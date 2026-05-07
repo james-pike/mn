@@ -1,0 +1,235 @@
+import { component$, useSignal, useComputed$, useContext, $, useVisibleTask$, useOnDocument } from "@builder.io/qwik";
+import { LocaleContext, t } from "../../i18n";
+import { allProducts, categoryLabel } from "../../routes/apparel/products";
+import type { Product } from "../../routes/apparel/products";
+import { LoginTypeContext } from "../../routes/layout";
+
+const CLOTHING_CATEGORIES = ["All", "Work Wear", "Jackets", "Polos", "Hats"];
+
+const CATEGORY_ICONS: Record<string, string> = {
+  "All": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
+  "Work Wear": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M4 6h16v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/><path d="M4 6l-2 4v2h4V8"/><path d="M20 6l2 4v2h-4V8"/></svg>',
+  "Jackets": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>',
+  "Polos": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2 12 5.5 8 2 3.62 3.46a2 2 0 00-1.34 1.93v15.12a2 2 0 001.34 1.93L8 24l4-3.5L16 24l4.38-1.46a2 2 0 001.34-1.93V5.39a2 2 0 00-1.34-1.93z"/></svg>',
+  "Hats": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>',
+};
+
+const ProductCard = component$<{ item: Product; sku: string }>(({ item, sku }) => {
+  const locale = useContext(LocaleContext);
+  const loginType = useContext(LoginTypeContext);
+  const isTech = loginType.value === "tech";
+
+  return (
+    <a href={`/apparel/${sku}/`} class={`product-card product-card-link ${sku === "CAR-21" ? "product-card--cover" : ""}`}>
+      <div class="product-card__image">
+        <img src={item.img} alt={item.name} width="440" height="440" />
+      </div>
+      <div class="product-card__info">
+        <div class="product-card__name-row">
+          <div class="product-card__name">
+            <span class="product-card__name-text">{item.name.replace(/#\S+/g, '').trim()}</span>
+            <span class="product-card__name-code">{(item.name.match(/#\S+/) || [''])[0]}</span>
+          </div>
+          <div class="product-card__price-group">
+            {!isTech && <div class="product-card__price">${(Number(item.price) || 0).toFixed(2)}</div>}
+            <span class="product-card__sizes">{item.sizes === "One Size" ? t("modal.onesize", locale.value) : item.sizes}</span>
+          </div>
+        </div>
+      </div>
+    </a>
+  );
+});
+
+export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) => {
+  const locale = useContext(LocaleContext);
+  const loginType = useContext(LoginTypeContext);
+  const isTech = useComputed$(() => loginType.value === "tech");
+  const activeCat = useSignal("All");
+  const searchQuery = useSignal("");
+  const searchOpen = useSignal(false);
+  const tabletCols = useSignal(3);
+
+  const HASH_TO_CAT: Record<string, string> = isTech.value
+    ? {}
+    : { "work-wear": "Work Wear", "jackets": "Jackets", "polos": "Polos", "hats": "Hats" };
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ cleanup }) => {
+    const applyHash = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (hash && HASH_TO_CAT[hash]) {
+        activeCat.value = HASH_TO_CAT[hash];
+        history.replaceState(null, "", window.location.pathname);
+      }
+    };
+    const onSelectCategory = (e: Event) => {
+      const cat = (e as CustomEvent).detail;
+      if (cat) {
+        activeCat.value = cat;
+        searchQuery.value = "";
+      }
+    };
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    window.addEventListener("select-category", onSelectCategory);
+    cleanup(() => {
+      window.removeEventListener("hashchange", applyHash);
+      window.removeEventListener("select-category", onSelectCategory);
+    });
+  });
+
+  // When mobile/tablet search is open, close it on any click outside the
+  // search bar. Uses useOnDocument so the listener stays attached and is
+  // re-checked on every click — works for every open/close cycle.
+  useOnDocument(
+    'click',
+    $((e: Event) => {
+      if (!searchOpen.value) return;
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      if (target.closest('.apparel-titlebar__search--mobile')) return;
+      searchOpen.value = false;
+    })
+  );
+
+  const doSearch = $((query: string) => {
+    if (query.trim()) {
+      activeCat.value = "All";
+      searchQuery.value = query.trim();
+    } else {
+      searchQuery.value = "";
+    }
+  });
+
+  const baseProducts = useComputed$(() => {
+    if (isTech.value) return allProducts.filter((p) => p.category === "Work Wear");
+    return allProducts;
+  });
+
+  const filtered = useComputed$(() => {
+    const products = baseProducts.value;
+
+    if (searchQuery.value) {
+      const q = searchQuery.value.toLowerCase();
+      return products.filter((p) =>
+        p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)
+      );
+    }
+
+    if (activeCat.value !== "All") {
+      return products.filter((p) => p.category === activeCat.value);
+    }
+
+    return products;
+  });
+
+  return (
+    <section class={`home-catalog ${cls || ""}`}>
+      <div class="home-catalog__inner">
+        <div class="home-catalog__header">
+          <h2 class="home-catalog__title">{t("nav.apparel", locale.value)}</h2>
+          <div class="home-catalog__sidebar-search">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input
+              type="text"
+              class="apparel-titlebar__search-input"
+              placeholder=""
+              aria-label="Search apparel"
+              value={searchQuery.value}
+              onInput$={(_, el) => { searchQuery.value = el.value; }}
+              onKeyDown$={(e) => { if (e.key === "Enter") doSearch(searchQuery.value); }}
+              onBlur$={() => doSearch(searchQuery.value)}
+            />
+          </div>
+          <div class="home-catalog__tabs">
+            {(isTech.value ? ["Work Wear"] : CLOTHING_CATEGORIES).map((cat) => (
+              <button
+                key={cat}
+                class={`apparel-titlebar__tab ${isTech.value || activeCat.value === cat ? "active" : ""}`}
+                onClick$={() => {
+                  if (isTech.value) return;
+                  if (activeCat.value === cat) { activeCat.value = "All"; return; }
+                  activeCat.value = cat;
+                  searchQuery.value = "";
+                  const isDesktop = window.innerWidth > 1024;
+                  const headerH = window.innerWidth <= 900 ? 49 : 58;
+                  if (isDesktop) {
+                    const grid = document.querySelector('.home-catalog .apparel-grid');
+                    const gridTop = grid ? grid.getBoundingClientRect().top + window.scrollY - headerH - 8 : 0;
+                    const needsScrollUp = gridTop < window.scrollY;
+                    window.scrollTo({ top: gridTop, behavior: needsScrollUp ? 'instant' : 'smooth' });
+                  } else {
+                    const catalog = document.querySelector('.home-catalog');
+                    const tabH = (document.querySelector('.home-catalog__header') as HTMLElement)?.offsetHeight || 34;
+                    const catalogTop = catalog ? catalog.getBoundingClientRect().top + window.scrollY : 0;
+                    const stickyPos = catalogTop - headerH + tabH - 28;
+                    window.scrollTo({ top: stickyPos, behavior: 'instant' });
+                  }
+                }}
+              >
+                <span class="apparel-titlebar__tab-icon" dangerouslySetInnerHTML={CATEGORY_ICONS[cat]} />
+                {cat === "All" ? t("apparel.all", locale.value) : categoryLabel(cat, locale.value)}
+              </button>
+            ))}
+          </div>
+          <div class="home-catalog__right">
+            <div class="apparel-titlebar__search home-catalog__search-desktop">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              <input
+                type="text"
+                class="apparel-titlebar__search-input"
+                placeholder=""
+                aria-label="Search apparel"
+                value={searchQuery.value}
+                onInput$={(_, el) => { searchQuery.value = el.value; }}
+                onKeyDown$={(e) => { if (e.key === "Enter") doSearch(searchQuery.value); }}
+                onBlur$={() => doSearch(searchQuery.value)}
+              />
+            </div>
+            {searchOpen.value ? (
+              <div class="apparel-titlebar__search apparel-titlebar__search--mobile">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <input
+                  type="text"
+                  class="apparel-titlebar__search-input"
+                  placeholder=""
+                  aria-label="Search apparel"
+                  autoFocus
+                  value={searchQuery.value}
+                  onInput$={(_, el) => { searchQuery.value = el.value; }}
+                  onKeyDown$={(e) => { if (e.key === "Enter") { doSearch(searchQuery.value); searchOpen.value = false; } if (e.key === "Escape") { searchQuery.value = ""; searchOpen.value = false; } }}
+                  onBlur$={() => { doSearch(searchQuery.value); searchOpen.value = false; }}
+                />
+                <button class="apparel-titlebar__action" aria-label="Close search" onClick$={() => { doSearch(searchQuery.value); searchOpen.value = false; }} style="padding:2px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+                </button>
+              </div>
+            ) : (
+              <>
+                <button
+                  class="apparel-titlebar__action apparel-titlebar__action--tablet-cols"
+                  aria-label={`Show ${tabletCols.value === 2 ? 3 : 2} per row`}
+                  onClick$={() => { tabletCols.value = tabletCols.value === 2 ? 3 : 2; }}
+                >
+                  {tabletCols.value === 2 ? (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="18"/><rect x="9.5" y="3" width="5" height="18"/><rect x="16" y="3" width="5" height="18"/></svg>
+                  ) : (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="18"/><rect x="13" y="3" width="8" height="18"/></svg>
+                  )}
+                </button>
+                <button class="apparel-titlebar__action apparel-titlebar__action--mobile-search" aria-label="Search" onClick$={() => (searchOpen.value = true)}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+        <div class={`apparel-grid apparel-grid--cols-${tabletCols.value}`}>
+          {filtered.value.map((item) => (
+            <ProductCard key={item.sku} item={item} sku={item.sku} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+});
