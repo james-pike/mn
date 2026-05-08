@@ -590,7 +590,7 @@ export default component$(() => {
             )}
             <div class="login-modal__header">
               <img
-                src="/modernniagara-logo.png"
+                src="/logo.png"
                 alt="Modern Niagara Apparel"
                 class="login-modal__logo"
               />
@@ -638,7 +638,7 @@ export default component$(() => {
         <div class="site-header__inner">
           <Link href="/" class="site-header__logo">
             <img
-              src="/modernniagara-logo.png"
+              src="/logo.png"
               alt="Modern Niagara Apparel"
               class="site-header__logo-img"
               width="200"
@@ -648,7 +648,7 @@ export default component$(() => {
             />
             <div class="site-header__logo-brand">
               <img
-                src="/logo-modernniagara.jpg"
+                src="/logo.png"
                 alt="Modern Niagara Apparel"
                 class="site-header__logo-text"
                 width="408"
@@ -664,11 +664,11 @@ export default component$(() => {
             <Link href="/apparel/" class={loc.url.pathname.startsWith("/apparel") ? "active" : ""}>{loginType.value === "tech" ? t("cat.Work Wear", locale.value) : t("nav.apparel", locale.value)}</Link>
           </nav>
           <nav class="site-header__nav">
-            <button class={`locale-btn ${cartOpen.value ? "locale-btn--cart-open" : ""}`} onClick$={toggleLocale} aria-label="Toggle language">
+            {/* <button class={`locale-btn ${cartOpen.value ? "locale-btn--cart-open" : ""}`} onClick$={toggleLocale} aria-label="Toggle language">
               <span class="locale-btn__full">{locale.value === "en" ? "Français" : "English"}</span>
               <span class="locale-btn__short">{locale.value === "en" ? "FR" : "EN"}</span>
               <svg class="locale-btn__icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-            </button>
+            </button> */}
             <button class={`cart-btn ${cart.items.length > 0 ? "cart-btn--active" : ""}`} onClick$={() => { cartOpen.value = !cartOpen.value; if (!cartOpen.value) checkoutStep.value = "cart"; }}>
               <span class="cart-btn__label">{t("cart.mycart", locale.value)}</span>
               {cartOpen.value ? (
@@ -699,9 +699,9 @@ export default component$(() => {
           <nav class="nav-drawer" onClick$={(e) => e.stopPropagation()}>
             <div class="nav-drawer__header">
               <div class="nav-drawer__brand">
-                <img src="/modernniagara-logo.png" alt="Modern Niagara" class="nav-drawer__logo" width="48" height="48" />
+                <img src="/logo.png" alt="Modern Niagara" class="nav-drawer__logo" width="48" height="48" />
                 <div class="nav-drawer__brand-text">
-                  <img src="/logo-modernniagara.jpg" alt="Modern Niagara" class="nav-drawer__logo-text" />
+                  <img src="/logo.png" alt="Modern Niagara" class="nav-drawer__logo-text" />
                   <span class="nav-drawer__apparel">{t("logo.apparel", locale.value)}</span>
                 </div>
               </div>
@@ -734,10 +734,10 @@ export default component$(() => {
               </>}
             </div>
             <div class="nav-drawer__footer">
-              <button class="nav-drawer__locale" onClick$={() => { toggleLocale(); }}>
+              {/* <button class="nav-drawer__locale" onClick$={() => { toggleLocale(); }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
                 {locale.value === "en" ? "Français" : "English"}
-              </button>
+              </button> */}
               <Form action={logoutAction} reloadDocument>
                 <button type="submit" class="nav-drawer__locale nav-drawer__logout">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -756,9 +756,9 @@ export default component$(() => {
       <footer class="site-footer">
         <div class="site-footer__inner">
           <div class="site-footer__brand">
-            <img src="/modernniagara-logo.png" alt="Modern Niagara" class="site-footer__logo" width="200" height="200" />
+            <img src="/logo.png" alt="Modern Niagara" class="site-footer__logo" width="200" height="200" />
             <div class="site-footer__brand-text">
-              <img src="/logo3.png" alt="Modern Niagara" class="site-footer__logo-text" width="408" height="61" />
+              <img src="/logo.png" alt="Modern Niagara" class="site-footer__logo-text" width="408" height="61" />
               <span class="site-footer__apparel">{t("logo.apparel", locale.value)}</span>
             </div>
           </div>
@@ -784,8 +784,8 @@ export default component$(() => {
           <div class="drawer cart-drawer" onClick$={(e) => e.stopPropagation()}>
             <div class="cart-drawer__site-header">
               <Link href="/" class="site-header__logo">
-                <img src="/modernniagara-logo.png" alt="Modern Niagara Apparel" class="site-header__logo-img" width="200" height="200" loading="eager" decoding="sync" />
-                <img src="/logo-modernniagara.jpg" alt="Modern Niagara Apparel" class="site-header__logo-text" width="408" height="61" loading="eager" decoding="sync" />
+                <img src="/logo.png" alt="Modern Niagara Apparel" class="site-header__logo-img" width="200" height="200" loading="eager" decoding="sync" />
+                <img src="/logo.png" alt="Modern Niagara Apparel" class="site-header__logo-text" width="408" height="61" loading="eager" decoding="sync" />
                 <span class="site-header__logo-apparel">{t("logo.apparel", locale.value)}</span>
               </Link>
               <nav class="site-header__nav">
