@@ -191,7 +191,7 @@ export default component$(() => {
               onTouchStart$={(e) => { touchStartX.value = e.touches[0].clientX; }}
               onTouchEnd$={(e) => {
                 const diff = touchStartX.value - e.changedTouches[0].clientX;
-                const imgs = p.imgs || [p.img];
+                const imgs = ((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[]);
                 if (Math.abs(diff) > 40) {
                   userSelectedImg.value = true;
                   if (diff > 0) {
@@ -203,7 +203,7 @@ export default component$(() => {
               }}
               onClick$={() => { if (window.innerWidth > 1024) imgFullscreen.value = true; }}
             >
-              {(p.imgs || [p.img]).map((src, i) => (
+              {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).map((src, i) => (
                 <img
                   key={i}
                   src={src}
@@ -220,9 +220,9 @@ export default component$(() => {
                 </a>
               )}
             </div>
-            {(p.imgs || [p.img]).length > 1 && (
+            {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).length > 1 && (
               <div class="product-thumbs product-thumbs--column">
-                {(p.imgs || [p.img]).map((src, i) => (
+                {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).map((src, i) => (
                   <button
                     key={i}
                     class={`product-thumbs__item ${imgIndex.value === i ? "active" : ""}`}
@@ -435,7 +435,7 @@ export default component$(() => {
         <div class="product-fullscreen" onClick$={() => (imgFullscreen.value = false)}>
           <button class="product-fullscreen__close" aria-label="Close fullscreen" onClick$={(e) => { e.stopPropagation(); imgFullscreen.value = false; }}>&times;</button>
           <img
-            src={(p.imgs || [p.img])[imgIndex.value]}
+            src={(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[]))[imgIndex.value]}
             alt={p.name}
             class="product-fullscreen__img"
             onClick$={(e) => e.stopPropagation()}
