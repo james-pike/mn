@@ -54,12 +54,12 @@ const translations = {
   "teaser.all.text": { en: "Browse the complete Modern Niagara branded collection.", fr: "Parcourez la collection complète Modern Niagara." },
   "teaser.all.cta": { en: "Browse Apparel", fr: "Parcourir les vêtements" },
   "teaser.jackets.tag": { en: "Cold Weather", fr: "Temps froid" },
-  "teaser.jackets.title": { en: "Jackets & Fleeces", fr: "Manteaux et polaires" },
+  "teaser.jackets.title": { en: "Jackets & Hoodies", fr: "Manteaux et hoodies" },
   "teaser.jackets.text": { en: "Softshell and insulated options built for Canadian weather.", fr: "Options softshell et isolées conçues pour le climat canadien." },
   "teaser.jackets.cta": { en: "Shop Jackets", fr: "Voir les manteaux" },
 
   "teaser.polos.tag": { en: "Team Favourite", fr: "Favori de l'équipe" },
-  "teaser.polos.title": { en: "Classic Polos", fr: "Polos classiques" },
+  "teaser.polos.title": { en: "Classic Shirts", fr: "Chemises classiques" },
   "teaser.polos.text": { en: "The go-to for site visits and the office.", fr: "L'incontournable pour les visites de chantier et le bureau." },
   "teaser.polos.cta": { en: "Shop Polos", fr: "Voir les polos" },
 
@@ -69,14 +69,14 @@ const translations = {
   "teaser.hoodies.cta": { en: "Shop Hoodies", fr: "Voir les kangourous" },
 
   "teaser.hats.tag": { en: "Headwear", fr: "Couvre-chefs" },
-  "teaser.hats.title": { en: "Caps & Beanies", fr: "Casquettes et tuques" },
+  "teaser.hats.title": { en: "Hats", fr: "Chapeaux" },
   "teaser.hats.text": { en: "Embroidered caps and knit beanies for every season.", fr: "Casquettes brodées et tuques tricotées pour toutes les saisons." },
   "teaser.hats.cta": { en: "Shop Hats", fr: "Voir les chapeaux" },
 
   "teaser.workwear.tag": { en: "On the Job", fr: "Au travail" },
-  "teaser.workwear.title": { en: "Work Wear", fr: "Vêtements de travail" },
+  "teaser.workwear.title": { en: "All Apparel", fr: "Tous les vêtements" },
   "teaser.workwear.text": { en: "Durable gear built for the jobsite.", fr: "Équipement durable conçu pour le chantier." },
-  "teaser.workwear.cta": { en: "Shop Work Wear", fr: "Voir les vêtements" },
+  "teaser.workwear.cta": { en: "Shop All Apparel", fr: "Voir tous les vêtements" },
 
   "teaser.tees.tag": { en: "Essentials", fr: "Essentiels" },
   "teaser.tees.title": { en: "Crew Neck Tees", fr: "T-shirts col rond" },

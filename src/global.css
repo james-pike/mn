@@ -17,7 +17,7 @@
   --ce-gray-700: #4a4a46;
   --ce-gray-900: #1a1a18;
 
-  --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 10px;
@@ -5930,9 +5930,20 @@ details[open] > .cart-drawer__checkout-title::after {
   width: 100% !important;
   flex: 0 0 auto !important;
   background: #000000 !important;
-  padding: 1.25rem 1rem 1.5rem !important;
+  padding: 0.5rem 1rem 0.6rem !important;
   z-index: 1 !important;
 }
+.hero__lower::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 3 !important;
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, rgba(0,0,0,0.65) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 18%, transparent 82%, rgba(0,0,0,0.4) 100%) !important;
+}
+.hero__lower > * { position: relative; z-index: 2; }
 
 .hero__vignette {
   position: absolute !important;
@@ -6023,6 +6034,16 @@ details[open] > .cart-drawer__checkout-title::after {
 }
 .hero__upper .hero-card-header__actions { display: flex !important; }
 .hero__upper .hero-card-header__logo { visibility: hidden !important; pointer-events: none !important; }
+@media (min-width: 1025px) {
+  /* Constrain the floating hero header and carousel pagination to align with the collection cards container */
+  .hero__upper .hero-card-header {
+    padding-left: max(1rem, calc((100% - 1536px) / 2)) !important;
+    padding-right: max(1rem, calc((100% - 1536px) / 2)) !important;
+  }
+  .hero__upper .hero-carousel__dots {
+    right: max(1rem, calc((100% - 1536px) / 2)) !important;
+  }
+}
 
 /* Centered text overlay */
 .hero__upper .hero__text {
@@ -6032,29 +6053,85 @@ details[open] > .cart-drawer__checkout-title::after {
   transform: translate(-50%, -50%) !important;
   z-index: 3 !important;
   display: flex !important;
-  flex-direction: column !important;
+  flex-direction: row !important;
   align-items: center !important;
-  justify-content: center !important;
-  text-align: center !important;
-  width: min(92%, 480px) !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  width: min(92%, 560px) !important;
   aspect-ratio: 1 / 1 !important;
-  padding: clamp(1.25rem, 3vw, 2.25rem) !important;
-  gap: 0.85rem !important;
+  padding: clamp(0.8rem, 2vw, 1.5rem) !important;
+  gap: clamp(1.5rem, 3.5vw, 2.5rem) !important;
   color: #fff !important;
   background: rgba(0, 0, 0, 0.5) !important;
   text-shadow: 0 2px 8px rgba(0,0,0,0.45);
   pointer-events: none;
 }
-/* Desktop: square overlay aligned with the left edge of the collection cards below */
+.hero__upper .hero__text .hero__brandmark {
+  width: clamp(100px, 30%, 220px) !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1 !important;
+  flex: 0 0 auto !important;
+  display: block !important;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5)) !important;
+  opacity: 0;
+  transform: rotate(45deg) scale(0.4);
+  animation: hero-mark-in 1s cubic-bezier(0.16, 1, 0.3, 1) 0.05s forwards;
+}
+@keyframes hero-mark-in {
+  to { opacity: 1; transform: rotate(45deg) scale(0.78); }
+}
+
+.hero__upper .hero__text .hero__title-word {
+  opacity: 0;
+  transform: translateY(14px);
+  filter: blur(6px);
+  animation: hero-word-reveal 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero__upper .hero__text .hero__title-word:nth-child(1) { animation-delay: 0.30s; }
+.hero__upper .hero__text .hero__title-word:nth-child(2) { animation-delay: 0.42s; }
+.hero__upper .hero__text .hero__title-word:nth-child(3) { animation-delay: 0.54s; font-weight: 400 !important; letter-spacing: 0.02em !important; }
+@keyframes hero-word-reveal {
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__upper .hero__text .hero__brandmark,
+  .hero__upper .hero__text .hero__title-word {
+    opacity: 1 !important;
+    transform: rotate(45deg) scale(0.78) !important;
+    filter: none !important;
+    animation: none !important;
+  }
+  .hero__upper .hero__text .hero__title-word { transform: none !important; }
+}
+.hero__upper .hero__text .hero__words {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 0.15rem !important;
+  min-width: 0 !important;
+}
+.hero__upper .hero__text .hero__title-word {
+  font-family: var(--font-sans) !important;
+  font-size: clamp(2rem, 5.2vw, 4rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1 !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  margin: 0 !important;
+  display: block !important;
+}
+/* Desktop: overlay locked to the same width as the leftmost two collection
+   cards below it (≈50% of the cards-row, capped at 768px on wide screens). */
 @media (min-width: 1025px) {
   .hero__upper .hero__text {
     top: 0 !important;
     left: max(1rem, calc((100% - 1536px) / 2)) !important;
     transform: none !important;
     height: 100% !important;
-    width: auto !important;
-    aspect-ratio: 1 / 1 !important;
-    max-width: 50% !important;
+    width: min(calc(50% - 1rem), 768px) !important;
+    aspect-ratio: auto !important;
+    max-width: none !important;
   }
 }
 .hero__upper .hero__text > * { pointer-events: auto; }
@@ -6075,11 +6152,11 @@ details[open] > .cart-drawer__checkout-title::after {
   filter: drop-shadow(0 2px 10px rgba(0,0,0,0.55)) !important;
 }
 .hero__upper .hero__text .hero__title-apparel {
-  font-size: clamp(0.85rem, 1.6vw, 1.05rem) !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.18em !important;
+  font-size: clamp(1.6rem, 3.6vw, 2.6rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
   text-transform: uppercase !important;
-  color: rgba(255,255,255,0.85) !important;
+  color: rgba(255,255,255,0.95) !important;
   white-space: nowrap !important;
   margin: 0 !important;
 }
@@ -6096,16 +6173,24 @@ details[open] > .cart-drawer__checkout-title::after {
 @media (max-width: 600px) {
   .hero { height: auto !important; }
   .hero__upper { flex: 0 0 auto !important; height: clamp(360px, 55vh, 520px) !important; }
-  .hero__upper .hero__text { gap: 0.55rem !important; width: 92% !important; }
-  .hero__upper .hero__text .hero__title-icon { width: 70% !important; }
-  .hero__upper .hero__text .hero__title-img { width: 92% !important; }
+  .hero__upper .hero__text {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    gap: 0.9rem !important;
+    width: 92% !important;
+  }
+  .hero__upper .hero__text .hero__brandmark { width: clamp(90px, 32vw, 150px) !important; }
+  .hero__upper .hero__text .hero__words { align-items: center !important; }
+  .hero__upper .hero__text .hero__title-word { font-size: clamp(2.8rem, 9vw, 4.5rem) !important; }
 }
 
 /* Bottom 1/3 — category cards row */
 .hero__lower .hero-categories {
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
-  gap: 12px !important;
+  gap: 0.5rem !important;
   margin: 0 auto !important;
   max-width: 1536px !important;
   width: 100% !important;
@@ -6114,7 +6199,7 @@ details[open] > .cart-drawer__checkout-title::after {
   grid-row: auto !important;
 }
 @media (max-width: 1024px) {
-  .hero__lower .hero-categories { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+  .hero__lower .hero-categories { grid-template-columns: repeat(2, 1fr) !important; gap: 0.5rem !important; }
 }
 /* Desktop: lock card height to a fixed share of viewport height so cards
    stay the same size relative to the screen at any zoom level. */

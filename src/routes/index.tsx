@@ -145,13 +145,21 @@ export default component$(() => {
 
           {/* Centered text overlay (badge + logo + title + subtitle) */}
           <div class="hero__text">
-            {/* <div class="hero__badge">
-              <span class="hero__badge-dot" />
-              {t("hero.badge", locale.value)}
-            </div> */}
-            <img src="/logo.png" alt="Modern Niagara" class="hero__title-img" width="408" height="61" loading="eager" decoding="sync" />
-            <span class="hero__title-apparel">{t("logo.apparel", locale.value)}</span>
-            {/* <p class="hero__subtitle-inline">{t("hero.subtitle", locale.value)}</p> */}
+            <svg class="hero__brandmark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <polygon points="50,50 50,0 100,0" fill="#e8b73d" />
+              <polygon points="50,50 100,0 100,50" fill="#e14504" />
+              <polygon points="50,50 100,50 100,100" fill="#c82401" />
+              <polygon points="50,50 100,100 50,100" fill="#6b6d28" />
+              <polygon points="50,50 50,100 0,100" fill="#999b38" />
+              <polygon points="50,50 0,100 0,50" fill="#183e5c" />
+              <polygon points="50,50 0,50 0,0" fill="#1774bb" />
+              <polygon points="50,50 0,0 50,0" fill="#fed25b" />
+            </svg>
+            <div class="hero__words">
+              <span class="hero__title-word">MODERN</span>
+              <span class="hero__title-word">NIAGARA</span>
+              <span class="hero__title-word">APPAREL</span>
+            </div>
           </div>
         </div>
 
@@ -178,15 +186,15 @@ export default component$(() => {
                   </a>
                 </>) : (<>
                   <a href="/apparel/#work-wear" class="category-card">
-                    <img src="/carmichael-services/boiler-technicians.jpeg" alt="Work Wear" width="400" height="300" loading="eager" decoding="sync" />
+                    <img src="/all.jpg" alt="All Apparel" width="400" height="300" loading="eager" decoding="sync" />
                     <span class="category-card__label">{t("teaser.workwear.title", locale.value)}</span>
                   </a>
                   <a href="/apparel/#jackets" class="category-card">
-                    <img src="/carmichael-services/careers.jpeg" alt="Jackets" width="400" height="300" loading="eager" decoding="sync" />
+                    <img src="/jackets.jpg" alt="Jackets & Hoodies" width="400" height="300" loading="eager" decoding="sync" />
                     <span class="category-card__label">{t("teaser.jackets.title", locale.value)}</span>
                   </a>
                   <a href="/apparel/#polos" class="category-card">
-                    <img src="/carmichael-services/hvac-retrofit.jpeg" alt="Polos" width="400" height="300" loading="eager" decoding="sync" />
+                    <img src="/shirts.jpg" alt="Classic Shirts" width="400" height="300" loading="eager" decoding="sync" />
                     <span class="category-card__label">{t("teaser.polos.title", locale.value)}</span>
                   </a>
                   <a href="/apparel/#hats" class="category-card">
