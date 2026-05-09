@@ -346,10 +346,9 @@ export default component$(() => {
   });
   const headerScrolled = useSignal(false);
 
-  const toggleLocale = $(() => {
-    locale.value = locale.value === "en" ? "fr" : "en";
-    document.cookie = `${LOCALE_COOKIE}=${locale.value};path=/;max-age=31536000`;
-  });
+  // Locale toggle removed — buttons commented out site-wide.
+  // To re-enable: restore the const toggleLocale = $(() => { ... }) and the
+  // commented-out buttons in the site/header/drawer.
 
   // Load cart from localStorage — eager strategy to ensure it runs immediately
   // eslint-disable-next-line qwik/no-use-visible-task
