@@ -635,16 +635,22 @@ export default component$(() => {
       {(auth.value.loggedIn || (loginAction.value && !loginAction.value.failed)) && <>
       <header class={`site-header site-header--white ${cartOpen.value ? "site-header--cart-open" : ""} ${loc.url.pathname === "/" && !cartOpen.value ? `site-header--hero-hidden ${headerScrolled.value ? "site-header--hero-visible" : ""}` : ""}`}>
         <div class="site-header__inner">
-          <Link href="/" class="site-header__logo">
-            <img
-              src="/logo.png"
-              alt="Modern Niagara Apparel"
-              class="site-header__logo-img"
-              width="200"
-              height="200"
-              loading="eager"
-              decoding="sync"
-            />
+          <Link href="/" class="site-header__logo brand-cluster brand-cluster--small">
+            <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <polygon points="50,50 50,0 100,0" fill="#fed25b" />
+              <polygon points="50,50 100,0 100,50" fill="#c82401" />
+              <polygon points="50,50 100,50 100,100" fill="#e14504" />
+              <polygon points="50,50 100,100 50,100" fill="#999b38" />
+              <polygon points="50,50 50,100 0,100" fill="#6b6d28" />
+              <polygon points="50,50 0,100 0,50" fill="#1774bb" />
+              <polygon points="50,50 0,50 0,0" fill="#183e5c" />
+              <polygon points="50,50 0,0 50,0" fill="#e8b73d" />
+            </svg>
+            <div class="brand-cluster__words">
+              <span class="brand-cluster__word">MODERN</span>
+              <span class="brand-cluster__word">NIAGARA</span>
+              <span class="brand-cluster__word brand-cluster__word--muted">APPAREL</span>
+            </div>
           </Link>
           <nav class="site-header__categories">
             <Link href="/" class={loc.url.pathname === "/" ? "active" : ""}>{t("nav.home", locale.value)}</Link>

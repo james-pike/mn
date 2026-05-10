@@ -6048,18 +6048,8 @@ details[open] > .cart-drawer__checkout-title::after {
   box-shadow: none !important;
 }
 .hero__upper .hero-card-header__actions { display: flex !important; }
-/* Hide the placeholder logo on small viewports (logo cluster is visible in the hero overlay).
-   On desktop the floating header DOES show the brand cluster so we override below. */
-@media (max-width: 1024px) {
-  .hero__upper .hero-card-header__logo { visibility: hidden !important; pointer-events: none !important; }
-}
-@media (min-width: 1025px) {
-  /* Brand cluster styling inside the dark floating hero header on desktop. */
-  .hero__upper .hero-card-header__logo { display: flex !important; align-items: center !important; gap: 0.6rem !important; text-decoration: none !important; padding: 0 !important; }
-  .hero__upper .hero-card-header__logo .brand-cluster__mark { width: 36px !important; height: 36px !important; }
-  .hero__upper .hero-card-header__logo .brand-cluster__word { color: rgba(255,255,255,0.95) !important; font-size: 0.78rem !important; }
-  .hero__upper .hero-card-header__logo .brand-cluster__word--muted { color: rgba(255,255,255,0.55) !important; }
-}
+/* Floating hero header has no logo — the in-hero overlay carries the brand. */
+.hero__upper .hero-card-header__logo { visibility: hidden !important; pointer-events: none !important; }
 @media (min-width: 1025px) {
   /* Pull header content in from the right edge to match the logo-cluster's
      5vw offset on the left. */
