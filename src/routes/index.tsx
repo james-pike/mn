@@ -26,6 +26,17 @@ export default component$(() => {
     check();
     window.addEventListener("cart-updated", check);
     cleanup(() => window.removeEventListener("cart-updated", check));
+
+    // Hero intro animations only play on a hard page load. On SPA nav back,
+    // the body already has .mn-hero-no-anim from the inline pre-paint script;
+    // here we ensure the flag is set so a subsequent SPA nav also skips.
+    try {
+      if (sessionStorage.getItem("mn_hero_animated") !== "1") {
+        sessionStorage.setItem("mn_hero_animated", "1");
+      } else {
+        document.documentElement.classList.add("mn-hero-no-anim");
+      }
+    } catch { /* sessionStorage unavailable — leave animations on */ }
   });
 
   // Carousel autoplay (manual to avoid qwik-ui serialization bug)

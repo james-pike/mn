@@ -6168,6 +6168,19 @@ details[open] > .cart-drawer__checkout-title::after {
     animation: none !important;
   }
 }
+/* When the user has already seen the hero intro this session, skip all
+   intro animations and render the final state immediately. The flag class
+   is applied to <html> by an inline script in <head> before first paint. */
+.mn-hero-no-anim .hero__brandmark polygon,
+.mn-hero-no-anim .hero__brandmark-ring,
+.mn-hero-no-anim .hero__title-word,
+.mn-hero-no-anim .hero__title-letter {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  animation: none !important;
+  animation-delay: 0s !important;
+}
 .hero__upper .hero__text .hero__words {
   display: flex !important;
   flex-direction: column !important;
