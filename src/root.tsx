@@ -34,9 +34,7 @@ export default component$(() => {
           body.loading{opacity:0}
           body.ready{opacity:1;transition:opacity 0.1s ease}
         `} />
-        {/* Pre-paint: if the hero intro has already played this session,
-            mark <html> so all intro animations render skipped from the first frame. */}
-        <script dangerouslySetInnerHTML="try{if(sessionStorage.getItem('mn_hero_animated')==='1')document.documentElement.classList.add('mn-hero-no-anim');}catch(_){}" />
+        {/* Hero intro animations play on every home-page render — no session gate. */}
       </head>
       <body lang="en" translate="no" class="notranslate loading">
         <RouterOutlet />

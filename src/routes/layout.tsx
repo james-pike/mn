@@ -590,14 +590,14 @@ export default component$(() => {
             <div class="login-modal__header">
               <div class="login-modal__brand brand-cluster brand-cluster--small">
                 <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <polygon points="50,50 50,0 100,0" fill="#fed25b" />
-                  <polygon points="50,50 100,0 100,50" fill="#c82401" />
-                  <polygon points="50,50 100,50 100,100" fill="#e14504" />
-                  <polygon points="50,50 100,100 50,100" fill="#999b38" />
-                  <polygon points="50,50 50,100 0,100" fill="#6b6d28" />
-                  <polygon points="50,50 0,100 0,50" fill="#1774bb" />
-                  <polygon points="50,50 0,50 0,0" fill="#183e5c" />
-                  <polygon points="50,50 0,0 50,0" fill="#e8b73d" />
+                  <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
+                  <polygon points="50,50 100,0 100,50" fill="#ae1f2a" />
+                  <polygon points="50,50 100,50 100,100" fill="#d43950" />
+                  <polygon points="50,50 100,100 50,100" fill="#9ec069" />
+                  <polygon points="50,50 50,100 0,100" fill="#7fa244" />
+                  <polygon points="50,50 0,100 0,50" fill="#4689b3" />
+                  <polygon points="50,50 0,50 0,0" fill="#31759c" />
+                  <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
                 </svg>
                 <div class="brand-cluster__words">
                   <span class="brand-cluster__word">MODERN</span>
@@ -649,14 +649,14 @@ export default component$(() => {
         <div class="site-header__inner">
           <Link href="/" class="site-header__logo brand-cluster brand-cluster--small">
             <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <polygon points="50,50 50,0 100,0" fill="#fed25b" />
-              <polygon points="50,50 100,0 100,50" fill="#c82401" />
-              <polygon points="50,50 100,50 100,100" fill="#e14504" />
-              <polygon points="50,50 100,100 50,100" fill="#999b38" />
-              <polygon points="50,50 50,100 0,100" fill="#6b6d28" />
-              <polygon points="50,50 0,100 0,50" fill="#1774bb" />
-              <polygon points="50,50 0,50 0,0" fill="#183e5c" />
-              <polygon points="50,50 0,0 50,0" fill="#e8b73d" />
+              <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
+              <polygon points="50,50 100,0 100,50" fill="#ae1f2a" />
+              <polygon points="50,50 100,50 100,100" fill="#d43950" />
+              <polygon points="50,50 100,100 50,100" fill="#9ec069" />
+              <polygon points="50,50 50,100 0,100" fill="#7fa244" />
+              <polygon points="50,50 0,100 0,50" fill="#4689b3" />
+              <polygon points="50,50 0,50 0,0" fill="#31759c" />
+              <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
             </svg>
             <div class="brand-cluster__words">
               <span class="brand-cluster__word">MODERN</span>
@@ -705,14 +705,14 @@ export default component$(() => {
             <div class="nav-drawer__header">
               <div class="nav-drawer__brand brand-cluster brand-cluster--small">
                 <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <polygon points="50,50 50,0 100,0" fill="#fed25b" />
-                  <polygon points="50,50 100,0 100,50" fill="#c82401" />
-                  <polygon points="50,50 100,50 100,100" fill="#e14504" />
-                  <polygon points="50,50 100,100 50,100" fill="#999b38" />
-                  <polygon points="50,50 50,100 0,100" fill="#6b6d28" />
-                  <polygon points="50,50 0,100 0,50" fill="#1774bb" />
-                  <polygon points="50,50 0,50 0,0" fill="#183e5c" />
-                  <polygon points="50,50 0,0 50,0" fill="#e8b73d" />
+                  <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
+                  <polygon points="50,50 100,0 100,50" fill="#ae1f2a" />
+                  <polygon points="50,50 100,50 100,100" fill="#d43950" />
+                  <polygon points="50,50 100,100 50,100" fill="#9ec069" />
+                  <polygon points="50,50 50,100 0,100" fill="#7fa244" />
+                  <polygon points="50,50 0,100 0,50" fill="#4689b3" />
+                  <polygon points="50,50 0,50 0,0" fill="#31759c" />
+                  <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
                 </svg>
                 <div class="brand-cluster__words">
                   <span class="brand-cluster__word">MODERN</span>
@@ -772,14 +772,14 @@ export default component$(() => {
         <div class="site-footer__inner">
           <div class="site-footer__brand brand-cluster brand-cluster--small">
             <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <polygon points="50,50 50,0 100,0" fill="#fed25b" />
-              <polygon points="50,50 100,0 100,50" fill="#c82401" />
-              <polygon points="50,50 100,50 100,100" fill="#e14504" />
-              <polygon points="50,50 100,100 50,100" fill="#999b38" />
-              <polygon points="50,50 50,100 0,100" fill="#6b6d28" />
-              <polygon points="50,50 0,100 0,50" fill="#1774bb" />
-              <polygon points="50,50 0,50 0,0" fill="#183e5c" />
-              <polygon points="50,50 0,0 50,0" fill="#e8b73d" />
+              <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
+              <polygon points="50,50 100,0 100,50" fill="#ae1f2a" />
+              <polygon points="50,50 100,50 100,100" fill="#d43950" />
+              <polygon points="50,50 100,100 50,100" fill="#9ec069" />
+              <polygon points="50,50 50,100 0,100" fill="#7fa244" />
+              <polygon points="50,50 0,100 0,50" fill="#4689b3" />
+              <polygon points="50,50 0,50 0,0" fill="#31759c" />
+              <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
             </svg>
             <div class="brand-cluster__words">
               <span class="brand-cluster__word">MODERN</span>

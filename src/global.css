@@ -791,6 +791,11 @@ img { max-width: 100%; display: block; }
   object-position: center center;
   display: block;
 }
+/* Slide 2 (Edmonton van) — image is pre-cropped (right 35% removed), so
+   center the focal point. */
+.hero-carousel__van-img {
+  object-position: center center !important;
+}
 
 /* Carousel prev/next chevron buttons */
 .hero-carousel__nav {
@@ -832,24 +837,31 @@ img { max-width: 100%; display: block; }
   right: 1rem;
   left: auto;
   transform: none;
-  z-index: 10;
+  /* High enough to sit above the dark .hero__text overlay (z-index 3) and
+     the floating header (z-index 4) on every breakpoint. */
+  z-index: 20;
 }
 .hero-carousel__dot {
-  width: 1.2vw !important;
-  height: 1.2vw !important;
+  width: 0.7vw !important;
+  height: 0.7vw !important;
   min-width: 8px !important;
   min-height: 8px !important;
   border-radius: 2px !important;
   border: none !important;
-  background: rgba(255,255,255,0.6) !important;
+  background: rgba(255,255,255,0.55) !important;
   cursor: pointer !important;
   padding: 0 !important;
+  /* Lift dots into their own stacking context with high z-index so they sit
+     above the dark .hero__text overlay on every breakpoint. */
+  position: relative !important;
+  z-index: 100 !important;
   transition: background 0.2s ease, transform 0.2s ease !important;
 }
 .hero-carousel__dot[data-active] {
   background: #fff !important;
   transform: scale(1.4) !important;
-  box-shadow: 0 0 14px rgba(255,255,255,0.85) !important;
+  box-shadow: 0 0 12px rgba(255,255,255,0.7) !important;
+  z-index: 101 !important;
 }
 
 .hero__badge {
@@ -4845,8 +4857,8 @@ details[open] > .cart-drawer__checkout-title::after {
     text-decoration: none;
     padding: 4px 8px;
   }
-  .hero-card-header__nav-link:hover { color: #31759d; }
-  .hero-card-header__nav-link.active { color: #1774bb; }
+  .hero-card-header__nav-link:hover { color: #31759c; }
+  .hero-card-header__nav-link.active { color: #4689b3; }
   .hero-card-header__brand { display: none !important; }
   .hero-card-header__actions .hero-card-header__btn:last-child { display: none !important; }
   /* Desktop main site-header is visible from first view, so the in-card actions would be duplicates. */
@@ -5407,8 +5419,8 @@ details[open] > .cart-drawer__checkout-title::after {
   .hero-card-header__btn { padding: 10px; }
   .hero-card-header__nav { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; margin-right: 0.5rem; }
   .hero-card-header__nav-link { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; color: rgba(255,255,255,0.7); text-decoration: none; padding: 4px 8px; }
-  .hero-card-header__nav-link:hover { color: #1774bb; }
-  .hero-card-header__nav-link.active { color: #183e5c; }
+  .hero-card-header__nav-link:hover { color: #4689b3; }
+  .hero-card-header__nav-link.active { color: #31759c; }
   .hero-card-header__actions .hero-card-header__btn:last-child { display: none; }
 
   /* Hero carousel — shorter on tablet so it doesn't dominate */
@@ -5983,7 +5995,9 @@ details[open] > .cart-drawer__checkout-title::after {
   aspect-ratio: auto !important;
   grid-column: auto !important;
   grid-row: auto !important;
-  z-index: 1 !important;
+  /* No z-index here so the pagination dots inside can use the parent's
+     stacking context and sit above the dark .hero__text overlay (z-index 3). */
+  z-index: auto !important;
   overflow: hidden !important;
 }
 .hero__upper .hero-carousel::after { display: none !important; }
@@ -6287,42 +6301,78 @@ details[open] > .cart-drawer__checkout-title::after {
   max-width: 600px !important;
   text-align: center !important;
 }
-/* Tablet: same stacked column layout as desktop (brandmark above words). */
+/* Tablet: same stacked column layout as desktop, container is 2/3 of the
+   viewport width centered, brandmark + words sized larger. */
 @media (min-width: 601px) and (max-width: 1024px) {
+  /* Drop the 100vh lock so the carousel can grow to fit the cluster. */
+  .hero { height: auto !important; }
+  .hero__upper {
+    flex: 0 0 auto !important;
+    height: auto !important;
+    min-height: 80vh !important;
+  }
   .hero__upper .hero__text {
+    /* Sized to its content so a tall cluster grows the upper instead of
+       being clipped by overflow:hidden. Same 5vw left offset as desktop. */
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    height: auto !important;
+    width: calc(100vw * 2 / 3) !important;
+    aspect-ratio: auto !important;
+    max-width: none !important;
+    margin: 0 0 0 5vw !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
-    gap: 1.5rem !important;
+    gap: 2.5rem !important;
+    padding-top: 7rem !important;
+    padding-bottom: 5rem !important;
+    padding-left: 0 !important;
   }
   .hero__upper .hero__text .hero__words {
     align-items: center !important;
+  }
+  .hero__upper .hero__text .hero__brandmark {
+    width: 32vw !important;
+  }
+  .hero__upper .hero__text .hero__title-word {
+    font-size: 11vw !important;
   }
 }
 
 @media (max-width: 600px) {
   .hero { height: auto !important; }
-  .hero__upper { flex: 0 0 auto !important; height: clamp(360px, 55vh, 520px) !important; }
+  /* Drop the fixed height so the carousel grows to fit the cluster (and APPAREL
+     never gets cut off when the brandmark/padding scale up). */
+  .hero__upper {
+    flex: 0 0 auto !important;
+    height: auto !important;
+    min-height: 55vh !important;
+  }
   .hero__upper .hero__text {
-    /* Anchor the panel to fill the full carousel height on mobile so adding
-       padding-top pushes the logos DOWN inside the panel rather than making
-       the panel itself grow upward. */
-    top: 0 !important;
-    transform: translateX(-50%) !important;
-    height: 100% !important;
+    /* In normal flow on mobile so a tall cluster grows the carousel area
+       rather than getting clipped. */
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin: 0 auto !important;
+    height: auto !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
-    gap: 2.2rem !important;
+    gap: 2.6rem !important;
     width: 92% !important;
     padding-top: 6rem !important;
     /* Small reserve at the bottom so the gap between APPAREL and the dots
        matches the brandmark-to-words gap (≈2.2rem visible). */
     padding-bottom: 4.4rem !important;
   }
-  .hero__upper .hero__text .hero__brandmark { width: clamp(90px, 32vw, 150px) !important; }
+  .hero__upper .hero__text .hero__brandmark { width: 48vw !important; }
   .hero__upper .hero__text .hero__words { align-items: center !important; }
   /* Pure vw so the text always fills the same proportion of the viewport
      regardless of zoom (no rem-based step changes). */

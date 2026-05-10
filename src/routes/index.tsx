@@ -27,16 +27,10 @@ export default component$(() => {
     window.addEventListener("cart-updated", check);
     cleanup(() => window.removeEventListener("cart-updated", check));
 
-    // Hero intro animations only play on a hard page load. On SPA nav back,
-    // the body already has .mn-hero-no-anim from the inline pre-paint script;
-    // here we ensure the flag is set so a subsequent SPA nav also skips.
-    try {
-      if (sessionStorage.getItem("mn_hero_animated") !== "1") {
-        sessionStorage.setItem("mn_hero_animated", "1");
-      } else {
-        document.documentElement.classList.add("mn-hero-no-anim");
-      }
-    } catch { /* sessionStorage unavailable — leave animations on */ }
+    // Always play the hero intro animations on every render of the home page.
+    // (Earlier we gated this on sessionStorage; that suppressed the animation
+    // even on login, so the gate has been removed.)
+    document.documentElement.classList.remove("mn-hero-no-anim");
   });
 
   // Carousel autoplay (manual to avoid qwik-ui serialization bug)
@@ -44,7 +38,7 @@ export default component$(() => {
   useVisibleTask$(({ cleanup }) => {
     const id = setInterval(() => {
       if (carouselPaused.value) return;
-      heroIndex.value = (heroIndex.value + 1) % 3;
+      heroIndex.value = (heroIndex.value + 1) % 2;
     }, 9000);
     // Resume autoplay when user clicks anywhere outside a carousel pagination
     const onDocClick = (e: MouseEvent) => {
@@ -72,7 +66,7 @@ export default component$(() => {
               class="hero-carousel__scroller"
               onClick$={() => {
                 carouselPaused.value = true;
-                heroIndex.value = (heroIndex.value + 1) % 3;
+                heroIndex.value = (heroIndex.value + 1) % 2;
               }}
               onTouchStart$={(e) => {
                 if (e.touches.length !== 1) return;
@@ -85,22 +79,18 @@ export default component$(() => {
                 const dy = t.clientY - touchStartY.value;
                 if (Math.abs(dx) < 40 || Math.abs(dy) > Math.abs(dx)) return;
                 carouselPaused.value = true;
-                heroIndex.value = (heroIndex.value + 1) % 3;
+                heroIndex.value = (heroIndex.value + 1) % 2;
               }}
             >
               <Carousel.Slide class="hero-carousel__slide">
                 <img src="/hero.jpg" alt="Modern Niagara hero" loading="eager" />
               </Carousel.Slide>
-              <Carousel.Slide class="hero-carousel__slide">
-                <img src="/hero.jpg" alt="Modern Niagara hero" loading="eager" />
-              </Carousel.Slide>
-              <Carousel.Slide class="hero-carousel__slide">
-                <img src="/hero.jpg" alt="Modern Niagara hero" loading="eager" />
+              <Carousel.Slide class="hero-carousel__slide hero-carousel__slide--van">
+                <img src="/hero-edmonton-van.jpg" alt="Modern Niagara service van" class="hero-carousel__van-img" loading="eager" />
               </Carousel.Slide>
             </Carousel.Scroller>
 
             <Carousel.Pagination class="hero-carousel__dots" onClick$={() => { carouselPaused.value = true; }}>
-              <Carousel.Bullet class="hero-carousel__dot" />
               <Carousel.Bullet class="hero-carousel__dot" />
               <Carousel.Bullet class="hero-carousel__dot" />
             </Carousel.Pagination>
@@ -152,14 +142,14 @@ export default component$(() => {
           {/* Centered text overlay (badge + logo + title + subtitle) */}
           <div class="hero__text">
             <svg class="hero__brandmark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <polygon points="50,50 50,0 100,0" fill="#fed25b" />
-              <polygon points="50,50 100,0 100,50" fill="#c82401" />
-              <polygon points="50,50 100,50 100,100" fill="#e14504" />
-              <polygon points="50,50 100,100 50,100" fill="#999b38" />
-              <polygon points="50,50 50,100 0,100" fill="#6b6d28" />
-              <polygon points="50,50 0,100 0,50" fill="#1774bb" />
-              <polygon points="50,50 0,50 0,0" fill="#183e5c" />
-              <polygon points="50,50 0,0 50,0" fill="#e8b73d" />
+              <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
+              <polygon points="50,50 100,0 100,50" fill="#ae1f2a" />
+              <polygon points="50,50 100,50 100,100" fill="#d43950" />
+              <polygon points="50,50 100,100 50,100" fill="#9ec069" />
+              <polygon points="50,50 50,100 0,100" fill="#7fa244" />
+              <polygon points="50,50 0,100 0,50" fill="#4689b3" />
+              <polygon points="50,50 0,50 0,0" fill="#31759c" />
+              <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
               <rect class="hero__brandmark-ring" x="0" y="0" width="100" height="100" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="0.5" vector-effect="non-scaling-stroke" />
             </svg>
             <div class="hero__words">
