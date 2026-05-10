@@ -100,11 +100,21 @@ export default component$(() => {
 
           {/* Floating nav header */}
           <div class="hero-card-header">
-            <a href="/" class="hero-card-header__logo">
-              <img src="/logo.png" alt="Modern Niagara" class="hero-card-header__logo-img" width="200" height="200" loading="eager" />
-              <div class="hero-card-header__brand">
-                <img src="/logo.png" alt="Modern Niagara" class="hero-card-header__brand-text" width="408" height="61" loading="eager" />
-                <span class="hero-card-header__apparel">{t("logo.apparel", locale.value)}</span>
+            <a href="/" class="hero-card-header__logo brand-cluster brand-cluster--small">
+              <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <polygon points="50,50 50,0 100,0" fill="#fed25b" />
+                <polygon points="50,50 100,0 100,50" fill="#c82401" />
+                <polygon points="50,50 100,50 100,100" fill="#e14504" />
+                <polygon points="50,50 100,100 50,100" fill="#999b38" />
+                <polygon points="50,50 50,100 0,100" fill="#6b6d28" />
+                <polygon points="50,50 0,100 0,50" fill="#1774bb" />
+                <polygon points="50,50 0,50 0,0" fill="#183e5c" />
+                <polygon points="50,50 0,0 50,0" fill="#e8b73d" />
+              </svg>
+              <div class="brand-cluster__words">
+                <span class="brand-cluster__word">MODERN</span>
+                <span class="brand-cluster__word">NIAGARA</span>
+                <span class="brand-cluster__word brand-cluster__word--muted">APPAREL</span>
               </div>
             </a>
             <nav class="hero-card-header__nav">
