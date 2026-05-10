@@ -69,7 +69,7 @@ const translations = {
   "teaser.hoodies.cta": { en: "Shop Hoodies", fr: "Voir les kangourous" },
 
   "teaser.hats.tag": { en: "Headwear", fr: "Couvre-chefs" },
-  "teaser.hats.title": { en: "Hats", fr: "Chapeaux" },
+  "teaser.hats.title": { en: "Caps and Beanies", fr: "Casquettes et tuques" },
   "teaser.hats.text": { en: "Embroidered caps and knit beanies for every season.", fr: "Casquettes brodées et tuques tricotées pour toutes les saisons." },
   "teaser.hats.cta": { en: "Shop Hats", fr: "Voir les chapeaux" },
 

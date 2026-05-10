@@ -645,18 +645,6 @@ export default component$(() => {
               loading="eager"
               decoding="sync"
             />
-            <div class="site-header__logo-brand">
-              <img
-                src="/logo.png"
-                alt="Modern Niagara Apparel"
-                class="site-header__logo-text"
-                width="408"
-                height="61"
-                loading="eager"
-                decoding="sync"
-              />
-              <span class="site-header__logo-apparel">{t("logo.apparel", locale.value)}</span>
-            </div>
           </Link>
           <nav class="site-header__categories">
             <Link href="/" class={loc.url.pathname === "/" ? "active" : ""}>{t("nav.home", locale.value)}</Link>
@@ -697,11 +685,21 @@ export default component$(() => {
         <div class="nav-drawer-overlay" onClick$={() => (menuOpen.value = false)}>
           <nav class="nav-drawer" onClick$={(e) => e.stopPropagation()}>
             <div class="nav-drawer__header">
-              <div class="nav-drawer__brand">
-                <img src="/logo.png" alt="Modern Niagara" class="nav-drawer__logo" width="48" height="48" />
-                <div class="nav-drawer__brand-text">
-                  <img src="/logo.png" alt="Modern Niagara" class="nav-drawer__logo-text" />
-                  <span class="nav-drawer__apparel">{t("logo.apparel", locale.value)}</span>
+              <div class="nav-drawer__brand brand-cluster brand-cluster--small">
+                <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <polygon points="50,50 50,0 100,0" fill="#fed25b" />
+                  <polygon points="50,50 100,0 100,50" fill="#c82401" />
+                  <polygon points="50,50 100,50 100,100" fill="#e14504" />
+                  <polygon points="50,50 100,100 50,100" fill="#999b38" />
+                  <polygon points="50,50 50,100 0,100" fill="#6b6d28" />
+                  <polygon points="50,50 0,100 0,50" fill="#1774bb" />
+                  <polygon points="50,50 0,50 0,0" fill="#183e5c" />
+                  <polygon points="50,50 0,0 50,0" fill="#e8b73d" />
+                </svg>
+                <div class="brand-cluster__words">
+                  <span class="brand-cluster__word">MODERN</span>
+                  <span class="brand-cluster__word">NIAGARA</span>
+                  <span class="brand-cluster__word brand-cluster__word--muted">APPAREL</span>
                 </div>
               </div>
               <button class="nav-drawer__close" onClick$={() => (menuOpen.value = false)} aria-label="Close">
@@ -754,11 +752,21 @@ export default component$(() => {
 
       <footer class="site-footer">
         <div class="site-footer__inner">
-          <div class="site-footer__brand">
-            <img src="/logo.png" alt="Modern Niagara" class="site-footer__logo" width="200" height="200" />
-            <div class="site-footer__brand-text">
-              <img src="/logo.png" alt="Modern Niagara" class="site-footer__logo-text" width="408" height="61" />
-              <span class="site-footer__apparel">{t("logo.apparel", locale.value)}</span>
+          <div class="site-footer__brand brand-cluster brand-cluster--small">
+            <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <polygon points="50,50 50,0 100,0" fill="#fed25b" />
+              <polygon points="50,50 100,0 100,50" fill="#c82401" />
+              <polygon points="50,50 100,50 100,100" fill="#e14504" />
+              <polygon points="50,50 100,100 50,100" fill="#999b38" />
+              <polygon points="50,50 50,100 0,100" fill="#6b6d28" />
+              <polygon points="50,50 0,100 0,50" fill="#1774bb" />
+              <polygon points="50,50 0,50 0,0" fill="#183e5c" />
+              <polygon points="50,50 0,0 50,0" fill="#e8b73d" />
+            </svg>
+            <div class="brand-cluster__words">
+              <span class="brand-cluster__word">MODERN</span>
+              <span class="brand-cluster__word">NIAGARA</span>
+              <span class="brand-cluster__word brand-cluster__word--muted">APPAREL</span>
             </div>
           </div>
           {loginType.value !== "tech" && (
@@ -784,8 +792,6 @@ export default component$(() => {
             <div class="cart-drawer__site-header">
               <Link href="/" class="site-header__logo">
                 <img src="/logo.png" alt="Modern Niagara Apparel" class="site-header__logo-img" width="200" height="200" loading="eager" decoding="sync" />
-                <img src="/logo.png" alt="Modern Niagara Apparel" class="site-header__logo-text" width="408" height="61" loading="eager" decoding="sync" />
-                <span class="site-header__logo-apparel">{t("logo.apparel", locale.value)}</span>
               </Link>
               <nav class="site-header__nav">
                 <button class="cart-btn" onClick$={() => (cartOpen.value = false)}>

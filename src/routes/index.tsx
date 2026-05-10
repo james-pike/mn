@@ -81,10 +81,10 @@ export default component$(() => {
                 <img src="/hero.jpg" alt="Modern Niagara hero" loading="eager" />
               </Carousel.Slide>
               <Carousel.Slide class="hero-carousel__slide">
-                <img src="/carmichael-services/hvac-retrofit.jpeg" alt="HVAC retrofit project" loading="eager" />
+                <img src="/hero.jpg" alt="Modern Niagara hero" loading="eager" />
               </Carousel.Slide>
               <Carousel.Slide class="hero-carousel__slide">
-                <img src="/carmichael-services/boiler-technicians.jpeg" alt="Boiler technicians at work" loading="eager" />
+                <img src="/hero.jpg" alt="Modern Niagara hero" loading="eager" />
               </Carousel.Slide>
             </Carousel.Scroller>
 
@@ -146,19 +146,24 @@ export default component$(() => {
           {/* Centered text overlay (badge + logo + title + subtitle) */}
           <div class="hero__text">
             <svg class="hero__brandmark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <polygon points="50,50 50,0 100,0" fill="#e8b73d" />
-              <polygon points="50,50 100,0 100,50" fill="#e14504" />
-              <polygon points="50,50 100,50 100,100" fill="#c82401" />
-              <polygon points="50,50 100,100 50,100" fill="#6b6d28" />
-              <polygon points="50,50 50,100 0,100" fill="#999b38" />
-              <polygon points="50,50 0,100 0,50" fill="#183e5c" />
-              <polygon points="50,50 0,50 0,0" fill="#1774bb" />
-              <polygon points="50,50 0,0 50,0" fill="#fed25b" />
+              <polygon points="50,50 50,0 100,0" fill="#fed25b" />
+              <polygon points="50,50 100,0 100,50" fill="#c82401" />
+              <polygon points="50,50 100,50 100,100" fill="#e14504" />
+              <polygon points="50,50 100,100 50,100" fill="#999b38" />
+              <polygon points="50,50 50,100 0,100" fill="#6b6d28" />
+              <polygon points="50,50 0,100 0,50" fill="#1774bb" />
+              <polygon points="50,50 0,50 0,0" fill="#183e5c" />
+              <polygon points="50,50 0,0 50,0" fill="#e8b73d" />
+              <rect class="hero__brandmark-ring" x="0" y="0" width="100" height="100" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="0.5" vector-effect="non-scaling-stroke" />
             </svg>
             <div class="hero__words">
               <span class="hero__title-word">MODERN</span>
               <span class="hero__title-word">NIAGARA</span>
-              <span class="hero__title-word">APPAREL</span>
+              <span class="hero__title-word hero__title-word--letters">
+                {"APPAREL".split("").map((ch, i) => (
+                  <span key={i} class="hero__title-letter" style={{ animationDelay: `${0.7 + i * 0.04}s` }}>{ch}</span>
+                ))}
+              </span>
             </div>
           </div>
         </div>
