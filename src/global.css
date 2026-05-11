@@ -6243,10 +6243,10 @@ details[open] > .cart-drawer__checkout-title::after {
   /* Pure vw sizing across the board — every element inside the cluster is a
      fixed fraction of the viewport, so nothing drifts at any zoom level. */
   .hero__upper .hero__text .hero__title-word {
-    font-size: 5vw !important;
+    font-size: 4.5vw !important;
   }
   .hero__upper .hero__text .hero__brandmark {
-    width: 15vw !important;
+    width: 13vw !important;
   }
   /* Black framed hero — small black border around carousel + cards row. */
   .hero { background: #000 !important; padding: 0.5rem !important; height: auto !important; }
@@ -6336,10 +6336,10 @@ details[open] > .cart-drawer__checkout-title::after {
     align-items: center !important;
   }
   .hero__upper .hero__text .hero__brandmark {
-    width: 32vw !important;
+    width: 28vw !important;
   }
   .hero__upper .hero__text .hero__title-word {
-    font-size: 11vw !important;
+    font-size: 10vw !important;
   }
 }
 
@@ -6366,17 +6366,17 @@ details[open] > .cart-drawer__checkout-title::after {
     justify-content: center !important;
     text-align: center !important;
     gap: 2.6rem !important;
-    width: 92% !important;
+    width: 94% !important;
     padding-top: 6rem !important;
     /* Small reserve at the bottom so the gap between APPAREL and the dots
        matches the brandmark-to-words gap (≈2.2rem visible). */
     padding-bottom: 4.4rem !important;
   }
-  .hero__upper .hero__text .hero__brandmark { width: 48vw !important; }
+  .hero__upper .hero__text .hero__brandmark { width: 42vw !important; }
   .hero__upper .hero__text .hero__words { align-items: center !important; }
   /* Pure vw so the text always fills the same proportion of the viewport
      regardless of zoom (no rem-based step changes). */
-  .hero__upper .hero__text .hero__title-word { font-size: 14vw !important; }
+  .hero__upper .hero__text .hero__title-word { font-size: 12.5vw !important; }
   /* Pagination dots: centered horizontally inside the cluster, near the bottom. */
   .hero__upper .hero-carousel__dots {
     left: 50% !important;
