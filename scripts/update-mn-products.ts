@@ -14,6 +14,7 @@ type Update = {
   imgs?: string[];
   colors?: string[];
   sizes?: string;
+  sort_order?: number;
   delete?: boolean;
 };
 
@@ -124,6 +125,19 @@ const updates: Update[] = [
     details: "Classic fit, rib collar, taped neck and shoulders, tear-away label, no optical brighteners for consistent dye adherence, OEKO-TEX and FLA certified, #2000 / #2000T",
   },
   { sku: "MN-4", delete: true },
+  // Display order: Shirts → SWAG → Jackets/Hoodies → Hats → image-less items last
+  { sku: "MN-3",  sort_order: 10 }, // Short Sleeve T-Shirt (Shirts)
+  { sku: "MN-11", sort_order: 15 }, // Mens Polo (SWAG)
+  { sku: "MN-12", sort_order: 16 }, // Womens Polo (SWAG)
+  { sku: "MN-7",  sort_order: 20 }, // Winter Jacket
+  { sku: "MN-9",  sort_order: 21 }, // Pullover Hoodie (Jackets)
+  { sku: "MN-10", sort_order: 22 }, // Full Zip Hoodie (Jackets)
+  { sku: "MN-5",  sort_order: 30 }, // Ball Cap (Hats)
+  { sku: "MN-6",  sort_order: 31 }, // Toque (Hats)
+  // No-image items pushed to the end
+  { sku: "MN-2",  sort_order: 90 }, // Long Sleeve Shirt (no img)
+  { sku: "MN-1",  sort_order: 91 }, // Pants (no img)
+  { sku: "MN-8",  sort_order: 92 }, // Winter Bibs (no img)
 ];
 
 async function main() {
@@ -164,6 +178,7 @@ async function main() {
     if (u.imgs !== undefined)     { sets.push("imgs = ?");     args.push(JSON.stringify(u.imgs)); }
     if (u.colors !== undefined)   { sets.push("colors = ?");   args.push(JSON.stringify(u.colors)); }
     if (u.sizes !== undefined)    { sets.push("sizes = ?");    args.push(u.sizes); }
+    if (u.sort_order !== undefined) { sets.push("sort_order = ?"); args.push(u.sort_order); }
     if (sets.length === 0) continue;
 
     args.push(VENDOR, u.sku);

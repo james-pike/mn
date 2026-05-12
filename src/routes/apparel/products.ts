@@ -4,6 +4,145 @@ import type { Locale } from "../../i18n";
 
 export const allProducts = [
   {
+    "sku": "MN-3",
+    "name": "Short Sleeve T-Shirt - Navy",
+    "category": "Shirts",
+    "sizes": "S - 4XL / LT - 4XLT",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 13.5,
+    "img": "/sku/tshirt.png",
+    "imgs": [
+      "/sku/tshirt.png"
+    ],
+    "material": "6 oz/yd² 100% US cotton, 18 singles",
+    "details": "Classic fit, rib collar, taped neck and shoulders, tear-away label, no optical brighteners for consistent dye adherence, OEKO-TEX and FLA certified, #2000 / #2000T"
+  },
+  {
+    "sku": "MN-11",
+    "name": "Men's Speckle Print Polo",
+    "category": "SWAG",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#2c3e50",
+      "#6b8bb0"
+    ],
+    "price": 0,
+    "img": "/sku/footjoy.png",
+    "imgs": [
+      "/sku/footjoy.png"
+    ],
+    "material": "ProDry® performance polyester",
+    "details": "Moisture-wicking, anti-microbial, double-stitched seams, extended back shirt tail, easy-care fabric, FootJoy, #16324"
+  },
+  {
+    "sku": "MN-12",
+    "name": "Women's Speckle Print Polo",
+    "category": "SWAG",
+    "sizes": "XS - 2XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#6b8bb0"
+    ],
+    "price": 0,
+    "img": "/sku/footjoy-ladies.png",
+    "imgs": [
+      "/sku/footjoy-ladies.png"
+    ],
+    "material": "ProDry® performance polyester",
+    "details": "Moisture-wicking, anti-microbial, double-stitched seams, lock-stitched hem, extended back shirt tail, machine washable, FootJoy, #96324"
+  },
+  {
+    "sku": "MN-7",
+    "name": "Winter Jacket - Navy",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 198.49,
+    "img": "/sku/winterjacket.jpeg",
+    "imgs": [
+      "/sku/winterjacket.jpeg"
+    ],
+    "material": "12 oz 100% ringspun cotton duck shell, quilted nylon lining, Arctic-weight polyester insulation",
+    "details": "Two-way brass zip, pleated bi-swing back, internal rib-knit storm cuffs, four exterior pockets, two interior pockets, triple-stitched seams, #106674"
+  },
+  {
+    "sku": "MN-9",
+    "name": "Pullover Hoodie - Navy",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 74.99,
+    "img": "/sku/pulloverhoodie.png",
+    "imgs": [
+      "/sku/pulloverhoodie.png"
+    ],
+    "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
+    "details": "Three-piece hood with drawcord, rib-knit cuffs and waist, front handwarmer pocket, triple-stitched seams, Carhartt patch, #K121"
+  },
+  {
+    "sku": "MN-10",
+    "name": "Full Zip Hoodie - Navy",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 89.99,
+    "img": "/sku/fullziphoodie.png",
+    "imgs": [
+      "/sku/fullziphoodie.png"
+    ],
+    "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
+    "details": "Three-piece hood with drawcord, full-length brass zipper, rib-knit cuffs and waist, two front handwarmer pockets, Carhartt patch on pocket, loose fit, #K122"
+  },
+  {
+    "sku": "MN-5",
+    "name": "Ball Cap - Navy",
+    "category": "Hats",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 23.5,
+    "img": "/sku/cap.png",
+    "imgs": [
+      "/sku/cap.png"
+    ],
+    "material": "Poly/spandex blend with performance mesh back",
+    "details": "Mid-profile structured trucker cap, shapeable pre-curved visor, UV protection, moisture wicking, 110 Technology® sweatband, adjustable plastic snapback, grey under visor, #i8502"
+  },
+  {
+    "sku": "MN-6",
+    "name": "Toque - Navy",
+    "category": "Hats",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 33.99,
+    "img": "/sku/toque.png",
+    "imgs": [
+      "/sku/toque.png"
+    ],
+    "material": "100% acrylic rib knit",
+    "details": "Stretchy thick knit, fold-up cuff with Carhartt patch, one-size-fits-most, #A18"
+  },
+  {
     "sku": "MNFR-1",
     "name": "FR Pants - Navy",
     "category": "FR Workwear",
@@ -102,21 +241,6 @@ export const allProducts = [
     "details": "Fire-resistant, #101618"
   },
   {
-    "sku": "MN-1",
-    "name": "Pants - Navy",
-    "category": "Pants",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 69.99,
-    "img": "",
-    "imgs": [],
-    "material": "",
-    "details": "#102291"
-  },
-  {
     "sku": "MN-2",
     "name": "Long Sleeve Shirt - Navy",
     "category": "Shirts",
@@ -132,72 +256,19 @@ export const allProducts = [
     "details": "Loose fit with dropped shoulders, rib-knit crewneck, side-seam construction, left-chest pocket with Carhartt patch, tagless neck label, #K126"
   },
   {
-    "sku": "MN-3",
-    "name": "Short Sleeve T-Shirt - Navy",
-    "category": "Shirts",
-    "sizes": "S - 4XL / LT - 4XLT",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 13.5,
-    "img": "/sku/tshirt.png",
-    "imgs": [
-      "/sku/tshirt.png"
-    ],
-    "material": "6 oz/yd² 100% US cotton, 18 singles",
-    "details": "Classic fit, rib collar, taped neck and shoulders, tear-away label, no optical brighteners for consistent dye adherence, OEKO-TEX and FLA certified, #2000 / #2000T"
-  },
-  {
-    "sku": "MN-5",
-    "name": "Ball Cap - Navy",
-    "category": "Hats",
-    "sizes": "One Size",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 23.5,
-    "img": "/sku/cap.png",
-    "imgs": [
-      "/sku/cap.png"
-    ],
-    "material": "Poly/spandex blend with performance mesh back",
-    "details": "Mid-profile structured trucker cap, shapeable pre-curved visor, UV protection, moisture wicking, 110 Technology® sweatband, adjustable plastic snapback, grey under visor, #i8502"
-  },
-  {
-    "sku": "MN-6",
-    "name": "Toque - Navy",
-    "category": "Hats",
-    "sizes": "One Size",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 33.99,
-    "img": "/sku/toque.png",
-    "imgs": [
-      "/sku/toque.png"
-    ],
-    "material": "100% acrylic rib knit",
-    "details": "Stretchy thick knit, fold-up cuff with Carhartt patch, one-size-fits-most, #A18"
-  },
-  {
-    "sku": "MN-7",
-    "name": "Winter Jacket - Navy",
-    "category": "Jackets",
+    "sku": "MN-1",
+    "name": "Pants - Navy",
+    "category": "Pants",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
       "#2c3e50"
     ],
-    "price": 198.49,
-    "img": "/sku/winterjacket.jpeg",
-    "imgs": [
-      "/sku/winterjacket.jpeg"
-    ],
-    "material": "12 oz 100% ringspun cotton duck shell, quilted nylon lining, Arctic-weight polyester insulation",
-    "details": "Two-way brass zip, pleated bi-swing back, internal rib-knit storm cuffs, four exterior pockets, two interior pockets, triple-stitched seams, #106674"
+    "price": 69.99,
+    "img": "",
+    "imgs": [],
+    "material": "",
+    "details": "#102291"
   },
   {
     "sku": "MN-8",
@@ -213,77 +284,6 @@ export const allProducts = [
     "imgs": [],
     "material": "",
     "details": "#106672"
-  },
-  {
-    "sku": "MN-9",
-    "name": "Pullover Hoodie - Navy",
-    "category": "Jackets",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 74.99,
-    "img": "/sku/pulloverhoodie.png",
-    "imgs": [
-      "/sku/pulloverhoodie.png"
-    ],
-    "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
-    "details": "Three-piece hood with drawcord, rib-knit cuffs and waist, front handwarmer pocket, triple-stitched seams, Carhartt patch, #K121"
-  },
-  {
-    "sku": "MN-10",
-    "name": "Full Zip Hoodie - Navy",
-    "category": "Jackets",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 89.99,
-    "img": "/sku/fullziphoodie.png",
-    "imgs": [
-      "/sku/fullziphoodie.png"
-    ],
-    "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
-    "details": "Three-piece hood with drawcord, full-length brass zipper, rib-knit cuffs and waist, two front handwarmer pockets, Carhartt patch on pocket, loose fit, #K122"
-  },
-  {
-    "sku": "MN-11",
-    "name": "Men's Speckle Print Polo",
-    "category": "SWAG",
-    "sizes": "S - 3XL",
-    "badge": "",
-    "colors": [
-      "#1a1a18",
-      "#2c3e50",
-      "#6b8bb0"
-    ],
-    "price": 0,
-    "img": "/sku/footjoy.png",
-    "imgs": [
-      "/sku/footjoy.png"
-    ],
-    "material": "ProDry® performance polyester",
-    "details": "Moisture-wicking, anti-microbial, double-stitched seams, extended back shirt tail, easy-care fabric, FootJoy, #16324"
-  },
-  {
-    "sku": "MN-12",
-    "name": "Women's Speckle Print Polo",
-    "category": "SWAG",
-    "sizes": "XS - 2XL",
-    "badge": "",
-    "colors": [
-      "#1a1a18",
-      "#6b8bb0"
-    ],
-    "price": 0,
-    "img": "/sku/footjoy-ladies.png",
-    "imgs": [
-      "/sku/footjoy-ladies.png"
-    ],
-    "material": "ProDry® performance polyester",
-    "details": "Moisture-wicking, anti-microbial, double-stitched seams, lock-stitched hem, extended back shirt tail, machine washable, FootJoy, #96324"
   }
 ];
 
