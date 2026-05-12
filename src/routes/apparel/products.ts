@@ -4,424 +4,286 @@ import type { Locale } from "../../i18n";
 
 export const allProducts = [
   {
-    "sku": "CAR-1",
-    "name": "Men's Soft Shell Jacket",
-    "category": "Jackets",
-    "sizes": "XS - 4XL",
+    "sku": "MNFR-1",
+    "name": "FR Pants - Navy",
+    "category": "FR Workwear",
+    "sizes": "S - 4XL",
     "badge": "",
-    "colors": [],
-    "price": 65,
-    "img": "/softshell/j7603-soft-shell.png",
-    "imgs": [
-      "/softshell/j7603-soft-shell.png"
+    "colors": [
+      "#2c3e50"
     ],
-    "material": "100% polyester with mechanical stretch, bonded micro fleece lining",
-    "details": "Water repellent, Wind resistant, Anti-pill, YKK zippers, 1000mm waterproof rating, Classic fit , #J7603"
+    "price": 159,
+    "img": "/sku/fr-pants.png",
+    "imgs": [
+      "/sku/fr-pants.png"
+    ],
+    "material": "9 oz 98% cotton / 2% spandex canvas with Rugged Flex stretch",
+    "details": "Flame-resistant, NFPA 70E and UL classified to NFPA 2112, relaxed fit, straight leg, phone and utility pockets, OEKO-TEX Standard 100, #104204"
   },
   {
-    "sku": "CAR-2",
-    "name": "Women's Soft Shell Jacket",
-    "category": "Jackets",
-    "sizes": "XS - 4XL",
+    "sku": "MNFR-2",
+    "name": "FR Long Sleeve Button-Up Shirt - Light Blue",
+    "category": "FR Workwear",
+    "sizes": "S - 4XL",
     "badge": "",
-    "colors": [],
-    "price": 65,
-    "img": "/softshell/l7603-ladies-soft-shell.png",
-    "imgs": [
-      "/softshell/l7603-ladies-soft-shell.png"
+    "colors": [
+      "#7dd3fc"
     ],
-    "material": "100% polyester with mechanical stretch, bonded micro fleece lining",
-    "details": "Water repellent, Wind resistant, Anti-pill, YKK zippers, 1000mm waterproof rating, Classic fit , #L7603"
+    "price": 124.99,
+    "img": "/sku/fr-lightblue.png",
+    "imgs": [
+      "/sku/fr-lightblue.png"
+    ],
+    "material": "7 oz 88% cotton / 12% high-tenacity nylon FR twill",
+    "details": "Button-up long sleeve, button-down collar, two chest pockets with flaps, flame-resistant melamine buttons, triple-stitched seams, NFPA 2112 / UL classified, meets NFPA 70E, #FRS160"
   },
   {
-    "sku": "CAR-25",
-    "name": "Men's Rigi Eco Knit Full Zip - Trimark Sportswear",
-    "category": "Jackets",
-    "sizes": "S - 3XL",
+    "sku": "MNFR-3",
+    "name": "FR Pullover Hoodie - Navy",
+    "category": "FR Workwear",
+    "sizes": "S - 4XL",
     "badge": "",
-    "colors": [],
-    "price": 88,
-    "img": "/mens-rigi-car-logoed.png",
-    "imgs": [
-      "/mens-rigi-car-logoed.png"
+    "colors": [
+      "#2c3e50"
     ],
-    "material": "53% Cotton/ 47% Recycled Polyester textured doubleknit, 225 g/m² (7.5 oz/yd²)",
-    "details": "Eco-friendly polyblend doubleknit fabric, Global Recycled Standard Certified, Breathable and moisture-wicking, Anti-pill, UPF 40+ protection, Self-fabric waistband and cuffs , #18157"
+    "price": 214.99,
+    "img": "/sku/fr-pullover.png",
+    "imgs": [
+      "/sku/fr-pullover.png"
+    ],
+    "material": "10.5 oz 40% cotton / 35% modacrylic / 15% viscose / 8% aramid / 2% antistat FR fleece",
+    "details": "Pullover hood with adjustable drawcord, flame-resistant (NFPA 2112 / ASTM F1506), Force sweat-wicking, FastDry, odor-fighting, handwarmer pocket, #104983"
   },
   {
-    "sku": "CAR-24",
-    "name": "Women's Rigi Eco Knit Full Zip - Trimark Sportswear",
-    "category": "Jackets",
-    "sizes": "XS - 2XL",
+    "sku": "MNFR-4",
+    "name": "FR Full Zip Hoodie - Navy",
+    "category": "FR Workwear",
+    "sizes": "S - 4XL",
     "badge": "",
-    "colors": [],
-    "price": 88,
-    "img": "/ladies-rigbi-logoed-car.png",
-    "imgs": [
-      "/ladies-rigbi-logoed-car.png"
+    "colors": [
+      "#2c3e50"
     ],
-    "material": "53% Cotton/ 47% Recycled Polyester textured doubleknit, 225 g/m² (7.5 oz/yd²)",
-    "details": "Eco-friendly polyblend doubleknit fabric, Global Recycled Standard Certified, Breathable and moisture-wicking, Anti-pill, UPF 40+ protection, Self-fabric waistband and cuffs, Shaped seams for a better fit , #98157"
+    "price": 239.99,
+    "img": "/sku/fr-fullzip.png",
+    "imgs": [
+      "/sku/fr-fullzip.png"
+    ],
+    "material": "10.5 oz 40% cotton / 35% modacrylic / 15% viscose / 8% aramid / 2% antistat FR fleece",
+    "details": "Full-zip hood with adjustable drawcord, Vislon zip with Nomex tape, flame-resistant (meets NFPA 70E, ASTM F1506, UL classified to NFPA 2112), Force sweat-wicking, FastDry, #104982"
   },
   {
-    "sku": "CAR-31",
-    "name": "Men's Roots Fleece",
-    "category": "Jackets",
-    "sizes": "S - 3XL",
+    "sku": "MNFR-5",
+    "name": "FR Insulated Bib - Navy",
+    "category": "FR Workwear",
+    "sizes": "S - 4XL",
     "badge": "",
-    "colors": [],
-    "price": 110,
-    "img": "/mens-roots-fleece.png",
-    "imgs": [
-      "/mens-roots-fleece.png"
+    "colors": [
+      "#2c3e50"
     ],
-    "material": "75% Recycled Polyester 25% Polyester anti-pill microfleece, 270 g/m² (8.0 oz/yd²), Contrast: 60% Polyester 40% Recycled Polyester 240T woven interior collar & zipper flap. 100% Recycled polyester brushed tricot knit pocket bags",
-    "details": "Anti-pill microfleece, Global Recycled Standard (GRS) Certified , #18194"
-  },
-  {
-    "sku": "CAR-32",
-    "name": "Women's Roots Fleece",
-    "category": "Jackets",
-    "sizes": "XS - 2XL",
-    "badge": "",
-    "colors": [],
-    "price": 110,
-    "img": "/womens-roots-fleece.png",
-    "imgs": [
-      "/womens-roots-fleece.png"
-    ],
+    "price": 380,
+    "img": "",
+    "imgs": [],
     "material": "",
-    "details": "#98194"
+    "details": "Fire-resistant, #101626"
   },
   {
-    "sku": "CAR-3",
-    "name": "Men's UA Tech Polo - Black",
-    "category": "Polos",
+    "sku": "MNFR-6",
+    "name": "FR Insulated Jacket - Navy",
+    "category": "FR Workwear",
     "sizes": "S - 4XL",
     "badge": "",
-    "colors": [],
-    "price": 65,
-    "img": "/uapolo/car1.png",
-    "imgs": [
-      "/uapolo/car1.png"
+    "colors": [
+      "#2c3e50"
     ],
-    "material": "100% polyester",
-    "details": "Moisture-wicking, Anti-odor technology, Textured soft & breathable fabric, Self-fabric collar, 3-button placket , #1370399"
+    "price": 290,
+    "img": "",
+    "imgs": [],
+    "material": "",
+    "details": "Fire-resistant, #101618"
   },
   {
-    "sku": "CAR-8",
-    "name": "Men's UA Tech Polo - Grey",
-    "category": "Polos",
+    "sku": "MN-1",
+    "name": "Pants - Navy",
+    "category": "Pants",
     "sizes": "S - 4XL",
     "badge": "",
-    "colors": [],
-    "price": 65,
-    "img": "/sku/car18.png",
-    "imgs": [
-      "/sku/car18.png"
+    "colors": [
+      "#2c3e50"
     ],
-    "material": "100% polyester ",
-    "details": "Moisture-wicking, Anti-odor technology, Textured soft & breathable fabric, Self-fabric collar, 3-button placket , #1370399"
+    "price": 69.99,
+    "img": "",
+    "imgs": [],
+    "material": "",
+    "details": "#102291"
   },
   {
-    "sku": "CAR-27",
-    "name": "Women's UA Tech Polo - Black",
-    "category": "Polos",
-    "sizes": "XS - 2XL",
-    "badge": "",
-    "colors": [],
-    "price": 65,
-    "img": "/wuapb.png",
-    "imgs": [
-      "/wuapb.png"
-    ],
-    "material": "100% polyester",
-    "details": "Moisture-wicking, Anti-odor technology, Textured soft & breathable fabric, Self-fabric collar, 4-button placket , #1370431"
-  },
-  {
-    "sku": "CAR-4",
-    "name": "Women's UA Tech Polo - White",
-    "category": "Polos",
-    "sizes": "XS - 2XL",
-    "badge": "",
-    "colors": [],
-    "price": 65,
-    "img": "/uapolo/womens-white.png",
-    "imgs": [
-      "/uapolo/womens-white.png"
-    ],
-    "material": "100% polyester",
-    "details": "Moisture-wicking, Anti-odor technology, Textured soft & breathable fabric, Self-fabric collar, 4-button placket , #1370431"
-  },
-  {
-    "sku": "CAR-19",
-    "name": "Men's Coal Harbour® Snag Resistant Polo - Black",
-    "category": "Polos",
+    "sku": "MN-2",
+    "name": "Long Sleeve Shirt - Navy",
+    "category": "Shirts",
     "sizes": "S - 4XL",
     "badge": "",
-    "colors": [],
-    "price": 37,
-    "img": "/sku/car19.png",
-    "imgs": [
-      "/sku/car19.png"
+    "colors": [
+      "#2c3e50"
     ],
-    "material": "100% performance polyester flat tricot micropique",
-    "details": "6.3-oz, Rib knit collar, Moisture wicking, Snag resistant, Breathable, Tagless Classic fit , #S445"
+    "price": 59.99,
+    "img": "",
+    "imgs": [],
+    "material": "100% cotton jersey, 6.75 oz heavyweight",
+    "details": "Loose fit with dropped shoulders, rib-knit crewneck, side-seam construction, left-chest pocket with Carhartt patch, tagless neck label, #K126"
   },
   {
-    "sku": "CAR-20",
-    "name": "Men's Coal Harbour® Snag Resistant Polo - Grey",
-    "category": "Polos",
-    "sizes": "S - 4XL",
+    "sku": "MN-3",
+    "name": "Short Sleeve T-Shirt - Navy",
+    "category": "Shirts",
+    "sizes": "S - 4XL / LT - 4XLT",
     "badge": "",
-    "colors": [],
-    "price": 37,
-    "img": "/sku/car20.png",
-    "imgs": [
-      "/sku/car20.png"
+    "colors": [
+      "#2c3e50"
     ],
-    "material": "100% performance polyester flat tricot micropique",
-    "details": "6.3-oz, Rib knit collar, Moisture wicking, Snag resistant, Breathable, Tagless Classic fit , #S445"
+    "price": 13.5,
+    "img": "/sku/tshirt.png",
+    "imgs": [
+      "/sku/tshirt.png"
+    ],
+    "material": "6 oz/yd² 100% US cotton, 18 singles",
+    "details": "Classic fit, rib collar, taped neck and shoulders, tear-away label, no optical brighteners for consistent dye adherence, OEKO-TEX and FLA certified, #2000 / #2000T"
   },
   {
-    "sku": "CAR-22",
-    "name": "Men's Coal Harbour® Snag Resistant Polo - Green",
-    "category": "Polos",
-    "sizes": "XS-6XL",
-    "badge": "",
-    "colors": [],
-    "price": 37,
-    "img": "/s455-mens-green.png",
-    "imgs": [
-      "/s455-mens-green.png"
-    ],
-    "material": "100% performance polyester flat tricot micropique",
-    "details": "6.3-oz, Rib knit collar, Moisture wicking, Snag resistant, Breathable, Tagless Classic fit , #S445"
-  },
-  {
-    "sku": "CAR-7",
-    "name": "Women's Coal Harbour® Snag Resistant Polo - Black",
-    "category": "Polos",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [],
-    "price": 37,
-    "img": "/wpb.png",
-    "imgs": [
-      "/wpb.png"
-    ],
-    "material": "100% performance polyester flat tricot micropique",
-    "details": "Self-fabric collar, Moisture-wicking, Snag resistant, Breathable, Tagless, Relaxed fit, #L455"
-  },
-  {
-    "sku": "CAR-5",
-    "name": "Women's Coal Harbour® Snag Resistant Polo - Grey",
-    "category": "Polos",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [],
-    "price": 37,
-    "img": "/wpg.png",
-    "imgs": [
-      "/wpg.png"
-    ],
-    "material": "100% performance polyester flat tricot micropique",
-    "details": "Self-fabric collar, Moisture-wicking, Snag resistant, Breathable, Tagless, Relaxed fit, #L455"
-  },
-  {
-    "sku": "CAR-6",
-    "name": "Women's Coal Harbour® Snag Resistant Polo - Green",
-    "category": "Polos",
-    "sizes": "XS - 4XL",
-    "badge": "",
-    "colors": [],
-    "price": 37,
-    "img": "/golf/green.png",
-    "imgs": [
-      "/golf/green.png"
-    ],
-    "material": "100% performance polyester flat tricot micropique",
-    "details": "Self-fabric collar, Moisture-wicking, Snag resistant, Breathable, Tagless, Relaxed fit, #L455"
-  },
-  {
-    "sku": "CAR-23",
-    "name": "Women's Harriton Easy Blend Polo",
-    "category": "Polos",
-    "sizes": "XS - 3XL",
-    "badge": "",
-    "colors": [],
-    "price": 43,
-    "img": "/m265w-womens-harriton.png",
-    "imgs": [
-      "/m265w-womens-harriton.png"
-    ],
-    "material": "65% polyester / 35% cotton piqué",
-    "details": " Special poly/cotton blend helps reduce shrinkage, Wrinkle-resistant, Softly shaped for more flattering feminine fit, Flat-knit collar and cuffs, Set-in sleeves, Side seams, Three-button placket, Hemmed bottom with side vents, #M265W"
-  },
-  {
-    "sku": "CAR-21",
-    "name": "Embroidered Cap",
-    "category": "Hats",
-    "sizes": "One Size",
-    "badge": "Popular",
-    "colors": [],
-    "price": 28.5,
-    "img": "/hat/30109107PS2_FRONT.JPG",
-    "imgs": [
-      "/hat/30109107PS2_FRONT.JPG"
-    ],
-    "material": "Poly/Spandex with Performance Mesh",
-    "details": "Structured mid profile 6 panel Flexfit 110®, Shapeable pre-curved visor, Plastic snap back closure, UV protection, Moisture wicking, Contrasting grey undervisor, Flat embroidery with embroidered patch ,  #I8502"
-  },
-  {
-    "sku": "CAR-18",
-    "name": "Flip Toque",
+    "sku": "MN-5",
+    "name": "Ball Cap - Navy",
     "category": "Hats",
     "sizes": "One Size",
     "badge": "",
-    "colors": [],
-    "price": 18.5,
-    "img": "/beanie/1.png",
-    "imgs": [
-      "/beanie/1.png"
+    "colors": [
+      "#2c3e50"
     ],
-    "material": "100% Acrylic",
-    "details": "Traditional knit hat with cuff, One size fits most , DK24"
+    "price": 23.5,
+    "img": "/sku/cap.png",
+    "imgs": [
+      "/sku/cap.png"
+    ],
+    "material": "Poly/spandex blend with performance mesh back",
+    "details": "Mid-profile structured trucker cap, shapeable pre-curved visor, UV protection, moisture wicking, 110 Technology® sweatband, adjustable plastic snapback, grey under visor, #i8502"
   },
   {
-    "sku": "CAR-11",
-    "name": "Flame-Resistant Classic Twill Shirt",
+    "sku": "MN-6",
+    "name": "Toque - Navy",
+    "category": "Hats",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 33.99,
+    "img": "/sku/toque.png",
+    "imgs": [
+      "/sku/toque.png"
+    ],
+    "material": "100% acrylic rib knit",
+    "details": "Stretchy thick knit, fold-up cuff with Carhartt patch, one-size-fits-most, #A18"
+  },
+  {
+    "sku": "MN-7",
+    "name": "Winter Jacket - Navy",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 198.49,
+    "img": "/sku/winterjacket.jpeg",
+    "imgs": [
+      "/sku/winterjacket.jpeg"
+    ],
+    "material": "12 oz 100% ringspun cotton duck shell, quilted nylon lining, Arctic-weight polyester insulation",
+    "details": "Two-way brass zip, pleated bi-swing back, internal rib-knit storm cuffs, four exterior pockets, two interior pockets, triple-stitched seams, #106674"
+  },
+  {
+    "sku": "MN-8",
+    "name": "Winter Bibs - Navy",
     "category": "Work Wear",
     "sizes": "S - 4XL",
     "badge": "",
-    "colors": [],
-    "price": 135,
-    "img": "/sku/FRS-160-CARHARTT-SHIRT-_2_.png",
-    "imgs": [
-      "/sku/FRS-160-CARHARTT-SHIRT-_2_.png"
+    "colors": [
+      "#2c3e50"
     ],
-    "material": "88% cotton / 12% High-tenacity nylon",
-    "details": "7-ounces, FR twill, #FRS160"
-  },
-  {
-    "sku": "CAR-16",
-    "name": "Men's Classic Lightweight FR Long Sleeve Polo",
-    "category": "Work Wear",
-    "sizes": "M - 3XL",
-    "badge": "",
-    "colors": [],
-    "price": 250,
-    "img": "/sku/MENS-CLASSIC-LONG-SLEEVE-SMP2.png",
-    "imgs": [
-      "/sku/MENS-CLASSIC-LONG-SLEEVE-SMP2.png"
-    ],
+    "price": 189.99,
+    "img": "",
+    "imgs": [],
     "material": "",
-    "details": "Flame resistant, 6.5 oz.(220 g/m²), Swiss Pique, Category 2 Protection, #SMP2"
+    "details": "#106672"
   },
   {
-    "sku": "CAR-15",
-    "name": "FR Heavyweight Cotton Hoodie-Black ",
-    "category": "Work Wear",
-    "sizes": "XS - 7XL",
-    "badge": "",
-    "colors": [],
-    "price": 176,
-    "img": "/sku/carmicheal-337-logo.png",
-    "imgs": [
-      "/sku/carmicheal-337-logo.png"
-    ],
-    "material": "",
-    "details": "Durable material holds up to the toughest working conditions, Sewn with FR thread for flame resistance, Detachable snap hood, #337"
-  },
-  {
-    "sku": "CAR-9",
-    "name": "Viking Professional® Insulated Journeyman Jacket",
-    "category": "Work Wear",
-    "sizes": "S - 5XL",
-    "badge": "",
-    "colors": [],
-    "price": 260,
-    "img": "/sku/_INSULATED-VIKING-frj3957frj-_1_.png",
-    "imgs": [
-      "/sku/_INSULATED-VIKING-frj3957frj-_1_.png"
-    ],
-    "material": "",
-    "details": "Waterproof, Windproof, #3957FRJ"
-  },
-  {
-    "sku": "CAR-13",
-    "name": "Viking Journeyman® 420D Jacket",
-    "category": "Work Wear",
-    "sizes": "S - 5XL",
-    "badge": "",
-    "colors": [],
-    "price": 120,
-    "img": "/sku/jacket-logoed-3307J.png",
-    "imgs": [
-      "/sku/jacket-logoed-3307J.png"
-    ],
-    "material": "Heavy-duty 420 denier nylon with PVC backing",
-    "details": "100% Waterproof and windproof, Toughest fabric to resist punctures rips snags and abrasions, #3307J"
-  },
-  {
-    "sku": "CAR-12",
-    "name": "Flame-Resistant Relaxed Fit Canvas Work Pant Shadow",
-    "category": "Work Wear",
-    "sizes": " ",
-    "badge": "",
-    "colors": [],
-    "price": 160,
-    "img": "/sku/carhartt-104204.png",
-    "imgs": [
-      "/sku/carhartt-104204.png"
-    ],
-    "material": "98% cotton / 2% spandex canvas",
-    "details": "Flame resistant, 9-ounces, #104204"
-  },
-  {
-    "sku": "CAR-10",
-    "name": "Viking Professional® Insulated Journeyman Bib",
-    "category": "Work Wear",
+    "sku": "MN-9",
+    "name": "Pullover Hoodie - Navy",
+    "category": "Jackets",
     "sizes": "S - 4XL",
     "badge": "",
-    "colors": [],
-    "price": 85,
-    "img": "/sku/viking-3907FRWP.png",
-    "imgs": [
-      "/sku/viking-3907FRWP.png"
+    "colors": [
+      "#2c3e50"
     ],
-    "material": "",
-    "details": "Flame resistance, Self-extinguishing for momentary contact with open flame, #3957FRJ"
+    "price": 74.99,
+    "img": "/sku/pulloverhoodie.png",
+    "imgs": [
+      "/sku/pulloverhoodie.png"
+    ],
+    "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
+    "details": "Three-piece hood with drawcord, rib-knit cuffs and waist, front handwarmer pocket, triple-stitched seams, Carhartt patch, #K121"
   },
   {
-    "sku": "CAR-14",
-    "name": "Viking Journeyman® 420D Bib Pants",
-    "category": "Work Wear",
+    "sku": "MN-10",
+    "name": "Full Zip Hoodie - Navy",
+    "category": "Jackets",
     "sizes": "S - 4XL",
     "badge": "",
-    "colors": [],
-    "price": 100,
-    "img": "/sku/Viking-3307P.png",
-    "imgs": [
-      "/sku/Viking-3307P.png"
+    "colors": [
+      "#2c3e50"
     ],
-    "material": "",
-    "details": "#3307P"
+    "price": 89.99,
+    "img": "/sku/fullziphoodie.png",
+    "imgs": [
+      "/sku/fullziphoodie.png"
+    ],
+    "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
+    "details": "Three-piece hood with drawcord, full-length brass zipper, rib-knit cuffs and waist, two front handwarmer pockets, Carhartt patch on pocket, loose fit, #K122"
   },
   {
-    "sku": "CAR-17",
-    "name": "Atlas Guardian FR/AR Ohsa Hi Vis Coveralls - Grey ",
-    "category": "Work Wear",
-    "sizes": "XS - 7XL",
+    "sku": "MN-11",
+    "name": "Men's Speckle Print Polo",
+    "category": "SWAG",
+    "sizes": "S - 3XL",
     "badge": "",
-    "colors": [],
-    "price": 200,
-    "img": "/sku/Coverall-FlaME-1072GR.png",
-    "imgs": [
-      "/sku/Coverall-FlaME-1072GR.png"
+    "colors": [
+      "#1a1a18",
+      "#2c3e50",
+      "#6b8bb0"
     ],
-    "material": "",
-    "details": "#1072"
+    "price": 0,
+    "img": "/sku/footjoy.png",
+    "imgs": [
+      "/sku/footjoy.png"
+    ],
+    "material": "ProDry® performance polyester",
+    "details": "Moisture-wicking, anti-microbial, double-stitched seams, extended back shirt tail, easy-care fabric, FootJoy, #16324"
+  },
+  {
+    "sku": "MN-12",
+    "name": "Women's Speckle Print Polo",
+    "category": "SWAG",
+    "sizes": "XS - 2XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#6b8bb0"
+    ],
+    "price": 0,
+    "img": "/sku/footjoy-ladies.png",
+    "imgs": [
+      "/sku/footjoy-ladies.png"
+    ],
+    "material": "ProDry® performance polyester",
+    "details": "Moisture-wicking, anti-microbial, double-stitched seams, lock-stitched hem, extended back shirt tail, machine washable, FootJoy, #96324"
   }
 ];
 
@@ -441,6 +303,8 @@ const colorNames: Record<string, Record<string, string>> = {
   "#2c3e50": { en: "Navy", fr: "Marine" },
   "#94a3b8": { en: "Silver", fr: "Argent" },
   "#4a4a4a": { en: "Charcoal", fr: "Charbon" },
+  "#6b8bb0": { en: "Solace Blue", fr: "Bleu Solace" },
+  "#7dd3fc": { en: "Light Blue", fr: "Bleu clair" },
 };
 export function colorName(hex: string, locale: Locale): string {
   return colorNames[hex]?.[locale] || hex;

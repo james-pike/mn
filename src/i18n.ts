@@ -187,6 +187,8 @@ const translations = {
   "cat.Caps": { en: "Caps & Beanies", fr: "Casquettes" },
   "cat.Jackets": { en: "Jackets", fr: "Manteaux" },
   "cat.Work Wear": { en: "Work Wear", fr: "Travail" },
+  "cat.Shirts": { en: "Shirts", fr: "Chemises" },
+  "cat.SWAG": { en: "SWAG", fr: "SWAG" },
 
   // Product detail
   "product.taptoclose": { en: "Tap anywhere to close", fr: "Appuyez pour fermer" },

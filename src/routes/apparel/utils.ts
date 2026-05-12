@@ -3,10 +3,15 @@
 export function expandSizes(sizes: string): string[] {
   if (sizes === "One Size") return ["One Size"];
   const order = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL", "7XL"];
-  const match = sizes.match(/^(\w+)\s*-\s*(\w+)$/);
-  if (!match) return [sizes];
-  const start = order.indexOf(match[1]);
-  const end = order.indexOf(match[2]);
-  if (start === -1 || end === -1) return [sizes];
-  return order.slice(start, end + 1);
+  const tallOrder = ["LT", "XLT", "2XLT", "3XLT", "4XLT", "5XLT"];
+  const expandRange = (range: string): string[] => {
+    const m = range.trim().match(/^(\w+)\s*-\s*(\w+)$/);
+    if (!m) return [range.trim()];
+    const inReg = order.indexOf(m[1]) !== -1 && order.indexOf(m[2]) !== -1;
+    const inTall = tallOrder.indexOf(m[1]) !== -1 && tallOrder.indexOf(m[2]) !== -1;
+    const arr = inReg ? order : inTall ? tallOrder : null;
+    if (!arr) return [range.trim()];
+    return arr.slice(arr.indexOf(m[1]), arr.indexOf(m[2]) + 1);
+  };
+  return sizes.split("/").flatMap(expandRange);
 }

@@ -4,14 +4,16 @@ import { allProducts, categoryLabel } from "../../routes/apparel/products";
 import type { Product } from "../../routes/apparel/products";
 import { LoginTypeContext } from "../../routes/layout";
 
-const CLOTHING_CATEGORIES = ["All", "Work Wear", "Jackets", "Polos", "Hats"];
+const CLOTHING_CATEGORIES = ["All", "Jackets", "Shirts", "Hats", "SWAG"];
 
 const CATEGORY_ICONS: Record<string, string> = {
   "All": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
   "Work Wear": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M4 6h16v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/><path d="M4 6l-2 4v2h4V8"/><path d="M20 6l2 4v2h-4V8"/></svg>',
   "Jackets": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>',
+  "Shirts": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 2l4 4-3 3-2-1v14a1 1 0 01-1 1H10a1 1 0 01-1-1V8L7 9 4 6l4-4h2a2 2 0 004 0h2z"/></svg>',
   "Polos": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2 12 5.5 8 2 3.62 3.46a2 2 0 00-1.34 1.93v15.12a2 2 0 001.34 1.93L8 24l4-3.5L16 24l4.38-1.46a2 2 0 001.34-1.93V5.39a2 2 0 00-1.34-1.93z"/></svg>',
   "Hats": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>',
+  "SWAG": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>',
 };
 
 const ProductCard = component$<{ item: Product; sku: string }>(({ item, sku }) => {
@@ -32,8 +34,22 @@ const ProductCard = component$<{ item: Product; sku: string }>(({ item, sku }) =
           </div>
           <div class="product-card__price-group">
             {!isTech && <div class="product-card__price">${(Number(item.price) || 0).toFixed(2)}</div>}
-            <span class="product-card__sizes">{item.sizes === "One Size" ? t("modal.onesize", locale.value) : item.sizes}</span>
           </div>
+        </div>
+        <div class="product-card__color-size-row">
+          {item.colors && item.colors.length > 0 ? (
+            <div class="product-card__colors">
+              {item.colors.map((c) => (
+                <span
+                  key={c}
+                  class="product-card__color-dot"
+                  style={{ background: c }}
+                  aria-hidden="true"
+                />
+              ))}
+            </div>
+          ) : <span />}
+          <span class="product-card__sizes">{item.sizes === "One Size" ? t("modal.onesize", locale.value) : item.sizes}</span>
         </div>
       </div>
     </a>
@@ -51,7 +67,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
 
   const HASH_TO_CAT: Record<string, string> = isTech.value
     ? {}
-    : { "work-wear": "Work Wear", "jackets": "Jackets", "polos": "Polos", "hats": "Hats" };
+    : { "jackets": "Jackets", "shirts": "Shirts", "hats": "Hats", "swag": "SWAG" };
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup }) => {
@@ -103,7 +119,13 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
 
   const baseProducts = useComputed$(() => {
     if (isTech.value) return allProducts.filter((p) => p.category === "Work Wear");
-    return allProducts;
+    return allProducts.filter((p) => p.category !== "FR Workwear");
+  });
+
+  const visibleCategories = useComputed$(() => {
+    if (isTech.value) return ["Work Wear"];
+    const present = new Set(baseProducts.value.map((p) => p.category));
+    return CLOTHING_CATEGORIES.filter((c) => c === "All" || present.has(c));
   });
 
   const filtered = useComputed$(() => {
@@ -142,7 +164,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
             />
           </div>
           <div class="home-catalog__tabs">
-            {(isTech.value ? ["Work Wear"] : CLOTHING_CATEGORIES).map((cat) => (
+            {visibleCategories.value.map((cat) => (
               <button
                 key={cat}
                 class={`apparel-titlebar__tab ${isTech.value || activeCat.value === cat ? "active" : ""}`}

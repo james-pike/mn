@@ -7,10 +7,14 @@ const VENDOR = "modernniagara";
 
 type Update = {
   sku: string;
+  category?: string;
   material?: string;
   details?: string;
   img?: string;
   imgs?: string[];
+  colors?: string[];
+  sizes?: string;
+  delete?: boolean;
 };
 
 const updates: Update[] = [
@@ -89,6 +93,37 @@ const updates: Update[] = [
     img: "/sku/fr-fullzip.png",
     imgs: ["/sku/fr-fullzip.png"],
   },
+  {
+    sku: "MN-11",
+    material: "ProDry® performance polyester",
+    details: "Moisture-wicking, anti-microbial, double-stitched seams, extended back shirt tail, easy-care fabric, FootJoy, #16324",
+    img: "/sku/footjoy.png",
+    imgs: ["/sku/footjoy.png"],
+  },
+  {
+    sku: "MN-12",
+    material: "ProDry® performance polyester",
+    details: "Moisture-wicking, anti-microbial, double-stitched seams, lock-stitched hem, extended back shirt tail, machine washable, FootJoy, #96324",
+    img: "/sku/footjoy-ladies.png",
+    imgs: ["/sku/footjoy-ladies.png"],
+  },
+  // Re-categorize for the construction sidebar (Jackets / Shirts / Polos / Hats / SWAG)
+  { sku: "MN-3",  category: "Shirts"  }, // Short Sleeve T-Shirt
+  { sku: "MN-4",  category: "Shirts"  }, // Short Sleeve T-Shirt — Tall
+  { sku: "MN-5",  category: "Hats"    }, // Ball Cap
+  { sku: "MN-6",  category: "Hats"    }, // Toque
+  { sku: "MN-9",  category: "Jackets" }, // Pullover Hoodie
+  { sku: "MN-10", category: "Jackets" }, // Full Zip Hoodie
+  // Polo color order: Black, Navy, Solace Blue
+  { sku: "MN-11", colors: ["#1a1a18", "#2c3e50", "#6b8bb0"] },
+  { sku: "MN-12", colors: ["#1a1a18", "#6b8bb0"] },
+  // Merge MN-4 (Tall) into MN-3 as a size variant
+  {
+    sku: "MN-3",
+    sizes: "S - 4XL / LT - 4XLT",
+    details: "Classic fit, rib collar, taped neck and shoulders, tear-away label, no optical brighteners for consistent dye adherence, OEKO-TEX and FLA certified, #2000 / #2000T",
+  },
+  { sku: "MN-4", delete: true },
 ];
 
 async function main() {
@@ -110,12 +145,25 @@ async function main() {
       continue;
     }
 
+    if (u.delete) {
+      await db.execute({
+        sql: "DELETE FROM products WHERE vendor = ? AND sku = ?",
+        args: [VENDOR, u.sku],
+      });
+      console.log(`  delete ${u.sku}`);
+      updated++;
+      continue;
+    }
+
     const sets: string[] = [];
     const args: any[] = [];
+    if (u.category !== undefined) { sets.push("category = ?"); args.push(u.category); }
     if (u.material !== undefined) { sets.push("material = ?"); args.push(u.material); }
     if (u.details !== undefined)  { sets.push("details = ?");  args.push(u.details); }
     if (u.img !== undefined)      { sets.push("img = ?");      args.push(u.img); }
     if (u.imgs !== undefined)     { sets.push("imgs = ?");     args.push(JSON.stringify(u.imgs)); }
+    if (u.colors !== undefined)   { sets.push("colors = ?");   args.push(JSON.stringify(u.colors)); }
+    if (u.sizes !== undefined)    { sets.push("sizes = ?");    args.push(u.sizes); }
     if (sets.length === 0) continue;
 
     args.push(VENDOR, u.sku);

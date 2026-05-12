@@ -6,6 +6,8 @@ config({ path: new URL("../.env", import.meta.url).pathname });
 const VENDOR = "modernniagara";
 const NAVY = "#2c3e50";
 const LIGHT_BLUE = "#7dd3fc";
+const BLACK = "#1a1a18";
+const SOLACE_BLUE = "#6b8bb0";
 
 type Seed = {
   sku: string;
@@ -28,14 +30,16 @@ const seeds: Seed[] = [
   // Regular MN apparel
   { sku: "MN-1",  name: "Pants",                       category: "Pants",     sizes: "S - 4XL",  colors: [NAVY], price: 69.99,  details: "#102291" },
   { sku: "MN-2",  name: "Long Sleeve Shirt",           category: "Shirts",    sizes: "S - 4XL",  colors: [NAVY], price: 59.99,  details: "#K126" },
-  { sku: "MN-3",  name: "Short Sleeve T-Shirt",        category: "T-Shirts",  sizes: "S - 4XL",  colors: [NAVY], price: 13.50,  details: "#2000" },
-  { sku: "MN-4",  name: "Short Sleeve T-Shirt — Tall", category: "T-Shirts",  sizes: "LT - 4XLT", colors: [NAVY], price: 17.50,  details: "#2000T" },
+  { sku: "MN-3",  name: "Short Sleeve T-Shirt",        category: "T-Shirts",  sizes: "S - 4XL / LT - 4XLT", colors: [NAVY], price: 13.50,  details: "#2000 / #2000T" },
   { sku: "MN-5",  name: "Ball Cap",                    category: "Caps",      sizes: "One Size", colors: [NAVY], price: 23.50,  details: "#i8502" },
   { sku: "MN-6",  name: "Toque",                       category: "Caps",      sizes: "One Size", colors: [NAVY], price: 33.99,  details: "#A18" },
   { sku: "MN-7",  name: "Winter Jacket",               category: "Jackets",   sizes: "S - 4XL",  colors: [NAVY], price: 198.49, details: "#106674" },
   { sku: "MN-8",  name: "Winter Bibs",                 category: "Work Wear", sizes: "S - 4XL",  colors: [NAVY], price: 189.99, details: "#106672" },
   { sku: "MN-9",  name: "Pullover Hoodie",             category: "Hoodies",   sizes: "S - 4XL",  colors: [NAVY], price: 74.99,  details: "#K121" },
   { sku: "MN-10", name: "Full Zip Hoodie",             category: "Hoodies",   sizes: "S - 4XL",  colors: [NAVY], price: 89.99,  details: "#K122" },
+  // SWAG
+  { sku: "MN-11", name: "Men's Speckle Print Polo",    category: "SWAG",      sizes: "S - 3XL",  colors: [SOLACE_BLUE, NAVY, BLACK], price: 0, details: "FootJoy, #16324" },
+  { sku: "MN-12", name: "Women's Speckle Print Polo",  category: "SWAG",      sizes: "XS - 2XL", colors: [SOLACE_BLUE, BLACK],       price: 0, details: "FootJoy, #96324" },
 ];
 
 async function main() {
