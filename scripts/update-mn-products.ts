@@ -61,6 +61,34 @@ const updates: Update[] = [
     img: "/sku/tshirt.png",
     imgs: ["/sku/tshirt.png"],
   },
+  {
+    sku: "MNFR-1",
+    material: "9 oz 98% cotton / 2% spandex canvas with Rugged Flex stretch",
+    details: "Flame-resistant, NFPA 70E and UL classified to NFPA 2112, relaxed fit, straight leg, phone and utility pockets, OEKO-TEX Standard 100, #104204",
+    img: "/sku/fr-pants.png",
+    imgs: ["/sku/fr-pants.png"],
+  },
+  {
+    sku: "MNFR-2",
+    material: "7 oz 88% cotton / 12% high-tenacity nylon FR twill",
+    details: "Button-up long sleeve, button-down collar, two chest pockets with flaps, flame-resistant melamine buttons, triple-stitched seams, NFPA 2112 / UL classified, meets NFPA 70E, #FRS160",
+    img: "/sku/fr-lightblue.png",
+    imgs: ["/sku/fr-lightblue.png"],
+  },
+  {
+    sku: "MNFR-3",
+    material: "10.5 oz 40% cotton / 35% modacrylic / 15% viscose / 8% aramid / 2% antistat FR fleece",
+    details: "Pullover hood with adjustable drawcord, flame-resistant (NFPA 2112 / ASTM F1506), Force sweat-wicking, FastDry, odor-fighting, handwarmer pocket, #104983",
+    img: "/sku/fr-pullover.png",
+    imgs: ["/sku/fr-pullover.png"],
+  },
+  {
+    sku: "MNFR-4",
+    material: "10.5 oz 40% cotton / 35% modacrylic / 15% viscose / 8% aramid / 2% antistat FR fleece",
+    details: "Full-zip hood with adjustable drawcord, Vislon zip with Nomex tape, flame-resistant (meets NFPA 70E, ASTM F1506, UL classified to NFPA 2112), Force sweat-wicking, FastDry, #104982",
+    img: "/sku/fr-fullzip.png",
+    imgs: ["/sku/fr-fullzip.png"],
+  },
 ];
 
 async function main() {
