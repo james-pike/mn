@@ -750,7 +750,7 @@ export default component$(() => {
                       const items = allProducts.filter((p) => p.category === c.cat);
                       return (
                         <Accordion.Item key={c.cat} value={c.cat} class="nav-drawer__cat">
-                          <Accordion.Header as="div">
+                          <Accordion.Header as="h3">
                             <Accordion.Trigger class="nav-drawer__cat-trigger">
                               <span class="nav-drawer__cat-label">
                                 <span class="nav-drawer__cat-icon" dangerouslySetInnerHTML={c.icon} />
