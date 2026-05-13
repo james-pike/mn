@@ -58,6 +58,23 @@ export const allProducts = [
     "details": "Moisture-wicking, anti-microbial, double-stitched seams, lock-stitched hem, extended back shirt tail, machine washable, FootJoy, #96324"
   },
   {
+    "sku": "MN-13",
+    "name": "Yeti Rambler Straw Mug",
+    "category": "SWAG",
+    "sizes": "25 oz / 35 oz / 42 oz",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 0,
+    "img": "/swag/yeti.png",
+    "imgs": [
+      "/swag/yeti.png"
+    ],
+    "material": "18/8 stainless steel, double-wall vacuum insulation, DuraCoat™ color finish",
+    "details": "Comfort grip handle, cupholder-compatible base, Straw Lid with molded-in stopper, dishwasher safe, YETI Rambler®"
+  },
+  {
     "sku": "MN-7",
     "name": "Winter Jacket - Navy",
     "category": "Jackets",

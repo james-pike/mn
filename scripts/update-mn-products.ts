@@ -118,6 +118,14 @@ const updates: Update[] = [
   // Polo color order: Black, Navy, Solace Blue
   { sku: "MN-11", colors: ["#1a1a18", "#2c3e50", "#6b8bb0"] },
   { sku: "MN-12", colors: ["#1a1a18", "#6b8bb0"] },
+  // Yeti mug
+  {
+    sku: "MN-13",
+    material: "18/8 stainless steel, double-wall vacuum insulation, DuraCoat™ color finish",
+    details: "Comfort grip handle, cupholder-compatible base, Straw Lid with molded-in stopper, dishwasher safe, YETI Rambler®",
+    img: "/swag/yeti.png",
+    imgs: ["/swag/yeti.png"],
+  },
   // Merge MN-4 (Tall) into MN-3 as a size variant
   {
     sku: "MN-3",
@@ -129,6 +137,7 @@ const updates: Update[] = [
   { sku: "MN-3",  sort_order: 10 }, // Short Sleeve T-Shirt (Shirts)
   { sku: "MN-11", sort_order: 15 }, // Mens Polo (SWAG)
   { sku: "MN-12", sort_order: 16 }, // Womens Polo (SWAG)
+  { sku: "MN-13", sort_order: 17 }, // Yeti Mug (SWAG)
   { sku: "MN-7",  sort_order: 20 }, // Winter Jacket
   { sku: "MN-9",  sort_order: 21 }, // Pullover Hoodie (Jackets)
   { sku: "MN-10", sort_order: 22 }, // Full Zip Hoodie (Jackets)
