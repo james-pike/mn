@@ -1,6 +1,6 @@
 import { component$, Slot, useSignal, useVisibleTask$, $, useContextProvider, useStore, useComputed$, createContextId } from "@builder.io/qwik";
 import type { Signal } from "@builder.io/qwik";
-import { Modal, Collapsible } from '@qwik-ui/headless';
+import { Modal, Collapsible, Accordion } from '@qwik-ui/headless';
 import {
   Link,
   routeAction$,
@@ -15,6 +15,7 @@ import { Resend } from "resend";
 import { createClient } from "@libsql/client";
 import { LocaleContext, t } from "../i18n";
 import type { Locale, TranslationKey } from "../i18n";
+import { allProducts } from "./apparel/products";
 
 const AUTH_COOKIE = "ce_auth"; // v2: orders persist to db
 const LOCALE_COOKIE = "ce_locale";
@@ -600,8 +601,8 @@ export default component$(() => {
                   <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
                 </svg>
                 <div class="brand-cluster__words">
-                  <span class="brand-cluster__word">MODERN</span>
-                  <span class="brand-cluster__word">NIAGARA</span>
+                  <span class="brand-cluster__word">MODERN NIAGARA</span>
+                  <span class="brand-cluster__word brand-cluster__word--sub">BUILDING SERVICES</span>
                   <span class="brand-cluster__word brand-cluster__word--muted">APPAREL</span>
                 </div>
               </div>
@@ -659,8 +660,8 @@ export default component$(() => {
               <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
             </svg>
             <div class="brand-cluster__words">
-              <span class="brand-cluster__word">MODERN</span>
-              <span class="brand-cluster__word">NIAGARA</span>
+              <span class="brand-cluster__word">MODERN NIAGARA</span>
+              <span class="brand-cluster__word brand-cluster__word--sub">BUILDING SERVICES</span>
               <span class="brand-cluster__word brand-cluster__word--muted">APPAREL</span>
             </div>
           </Link>
@@ -715,8 +716,8 @@ export default component$(() => {
                   <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
                 </svg>
                 <div class="brand-cluster__words">
-                  <span class="brand-cluster__word">MODERN</span>
-                  <span class="brand-cluster__word">NIAGARA</span>
+                  <span class="brand-cluster__word">MODERN NIAGARA</span>
+                  <span class="brand-cluster__word brand-cluster__word--sub">BUILDING SERVICES</span>
                   <span class="brand-cluster__word brand-cluster__word--muted">APPAREL</span>
                 </div>
               </div>
@@ -729,24 +730,53 @@ export default component$(() => {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 {t("nav.home", locale.value)}
               </a>
-              <a href={loginType.value === "tech" ? "/apparel/" : "/apparel/#work-wear"} class={`nav-drawer__link ${loc.url.pathname.startsWith("/apparel") ? "active" : ""}`} onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "Work Wear" })); }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M4 6h16v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/><path d="M4 6l-2 4v2h4V8"/><path d="M20 6l2 4v2h-4V8"/></svg>
-                {t("cat.Work Wear", locale.value)}
-              </a>
-              {loginType.value !== "tech" && <>
-              <a href="/apparel/#jackets" class="nav-drawer__link" onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "Jackets" })); }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>
-                {t("cat.Jackets", locale.value)}
-              </a>
-              <a href="/apparel/#polos" class="nav-drawer__link" onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "Polos" })); }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2 12 5.5 8 2 3.62 3.46a2 2 0 00-1.34 1.93v15.12a2 2 0 001.34 1.93L8 24l4-3.5L16 24l4.38-1.46a2 2 0 001.34-1.93V5.39a2 2 0 00-1.34-1.93z"/></svg>
-                {t("cat.Polos", locale.value)}
-              </a>
-              <a href="/apparel/#hats" class="nav-drawer__link" onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "Hats" })); }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>
-                {t("cat.Hats", locale.value)}
-              </a>
-              </>}
+              {loginType.value === "tech" && (
+                <a href="/apparel/" class={`nav-drawer__link ${loc.url.pathname.startsWith("/apparel") ? "active" : ""}`} onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "Work Wear" })); }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M4 6h16v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/><path d="M4 6l-2 4v2h4V8"/><path d="M20 6l2 4v2h-4V8"/></svg>
+                  {t("cat.Work Wear", locale.value)}
+                </a>
+              )}
+              {loginType.value !== "tech" && (() => {
+                const NAV_CATS: { key: TranslationKey; cat: string; hash: string; icon: string }[] = [
+                  { key: "cat.Shirts",  cat: "Shirts",  hash: "shirts",  icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 2l4 4-3 3-2-1v14a1 1 0 01-1 1H10a1 1 0 01-1-1V8L7 9 4 6l4-4h2a2 2 0 004 0h2z"/></svg>' },
+                  { key: "cat.Polos",   cat: "Polos",   hash: "polos",   icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2 12 5.5 8 2 3.62 3.46a2 2 0 00-1.34 1.93v15.12a2 2 0 001.34 1.93L8 24l4-3.5L16 24l4.38-1.46a2 2 0 001.34-1.93V5.39a2 2 0 00-1.34-1.93z"/></svg>' },
+                  { key: "cat.Jackets", cat: "Jackets", hash: "jackets", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>' },
+                  { key: "cat.Hats",    cat: "Hats",    hash: "hats",    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>' },
+                  { key: "cat.SWAG",    cat: "SWAG",    hash: "swag",    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>' },
+                ];
+                return (
+                  <Accordion.Root class="nav-drawer__accordion" collapsible>
+                    {NAV_CATS.map((c) => {
+                      const items = allProducts.filter((p) => p.category === c.cat);
+                      return (
+                        <Accordion.Item key={c.cat} value={c.cat} class="nav-drawer__cat">
+                          <Accordion.Header as="div">
+                            <Accordion.Trigger class="nav-drawer__cat-trigger">
+                              <span class="nav-drawer__cat-label">
+                                <span class="nav-drawer__cat-icon" dangerouslySetInnerHTML={c.icon} />
+                                {t(c.key, locale.value)}
+                              </span>
+                              <svg class="nav-drawer__cat-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                            </Accordion.Trigger>
+                          </Accordion.Header>
+                          <Accordion.Content class="nav-drawer__cat-content">
+                            <a href={`/apparel/#${c.hash}`} class="nav-drawer__cat-all" onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: c.cat })); }}>
+                              {t("apparel.all", locale.value)} {t(c.key, locale.value)}
+                            </a>
+                            {items.length === 0 ? (
+                              <span class="nav-drawer__cat-empty">—</span>
+                            ) : items.map((p) => (
+                              <a key={p.sku} href={`/apparel/${p.sku}/`} class="nav-drawer__cat-item" onClick$={() => (menuOpen.value = false)}>
+                                {p.name.replace(/#\S+/g, '').replace(/\s*-\s*$/, '').trim()}
+                              </a>
+                            ))}
+                          </Accordion.Content>
+                        </Accordion.Item>
+                      );
+                    })}
+                  </Accordion.Root>
+                );
+              })()}
             </div>
             <div class="nav-drawer__footer">
               {/* <button class="nav-drawer__locale" onClick$={() => { toggleLocale(); }}>
@@ -782,8 +812,8 @@ export default component$(() => {
               <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
             </svg>
             <div class="brand-cluster__words">
-              <span class="brand-cluster__word">MODERN</span>
-              <span class="brand-cluster__word">NIAGARA</span>
+              <span class="brand-cluster__word">MODERN NIAGARA</span>
+              <span class="brand-cluster__word brand-cluster__word--sub">BUILDING SERVICES</span>
               <span class="brand-cluster__word brand-cluster__word--muted">APPAREL</span>
             </div>
           </div>

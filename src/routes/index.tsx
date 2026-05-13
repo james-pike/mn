@@ -153,8 +153,8 @@ export default component$(() => {
               <rect class="hero__brandmark-ring" x="0" y="0" width="100" height="100" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="0.5" vector-effect="non-scaling-stroke" />
             </svg>
             <div class="hero__words">
-              <span class="hero__title-word">MODERN</span>
-              <span class="hero__title-word">NIAGARA</span>
+              <span class="hero__title-word">MODERN NIAGARA</span>
+              <span class="hero__title-word hero__title-word--sub">BUILDING SERVICES</span>
               <span class="hero__title-word hero__title-word--letters">
                 {"APPAREL".split("").map((ch, i) => (
                   <span key={i} class="hero__title-letter" style={{ animationDelay: `${0.7 + i * 0.04}s` }}>{ch}</span>
