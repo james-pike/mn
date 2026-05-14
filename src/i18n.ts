@@ -183,7 +183,7 @@ const translations = {
   "cat.Polos": { en: "Polos", fr: "Polos" },
   "cat.T-Shirts": { en: "T-Shirts", fr: "T-Shirts" },
   "cat.Hoodies": { en: "Hoodies", fr: "Kangourous" },
-  "cat.Hats": { en: "Caps & Beanies", fr: "Casquettes et tuques" },
+  "cat.Hats": { en: "Hats", fr: "Chapeaux" },
   "cat.Safety": { en: "Safety", fr: "Sécurité" },
   "cat.Caps": { en: "Caps & Beanies", fr: "Casquettes" },
   "cat.Jackets": { en: "Jackets", fr: "Manteaux" },
