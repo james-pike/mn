@@ -101,8 +101,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 198.49,
-    "img": "/sku/winterjacket.jpeg",
+    "img": "/sku/winterjacket.png",
     "imgs": [
+      "/sku/winterjacket.png",
       "/sku/winterjacket.jpeg"
     ],
     "material": "12 oz 100% ringspun cotton duck shell, quilted nylon lining, Arctic-weight polyester insulation",
