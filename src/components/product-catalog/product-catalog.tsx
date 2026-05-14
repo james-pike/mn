@@ -122,7 +122,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     return allProducts.filter((p) => p.category !== "FR Workwear");
   });
 
-  const ALWAYS_SHOW = new Set(["All", "Polos"]);
+  const ALWAYS_SHOW = new Set(["All"]);
 
   const visibleCategories = useComputed$(() => {
     if (isTech.value) return ["Work Wear"];

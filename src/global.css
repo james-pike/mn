@@ -707,6 +707,20 @@ img { max-width: 100%; display: block; }
 .category-card:hover img {
   transform: none;
 }
+/* SWAG card: side-by-side split of two product shots. */
+.category-card .category-card__split {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  z-index: 0;
+}
+.category-card .category-card__split img {
+  position: static;
+  flex: 1;
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+}
 .category-card::after {
   content: '';
   position: absolute;
@@ -990,20 +1004,18 @@ img { max-width: 100%; display: block; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.5);
-  border: 1px solid rgba(0,0,0,0.2);
+  background: transparent;
+  border: none;
   border-radius: 2px;
   color: rgba(255,255,255,0.85);
   cursor: pointer;
   padding: 9px;
   gap: 4px;
   transition: background 0.15s ease, color 0.15s ease;
-  box-shadow:
-    inset 0 1px 4px rgba(0,0,0,0.2),
-    inset 0 0 6px rgba(0,0,0,0.1);
+  box-shadow: none;
 }
 .hero-card-header__btn:hover {
-  background: rgba(0,0,0,0.65);
+  background: rgba(255,255,255,0.12);
   color: rgba(255,255,255,1);
 }
 .hero-card-header__btn-label {
@@ -4744,7 +4756,6 @@ details[open] > .cart-drawer__checkout-title::after {
   .home-catalog__tabs { overflow-x: hidden; container-type: inline-size; }
   .home-catalog__tabs .apparel-titlebar__tab { flex: 1; text-align: center; justify-content: center; font-size: clamp(0.72rem, 4.5cqi, 1.1rem); }
   .home-catalog__tabs .apparel-titlebar__tab:only-child { flex: 0 0 auto; margin-right: auto; text-align: left; justify-content: flex-start; padding-left: 0.75rem; }
-  .apparel-titlebar__tab:first-child, .home-catalog__tabs .apparel-titlebar__tab:first-child { display: none; }
   .home-catalog__tabs .apparel-titlebar__tab:only-child { display: flex; }
   .collection-hero { padding: 0; margin: 0 0.15rem 2px; margin-top: 0; }
   .collection-hero__viewport { aspect-ratio: 5/1; border-radius: 0 0 var(--radius-sm) var(--radius-sm); display: flex; }
@@ -6190,6 +6201,7 @@ details[open] > .cart-drawer__checkout-title::after {
   gap: clamp(1.5rem, 3.5vw, 2.5rem) !important;
   color: #fff !important;
   background: rgba(0, 0, 0, 0.5) !important;
+  clip-path: polygon(0 36px, 36px 0, 100% 0, 100% 100%, 0 100%) !important;
   padding-left: clamp(1rem, 2.5vw, 2rem) !important;
   padding-right: clamp(1rem, 2.5vw, 2rem) !important;
   text-shadow: 0 2px 8px rgba(0,0,0,0.45);
@@ -6232,12 +6244,13 @@ details[open] > .cart-drawer__checkout-title::after {
   opacity: 0;
   transform: translateY(20px);
   filter: blur(8px);
-  /* Slower, smoother S-curve so MODERN/NIAGARA take roughly the same total
-     time to settle as the per-letter APPAREL cascade (~1s). */
-  animation: hero-word-reveal 1.1s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+  /* Each line fades within one third of the brandmark's ~1.5s triangle
+     cascade: MODERN/NIAGARA in the 1st third, BUILDING SERVICES in the
+     2nd, APPAREL (per-letter, see index.tsx) in the last. */
+  animation: hero-word-reveal 0.55s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
 }
-.hero__upper .hero__text .hero__title-word:nth-child(1) { animation-delay: 0.10s; }
-.hero__upper .hero__text .hero__title-word:nth-child(2) { animation-delay: 0.45s; }
+.hero__upper .hero__text .hero__title-word:nth-child(1) { animation-delay: 0.05s; animation-duration: 0.85s; }
+.hero__upper .hero__text .hero__title-word:nth-child(2) { animation-delay: 0.55s; }
 .hero__upper .hero__text .hero__title-word.hero__title-word--sub {
   font-weight: 600 !important;
   color: #9a9a9a !important;
@@ -6252,7 +6265,7 @@ details[open] > .cart-drawer__checkout-title::after {
   filter: none !important;
   animation: none !important;
   font-weight: 500 !important;
-  letter-spacing: -0.01em !important;
+  letter-spacing: -0.06em !important;
   color: #fff !important;
 }
 .hero__upper .hero__text .hero__title-letter {
@@ -6302,13 +6315,18 @@ details[open] > .cart-drawer__checkout-title::after {
   font-family: var(--font-sans) !important;
   font-size: clamp(2rem, 6.5vw, 5.5rem) !important;
   font-weight: 500 !important;
-  letter-spacing: -0.01em !important;
+  letter-spacing: -0.06em !important;
   line-height: 1 !important;
   text-transform: uppercase !important;
   color: #fff !important;
   margin: 0 !important;
   white-space: nowrap !important;
   display: block !important;
+}
+/* MODERN / NIAGARA each get their own line at every breakpoint. */
+.hero__upper .hero__text .hero__title-word-part {
+  display: block !important;
+  text-align: left !important;
 }
 /* Desktop: overlay locked to the same width as the leftmost two collection
    cards below it (≈50% of the cards-row, capped at 768px on wide screens). */
@@ -6321,18 +6339,17 @@ details[open] > .cart-drawer__checkout-title::after {
     left: 5vw !important;
     transform: none !important;
     height: 100% !important;
-    /* Use calc with vw (not %) for an exact, integer-precise viewport ratio. */
-    width: calc(100vw / 3) !important;
+    width: 50vw !important;
     aspect-ratio: auto !important;
     max-width: none !important;
-    flex-direction: column !important;
+    flex-direction: row !important;
     align-items: center !important;
-    justify-content: space-evenly !important;
-    text-align: center !important;
-    gap: 0 !important;
-    padding-top: 2vw !important;
-    padding-bottom: 2vw !important;
-    padding-left: 2.2vw !important;
+    justify-content: center !important;
+    text-align: left !important;
+    gap: 3.5vw !important;
+    padding-top: 1vw !important;
+    padding-bottom: 1vw !important;
+    padding-left: 1.2vw !important;
     padding-right: 2.2vw !important;
   }
   .hero__upper .hero__text .hero__words {
@@ -6340,14 +6357,21 @@ details[open] > .cart-drawer__checkout-title::after {
     align-items: flex-start !important;
   }
   /* Pure vw sizing across the board — every element inside the cluster is a
-     fixed fraction of the viewport, so nothing drifts at any zoom level.
-     Sized so the longest line (MODERN NIAGARA, nowrap) fits inside the
-     box with the horizontal padding above. */
+     fixed fraction of the viewport, so nothing drifts at any zoom level. */
   .hero__upper .hero__text .hero__title-word {
-    font-size: 2.95vw !important;
+    font-size: 3.2vw !important;
+  }
+  .hero__upper .hero__text .hero__title-word--sub {
+    font-size: 3.2vw !important;
+  }
+  /* MODERN / NIAGARA stack on their own lines, scaled up to fill the line. */
+  .hero__upper .hero__text .hero__title-word:nth-child(1) {
+    font-size: 4.1vw !important;
+    line-height: 0.95 !important;
   }
   .hero__upper .hero__text .hero__brandmark {
-    width: 11vw !important;
+    width: 14vw !important;
+    margin-top: -3vw !important;
   }
   /* Black framed hero — small black border around carousel + cards row. */
   .hero { background: #000 !important; padding: 0.5rem !important; height: auto !important; }
@@ -6410,7 +6434,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .hero__upper {
     flex: 0 0 auto !important;
     height: auto !important;
-    min-height: 80vh !important;
+    min-height: 0 !important;
   }
   .hero__upper .hero__text {
     /* Sized to its content so a tall cluster grows the upper instead of
@@ -6420,28 +6444,37 @@ details[open] > .cart-drawer__checkout-title::after {
     left: auto !important;
     transform: none !important;
     height: auto !important;
-    width: calc(100vw * 2 / 3) !important;
+    width: 90% !important;
     aspect-ratio: auto !important;
     max-width: none !important;
-    margin: 0 0 0 5vw !important;
-    flex-direction: column !important;
+    margin: 1.5rem auto !important;
+    flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
-    text-align: center !important;
-    gap: 2.5rem !important;
-    padding-top: 7rem !important;
-    padding-bottom: 5rem !important;
-    padding-left: 2vw !important;
-    padding-right: 2vw !important;
+    text-align: left !important;
+    gap: 5vw !important;
+    padding-top: 5rem !important;
+    padding-bottom: 3rem !important;
+    padding-left: 1vw !important;
+    padding-right: 1.5vw !important;
   }
   .hero__upper .hero__text .hero__words {
     align-items: flex-start !important;
   }
   .hero__upper .hero__text .hero__brandmark {
-    width: 24vw !important;
+    width: 27vw !important;
+    margin-top: -7vw !important;
   }
   .hero__upper .hero__text .hero__title-word {
-    font-size: 7vw !important;
+    font-size: 6.5vw !important;
+  }
+  .hero__upper .hero__text .hero__title-word--sub {
+    font-size: 6.5vw !important;
+  }
+  /* MODERN / NIAGARA stack on their own lines, scaled up to fill the line. */
+  .hero__upper .hero__text .hero__title-word:nth-child(1) {
+    font-size: 9.4vw !important;
+    line-height: 0.95 !important;
   }
 }
 
@@ -6452,7 +6485,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .hero__upper {
     flex: 0 0 auto !important;
     height: auto !important;
-    min-height: 55vh !important;
+    min-height: 0 !important;
   }
   .hero__upper .hero__text {
     /* In normal flow on mobile so a tall cluster grows the carousel area
@@ -6461,24 +6494,29 @@ details[open] > .cart-drawer__checkout-title::after {
     top: auto !important;
     left: auto !important;
     transform: none !important;
-    margin: 0 auto !important;
+    margin: 3vw auto 0 !important;
     height: auto !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    text-align: center !important;
-    gap: 2.6rem !important;
+    text-align: left !important;
+    gap: 8vw !important;
     width: 94% !important;
-    padding-top: 6rem !important;
-    /* Small reserve at the bottom so the gap between APPAREL and the dots
-       matches the brandmark-to-words gap (≈2.2rem visible). */
-    padding-bottom: 4.4rem !important;
+    padding-top: 3.5rem !important;
+    padding-left: 0.75rem !important;
+    padding-bottom: 1.5rem !important;
   }
-  .hero__upper .hero__text .hero__brandmark { width: 36vw !important; }
+  .hero__upper .hero__text .hero__brandmark { width: 35vw !important; }
   .hero__upper .hero__text .hero__words { align-items: flex-start !important; }
   /* Pure vw so the text always fills the same proportion of the viewport
      regardless of zoom (no rem-based step changes). */
-  .hero__upper .hero__text .hero__title-word { font-size: 9vw !important; }
+  .hero__upper .hero__text .hero__title-word { font-size: 7.4vw !important; }
+  .hero__upper .hero__text .hero__title-word--sub { font-size: 7.4vw !important; }
+  /* MODERN / NIAGARA run larger on mobile now that they each have a line. */
+  .hero__upper .hero__text .hero__title-word:nth-child(1) {
+    font-size: 10.7vw !important;
+    line-height: 0.95 !important;
+  }
   /* Pagination dots: centered horizontally inside the cluster, near the bottom. */
   .hero__upper .hero-carousel__dots {
     left: 50% !important;

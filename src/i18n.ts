@@ -69,7 +69,7 @@ const translations = {
   "teaser.hoodies.cta": { en: "Shop Hoodies", fr: "Voir les kangourous" },
 
   "teaser.hats.tag": { en: "Headwear", fr: "Couvre-chefs" },
-  "teaser.hats.title": { en: "Caps and Beanies", fr: "Casquettes et tuques" },
+  "teaser.hats.title": { en: "Caps & Beanies", fr: "Casquettes et tuques" },
   "teaser.hats.text": { en: "Embroidered caps and knit beanies for every season.", fr: "Casquettes brodées et tuques tricotées pour toutes les saisons." },
   "teaser.hats.cta": { en: "Shop Hats", fr: "Voir les chapeaux" },
 
@@ -183,7 +183,7 @@ const translations = {
   "cat.Polos": { en: "Polos", fr: "Polos" },
   "cat.T-Shirts": { en: "T-Shirts", fr: "T-Shirts" },
   "cat.Hoodies": { en: "Hoodies", fr: "Kangourous" },
-  "cat.Hats": { en: "Hats", fr: "Chapeaux" },
+  "cat.Hats": { en: "Caps & Beanies", fr: "Casquettes et tuques" },
   "cat.Safety": { en: "Safety", fr: "Sécurité" },
   "cat.Caps": { en: "Caps & Beanies", fr: "Casquettes" },
   "cat.Jackets": { en: "Jackets", fr: "Manteaux" },

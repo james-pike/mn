@@ -153,11 +153,11 @@ export default component$(() => {
               <rect class="hero__brandmark-ring" x="0" y="0" width="100" height="100" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="0.5" vector-effect="non-scaling-stroke" />
             </svg>
             <div class="hero__words">
-              <span class="hero__title-word">MODERN NIAGARA</span>
+              <span class="hero__title-word"><span class="hero__title-word-part">MODERN</span> <span class="hero__title-word-part">NIAGARA</span></span>
               <span class="hero__title-word hero__title-word--sub">BUILDING SERVICES</span>
               <span class="hero__title-word hero__title-word--letters">
                 {"APPAREL".split("").map((ch, i) => (
-                  <span key={i} class="hero__title-letter" style={{ animationDelay: `${0.7 + i * 0.04}s` }}>{ch}</span>
+                  <span key={i} class="hero__title-letter" style={{ animationDelay: `${1.05 + i * 0.04}s` }}>{ch}</span>
                 ))}
               </span>
             </div>
@@ -186,21 +186,24 @@ export default component$(() => {
                     <img src="/carmichael-services/chiller-retrofit.jpeg" alt="" width="400" height="300" loading="eager" decoding="sync" />
                   </a>
                 </>) : (<>
-                  <a href="/apparel/#work-wear" class="category-card">
-                    <img src="/all.jpg" alt="All Apparel" width="400" height="300" loading="eager" decoding="sync" />
-                    <span class="category-card__label">{t("teaser.workwear.title", locale.value)}</span>
+                  <a href="/apparel/#polos" class="category-card">
+                    <img src="/shirts.jpg" alt="Classic Shirts" width="400" height="300" loading="eager" decoding="sync" />
+                    <span class="category-card__label">{t("teaser.polos.title", locale.value)}</span>
                   </a>
                   <a href="/apparel/#jackets" class="category-card">
                     <img src="/jackets.jpg" alt="Jackets & Hoodies" width="400" height="300" loading="eager" decoding="sync" />
                     <span class="category-card__label">{t("teaser.jackets.title", locale.value)}</span>
                   </a>
-                  <a href="/apparel/#polos" class="category-card">
-                    <img src="/shirts.jpg" alt="Classic Shirts" width="400" height="300" loading="eager" decoding="sync" />
-                    <span class="category-card__label">{t("teaser.polos.title", locale.value)}</span>
-                  </a>
                   <a href="/apparel/#hats" class="category-card">
                     <img src="/hat/30109107PS2_FRONT.JPG" alt="Hats" width="400" height="300" loading="eager" decoding="sync" />
                     <span class="category-card__label">{t("teaser.hats.title", locale.value)}</span>
+                  </a>
+                  <a href="/apparel/#swag" class="category-card">
+                    <div class="category-card__split">
+                      <img src="/swag/yeti.png" alt="Yeti tumbler" width="200" height="300" loading="eager" decoding="sync" />
+                      <img src="/swag/Tundra.png" alt="Yeti cooler" width="200" height="300" loading="eager" decoding="sync" />
+                    </div>
+                    <span class="category-card__label">{t("cat.SWAG", locale.value)}</span>
                   </a>
                 </>)}
           </div>
