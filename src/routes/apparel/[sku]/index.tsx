@@ -219,6 +219,18 @@ export default component$(() => {
                   {t("product.specsheet.pdf", locale.value)}
                 </a>
               )}
+              {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).length > 1 && (
+                <div class="product-carousel__indicators">
+                  {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).map((_, i) => (
+                    <button
+                      key={i}
+                      class={`product-carousel__dot ${imgIndex.value === i ? "active" : ""}`}
+                      aria-label={`Image ${i + 1}`}
+                      onClick$={(e) => { e.stopPropagation(); imgIndex.value = i; userSelectedImg.value = true; }}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
             {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).length > 1 && (
               <div class="product-thumbs product-thumbs--column">
