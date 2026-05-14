@@ -6510,11 +6510,11 @@ details[open] > .cart-drawer__checkout-title::after {
   .hero__upper .hero__text .hero__words { align-items: flex-start !important; }
   /* Pure vw so the text always fills the same proportion of the viewport
      regardless of zoom (no rem-based step changes). */
-  .hero__upper .hero__text .hero__title-word { font-size: 7.4vw !important; }
-  .hero__upper .hero__text .hero__title-word--sub { font-size: 7.4vw !important; }
+  .hero__upper .hero__text .hero__title-word { font-size: 8vw !important; }
+  .hero__upper .hero__text .hero__title-word--sub { font-size: 8vw !important; }
   /* MODERN / NIAGARA run larger on mobile now that they each have a line. */
   .hero__upper .hero__text .hero__title-word:nth-child(1) {
-    font-size: 10.7vw !important;
+    font-size: 11.5vw !important;
     line-height: 0.95 !important;
   }
   /* Pagination dots: centered horizontally inside the cluster, near the bottom. */
