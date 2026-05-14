@@ -20,6 +20,22 @@ import { allProducts } from "./apparel/products";
 const AUTH_COOKIE = "ce_auth"; // v2: orders persist to db
 const LOCALE_COOKIE = "ce_locale";
 
+// Canadian provincial sales tax rates (combined GST/HST/PST/QST)
+const PROVINCE_TAX: Record<string, number> = {
+  AB: 0.05, BC: 0.12, MB: 0.12, NB: 0.15, NL: 0.15,
+  NS: 0.14, ON: 0.13, PE: 0.15, QC: 0.14975, SK: 0.11,
+};
+const PROVINCE_NAMES: Record<string, string> = {
+  AB: "Alberta", BC: "British Columbia", MB: "Manitoba",
+  NB: "New Brunswick", NL: "Newfoundland and Labrador",
+  NS: "Nova Scotia", ON: "Ontario", PE: "Prince Edward Island",
+  QC: "Quebec", SK: "Saskatchewan",
+};
+const taxRateFor = (code: string): number => PROVINCE_TAX[code] ?? PROVINCE_TAX.ON;
+// Provinces with a single branch — the Location field is unnecessary for these
+const SINGLE_BRANCH_PROVINCES = new Set(["AB", "BC"]);
+const needsLocation = (code: string): boolean => !!code && !SINGLE_BRANCH_PROVINCES.has(code);
+
 export const LoginTypeContext = createContextId<Signal<string>>("loginType");
 
 export const useLocaleLoader = routeLoader$(({ cookie }) => {
@@ -127,8 +143,11 @@ export const useSubmitOrder = routeAction$(
   };
   const cName = (hex: string) => colorMap[hex] || hex;
 
+  const province = (employee.province && PROVINCE_TAX[employee.province]) ? employee.province : "ON";
+  const taxRate = taxRateFor(province);
+  const taxPct = +(taxRate * 100).toFixed(3);
   const subtotal = items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0);
-  const tax = subtotal * 0.13;
+  const tax = subtotal * taxRate;
   const total = subtotal + tax;
 
   // Insert order into Turso database
@@ -195,6 +214,7 @@ export const useSubmitOrder = routeAction$(
         <p style="margin:0 0 4px"><strong>Employee:</strong> ${esc(employee.name)}</p>
         ${employee.phone ? `<p style="margin:0 0 4px"><strong>Phone:</strong> ${esc(employee.phone)}</p>` : ""}
         ${employee.department ? `<p style="margin:0 0 4px"><strong>Location:</strong> ${esc(employee.department)}</p>` : ""}
+        <p style="margin:0 0 4px"><strong>Province:</strong> ${esc(PROVINCE_NAMES[province] || province)}</p>
         ${employee.po ? `<p style="margin:0 0 4px"><strong>PO #:</strong> ${esc(employee.po)}</p>` : ""}
         <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0">
         <table style="width:100%;border-collapse:collapse;font-size:14px">
@@ -213,7 +233,7 @@ export const useSubmitOrder = routeAction$(
               <td style="padding:6px 12px;text-align:right">$${subtotal.toFixed(2)}</td>
             </tr>
             <tr>
-              <td colspan="3" style="padding:6px 12px;text-align:right">Tax (13%)</td>
+              <td colspan="3" style="padding:6px 12px;text-align:right">Tax (${esc(province)} ${taxPct}%)</td>
               <td style="padding:6px 12px;text-align:right">$${tax.toFixed(2)}</td>
             </tr>
             <tr>
@@ -247,6 +267,7 @@ export const useSubmitOrder = routeAction$(
       email: z.string().email().max(254).or(z.literal("")),
       phone: z.string().max(40),
       department: z.string().max(120),
+      province: z.string().length(2),
       po: z.string().min(1).max(60),
     }),
     items: z
@@ -339,11 +360,22 @@ export default component$(() => {
   const empEmail = useSignal("");
   const empPhone = useSignal("");
   const empDept = useSignal("");
+  const empProvince = useSignal("");
   const empPO = useSignal("");
 
   const cartCount = useComputed$(() => {
     const count = cart.items.reduce((sum, i) => sum + i.quantity, 0);
     return count > 0 ? count : ssrCartCount.value;
+  });
+  const subtotal = useComputed$(() =>
+    cart.items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0),
+  );
+  const taxRate = useComputed$(() => taxRateFor(empProvince.value));
+  const taxAmount = useComputed$(() => subtotal.value * taxRate.value);
+  const orderTotal = useComputed$(() => subtotal.value + taxAmount.value);
+  const taxLabel = useComputed$(() => {
+    const pct = +(taxRate.value * 100).toFixed(3);
+    return `${t("cart.invoice.tax", locale.value)} (${empProvince.value} ${pct}%)`;
   });
   const headerScrolled = useSignal(false);
 
@@ -397,7 +429,8 @@ export default component$(() => {
 
   const submitOrder = $(async () => {
     formTouched.value = true;
-    if (!empFirstName.value || !empLastName.value || !empEmail.value || !empPhone.value || !empDept.value || !empPO.value) {
+    const locationRequired = needsLocation(empProvince.value);
+    if (!empFirstName.value || !empLastName.value || !empEmail.value || !empPhone.value || !empProvince.value || (locationRequired && !empDept.value) || !empPO.value) {
       formError.value = t("cart.error.required", locale.value);
       checkoutOpen.value = true;
       return;
@@ -419,7 +452,7 @@ export default component$(() => {
     formError.value = "";
 
     const orderData = {
-      employee: { name: `${empFirstName.value} ${empLastName.value}`, email: empEmail.value, phone: empPhone.value, department: empDept.value, po: empPO.value },
+      employee: { name: `${empFirstName.value} ${empLastName.value}`, email: empEmail.value, phone: empPhone.value, department: empDept.value, province: empProvince.value, po: empPO.value },
       items: cart.items.map((i) => ({
         name: i.name || "",
         sku: i.sku || "",
@@ -473,6 +506,7 @@ export default component$(() => {
     empEmail.value = "";
     empPhone.value = "";
     empDept.value = "";
+    empProvince.value = "";
     empPO.value = "";
     formTouched.value = false;
   });
@@ -737,12 +771,11 @@ export default component$(() => {
                 </a>
               )}
               {loginType.value !== "tech" && (() => {
-                const NAV_CATS: { key: TranslationKey; cat: string; hash: string; icon: string }[] = [
-                  { key: "cat.Shirts",  cat: "Shirts",  hash: "shirts",  icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 2l4 4-3 3-2-1v14a1 1 0 01-1 1H10a1 1 0 01-1-1V8L7 9 4 6l4-4h2a2 2 0 004 0h2z"/></svg>' },
-                  { key: "cat.Polos",   cat: "Polos",   hash: "polos",   icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2 12 5.5 8 2 3.62 3.46a2 2 0 00-1.34 1.93v15.12a2 2 0 001.34 1.93L8 24l4-3.5L16 24l4.38-1.46a2 2 0 001.34-1.93V5.39a2 2 0 00-1.34-1.93z"/></svg>' },
-                  { key: "cat.Jackets", cat: "Jackets", hash: "jackets", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>' },
-                  { key: "cat.Hats",    cat: "Hats",    hash: "hats",    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>' },
-                  { key: "cat.SWAG",    cat: "SWAG",    hash: "swag",    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>' },
+                const NAV_CATS: { key: TranslationKey; cat: string; icon: string }[] = [
+                  { key: "cat.Shirts",  cat: "Shirts",  icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 2l4 4-3 3-2-1v14a1 1 0 01-1 1H10a1 1 0 01-1-1V8L7 9 4 6l4-4h2a2 2 0 004 0h2z"/></svg>' },
+                  { key: "cat.Jackets", cat: "Jackets", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>' },
+                  { key: "cat.Hats",    cat: "Hats",    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>' },
+                  { key: "cat.SWAG",    cat: "SWAG",    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>' },
                 ];
                 return (
                   <Accordion.Root class="nav-drawer__accordion" collapsible>
@@ -760,13 +793,11 @@ export default component$(() => {
                             </Accordion.Trigger>
                           </Accordion.Header>
                           <Accordion.Content class="nav-drawer__cat-content">
-                            <a href={`/apparel/#${c.hash}`} class="nav-drawer__cat-all" onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: c.cat })); }}>
-                              {t("apparel.all", locale.value)} {t(c.key, locale.value)}
-                            </a>
                             {items.length === 0 ? (
                               <span class="nav-drawer__cat-empty">—</span>
                             ) : items.map((p) => (
                               <a key={p.sku} href={`/apparel/${p.sku}/`} class="nav-drawer__cat-item" onClick$={() => (menuOpen.value = false)}>
+                                <img src={p.img} alt="" width="24" height="24" class="nav-drawer__cat-item-img" loading="lazy" decoding="async" />
                                 {p.name.replace(/#\S+/g, '').replace(/\s*-\s*$/, '').trim()}
                               </a>
                             ))}
@@ -898,23 +929,32 @@ export default component$(() => {
                       <tfoot>
                         <tr>
                           <td colSpan={2} class="cart-table__subtotal-label">{t("cart.invoice.subtotal", locale.value)}</td>
-                          <td class="cart-table__subtotal-val">${cart.items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0).toFixed(2)}</td>
+                          <td class="cart-table__subtotal-val">${subtotal.value.toFixed(2)}</td>
                         </tr>
-                        <tr>
-                          <td colSpan={2} class="cart-table__subtotal-label">{t("cart.invoice.tax", locale.value)}</td>
-                          <td class="cart-table__subtotal-val">${(cart.items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0) * 0.13).toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                          <td colSpan={2} class="cart-table__subtotal-label" style={{ fontWeight: 700 }}>{t("cart.invoice.total", locale.value)}</td>
-                          <td class="cart-table__subtotal-val" style={{ fontWeight: 700 }}>${(cart.items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0) * 1.13).toFixed(2)}</td>
-                        </tr>
+                        {empProvince.value ? (
+                          <>
+                            <tr>
+                              <td colSpan={2} class="cart-table__subtotal-label">{taxLabel.value}</td>
+                              <td class="cart-table__subtotal-val">${taxAmount.value.toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                              <td colSpan={2} class="cart-table__subtotal-label" style={{ fontWeight: 700 }}>{t("cart.invoice.total", locale.value)}</td>
+                              <td class="cart-table__subtotal-val" style={{ fontWeight: 700 }}>${orderTotal.value.toFixed(2)}</td>
+                            </tr>
+                          </>
+                        ) : (
+                          <tr>
+                            <td colSpan={2} class="cart-table__subtotal-label">+ {t("cart.invoice.tax", locale.value)}</td>
+                            <td class="cart-table__subtotal-val">—</td>
+                          </tr>
+                        )}
                       </tfoot>
                     )}
                   </table>
                 </div>
                 <div class="cart-drawer__footer">
                   <span class="cart-drawer__total">
-                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{loginType.value !== "tech" && ` — $${(cart.items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0) * 1.13).toFixed(2)}`}
+                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{loginType.value !== "tech" && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
                   </span>
                   <button
                     class="btn btn--primary cart-drawer__order-btn"
@@ -951,16 +991,25 @@ export default component$(() => {
                           <>
                             <div class="cart-drawer__summary-item cart-drawer__summary-total">
                               <span>{t("cart.invoice.subtotal", locale.value)}</span>
-                              <span>${cart.items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0).toFixed(2)}</span>
+                              <span>${subtotal.value.toFixed(2)}</span>
                             </div>
-                            <div class="cart-drawer__summary-item">
-                              <span>{t("cart.invoice.tax", locale.value)}</span>
-                              <span>${(cart.items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0) * 0.13).toFixed(2)}</span>
-                            </div>
-                            <div class="cart-drawer__summary-item cart-drawer__summary-total">
-                              <span>{t("cart.invoice.total", locale.value)}</span>
-                              <span>${(cart.items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0) * 1.13).toFixed(2)}</span>
-                            </div>
+                            {empProvince.value ? (
+                              <>
+                                <div class="cart-drawer__summary-item">
+                                  <span>{taxLabel.value}</span>
+                                  <span>${taxAmount.value.toFixed(2)}</span>
+                                </div>
+                                <div class="cart-drawer__summary-item cart-drawer__summary-total">
+                                  <span>{t("cart.invoice.total", locale.value)}</span>
+                                  <span>${orderTotal.value.toFixed(2)}</span>
+                                </div>
+                              </>
+                            ) : (
+                              <div class="cart-drawer__summary-item">
+                                <span>+ {t("cart.invoice.tax", locale.value)}</span>
+                                <span>—</span>
+                              </div>
+                            )}
                           </>
                         )}
                       </div>
@@ -1002,14 +1051,40 @@ export default component$(() => {
                         onInput$={(_, el) => { empEmail.value = el.value; formError.value = ""; }}
                       />
                     </div>
-                    <div class={`checkout-modal__field ${formTouched.value && !empDept.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.location", locale.value)}</label>
-                      <input
-                        type="text"
-                        value={empDept.value}
-                        onInput$={(_, el) => (empDept.value = el.value)}
-                      />
+                    <div class={`checkout-modal__field ${formTouched.value && !empProvince.value ? "checkout-modal__field--error" : ""}`}>
+                      <label>{t("cart.province", locale.value)}</label>
+                      <select
+                        required
+                        value={empProvince.value}
+                        onChange$={(_, el) => {
+                          empProvince.value = el.value;
+                          if (!needsLocation(el.value)) empDept.value = "";
+                          formError.value = "";
+                        }}
+                      >
+                        <option value="" disabled hidden>{locale.value === "fr" ? "Sélectionner…" : "Select…"}</option>
+                        <option value="AB">Alberta</option>
+                        <option value="BC">British Columbia</option>
+                        <option value="MB">Manitoba</option>
+                        <option value="NB">New Brunswick</option>
+                        <option value="NL">Newfoundland and Labrador</option>
+                        <option value="NS">Nova Scotia</option>
+                        <option value="ON">Ontario</option>
+                        <option value="PE">Prince Edward Island</option>
+                        <option value="QC">Quebec</option>
+                        <option value="SK">Saskatchewan</option>
+                      </select>
                     </div>
+                    {needsLocation(empProvince.value) && (
+                      <div class={`checkout-modal__field ${formTouched.value && !empDept.value ? "checkout-modal__field--error" : ""}`}>
+                        <label>{t("cart.location", locale.value)}</label>
+                        <input
+                          type="text"
+                          value={empDept.value}
+                          onInput$={(_, el) => (empDept.value = el.value)}
+                        />
+                      </div>
+                    )}
                     <div class={`checkout-modal__field ${formTouched.value && !empPO.value ? "checkout-modal__field--error" : ""}`}>
                       <label>{t("cart.po", locale.value)}</label>
                       <input
@@ -1025,7 +1100,7 @@ export default component$(() => {
                 )}
                 <div class="cart-drawer__footer">
                   <span class="cart-drawer__total">
-                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{loginType.value !== "tech" && ` — $${(cart.items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0) * 1.13).toFixed(2)}`}
+                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{loginType.value !== "tech" && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
                   </span>
                   <button
                     class="btn btn--primary cart-drawer__order-btn"

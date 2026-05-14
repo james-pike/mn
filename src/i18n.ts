@@ -155,6 +155,7 @@ const translations = {
   "cart.phone": { en: "Phone Number *", fr: "Téléphone *" },
   "cart.email": { en: "Email *", fr: "Courriel *" },
   "cart.location": { en: "Location *", fr: "Emplacement *" },
+  "cart.province": { en: "Province *", fr: "Province *" },
   "cart.po": { en: "PO # *", fr: "N° de bon de commande *" },
   "cart.createorder": { en: "Place Order", fr: "Commander" },
   "cart.checkout": { en: "Checkout", fr: "Passer à la caisse" },

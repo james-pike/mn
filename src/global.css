@@ -1893,25 +1893,35 @@ img { max-width: 100%; display: block; }
 .nav-drawer__cat-content {
   display: flex;
   flex-direction: column;
+  gap: 1px;
+  padding: 2px 0;
   overflow: hidden;
 }
 .nav-drawer__cat-content[hidden] { display: none !important; }
-.nav-drawer__cat-all,
 .nav-drawer__cat-item {
-  padding: 8px 12px 8px 48px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 6px 6px 6px 9px;
   font-size: 0.92rem;
   color: var(--ce-gray-700);
   text-decoration: none;
-  border-radius: 2px;
+  border: 1px solid var(--ce-gray-200);
+  border-radius: 6px;
+  background: var(--ce-white);
 }
-.nav-drawer__cat-all {
-  font-weight: 600;
-  color: var(--ce-green);
+.nav-drawer__cat-item-img {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  object-fit: contain;
+  border-radius: 4px;
+  background: var(--ce-gray-100);
 }
-.nav-drawer__cat-all:hover,
 .nav-drawer__cat-item:hover {
   background: var(--ce-gray-100);
   color: var(--ce-gray-900);
+  border-color: var(--ce-gray-300);
 }
 .nav-drawer__cat-empty {
   padding: 8px 12px 8px 48px;
@@ -6180,6 +6190,8 @@ details[open] > .cart-drawer__checkout-title::after {
   gap: clamp(1.5rem, 3.5vw, 2.5rem) !important;
   color: #fff !important;
   background: rgba(0, 0, 0, 0.5) !important;
+  padding-left: clamp(1rem, 2.5vw, 2rem) !important;
+  padding-right: clamp(1rem, 2.5vw, 2rem) !important;
   text-shadow: 0 2px 8px rgba(0,0,0,0.45);
   pointer-events: none;
 }
@@ -6320,15 +6332,19 @@ details[open] > .cart-drawer__checkout-title::after {
     gap: 0 !important;
     padding-top: 2vw !important;
     padding-bottom: 2vw !important;
+    padding-left: 2.2vw !important;
+    padding-right: 2.2vw !important;
   }
   .hero__upper .hero__text .hero__words {
     gap: 0.4vw !important;
-    align-items: center !important;
+    align-items: flex-start !important;
   }
   /* Pure vw sizing across the board — every element inside the cluster is a
-     fixed fraction of the viewport, so nothing drifts at any zoom level. */
+     fixed fraction of the viewport, so nothing drifts at any zoom level.
+     Sized so the longest line (MODERN NIAGARA, nowrap) fits inside the
+     box with the horizontal padding above. */
   .hero__upper .hero__text .hero__title-word {
-    font-size: 3.4vw !important;
+    font-size: 2.95vw !important;
   }
   .hero__upper .hero__text .hero__brandmark {
     width: 11vw !important;
@@ -6415,16 +6431,17 @@ details[open] > .cart-drawer__checkout-title::after {
     gap: 2.5rem !important;
     padding-top: 7rem !important;
     padding-bottom: 5rem !important;
-    padding-left: 0 !important;
+    padding-left: 2vw !important;
+    padding-right: 2vw !important;
   }
   .hero__upper .hero__text .hero__words {
-    align-items: center !important;
+    align-items: flex-start !important;
   }
   .hero__upper .hero__text .hero__brandmark {
     width: 24vw !important;
   }
   .hero__upper .hero__text .hero__title-word {
-    font-size: 7.5vw !important;
+    font-size: 7vw !important;
   }
 }
 
@@ -6458,7 +6475,7 @@ details[open] > .cart-drawer__checkout-title::after {
     padding-bottom: 4.4rem !important;
   }
   .hero__upper .hero__text .hero__brandmark { width: 36vw !important; }
-  .hero__upper .hero__text .hero__words { align-items: center !important; }
+  .hero__upper .hero__text .hero__words { align-items: flex-start !important; }
   /* Pure vw so the text always fills the same proportion of the viewport
      regardless of zoom (no rem-based step changes). */
   .hero__upper .hero__text .hero__title-word { font-size: 9vw !important; }
