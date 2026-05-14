@@ -42,8 +42,8 @@ const updates: Update[] = [
     sku: "MN-7",
     material: "12 oz 100% ringspun cotton duck shell, quilted nylon lining, Arctic-weight polyester insulation",
     details: "Two-way brass zip, pleated bi-swing back, internal rib-knit storm cuffs, four exterior pockets, two interior pockets, triple-stitched seams, #106674",
-    img: "/sku/winterjacket.jpeg",
-    imgs: ["/sku/winterjacket.jpeg"],
+    img: "/sku/winterjacket.png",
+    imgs: ["/sku/winterjacket.png", "/sku/winterjacket.jpeg"],
   },
   {
     sku: "MN-9",
