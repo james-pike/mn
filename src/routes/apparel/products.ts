@@ -75,6 +75,23 @@ export const allProducts = [
     "details": "Comfort grip handle, cupholder-compatible base, Straw Lid with molded-in stopper, dishwasher safe, YETI Rambler®"
   },
   {
+    "sku": "MN-14",
+    "name": "Yeti Tundra Cooler",
+    "category": "SWAG",
+    "sizes": "Tundra 35 / Tundra 45",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 0,
+    "img": "/swag/Tundra.png",
+    "imgs": [
+      "/swag/Tundra.png"
+    ],
+    "material": "Rotomolded polyethylene with PermaFrost™ pressure-injected polyurethane foam insulation",
+    "details": "T-Rex™ lid latches, NeverFail™ hinge system, Vortex™ drain, bearfoot non-slip feet, integrated tie-down slots, YETI Tundra®"
+  },
+  {
     "sku": "MN-7",
     "name": "Winter Jacket - Navy",
     "category": "Jackets",
@@ -135,9 +152,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 23.5,
-    "img": "/sku/cap.png",
+    "img": "/swag/cap.png",
     "imgs": [
-      "/sku/cap.png"
+      "/swag/cap.png"
     ],
     "material": "Poly/spandex blend with performance mesh back",
     "details": "Mid-profile structured trucker cap, shapeable pre-curved visor, UV protection, moisture wicking, 110 Technology® sweatband, adjustable plastic snapback, grey under visor, #i8502"

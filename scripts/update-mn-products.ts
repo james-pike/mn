@@ -28,8 +28,8 @@ const updates: Update[] = [
     sku: "MN-5",
     material: "Poly/spandex blend with performance mesh back",
     details: "Mid-profile structured trucker cap, shapeable pre-curved visor, UV protection, moisture wicking, 110 Technology® sweatband, adjustable plastic snapback, grey under visor, #i8502",
-    img: "/sku/cap.png",
-    imgs: ["/sku/cap.png"],
+    img: "/swag/cap.png",
+    imgs: ["/swag/cap.png"],
   },
   {
     sku: "MN-6",
@@ -126,6 +126,14 @@ const updates: Update[] = [
     img: "/swag/yeti.png",
     imgs: ["/swag/yeti.png"],
   },
+  // Yeti cooler
+  {
+    sku: "MN-14",
+    material: "Rotomolded polyethylene with PermaFrost™ pressure-injected polyurethane foam insulation",
+    details: "T-Rex™ lid latches, NeverFail™ hinge system, Vortex™ drain, bearfoot non-slip feet, integrated tie-down slots, YETI Tundra®",
+    img: "/swag/Tundra.png",
+    imgs: ["/swag/Tundra.png"],
+  },
   // Merge MN-4 (Tall) into MN-3 as a size variant
   {
     sku: "MN-3",
@@ -138,6 +146,7 @@ const updates: Update[] = [
   { sku: "MN-11", sort_order: 15 }, // Mens Polo (SWAG)
   { sku: "MN-12", sort_order: 16 }, // Womens Polo (SWAG)
   { sku: "MN-13", sort_order: 17 }, // Yeti Mug (SWAG)
+  { sku: "MN-14", sort_order: 18 }, // Yeti Cooler (SWAG)
   { sku: "MN-7",  sort_order: 20 }, // Winter Jacket
   { sku: "MN-9",  sort_order: 21 }, // Pullover Hoodie (Jackets)
   { sku: "MN-10", sort_order: 22 }, // Full Zip Hoodie (Jackets)
