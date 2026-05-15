@@ -31,7 +31,7 @@ const PROVINCE_NAMES: Record<string, string> = {
   NS: "Nova Scotia", ON: "Ontario", PE: "Prince Edward Island",
   QC: "Quebec", SK: "Saskatchewan",
 };
-const taxRateFor = (code: string): number => PROVINCE_TAX[code] ?? PROVINCE_TAX.ON;
+const taxRateFor = (code: string): number | undefined => PROVINCE_TAX[code];
 // Provinces with a single branch — the Location field is unnecessary for these
 const SINGLE_BRANCH_PROVINCES = new Set(["AB", "BC"]);
 const needsLocation = (code: string): boolean => !!code && !SINGLE_BRANCH_PROVINCES.has(code);
@@ -144,7 +144,7 @@ export const useSubmitOrder = routeAction$(
   const cName = (hex: string) => colorMap[hex] || hex;
 
   const province = (employee.province && PROVINCE_TAX[employee.province]) ? employee.province : "ON";
-  const taxRate = taxRateFor(province);
+  const taxRate = taxRateFor(province) ?? PROVINCE_TAX.ON;
   const taxPct = +(taxRate * 100).toFixed(3);
   const subtotal = items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0);
   const tax = subtotal * taxRate;
@@ -371,9 +371,10 @@ export default component$(() => {
     cart.items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0),
   );
   const taxRate = useComputed$(() => taxRateFor(empProvince.value));
-  const taxAmount = useComputed$(() => subtotal.value * taxRate.value);
-  const orderTotal = useComputed$(() => subtotal.value + taxAmount.value);
+  const taxAmount = useComputed$(() => taxRate.value === undefined ? undefined : subtotal.value * taxRate.value);
+  const orderTotal = useComputed$(() => subtotal.value + (taxAmount.value ?? 0));
   const taxLabel = useComputed$(() => {
+    if (taxRate.value === undefined) return t("cart.invoice.tax", locale.value);
     const pct = +(taxRate.value * 100).toFixed(3);
     return `${t("cart.invoice.tax", locale.value)} (${empProvince.value} ${pct}%)`;
   });
@@ -934,7 +935,7 @@ export default component$(() => {
                           <>
                             <tr>
                               <td colSpan={2} class="cart-table__subtotal-label">{taxLabel.value}</td>
-                              <td class="cart-table__subtotal-val">${taxAmount.value.toFixed(2)}</td>
+                              <td class="cart-table__subtotal-val">${(taxAmount.value ?? 0).toFixed(2)}</td>
                             </tr>
                             <tr>
                               <td colSpan={2} class="cart-table__subtotal-label" style={{ fontWeight: 700 }}>{t("cart.invoice.total", locale.value)}</td>
@@ -996,7 +997,7 @@ export default component$(() => {
                               <>
                                 <div class="cart-drawer__summary-item">
                                   <span>{taxLabel.value}</span>
-                                  <span>${taxAmount.value.toFixed(2)}</span>
+                                  <span>${(taxAmount.value ?? 0).toFixed(2)}</span>
                                 </div>
                                 <div class="cart-drawer__summary-item cart-drawer__summary-total">
                                   <span>{t("cart.invoice.total", locale.value)}</span>
