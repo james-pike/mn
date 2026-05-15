@@ -51,8 +51,8 @@ const updates: Update[] = [
     sku: "MN-9",
     material: "10.5 oz midweight 50% cotton / 50% polyester blend",
     details: "Three-piece hood with drawcord, rib-knit cuffs and waist, front handwarmer pocket, triple-stitched seams, Carhartt patch, #K121",
-    img: "/sku/pulloverhoodie.png",
-    imgs: ["/sku/pulloverhoodie.png"],
+    img: "/sku/pullover.png",
+    imgs: ["/sku/pullover.png"],
   },
   {
     sku: "MN-10",
@@ -110,6 +110,28 @@ const updates: Update[] = [
     img: "/sku/footjoy-ladies.png",
     imgs: ["/sku/footjoy-ladies.png"],
   },
+  {
+    sku: "MN-8",
+    img: "/sku/bib.png",
+    imgs: ["/sku/bib.png"],
+  },
+  {
+    sku: "MN-1",
+    img: "/sku/pants.png",
+    imgs: ["/sku/pants.png"],
+  },
+  {
+    sku: "MN-15",
+    material: "5.3 oz/yd² (US), 8.8 oz/L yd (CA), 100% polyester",
+    details: "Moisture-management properties, Anti-odor technology, Textured fabric that's soft, light and breathable, Self-fabric collar, Three-button placket, #1370399",
+    img: "/sku/uapolo.png",
+    imgs: ["/sku/uapolo.png"],
+  },
+  {
+    sku: "MN-16",
+    material: "5.3 oz/yd² (US), 8.8 oz/L yd (CA), 100% polyester",
+    details: "Moisture-management properties, Anti-odor technology, Textured fabric that's soft, light and breathable, Self-fabric collar, Three-button placket, #1370431",
+  },
   // Re-categorize for the construction sidebar (Jackets / Shirts / Polos / Hats / SWAG)
   { sku: "MN-3",  category: "Shirts"  }, // Short Sleeve T-Shirt
   { sku: "MN-4",  category: "Shirts"  }, // Short Sleeve T-Shirt — Tall
@@ -117,6 +139,8 @@ const updates: Update[] = [
   { sku: "MN-6",  category: "Hats"    }, // Toque
   { sku: "MN-9",  category: "Jackets" }, // Pullover Hoodie
   { sku: "MN-10", category: "Jackets" }, // Full Zip Hoodie
+  { sku: "MN-15", category: "SWAG" },    // Men's UA Tech Polo (moved from Polos)
+  { sku: "MN-16", category: "SWAG" },    // Women's UA Tech Polo (moved from Polos)
   // Polo color order: Black, Navy, Solace Blue
   { sku: "MN-11", colors: ["#1a1a18", "#2c3e50", "#6b8bb0"] },
   { sku: "MN-12", colors: ["#1a1a18", "#6b8bb0"] },
@@ -125,8 +149,8 @@ const updates: Update[] = [
     sku: "MN-13",
     material: "18/8 stainless steel, double-wall vacuum insulation, DuraCoat™ color finish",
     details: "Comfort grip handle, cupholder-compatible base, Straw Lid with molded-in stopper, dishwasher safe, YETI Rambler®",
-    img: "/swag/yeti.png",
-    imgs: ["/swag/yeti.png"],
+    img: "/sku/yeti.png",
+    imgs: ["/sku/yeti.png"],
   },
   // Yeti cooler
   {
@@ -144,21 +168,22 @@ const updates: Update[] = [
     details: "Classic fit, rib collar, taped neck and shoulders, tear-away label, no optical brighteners for consistent dye adherence, OEKO-TEX and FLA certified, #2000 / #2000T",
   },
   { sku: "MN-4", delete: true },
-  // Display order: Shirts → SWAG → Jackets/Hoodies → Hats → image-less items last
+  // Display order: Shirts → Polos (all, SWAG) → Jackets/Hoodies → Pants & Bib → Hats → Yeti SWAG
   { sku: "MN-3",  sort_order: 10 }, // Short Sleeve T-Shirt (Shirts)
-  { sku: "MN-11", sort_order: 15 }, // Mens Polo (SWAG)
-  { sku: "MN-12", sort_order: 16 }, // Womens Polo (SWAG)
-  { sku: "MN-13", sort_order: 17 }, // Yeti Mug (SWAG)
-  { sku: "MN-14", sort_order: 18 }, // Yeti Cooler (SWAG)
-  { sku: "MN-7",  sort_order: 20 }, // Winter Jacket
+  { sku: "MN-2",  sort_order: 11 }, // Long Sleeve Shirt (Shirts)
+  { sku: "MN-15", sort_order: 12 }, // Men's UA Tech Polo (SWAG — surfaced near shirts)
+  { sku: "MN-16", sort_order: 13 }, // Women's UA Tech Polo (SWAG — surfaced near shirts)
+  { sku: "MN-11", sort_order: 14 }, // Mens Speckle Print Polo (SWAG — grouped with polos)
+  { sku: "MN-12", sort_order: 15 }, // Womens Speckle Print Polo (SWAG — grouped with polos)
+  { sku: "MN-7",  sort_order: 20 }, // Winter Jacket (Jackets)
   { sku: "MN-9",  sort_order: 21 }, // Pullover Hoodie (Jackets)
   { sku: "MN-10", sort_order: 22 }, // Full Zip Hoodie (Jackets)
-  { sku: "MN-5",  sort_order: 30 }, // Ball Cap (Hats)
-  { sku: "MN-6",  sort_order: 31 }, // Toque (Hats)
-  // No-image items pushed to the end
-  { sku: "MN-2",  sort_order: 90 }, // Long Sleeve Shirt (no img)
-  { sku: "MN-1",  sort_order: 91 }, // Pants (no img)
-  { sku: "MN-8",  sort_order: 92 }, // Winter Bibs (no img)
+  { sku: "MN-1",  sort_order: 30 }, // Pants
+  { sku: "MN-8",  sort_order: 31 }, // Winter Bibs
+  { sku: "MN-5",  sort_order: 40 }, // Ball Cap (Hats)
+  { sku: "MN-6",  sort_order: 41 }, // Toque (Hats)
+  { sku: "MN-13", sort_order: 50 }, // Yeti Mug (SWAG)
+  { sku: "MN-14", sort_order: 51 }, // Yeti Cooler (SWAG)
 ];
 
 async function main() {

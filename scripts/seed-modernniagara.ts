@@ -42,6 +42,8 @@ const seeds: Seed[] = [
   { sku: "MN-12", name: "Women's Speckle Print Polo",  category: "SWAG",      sizes: "XS - 2XL", colors: [SOLACE_BLUE, BLACK],       price: 0, details: "FootJoy, #96324" },
   { sku: "MN-13", name: "Yeti Rambler Straw Mug",      category: "SWAG",      sizes: "25 oz / 35 oz / 42 oz", colors: [NAVY],     price: 0, details: "YETI Rambler® Straw Mug" },
   { sku: "MN-14", name: "Yeti Tundra Cooler",          category: "SWAG",      sizes: "35L / 45L", colors: [NAVY],     price: 0, details: "YETI Tundra® Hard Cooler" },
+  { sku: "MN-15", name: "Men's UA Tech Polo",          category: "SWAG",      sizes: "S - 4XL",   colors: [NAVY, BLACK, "#ffffff", "#b8b8b8", "#6b3fa0", "#c0392b", "#1e40af"], price: 55.00, details: "#1370399" },
+  { sku: "MN-16", name: "Women's UA Tech Polo",        category: "SWAG",      sizes: "XS - 2XL",  colors: [NAVY, BLACK, "#ffffff", "#b8b8b8", "#6b3fa0", "#c0392b", "#1e40af"], price: 55.00, details: "#1370431" },
 ];
 
 async function main() {

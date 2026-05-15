@@ -270,7 +270,7 @@ export default component$(() => {
             )}
             {!waistLengthSkus.has(p.sku) && (
             <div class="product-modal__field">
-              <label class="product-modal__label">{t("modal.size", locale.value)}</label>
+              <label class="product-modal__label">{t("modal.size", locale.value)}{variantSkus.has(p.sku) && selectedVariant.value && <span class="product-modal__color-inline"> — {selectedVariant.value}</span>}</label>
               <div class="product-modal__options">
                 {expandSizes(p.sizes).map((size) => (
                   <button
@@ -461,6 +461,6 @@ export default component$(() => {
 export const head: DocumentHead = ({ params }) => {
   const product = allProducts.find((p) => p.sku === params.sku);
   return {
-    title: product ? `${product.name} - Modern Niagara Apparel` : "Product - Modern Niagara Apparel",
+    title: product ? `${product.name} - Modern Niagara Building Services` : "Product - Modern Niagara Building Services",
   };
 };

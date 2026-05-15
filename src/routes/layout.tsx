@@ -199,13 +199,13 @@ export const useSubmitOrder = routeAction$(
     </tr>`
   ).join("");
 
-  const fromAddress = env.get("RESEND_FROM") || env.get("VITE_RESEND_FROM") || "Modern Niagara Apparel <onboarding@resend.dev>";
+  const fromAddress = env.get("RESEND_FROM") || env.get("VITE_RESEND_FROM") || "Modern Niagara Building Services <onboarding@resend.dev>";
   const toAddress = env.get("ORDER_NOTIFY_TO") || env.get("VITE_ORDER_NOTIFY_TO") || "cs@safetyhouse.ca";
 
   const html = `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
       <div style="background:#1e40af;padding:20px 24px;border-radius:8px 8px 0 0">
-        <h1 style="color:#fff;margin:0;font-size:20px">Modern Niagara Apparel — Apparel Order</h1>
+        <h1 style="color:#fff;margin:0;font-size:20px">Modern Niagara Building Services — Apparel Order</h1>
         ${orderNumber ? `<p style="color:#cbd5e1;margin:6px 0 0;font-size:13px;letter-spacing:0.04em">Order ${esc(orderNumber)}</p>` : ""}
       </div>
       <div style="padding:24px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px">
@@ -853,7 +853,6 @@ export default component$(() => {
             <Link href="/">{t("nav.home", locale.value)}</Link>
             <a href="/apparel/#work-wear" onClick$={(e) => { if (loc.url.pathname.startsWith("/apparel")) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Work Wear" })); const headerH = window.innerWidth <= 900 ? 49 : 58; const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Work Wear", locale.value)}</a>
             <a href="/apparel/#jackets" onClick$={(e) => { if (loc.url.pathname.startsWith("/apparel")) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Jackets" })); const headerH = window.innerWidth <= 900 ? 49 : 58; const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Jackets", locale.value)}</a>
-            <a href="/apparel/#polos" onClick$={(e) => { if (loc.url.pathname.startsWith("/apparel")) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Polos" })); const headerH = window.innerWidth <= 900 ? 49 : 58; const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Polos", locale.value)}</a>
             <a href="/apparel/#hats" onClick$={(e) => { if (loc.url.pathname.startsWith("/apparel")) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Hats" })); const headerH = window.innerWidth <= 900 ? 49 : 58; const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Hats", locale.value)}</a>
           </nav>
           )}
@@ -870,7 +869,7 @@ export default component$(() => {
           <div class="drawer cart-drawer" onClick$={(e) => e.stopPropagation()}>
             <div class="cart-drawer__site-header">
               <Link href="/" class="site-header__logo">
-                <img src="/logo.png" alt="Modern Niagara Apparel" class="site-header__logo-img" width="200" height="200" loading="eager" decoding="sync" />
+                <img src="/logo.png" alt="Modern Niagara Building Services" class="site-header__logo-img" width="200" height="200" loading="eager" decoding="sync" />
               </Link>
               <nav class="site-header__nav">
                 <button class="cart-btn" onClick$={() => (cartOpen.value = false)}>

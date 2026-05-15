@@ -4,7 +4,10 @@ import { allProducts, categoryLabel } from "../../routes/apparel/products";
 import type { Product } from "../../routes/apparel/products";
 import { LoginTypeContext } from "../../routes/layout";
 
-const CLOTHING_CATEGORIES = ["All", "Shirts", "Polos", "Jackets", "Hats", "SWAG"];
+const CLOTHING_CATEGORIES = ["All", "Shirts", "Jackets", "Hats", "SWAG"];
+
+// Colors hidden from catalog-card swatches (still visible on product detail page).
+const CARD_HIDDEN_COLORS = new Set(["#c0392b", "#1e40af", "#6b3fa0"]);
 
 const CATEGORY_ICONS: Record<string, string> = {
   "All": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
@@ -37,18 +40,21 @@ const ProductCard = component$<{ item: Product; sku: string }>(({ item, sku }) =
           </div>
         </div>
         <div class="product-card__color-size-row">
-          {item.colors && item.colors.length > 0 ? (
-            <div class="product-card__colors">
-              {item.colors.map((c) => (
-                <span
-                  key={c}
-                  class="product-card__color-dot"
-                  style={{ background: c }}
-                  aria-hidden="true"
-                />
-              ))}
-            </div>
-          ) : <span />}
+          {(() => {
+            const visible = (item.colors || []).filter((c) => !CARD_HIDDEN_COLORS.has(c));
+            return visible.length > 0 ? (
+              <div class="product-card__colors">
+                {visible.map((c) => (
+                  <span
+                    key={c}
+                    class="product-card__color-dot"
+                    style={{ background: c }}
+                    aria-hidden="true"
+                  />
+                ))}
+              </div>
+            ) : <span />;
+          })()}
           <span class="product-card__sizes">{item.sizes === "One Size" ? t("modal.onesize", locale.value) : item.sizes}</span>
         </div>
       </div>
@@ -67,7 +73,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
 
   const HASH_TO_CAT: Record<string, string> = isTech.value
     ? {}
-    : { "shirts": "Shirts", "polos": "Polos", "jackets": "Jackets", "hats": "Hats", "swag": "SWAG" };
+    : { "shirts": "Shirts", "jackets": "Jackets", "hats": "Hats", "swag": "SWAG" };
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup }) => {

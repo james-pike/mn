@@ -5,7 +5,7 @@
   --ce-green-light: #3b82f6;
   --ce-orange: #E6570C;
   --ce-orange-light: #F27D13;
-  --ce-gold: #e4ba3f;
+  --ce-gold: #31759c;
 
   --ce-white: #ffffff;
   --ce-off-white: #f8f8f6;
@@ -720,6 +720,11 @@ img { max-width: 100%; display: block; }
   width: 50%;
   height: 100%;
   object-fit: cover;
+}
+.category-card .category-card__split img.category-card__split-img--pad {
+  object-fit: contain;
+  padding: 6% 4%;
+  box-sizing: border-box;
 }
 .category-card::after {
   content: '';
@@ -1475,7 +1480,7 @@ img { max-width: 100%; display: block; }
 .btn--primary {
   background: var(--ce-gold);
   color: var(--ce-gray-900);
-  box-shadow: 0 4px 20px rgba(228,186,63,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+  box-shadow: 0 4px 20px rgba(49,117,156,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
 }
 .btn--primary:hover {
   background: #d4a832;
@@ -1958,11 +1963,11 @@ img { max-width: 100%; display: block; }
   width: 100%;
   padding: 10px 12px;
   background: var(--ce-white);
-  border: 1px solid rgba(228,186,63,0.28);
+  border: 1px solid rgba(49,117,156,0.28);
   border-radius: 2px;
   font-size: 1.05rem;
   font-weight: 400;
-  color: #92750a;
+  color: #1e4a66;
   cursor: pointer;
   font-family: inherit;
   display: flex;
@@ -1971,7 +1976,7 @@ img { max-width: 100%; display: block; }
   gap: 28px;
 }
 .nav-drawer__locale svg { width: 20px; height: 20px; }
-.nav-drawer__locale svg { stroke: #92750a; }
+.nav-drawer__locale svg { stroke: #1e4a66; }
 .nav-drawer__logout {
   background: var(--ce-white) !important;
   border-color: rgba(220,38,38,0.25) !important;
@@ -2196,7 +2201,7 @@ img { max-width: 100%; display: block; }
 }
 
 /* Teaser card color rotation: green, gold, orange */
-.teaser-card { --tc-bg: rgba(255,255,255,0.1); --tc-text: #fff; --tc-tag-bg: rgba(228,186,63,0.15); --tc-tag-border: rgba(228,186,63,0.3); --tc-tag-color: #e4ba3f; --tc-btn-bg: #e4ba3f; --tc-btn-color: #fff; --tc-dot-color: rgba(255,255,255,0.4); --tc-glow: #e4ba3f; }
+.teaser-card { --tc-bg: rgba(255,255,255,0.1); --tc-text: #fff; --tc-tag-bg: rgba(49,117,156,0.15); --tc-tag-border: rgba(49,117,156,0.3); --tc-tag-color: #31759c; --tc-btn-bg: #31759c; --tc-btn-color: #fff; --tc-dot-color: rgba(255,255,255,0.4); --tc-glow: #31759c; }
 
 .teaser-card {
   background: var(--tc-bg);
@@ -2646,7 +2651,7 @@ img { max-width: 100%; display: block; }
 
 .product-card__badge--green { background: rgba(37,99,235,0.08); color: var(--ce-green); }
 .product-card__badge--orange { background: rgba(230,87,12,0.08); color: var(--ce-orange); }
-.product-card__badge--gold { background: rgba(228,186,63,0.12); color: #a68508; }
+.product-card__badge--gold { background: rgba(49,117,156,0.12); color: #1e4a66; }
 
 /* ===== Login Modal ===== */
 .login-overlay {
@@ -2715,7 +2720,7 @@ img { max-width: 100%; display: block; }
 .login-modal__field input::placeholder { color: var(--ce-gray-300); }
 .login-modal__submit { width: 100%; justify-content: center; margin-top: 0.5rem; }
 .login-modal__error {
-  background: #fdf8e8; border: 1px solid var(--ce-gold); color: #92750a;
+  background: #eaf3fa; border: 1px solid var(--ce-gold); color: #1e4a66;
   padding: 10px 14px; border-radius: var(--radius-sm);
   font-size: 0.82rem; font-weight: 500; text-align: center;
 }
@@ -3338,27 +3343,27 @@ img { max-width: 100%; display: block; }
   justify-content: center;
   box-shadow: inset 0 1px 4px rgba(0,0,0,0.08), inset 0 0 6px rgba(0,0,0,0.04);
 }
-@media (hover: hover) { .cart-btn:hover { border-color: var(--ce-gold); background: #fdf8e8; color: #92750a; } .cart-btn:hover svg { stroke: #92750a; } }
+@media (hover: hover) { .cart-btn:hover { border-color: var(--ce-gold); background: #eaf3fa; color: #1e4a66; } .cart-btn:hover svg { stroke: #1e4a66; } }
 .cart-btn svg { stroke: var(--ce-gray-700); width: 17px; height: 17px; }
 .cart-btn--active {
-  border-color: rgba(228,186,63,0.45);
-  background: rgba(228,186,63,0.12);
-  color: #92750a;
-  box-shadow: inset 0 1px 4px rgba(146,117,10,0.12), inset 0 0 6px rgba(146,117,10,0.06);
+  border-color: rgba(49,117,156,0.45);
+  background: rgba(49,117,156,0.12);
+  color: #1e4a66;
+  box-shadow: inset 0 1px 4px rgba(30,74,102,0.12), inset 0 0 6px rgba(30,74,102,0.06);
 }
-.cart-btn--active svg { stroke: #92750a; }
-@media (hover: hover) { .cart-btn--active:hover { border-color: var(--ce-gold); background: #fdf8e8; color: #92750a; } .cart-btn--active:hover svg { stroke: #92750a; } }
+.cart-btn--active svg { stroke: #1e4a66; }
+@media (hover: hover) { .cart-btn--active:hover { border-color: var(--ce-gold); background: #eaf3fa; color: #1e4a66; } .cart-btn--active:hover svg { stroke: #1e4a66; } }
 /* On apparel route, the cart button is always shown in the active (yellow) state */
 body:has(.apparel-page) .site-header .cart-btn {
-  border-color: rgba(228,186,63,0.45);
-  background: rgba(228,186,63,0.12);
-  color: #92750a;
-  box-shadow: inset 0 1px 4px rgba(146,117,10,0.12), inset 0 0 6px rgba(146,117,10,0.06);
+  border-color: rgba(49,117,156,0.45);
+  background: rgba(49,117,156,0.12);
+  color: #1e4a66;
+  box-shadow: inset 0 1px 4px rgba(30,74,102,0.12), inset 0 0 6px rgba(30,74,102,0.06);
 }
-body:has(.apparel-page) .site-header .cart-btn svg { stroke: #92750a; }
+body:has(.apparel-page) .site-header .cart-btn svg { stroke: #1e4a66; }
 @media (hover: hover) {
-  body:has(.apparel-page) .site-header .cart-btn:hover { border-color: var(--ce-gold); background: #fdf8e8; color: #92750a; }
-  body:has(.apparel-page) .site-header .cart-btn:hover svg { stroke: #92750a; }
+  body:has(.apparel-page) .site-header .cart-btn:hover { border-color: var(--ce-gold); background: #eaf3fa; color: #1e4a66; }
+  body:has(.apparel-page) .site-header .cart-btn:hover svg { stroke: #1e4a66; }
 }
 /* Logout button in site-header gets a subtle green tint to match the other accented buttons */
 .site-header .logout-btn {
@@ -3400,8 +3405,8 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #92750a; }
 }
 .logout-btn svg { stroke: var(--ce-gray-700); width: 17px; height: 17px; }
 @media (hover: hover) {
-  .logout-btn:hover { border-color: var(--ce-gold); background: #fdf8e8; color: #92750a; }
-  .logout-btn:hover svg { stroke: #92750a; }
+  .logout-btn:hover { border-color: var(--ce-gold); background: #eaf3fa; color: #1e4a66; }
+  .logout-btn:hover svg { stroke: #1e4a66; }
 }
 /* ===== Mobile Apparel Link ===== */
 .site-header__apparel-link {
@@ -3759,8 +3764,8 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #92750a; }
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
-  background: #fdf8e8;
-  color: #92750a;
+  background: #eaf3fa;
+  color: #1e4a66;
   border: 1px solid var(--ce-gold);
   padding: 0.6rem 1.5rem;
   font-size: 0.85rem;
@@ -4060,7 +4065,7 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #92750a; }
 .product-modal__add.btn--primary {
   background: var(--ce-gold);
   color: var(--ce-white);
-  box-shadow: 0 4px 20px rgba(228,186,63,0.3);
+  box-shadow: 0 4px 20px rgba(49,117,156,0.3);
 }
 .product-modal__add.btn--primary:hover {
   background: #d4a832;
@@ -4382,9 +4387,9 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #92750a; }
   color: var(--ce-green);
 }
 .cart-drawer__error {
-  background: #fdf8e8;
+  background: #eaf3fa;
   border: 1px solid var(--ce-gold);
-  color: #92750a;
+  color: #1e4a66;
   padding: 8px 12px;
   border-radius: var(--radius-sm);
   font-size: 0.78rem;
@@ -4413,7 +4418,7 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #92750a; }
 }
 .checkout-modal__field--error input {
   border-color: #d97706;
-  background: #fffbeb;
+  background: #eaf3fa;
 }
 .checkout-modal__field--error input:focus {
   border-color: #d97706;
@@ -4792,9 +4797,9 @@ details[open] > .cart-drawer__checkout-title::after {
   .logout-form { display: none; }
   .hero-card-header__btn--logout { display: none; }
   .cart-btn svg { width: 22px; height: 22px; }
-  .cart-btn--active { background: rgba(228,186,63,0.12) !important; border-color: rgba(228,186,63,0.45) !important; color: #92750a !important; box-shadow: inset 0 1px 4px rgba(146,117,10,0.12), inset 0 0 6px rgba(146,117,10,0.06) !important; }
-  .cart-btn--active svg { stroke: #92750a !important; }
-  .cart-btn--active .cart-btn__label { color: #92750a !important; }
+  .cart-btn--active { background: rgba(49,117,156,0.12) !important; border-color: rgba(49,117,156,0.45) !important; color: #1e4a66 !important; box-shadow: inset 0 1px 4px rgba(30,74,102,0.12), inset 0 0 6px rgba(30,74,102,0.06) !important; }
+  .cart-btn--active svg { stroke: #1e4a66 !important; }
+  .cart-btn--active .cart-btn__label { color: #1e4a66 !important; }
   .site-header__nav a { font-size: 0.75rem; }
   .locale-btn { font-size: 0.78rem; padding: 10px; margin-right: 0; min-width: auto; border: 1px solid var(--ce-gray-200); background: rgba(0,0,0,0.04); border-radius: 2px; box-shadow: inset 0 1px 4px rgba(0,0,0,0.08), inset 0 0 6px rgba(0,0,0,0.04); gap: 3px; }
   .locale-btn__full { display: none; }
@@ -5169,11 +5174,11 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header--hero-hidden .locale-btn { color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.2); background: transparent; border-radius: 4px; }
   .site-header--hero-hidden .locale-btn:hover { color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.2); background: transparent; }
   .site-header--hero-hidden .cart-btn { color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.2); background: transparent; border-radius: 4px; }
-  .site-header--hero-hidden .cart-btn:hover { color: var(--ce-gold); border-color: var(--ce-gold); background: rgba(228,186,63,0.12); }
+  .site-header--hero-hidden .cart-btn:hover { color: var(--ce-gold); border-color: var(--ce-gold); background: rgba(49,117,156,0.12); }
   .site-header--hero-hidden .cart-btn svg { stroke: rgba(255,255,255,0.85); }
   .site-header--hero-hidden .cart-btn:hover svg { stroke: var(--ce-gold); }
   .site-header--hero-hidden .logout-btn { color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.2); background: transparent; border-radius: 4px; }
-  .site-header--hero-hidden .logout-btn:hover { color: var(--ce-gold); border-color: var(--ce-gold); background: rgba(228,186,63,0.12); }
+  .site-header--hero-hidden .logout-btn:hover { color: var(--ce-gold); border-color: var(--ce-gold); background: rgba(49,117,156,0.12); }
   .site-header--hero-hidden .logout-btn svg { stroke: rgba(255,255,255,0.85); }
   .site-header--hero-hidden .logout-btn:hover svg { stroke: var(--ce-gold); }
   .site-header--hero-hidden .site-header__apparel-link { color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.2); }

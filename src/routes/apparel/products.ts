@@ -21,6 +21,67 @@ export const allProducts = [
     "details": "Classic fit, rib collar, taped neck and shoulders, tear-away label, no optical brighteners for consistent dye adherence, OEKO-TEX and FLA certified, #2000 / #2000T"
   },
   {
+    "sku": "MN-2",
+    "name": "Long Sleeve Shirt - Navy",
+    "category": "Shirts",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 59.99,
+    "img": "/sku/sleeve.png",
+    "imgs": [
+      "/sku/sleeve.png"
+    ],
+    "material": "100% cotton jersey, 6.75 oz heavyweight",
+    "details": "Loose fit with dropped shoulders, rib-knit crewneck, side-seam construction, left-chest pocket with Carhartt patch, tagless neck label, #K126"
+  },
+  {
+    "sku": "MN-15",
+    "name": "Men's UA Tech Polo",
+    "category": "SWAG",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50",
+      "#1a1a18",
+      "#ffffff",
+      "#b8b8b8",
+      "#6b3fa0",
+      "#c0392b",
+      "#1e40af"
+    ],
+    "price": 55,
+    "img": "/sku/uapolo.png",
+    "imgs": [
+      "/sku/uapolo.png"
+    ],
+    "material": "5.3 oz/yd² (US), 8.8 oz/L yd (CA), 100% polyester",
+    "details": "Moisture-management properties, Anti-odor technology, Textured fabric that's soft, light and breathable, Self-fabric collar, Three-button placket, #1370399"
+  },
+  {
+    "sku": "MN-16",
+    "name": "Women's UA Tech Polo",
+    "category": "SWAG",
+    "sizes": "XS - 2XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50",
+      "#1a1a18",
+      "#ffffff",
+      "#b8b8b8",
+      "#6b3fa0",
+      "#c0392b",
+      "#1e40af"
+    ],
+    "price": 55,
+    "img": "",
+    "imgs": [],
+    "material": "5.3 oz/yd² (US), 8.8 oz/L yd (CA), 100% polyester",
+    "details": "Moisture-management properties, Anti-odor technology, Textured fabric that's soft, light and breathable, Self-fabric collar, Three-button placket, #1370431"
+  },
+  {
     "sku": "MN-11",
     "name": "Men's Speckle Print Polo",
     "category": "SWAG",
@@ -58,40 +119,6 @@ export const allProducts = [
     "details": "Moisture-wicking, anti-microbial, double-stitched seams, lock-stitched hem, extended back shirt tail, machine washable, FootJoy, #96324"
   },
   {
-    "sku": "MN-13",
-    "name": "Yeti Rambler Straw Mug",
-    "category": "SWAG",
-    "sizes": "25 oz / 35 oz / 42 oz",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 0,
-    "img": "/swag/yeti.png",
-    "imgs": [
-      "/swag/yeti.png"
-    ],
-    "material": "18/8 stainless steel, double-wall vacuum insulation, DuraCoat™ color finish",
-    "details": "Comfort grip handle, cupholder-compatible base, Straw Lid with molded-in stopper, dishwasher safe, YETI Rambler®"
-  },
-  {
-    "sku": "MN-14",
-    "name": "Yeti Tundra Cooler",
-    "category": "SWAG",
-    "sizes": "35L / 45L",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 0,
-    "img": "/swag/Tundra.png",
-    "imgs": [
-      "/swag/Tundra.png"
-    ],
-    "material": "Rotomolded polyethylene with PermaFrost™ pressure-injected polyurethane foam insulation",
-    "details": "T-Rex™ lid latches, NeverFail™ hinge system, Vortex™ drain, bearfoot non-slip feet, integrated tie-down slots, YETI Tundra®"
-  },
-  {
     "sku": "MN-7",
     "name": "Winter Jacket - Navy",
     "category": "Jackets",
@@ -119,9 +146,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 74.99,
-    "img": "/sku/pulloverhoodie.png",
+    "img": "/sku/pullover.png",
     "imgs": [
-      "/sku/pulloverhoodie.png"
+      "/sku/pullover.png"
     ],
     "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
     "details": "Three-piece hood with drawcord, rib-knit cuffs and waist, front handwarmer pocket, triple-stitched seams, Carhartt patch, #K121"
@@ -142,6 +169,40 @@ export const allProducts = [
     ],
     "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
     "details": "Three-piece hood with drawcord, full-length brass zipper, rib-knit cuffs and waist, two front handwarmer pockets, Carhartt patch on pocket, loose fit, #K122"
+  },
+  {
+    "sku": "MN-1",
+    "name": "Pants - Navy",
+    "category": "Pants",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 69.99,
+    "img": "/sku/pants.png",
+    "imgs": [
+      "/sku/pants.png"
+    ],
+    "material": "",
+    "details": "#102291"
+  },
+  {
+    "sku": "MN-8",
+    "name": "Winter Bibs - Navy",
+    "category": "Work Wear",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 189.99,
+    "img": "/sku/bib.png",
+    "imgs": [
+      "/sku/bib.png"
+    ],
+    "material": "",
+    "details": "#106672"
   },
   {
     "sku": "MN-5",
@@ -195,6 +256,23 @@ export const allProducts = [
     "details": "Flame-resistant, NFPA 70E and UL classified to NFPA 2112, relaxed fit, straight leg, phone and utility pockets, OEKO-TEX Standard 100, #104204"
   },
   {
+    "sku": "MN-13",
+    "name": "Yeti Rambler Straw Mug",
+    "category": "SWAG",
+    "sizes": "25 oz / 35 oz / 42 oz",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 0,
+    "img": "/sku/yeti.png",
+    "imgs": [
+      "/sku/yeti.png"
+    ],
+    "material": "18/8 stainless steel, double-wall vacuum insulation, DuraCoat™ color finish",
+    "details": "Comfort grip handle, cupholder-compatible base, Straw Lid with molded-in stopper, dishwasher safe, YETI Rambler®"
+  },
+  {
     "sku": "MNFR-2",
     "name": "FR Long Sleeve Button-Up Shirt - Light Blue",
     "category": "FR Workwear",
@@ -210,6 +288,23 @@ export const allProducts = [
     ],
     "material": "7 oz 88% cotton / 12% high-tenacity nylon FR twill",
     "details": "Button-up long sleeve, button-down collar, two chest pockets with flaps, flame-resistant melamine buttons, triple-stitched seams, NFPA 2112 / UL classified, meets NFPA 70E, #FRS160"
+  },
+  {
+    "sku": "MN-14",
+    "name": "Yeti Tundra Cooler",
+    "category": "SWAG",
+    "sizes": "35L / 45L",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 0,
+    "img": "/swag/Tundra.png",
+    "imgs": [
+      "/swag/Tundra.png"
+    ],
+    "material": "Rotomolded polyethylene with PermaFrost™ pressure-injected polyurethane foam insulation",
+    "details": "T-Rex™ lid latches, NeverFail™ hinge system, Vortex™ drain, bearfoot non-slip feet, integrated tie-down slots, YETI Tundra®"
   },
   {
     "sku": "MNFR-3",
@@ -274,53 +369,6 @@ export const allProducts = [
     "imgs": [],
     "material": "",
     "details": "Fire-resistant, #101618"
-  },
-  {
-    "sku": "MN-2",
-    "name": "Long Sleeve Shirt - Navy",
-    "category": "Shirts",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 59.99,
-    "img": "/sku/sleeve.png",
-    "imgs": [
-      "/sku/sleeve.png"
-    ],
-    "material": "100% cotton jersey, 6.75 oz heavyweight",
-    "details": "Loose fit with dropped shoulders, rib-knit crewneck, side-seam construction, left-chest pocket with Carhartt patch, tagless neck label, #K126"
-  },
-  {
-    "sku": "MN-1",
-    "name": "Pants - Navy",
-    "category": "Pants",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 69.99,
-    "img": "",
-    "imgs": [],
-    "material": "",
-    "details": "#102291"
-  },
-  {
-    "sku": "MN-8",
-    "name": "Winter Bibs - Navy",
-    "category": "Work Wear",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 189.99,
-    "img": "",
-    "imgs": [],
-    "material": "",
-    "details": "#106672"
   }
 ];
 
@@ -342,6 +390,10 @@ const colorNames: Record<string, Record<string, string>> = {
   "#4a4a4a": { en: "Charcoal", fr: "Charbon" },
   "#6b8bb0": { en: "Solace Blue", fr: "Bleu Solace" },
   "#7dd3fc": { en: "Light Blue", fr: "Bleu clair" },
+  "#b8b8b8": { en: "Grey Heather", fr: "Gris chiné" },
+  "#6b3fa0": { en: "Purple", fr: "Violet" },
+  "#c0392b": { en: "Red", fr: "Rouge" },
+  "#1e40af": { en: "Royal", fr: "Bleu royal" },
 };
 export function colorName(hex: string, locale: Locale): string {
   return colorNames[hex]?.[locale] || hex;

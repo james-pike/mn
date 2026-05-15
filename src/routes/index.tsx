@@ -195,7 +195,10 @@ export default component$(() => {
                     <span class="category-card__label">{t("teaser.jackets.title", locale.value)}</span>
                   </a>
                   <a href="/apparel/#hats" class="category-card">
-                    <img src="/hat/30109107PS2_FRONT.JPG" alt="Hats" width="400" height="300" loading="eager" decoding="sync" />
+                    <div class="category-card__split">
+                      <img src="/swag/cap.png" alt="Ball cap" width="200" height="300" loading="eager" decoding="sync" />
+                      <img src="/sku/toque-removebg-preview.png" alt="Toque" class="category-card__split-img--pad" width="200" height="300" loading="eager" decoding="sync" />
+                    </div>
                     <span class="category-card__label">{t("teaser.hats.title", locale.value)}</span>
                   </a>
                   <a href="/apparel/#swag" class="category-card">
@@ -220,18 +223,18 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "Modern Niagara Apparel",
+  title: "Modern Niagara Building Services",
   meta: [
     { name: "description", content: "Modern Niagara Employee Apparel. Order branded jackets, polos, hats, and more." },
     { name: "robots", content: "noindex, nofollow" },
     { name: "theme-color", content: "#ffffff" },
-    { property: "og:title", content: "Modern Niagara Apparel" },
+    { property: "og:title", content: "Modern Niagara Building Services" },
     { property: "og:description", content: "Internal apparel ordering for Modern Niagara staff." },
     { property: "og:type", content: "website" },
     { property: "og:url", content: "https://modernniagaraapparel.ca/" },
     { property: "og:image", content: "https://modernniagaraapparel.ca/modernniagara-logo.png" },
     { name: "twitter:card", content: "summary" },
-    { name: "twitter:title", content: "Modern Niagara Apparel" },
+    { name: "twitter:title", content: "Modern Niagara Building Services" },
     { name: "twitter:description", content: "Internal apparel ordering for Modern Niagara staff." },
     { name: "twitter:image", content: "https://modernniagaraapparel.ca/modernniagara-logo.png" },
   ],
