@@ -78,7 +78,7 @@ export const allProducts = [
     "sku": "MN-14",
     "name": "Yeti Tundra Cooler",
     "category": "SWAG",
-    "sizes": "Tundra 35 / Tundra 45",
+    "sizes": "35L / 45L",
     "badge": "",
     "colors": [
       "#2c3e50"
@@ -285,8 +285,10 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 59.99,
-    "img": "",
-    "imgs": [],
+    "img": "/sku/sleeve.png",
+    "imgs": [
+      "/sku/sleeve.png"
+    ],
     "material": "100% cotton jersey, 6.75 oz heavyweight",
     "details": "Loose fit with dropped shoulders, rib-knit crewneck, side-seam construction, left-chest pocket with Carhartt patch, tagless neck label, #K126"
   },

@@ -23,6 +23,8 @@ const updates: Update[] = [
     sku: "MN-2",
     material: "100% cotton jersey, 6.75 oz heavyweight",
     details: "Loose fit with dropped shoulders, rib-knit crewneck, side-seam construction, left-chest pocket with Carhartt patch, tagless neck label, #K126",
+    img: "/sku/sleeve.png",
+    imgs: ["/sku/sleeve.png"],
   },
   {
     sku: "MN-5",
@@ -133,6 +135,7 @@ const updates: Update[] = [
     details: "T-Rex™ lid latches, NeverFail™ hinge system, Vortex™ drain, bearfoot non-slip feet, integrated tie-down slots, YETI Tundra®",
     img: "/swag/Tundra.png",
     imgs: ["/swag/Tundra.png"],
+    sizes: "35L / 45L",
   },
   // Merge MN-4 (Tall) into MN-3 as a size variant
   {
