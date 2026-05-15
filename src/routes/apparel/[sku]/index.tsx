@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { LocaleContext, t } from "../../../i18n";
 import { allProducts, colorName, categoryLabel } from "../products";
-import { expandSizes } from "../utils";
+import { expandSizes, sortColorsWhiteLast } from "../utils";
 import { LoginTypeContext } from "../../layout";
 
 export default component$(() => {
@@ -154,7 +154,7 @@ export default component$(() => {
 
   // Initialize color and auto-select default size (prefer L)
   if (!colorInitialized.value && product.value) {
-    selectedColor.value = product.value.colors[0];
+    selectedColor.value = sortColorsWhiteLast(product.value.colors)[0];
     if (waistLengthSkus.has(product.value.sku)) {
       selectedSize.value = "W/L";
     } else {
@@ -335,7 +335,7 @@ export default component$(() => {
                 <div class="product-modal__color-group">
                   <label class="product-modal__label">{t("modal.color", locale.value)}{selectedColor.value && <span class="product-modal__color-inline"> — {colorName(selectedColor.value, locale.value)}</span>}</label>
                   <div class="product-modal__options">
-                    {p.colors.map((color) => (
+                    {sortColorsWhiteLast(p.colors).map((color) => (
                       <button
                         key={color}
                         class={`product-modal__color ${selectedColor.value === color ? "active" : ""}`}

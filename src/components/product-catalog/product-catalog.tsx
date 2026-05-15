@@ -2,6 +2,7 @@ import { component$, useSignal, useComputed$, useContext, $, useVisibleTask$, us
 import { LocaleContext, t } from "../../i18n";
 import { allProducts, categoryLabel } from "../../routes/apparel/products";
 import type { Product } from "../../routes/apparel/products";
+import { sortColorsWhiteLast } from "../../routes/apparel/utils";
 import { LoginTypeContext } from "../../routes/layout";
 
 const CLOTHING_CATEGORIES = ["All", "Shirts", "Jackets", "Hats", "SWAG"];
@@ -41,7 +42,7 @@ const ProductCard = component$<{ item: Product; sku: string }>(({ item, sku }) =
         </div>
         <div class="product-card__color-size-row">
           {(() => {
-            const visible = (item.colors || []).filter((c) => !CARD_HIDDEN_COLORS.has(c));
+            const visible = sortColorsWhiteLast((item.colors || []).filter((c) => !CARD_HIDDEN_COLORS.has(c)));
             return visible.length > 0 ? (
               <div class="product-card__colors">
                 {visible.map((c) => (

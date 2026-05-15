@@ -131,6 +131,8 @@ const updates: Update[] = [
     sku: "MN-16",
     material: "5.3 oz/yd² (US), 8.8 oz/L yd (CA), 100% polyester",
     details: "Moisture-management properties, Anti-odor technology, Textured fabric that's soft, light and breathable, Self-fabric collar, Three-button placket, #1370431",
+    img: "/sku/ua-womens.jpg",
+    imgs: ["/sku/ua-womens.jpg"],
   },
   // Re-categorize for the construction sidebar (Jackets / Shirts / Polos / Hats / SWAG)
   { sku: "MN-3",  category: "Shirts"  }, // Short Sleeve T-Shirt

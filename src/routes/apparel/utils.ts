@@ -1,5 +1,14 @@
 // Utility functions that won't be overwritten by auto-generation
 
+// White (#ffffff) is always rendered after every other swatch.
+export function sortColorsWhiteLast(colors: readonly string[]): string[] {
+  return [...colors].sort((a, b) => {
+    const aw = a.toLowerCase() === "#ffffff" ? 1 : 0;
+    const bw = b.toLowerCase() === "#ffffff" ? 1 : 0;
+    return aw - bw;
+  });
+}
+
 export function expandSizes(sizes: string): string[] {
   if (sizes === "One Size") return ["One Size"];
   const order = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL", "7XL"];
