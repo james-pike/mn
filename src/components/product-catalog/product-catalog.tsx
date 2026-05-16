@@ -38,7 +38,6 @@ const ProductCard = component$<{ item: Product; sku: string }>(({ item, sku }) =
   const locale = useContext(LocaleContext);
   const loginType = useContext(LoginTypeContext);
   const isTech = loginType.value === "tech";
-  const isSafety = loginType.value === "safety";
 
   return (
     <a href={`/apparel/${sku}/`} class={`product-card product-card-link ${sku === "CAR-21" ? "product-card--cover" : ""}`}>
