@@ -805,7 +805,7 @@ export default component$(() => {
                   {t("cat.FR Workwear", locale.value)}
                 </a>
               )}
-              {(loginType.value !== "tech" && loginType.value !== "safety") && (() => {
+              {loginType.value !== "tech" && (() => {
                 const NAV_CATS: { key: TranslationKey; cat: string; icon: string }[] = [
                   { key: "cat.Shirts",  cat: "Shirts",  icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 2l4 4-3 3-2-1v14a1 1 0 01-1 1H10a1 1 0 01-1-1V8L7 9 4 6l4-4h2a2 2 0 004 0h2z"/></svg>' },
                   { key: "cat.Jackets", cat: "Jackets", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>' },
@@ -883,7 +883,7 @@ export default component$(() => {
               <span class="brand-cluster__word brand-cluster__word--muted">APPAREL</span>
             </div>
           </div>
-          {(loginType.value !== "tech" && loginType.value !== "safety") && (
+          {loginType.value !== "tech" && (
           <nav class="site-footer__links">
             <Link href="/">{t("nav.home", locale.value)}</Link>
             <a href="/apparel/#shirts" onClick$={(e) => { if (loc.url.pathname.startsWith("/apparel")) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Shirts" })); const headerH = window.innerWidth <= 900 ? 49 : 58; const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Shirts", locale.value)}</a>
@@ -931,7 +931,7 @@ export default component$(() => {
                       <tr>
                         <th class="cart-table__th-product">{t("cart.invoice.product", locale.value)}</th>
                         <th class="cart-table__th-qty">{t("cart.invoice.qty", locale.value)}</th>
-                        {(loginType.value !== "tech" && loginType.value !== "safety") && <th class="cart-table__th-total">{t("cart.invoice.total", locale.value)}</th>}
+                        {loginType.value !== "tech" && <th class="cart-table__th-total">{t("cart.invoice.total", locale.value)}</th>}
                       </tr>
                     </thead>
                     <tbody>
@@ -956,11 +956,11 @@ export default component$(() => {
                               <button class="cart-table__qty-btn" aria-label={`Increase quantity of ${item.name}`} onClick$={() => updateQty(i, 1)}>+</button>
                             </div>
                           </td>
-                          {(loginType.value !== "tech" && loginType.value !== "safety") && <td class="cart-table__total">${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</td>}
+                          {loginType.value !== "tech" && <td class="cart-table__total">${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</td>}
                         </tr>
                       ))}
                     </tbody>
-                    {(loginType.value !== "tech" && loginType.value !== "safety") && (
+                    {loginType.value !== "tech" && (
                       <tfoot>
                         <tr>
                           <td colSpan={2} class="cart-table__subtotal-label">{t("cart.invoice.subtotal", locale.value)}</td>
@@ -989,7 +989,7 @@ export default component$(() => {
                 </div>
                 <div class="cart-drawer__footer">
                   <span class="cart-drawer__total">
-                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{(loginType.value !== "tech" && loginType.value !== "safety") && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
+                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{loginType.value !== "tech" && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
                   </span>
                   <button
                     class="btn btn--primary cart-drawer__order-btn"
@@ -1019,10 +1019,10 @@ export default component$(() => {
                               {item.color && item.color.startsWith("#") && <span class="cart-drawer__summary-swatch" style={{ background: item.color }} aria-hidden="true" />}
                               {item.quantity}x {stripColorSuffix(item.name)}{(item.color || item.size) ? ` — ${item.color ? (item.color.startsWith("#") ? colorName(item.color, locale.value) : item.color) : ""}${item.color && item.size ? " / " : ""}${item.size || ""}` : ""}
                             </span>
-                            {(loginType.value !== "tech" && loginType.value !== "safety") && <span>${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</span>}
+                            {loginType.value !== "tech" && <span>${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</span>}
                           </div>
                         ))}
-                        {(loginType.value !== "tech" && loginType.value !== "safety") && (
+                        {loginType.value !== "tech" && (
                           <>
                             <div class="cart-drawer__summary-item cart-drawer__summary-total">
                               <span>{t("cart.invoice.subtotal", locale.value)}</span>
@@ -1135,7 +1135,7 @@ export default component$(() => {
                 )}
                 <div class="cart-drawer__footer">
                   <span class="cart-drawer__total">
-                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{(loginType.value !== "tech" && loginType.value !== "safety") && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
+                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{loginType.value !== "tech" && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
                   </span>
                   <button
                     class="btn btn--primary cart-drawer__order-btn"

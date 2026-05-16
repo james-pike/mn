@@ -52,7 +52,7 @@ const ProductCard = component$<{ item: Product; sku: string }>(({ item, sku }) =
             <span class="product-card__name-code">{(item.name.match(/#\S+/) || [''])[0]}</span>
           </div>
           <div class="product-card__price-group">
-            {!isTech && !isSafety && <div class="product-card__price">${(Number(item.price) || 0).toFixed(2)}</div>}
+            {!isTech && <div class="product-card__price">${(Number(item.price) || 0).toFixed(2)}</div>}
           </div>
         </div>
         <div class="product-card__color-size-row">

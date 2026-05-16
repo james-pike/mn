@@ -10,9 +10,7 @@ import { LoginTypeContext } from "../../layout";
 export default component$(() => {
   const locale = useContext(LocaleContext);
   const loginType = useContext(LoginTypeContext);
-  const isTech = loginType.value === "tech";
-  const isSafety = loginType.value === "safety";
-  const hidePrice = isTech || isSafety;
+  const hidePrice = loginType.value === "tech";
   const loc = useLocation();
   const nav = useNavigate();
 
@@ -49,10 +47,58 @@ export default component$(() => {
   });
 
   const waistLengthSkus = new Set(["CAR-12", "CAR-14"]);
-  const variantSkus = new Set(["CAR-11", "CAR-17"]);
-  const variantOptions = ["Regular", "Tall"];
+  // Per-SKU variant options. Each entry maps the variant label to the list
+  // of sizes available *for that variant* — different lengths on the same
+  // bib can carry different size runs (e.g. Carhartt 106672 Short comes
+  // M-4XL, Regular S-5XL, Tall M-4XL).
+  const variantSizesBySku: Record<string, Record<string, string[]>> = {
+    "CAR-11": {
+      "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+      "Tall": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+    },
+    "CAR-17": {
+      "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+      "Tall": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+    },
+    "MN-8": {
+      "Short": ["M", "L", "XL", "2XL", "3XL", "4XL"],
+      "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
+      "Tall": ["M", "L", "XL", "2XL", "3XL", "4XL"],
+    },
+  };
+  const variantSkus = new Set(Object.keys(variantSizesBySku));
+  const SIZE_ORDER = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"];
   const waistOptions = ["28", "29", "30", "31", "32", "33", "34", "35", "36", "38", "40", "42", "44", "46", "48", "50"];
   const lengthOptions = ["30", "32", "34", "36"];
+
+  // Sizes shown in the size picker. For per-variant SKUs the list narrows
+  // to whatever the currently selected variant carries; before a variant
+  // is picked, show the union (sorted) so the user sees the full pool.
+  const sizeOptions = useComputed$<string[]>(() => {
+    const p = product.value;
+    if (!p) return [];
+    const variantMap = variantSizesBySku[p.sku];
+    if (variantMap) {
+      if (selectedVariant.value && variantMap[selectedVariant.value]) {
+        return variantMap[selectedVariant.value];
+      }
+      const union = new Set<string>();
+      Object.values(variantMap).forEach((arr) => arr.forEach((s) => union.add(s)));
+      return Array.from(union).sort((a, b) => SIZE_ORDER.indexOf(a) - SIZE_ORDER.indexOf(b));
+    }
+    return expandSizes(p.sizes);
+  });
+
+  // If the user switches variant and their previously-picked size isn't
+  // offered in the new variant, clear it so they re-select consciously.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    track(() => selectedVariant.value);
+    if (!selectedSize.value) return;
+    if (!sizeOptions.value.includes(selectedSize.value)) {
+      selectedSize.value = "";
+    }
+  });
 
   const addToCart = $(() => {
     const p = product.value;
@@ -270,11 +316,27 @@ export default component$(() => {
                 ))}
               </ul>
             )}
+            {variantSkus.has(p.sku) && (
+              <div class="product-modal__field">
+                <label class="product-modal__label">{t("product.variant", locale.value)}</label>
+                <div class="product-modal__options">
+                  {(variantSizesBySku[p.sku] ? Object.keys(variantSizesBySku[p.sku]) : []).map((v) => (
+                    <button
+                      key={v}
+                      class={`product-modal__option ${selectedVariant.value === v ? "active" : ""}`}
+                      onClick$={() => (selectedVariant.value = v)}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             {!waistLengthSkus.has(p.sku) && (
             <div class="product-modal__field">
               <label class="product-modal__label">{t("modal.size", locale.value)}{variantSkus.has(p.sku) && selectedVariant.value && <span class="product-modal__color-inline"> — {selectedVariant.value}</span>}</label>
               <div class="product-modal__options">
-                {expandSizes(p.sizes).map((size) => (
+                {sizeOptions.value.map((size) => (
                   <button
                     key={size}
                     class={`product-modal__option ${selectedSize.value === size ? "active" : ""}`}
@@ -313,22 +375,6 @@ export default component$(() => {
                       <option key={l} value={l}>{l}</option>
                     ))}
                   </select>
-                </div>
-              </div>
-            )}
-            {variantSkus.has(p.sku) && (
-              <div class="product-modal__field">
-                <label class="product-modal__label">{t("product.variant", locale.value)}</label>
-                <div class="product-modal__options">
-                  {variantOptions.map((v) => (
-                    <button
-                      key={v}
-                      class={`product-modal__option ${selectedVariant.value === v ? "active" : ""}`}
-                      onClick$={() => (selectedVariant.value = v)}
-                    >
-                      {v}
-                    </button>
-                  ))}
                 </div>
               </div>
             )}
