@@ -291,13 +291,7 @@ img { max-width: 100%; display: block; }
   display: flex;
   align-items: center;
 }
-.site-header__logo {
-  display: flex; align-items: center; flex-shrink: 0; margin-right: auto; gap: 2px;
-  /* Visual top/bottom breathing room around the logo — header height is
-     fixed, so shrink the logo box rather than adding (clipped) padding. */
-  transform: scale(0.9);
-  transform-origin: left center;
-}
+.site-header__logo { display: flex; align-items: center; flex-shrink: 0; margin-right: auto; gap: 2px; }
 .site-header__logo-img { height: 50px; width: auto; flex-shrink: 0; }
 .site-header__logo-text { height: 24px; width: auto; flex-shrink: 0; }
 .site-header__logo-brand { display: flex; flex-direction: column; align-items: flex-start; transition: opacity 0.3s ease; }
@@ -952,12 +946,13 @@ img { max-width: 100%; display: block; }
   align-items: center;
   justify-content: space-between;
   padding-block: 0.6rem;
-  /* Match the sticky .site-header's content edge: it lives inside a
-     max-width: 1536px container with 0.75rem inner padding. On viewports
-     wider than ~1536px we calc the matching inset so the logo + button
-     row line up between the hero header and the on-scroll header. Below
-     that, the 1.25rem floor keeps the original edge-padding. */
-  padding-inline: max(1.25rem, calc((100% - 1536px) / 2 + 0.75rem));
+  /* Match the sticky .site-header's content edge exactly: it lives in a
+     max-width: 1536px inner with 0.75rem padding. At viewports >= 1536px
+     the calc grows the inset; below that, the 0.75rem floor (same as the
+     site-header inner padding) keeps both headers' buttons in the same
+     horizontal position so there's no shift when the on-scroll header
+     replaces this one. */
+  padding-inline: max(0.75rem, calc((100% - 1536px) / 2 + 0.75rem));
   background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 70%, transparent 100%);
   border: none;
   border-radius: 0;
@@ -1743,6 +1738,10 @@ img { max-width: 100%; display: block; }
 }
 @media (max-width: 900px) {
   .home-catalog__inner { padding: 0 0.25rem; }
+  /* Mobile nav drawer: drop the per-product thumbnails — the list is
+     long enough that the images crowd the row; clean text-only list. */
+  .nav-drawer__cat-item-img { display: none; }
+  .nav-drawer__cat-item { gap: 0; padding-left: 12px; }
   .home-catalog__hero-slot + .home-catalog__header { margin-top: 0; }
   .home-catalog__header { padding: 0; height: 34px; padding-left: 0.25rem; top: 48px; border-radius: 0; margin-bottom: 0; margin-top: 0; }
   .home-catalog__title { display: none; }
@@ -3368,24 +3367,26 @@ img { max-width: 100%; display: block; }
 @media (hover: hover) { .cart-btn:hover { border-color: var(--ce-gold); background: #eaf3fa; color: #1e4a66; } .cart-btn:hover svg { stroke: #1e4a66; } }
 .cart-btn svg { stroke: var(--ce-gray-700); width: 17px; height: 17px; }
 .cart-btn--active {
-  border-color: rgba(49,117,156,0.45);
-  background: rgba(49,117,156,0.12);
-  color: #1e4a66;
-  box-shadow: inset 0 1px 4px rgba(30,74,102,0.12), inset 0 0 6px rgba(30,74,102,0.06);
+  border-color: #31759c;
+  background: #31759c;
+  color: #ffffff;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08);
 }
-.cart-btn--active svg { stroke: #1e4a66; }
-@media (hover: hover) { .cart-btn--active:hover { border-color: var(--ce-gold); background: #eaf3fa; color: #1e4a66; } .cart-btn--active:hover svg { stroke: #1e4a66; } }
-/* On apparel route, the cart button is always shown in the active (yellow) state */
+.cart-btn--active svg { stroke: #ffffff; }
+.cart-btn--active .cart-btn__label { color: #ffffff; }
+@media (hover: hover) { .cart-btn--active:hover { border-color: var(--ce-gold); background: #2a6789; color: #ffffff; } .cart-btn--active:hover svg { stroke: #ffffff; } }
+/* On apparel route, the cart button is always shown in the active (blue) state */
 body:has(.apparel-page) .site-header .cart-btn {
-  border-color: rgba(49,117,156,0.45);
-  background: rgba(49,117,156,0.12);
-  color: #1e4a66;
-  box-shadow: inset 0 1px 4px rgba(30,74,102,0.12), inset 0 0 6px rgba(30,74,102,0.06);
+  border-color: #31759c;
+  background: #31759c;
+  color: #ffffff;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08);
 }
-body:has(.apparel-page) .site-header .cart-btn svg { stroke: #1e4a66; }
+body:has(.apparel-page) .site-header .cart-btn svg { stroke: #ffffff; }
+body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff; }
 @media (hover: hover) {
-  body:has(.apparel-page) .site-header .cart-btn:hover { border-color: var(--ce-gold); background: #eaf3fa; color: #1e4a66; }
-  body:has(.apparel-page) .site-header .cart-btn:hover svg { stroke: #1e4a66; }
+  body:has(.apparel-page) .site-header .cart-btn:hover { border-color: var(--ce-gold); background: #2a6789; color: #ffffff; }
+  body:has(.apparel-page) .site-header .cart-btn:hover svg { stroke: #ffffff; }
 }
 /* Logout button in site-header gets a subtle green tint to match the other accented buttons */
 .site-header .logout-btn {
@@ -4156,7 +4157,7 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #1e4a66; }
   justify-content: space-between;
   padding: 0.7rem 1rem;
   background: var(--ce-white);
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   margin: 0 2px;
 }
 .cart-drawer__header .modal__close { position: static; }
@@ -4180,7 +4181,7 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #1e4a66; }
   color: var(--ce-gray-400);
   font-size: 1rem;
   background: var(--ce-white);
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   margin: 0.35rem;
 }
 .cart-drawer__back-link {
@@ -4522,7 +4523,7 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #1e4a66; }
 .cart-drawer__checkout {
   padding: 0.35rem 0.5rem;
   background: var(--ce-white);
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   margin: 0 2px;
   display: flex;
   flex-direction: column;
@@ -4840,9 +4841,9 @@ details[open] > .cart-drawer__checkout-title::after {
   .logout-form { display: none; }
   .hero-card-header__btn--logout { display: none; }
   .cart-btn svg { width: 22px; height: 22px; }
-  .cart-btn--active { background: rgba(49,117,156,0.12) !important; border-color: rgba(49,117,156,0.45) !important; color: #1e4a66 !important; box-shadow: inset 0 1px 4px rgba(30,74,102,0.12), inset 0 0 6px rgba(30,74,102,0.06) !important; }
-  .cart-btn--active svg { stroke: #1e4a66 !important; }
-  .cart-btn--active .cart-btn__label { color: #1e4a66 !important; }
+  .cart-btn--active { background: #31759c !important; border-color: #31759c !important; color: #ffffff !important; box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important; }
+  .cart-btn--active svg { stroke: #ffffff !important; }
+  .cart-btn--active .cart-btn__label { color: #ffffff !important; }
   .site-header__nav a { font-size: 0.75rem; }
   .locale-btn { font-size: 0.78rem; padding: 10px; margin-right: 0; min-width: auto; border: 1px solid var(--ce-gray-200); background: rgba(0,0,0,0.04); border-radius: 2px; box-shadow: inset 0 1px 4px rgba(0,0,0,0.08), inset 0 0 6px rgba(0,0,0,0.04); gap: 3px; }
   .locale-btn__full { display: none; }
@@ -5573,7 +5574,7 @@ details[open] > .cart-drawer__checkout-title::after {
 
   /* Hero categories — 2 columns on tablet for more substantial cards (overridden by 768-1024 block below) */
   .hero-categories { grid-template-columns: repeat(2, 1fr); gap: 8px; width: 100%; margin: 0; padding-top: 0.5rem; }
-  .hero-categories .category-card { aspect-ratio: 4 / 3; }
+  .hero-categories .category-card { aspect-ratio: 16 / 9; }
 
   /* Hero logo spacer mobile */
   .hero__logo-spacer--mobile { padding: 0.95rem 0 0.5rem; }
@@ -5909,7 +5910,7 @@ details[open] > .cart-drawer__checkout-title::after {
     padding: 0.4rem 0.8rem;
     letter-spacing: 0.03em;
   }
-  .hero-categories .category-card { aspect-ratio: 4 / 3; }
+  .hero-categories .category-card { aspect-ratio: 16 / 9; }
 }
 
 @media (max-width: 600px) {
@@ -6224,6 +6225,25 @@ details[open] > .cart-drawer__checkout-title::after {
     padding-left: 0 !important;
     padding-right: 5vw !important;
   }
+  /* Buttons scale with the viewport so they stay visually proportional to
+     the hero text + header padding (which are vw-based). Without this, the
+     fixed-px buttons appear to shrink as the viewport grows or as the
+     user zooms in/out. */
+  .hero__upper .hero-card-header__btn {
+    padding: clamp(8px, 0.6vw, 14px) clamp(10px, 0.8vw, 18px) !important;
+    font-size: clamp(0.78rem, 0.85vw, 1.05rem) !important;
+    gap: clamp(4px, 0.35vw, 8px) !important;
+  }
+  .hero__upper .hero-card-header__btn svg {
+    width: clamp(18px, 1.35vw, 28px) !important;
+    height: clamp(18px, 1.35vw, 28px) !important;
+  }
+  .hero__upper .hero-card-header__btn-label {
+    font-size: inherit !important;
+  }
+  .hero__upper .hero-card-header__actions {
+    gap: clamp(2px, 0.25vw, 6px) !important;
+  }
   /* Pagination dots centered horizontally inside the 1/3-wide logo-cluster
      column (cluster center = 5vw left + 16.667vw half-width). */
   .hero__upper .hero-carousel__dots {
@@ -6483,7 +6503,26 @@ details[open] > .cart-drawer__checkout-title::after {
 @media (min-width: 601px) and (max-width: 1024px) {
   /* Drop the 100vh lock so the carousel can grow to fit the cluster.
      Edge-to-edge: no x margin, tiny top gap to match the mobile treatment. */
-  .hero { height: auto !important; margin: 0 !important; padding: 2px 0 0 !important; }
+  .hero {
+    height: auto !important;
+    margin: 0 !important;
+    padding: 2px 0 0 !important;
+    /* Force the dark overlay container edge-to-edge on tablet — no hidden
+       max-width or flex shrink should keep it narrow. */
+    width: 100% !important;
+    max-width: none !important;
+  }
+  .hero__upper {
+    width: 100% !important;
+    max-width: none !important;
+    align-self: stretch !important;
+  }
+  /* Dark overlay container stays edge-to-edge, but give the category
+     cards a touch of breathing room from the left/right hero edges. */
+  .hero__lower { padding: 0.5rem 0.5rem 0.6rem !important; width: 100% !important; max-width: none !important; align-self: stretch !important; }
+  .hero-card-header { padding: 0.4rem 0.25rem !important; }
+  /* Home-page wrapper should not introduce any inset around the hero. */
+  .home-page { padding: 0 !important; margin: 0 !important; width: 100% !important; max-width: none !important; }
   .hero__upper {
     flex: 0 0 auto !important;
     height: auto !important;
@@ -6519,6 +6558,12 @@ details[open] > .cart-drawer__checkout-title::after {
     width: 23vw !important;
     margin-top: -5.5vw !important;
   }
+  /* Tablet uses a row layout (brandmark left, words right), so the eye
+     finishes tracking the brandmark cascade before noticing APPAREL.
+     Start APPAREL earlier here so it visibly begins while the last
+     third of triangles is still fading in — matches the mobile/desktop
+     feel where they're stacked. */
+  .hero__upper .hero__text .hero__title-letter { --apparel-start: 0.55s; }
   .hero__upper .hero__text .hero__title-word {
     font-size: 5.6vw !important;
   }
@@ -6649,12 +6694,22 @@ details[open] > .cart-drawer__checkout-title::after {
 }
 .brand-cluster__word {
   font-size: 0.95rem;
-  font-weight: 500;
+  /* MODERN NIAGARA reads heavier in the brand lockup. The --sub and
+     --muted variants below pull their own weight back down so they sit
+     visually subordinate to the main word. */
+  font-weight: 700;
   letter-spacing: -0.01em;
   text-transform: uppercase;
   color: inherit;
 }
-.brand-cluster__word--muted { opacity: 0.55; }
+.brand-cluster__word--muted {
+  opacity: 0.55;
+  font-weight: 500;
+  /* APPAREL is lighter (500) than the bolder MODERN NIAGARA (700) so its
+     line-box carries more whitespace at the top — pull it up so the visual
+     gap above APPAREL matches the gap above BUILDING SERVICES. */
+  margin-top: -2px;
+}
 .brand-cluster__word--sub {
   letter-spacing: 0.04em;
   color: var(--ce-gray-500);

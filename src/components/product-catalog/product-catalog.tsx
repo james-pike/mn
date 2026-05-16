@@ -10,12 +10,13 @@ const CLOTHING_CATEGORIES = ["All", "Shirts", "Jackets", "Hats", "SWAG"];
 // Safety catalog: every MNFR-* item plus a small allowlist of standard SKUs,
 // minus a deny list for FR items we don't carry yet.
 const SAFETY_SKU_PREFIX = "MNFR-";
-const SAFETY_EXTRA_SKUS = new Set(["MN-3", "MN-5", "MN-6"]);
+const SAFETY_EXTRA_SKUS = new Set(["MN-2", "MN-3", "MN-5", "MN-6"]);
 const SAFETY_HIDDEN_SKUS = new Set(["MNFR-5", "MNFR-6"]); // FR Insulated Bib & Jacket
 const SAFETY_CATEGORIES = ["All", "FR Workwear", "Shirts", "Hats"];
-// Explicit display order for the Safety "All" view: shirt, hoodies, pants,
-// then the standard-SKU allowlist (tee, ball cap, toque).
-const SAFETY_SKU_ORDER = ["MNFR-2", "MNFR-3", "MNFR-4", "MNFR-1", "MN-3", "MN-5", "MN-6"];
+// Explicit display order for the Safety "All" view: FR shirt + hoodies,
+// FR pants, then the standard-SKU allowlist (short-sleeve tee,
+// long-sleeve tee, ball cap, toque).
+const SAFETY_SKU_ORDER = ["MNFR-2", "MNFR-3", "MNFR-4", "MNFR-1", "MN-3", "MN-2", "MN-5", "MN-6"];
 const isSafetyProduct = (sku: string) =>
   !SAFETY_HIDDEN_SKUS.has(sku) && (sku.startsWith(SAFETY_SKU_PREFIX) || SAFETY_EXTRA_SKUS.has(sku));
 

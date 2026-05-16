@@ -166,7 +166,11 @@ export default component$(() => {
               <span class="hero__title-word hero__title-word--sub">BUILDING SERVICES</span>
               <span class="hero__title-word hero__title-word--letters">
                 {"APPAREL".split("").map((ch, i) => (
-                  <span key={i} class="hero__title-letter" style={{ animationDelay: `${1.05 + i * 0.04}s` }}>{ch}</span>
+                  <span
+                    key={i}
+                    class="hero__title-letter"
+                    style={{ animationDelay: `calc(var(--apparel-start, 1.05s) + ${i * 0.04}s)` }}
+                  >{ch}</span>
                 ))}
               </span>
             </div>
@@ -196,17 +200,22 @@ export default component$(() => {
                   </a>
                 </>) : isSafety.value ? (<>
                   <a href="/apparel/" class="category-card category-card--tech-primary">
-                    <img src="/sku/FRpullover.png" alt="FR Workwear" width="400" height="300" loading="eager" decoding="sync" />
+                    <img src="/hero.jpg" alt="FR Workwear" width="400" height="300" loading="eager" decoding="sync" />
                     <span class="category-card__label">{t("cat.FR Workwear", locale.value)}</span>
                   </a>
-                  <a href="/apparel/" class="category-card category-card--tech-extra category-card--tech-desktop">
-                    <img src="/sku/FRpants.png" alt="" width="400" height="300" loading="eager" decoding="sync" />
+                  <a href="/apparel/#shirts" class="category-card">
+                    <img src="/shirts.jpg" alt="Classic Shirts" width="400" height="300" loading="eager" decoding="sync" />
+                    <span class="category-card__label">{t("teaser.polos.title", locale.value)}</span>
                   </a>
-                  <a href="/apparel/" class="category-card category-card--tech-extra category-card--tech-desktop">
-                    <img src="/sku/FRsleeve.png" alt="" width="400" height="300" loading="eager" decoding="sync" />
+                  <a href="/apparel/#hats" class="category-card">
+                    <div class="category-card__split">
+                      <img src="/swag/cap.png" alt="Ball cap" width="200" height="300" loading="eager" decoding="sync" />
+                      <img src="/sku/toque-removebg-preview.png" alt="Toque" class="category-card__split-img--pad" width="200" height="300" loading="eager" decoding="sync" />
+                    </div>
+                    <span class="category-card__label">{t("teaser.hats.title", locale.value)}</span>
                   </a>
-                  <a href="/apparel/" class="category-card category-card--tech-extra category-card--tech-tablet">
-                    <img src="/sku/FRfullzip.png" alt="" width="400" height="300" loading="eager" decoding="sync" />
+                  <a href="/apparel/" class="category-card category-card--tech-extra">
+                    <img src="/jackets.jpg" alt="" width="400" height="300" loading="eager" decoding="sync" />
                   </a>
                 </>) : (<>
                   <a href="/apparel/#polos" class="category-card">
