@@ -6480,7 +6480,7 @@ details[open] > .cart-drawer__checkout-title::after {
     /* More top breathing room so the brandmark sits lower in the dark
        panel instead of hugging the top edge. */
     padding-top: 4vw !important;
-    padding-bottom: 1vw !important;
+    padding-bottom: 3.5vw !important;
     padding-left: 1.2vw !important;
     padding-right: 2.2vw !important;
   }
