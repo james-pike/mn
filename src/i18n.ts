@@ -120,6 +120,15 @@ const translations = {
   "color.grey": { en: "Grey", fr: "Gris" },
   "color.orange": { en: "Orange", fr: "Orange" },
   "color.yellow": { en: "Yellow", fr: "Jaune" },
+  "color.red": { en: "Red", fr: "Rouge" },
+  "color.purple": { en: "Purple", fr: "Violet" },
+  "color.royal": { en: "Royal", fr: "Bleu royal" },
+  "color.greyheather": { en: "Grey Heather", fr: "Gris chiné" },
+  "color.lightblue": { en: "Light Blue", fr: "Bleu clair" },
+  "color.solaceblue": { en: "Solace Blue", fr: "Bleu Solace" },
+  "color.silver": { en: "Silver", fr: "Argent" },
+  "color.charcoal": { en: "Charcoal", fr: "Charbon" },
+  "color.bronze": { en: "Bronze", fr: "Bronze" },
 
   // Product modal
   "modal.material": { en: "Material", fr: "Matière" },

@@ -463,6 +463,6 @@ export default component$(() => {
 export const head: DocumentHead = ({ params }) => {
   const product = allProducts.find((p) => p.sku === params.sku);
   return {
-    title: product ? `${product.name} - Modern Niagara Building Services` : "Product - Modern Niagara Building Services",
+    title: product ? `${product.name} - Modern Niagara Building Services Apparel` : "Product - Modern Niagara Building Services Apparel",
   };
 };

@@ -154,12 +154,17 @@ export const useSubmitOrder = routeAction$(
   const colorMap: Record<string, string> = {
     "#00703c": "Green", "#1a1a18": "Black", "#ffffff": "White",
     "#2c3e50": "Navy", "#94a3b8": "Silver", "#4a4a4a": "Charcoal",
-    "#8d5f18": "Bronze",
+    "#8d5f18": "Bronze", "#c0392b": "Red", "#6b3fa0": "Purple",
+    "#1e40af": "Royal", "#b8b8b8": "Grey Heather", "#7dd3fc": "Light Blue",
+    "#6b8bb0": "Solace Blue",
   };
   const cName = (hex: string) => colorMap[hex] || hex;
 
-  const province = (employee.province && PROVINCE_TAX[employee.province]) ? employee.province : "ON";
-  const taxRate = taxRateFor(province) ?? PROVINCE_TAX.ON;
+  const province = employee.province;
+  if (!province || !PROVINCE_TAX[province]) {
+    return fail(400, { message: "Please select a province before submitting the order." });
+  }
+  const taxRate = PROVINCE_TAX[province];
   const taxPct = +(taxRate * 100).toFixed(3);
   const subtotal = items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0);
   const tax = subtotal * taxRate;
@@ -330,9 +335,17 @@ const colorKeyMap: Record<string, string> = {
   "#1a1a18": "color.black",
   "#ffffff": "color.white",
   "#2c3e50": "color.navy",
-  "#94a3b8": "color.grey",
+  "#94a3b8": "color.silver",
   "#E6570C": "color.orange",
   "#e4ba3f": "color.yellow",
+  "#c0392b": "color.red",
+  "#6b3fa0": "color.purple",
+  "#1e40af": "color.royal",
+  "#b8b8b8": "color.greyheather",
+  "#7dd3fc": "color.lightblue",
+  "#6b8bb0": "color.solaceblue",
+  "#4a4a4a": "color.charcoal",
+  "#8d5f18": "color.bronze",
 };
 
 const colorName = (hex: string, locale: Locale): string => {

@@ -684,6 +684,9 @@ img { max-width: 100%; display: block; }
   -webkit-backface-visibility: hidden;
   contain: layout paint;
   will-change: transform;
+  /* Enables `cqi` units in descendants so the label font-size can scale
+     with the card's actual width (used by `.category-card__label`). */
+  container-type: inline-size;
 }
 .category-card::before {
   content: '';
@@ -750,7 +753,12 @@ img { max-width: 100%; display: block; }
   bottom: 0.6rem;
   left: 0.6rem;
   color: var(--ce-white);
-  font-size: 0.9rem;
+  /* Shrink with the card on narrow mobile widths instead of ellipsis-cutting
+     the title. Preferred 7cqi (= 7% of card width) keeps things proportional;
+     clamps stop it from being unreadably small or jumping above the desktop
+     size. The desktop @media block below opts back into a viewport-based
+     clamp for the wider layout. */
+  font-size: clamp(0.6rem, 7cqi, 0.9rem);
   font-weight: 700;
   z-index: 1;
   padding: 0.4rem 0.7rem;
@@ -760,6 +768,8 @@ img { max-width: 100%; display: block; }
   letter-spacing: -0.01em;
   white-space: nowrap;
   max-width: calc(100% - 1.2rem);
+  /* Safety net for extreme/long translations — should rarely trigger now
+     because the font already scales down with card width. */
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -941,7 +951,13 @@ img { max-width: 100%; display: block; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.6rem 1.25rem;
+  padding-block: 0.6rem;
+  /* Match the sticky .site-header's content edge: it lives inside a
+     max-width: 1536px container with 0.75rem inner padding. On viewports
+     wider than ~1536px we calc the matching inset so the logo + button
+     row line up between the hero header and the on-scroll header. Below
+     that, the 1.25rem floor keeps the original edge-padding. */
+  padding-inline: max(1.25rem, calc((100% - 1536px) / 2 + 0.75rem));
   background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 70%, transparent 100%);
   border: none;
   border-radius: 0;
@@ -1726,7 +1742,7 @@ img { max-width: 100%; display: block; }
   width: fit-content;
 }
 @media (max-width: 900px) {
-  .home-catalog__inner { padding: 0 0.05rem; }
+  .home-catalog__inner { padding: 0 0.25rem; }
   .home-catalog__hero-slot + .home-catalog__header { margin-top: 0; }
   .home-catalog__header { padding: 0; height: 34px; padding-left: 0.25rem; top: 48px; border-radius: 0; margin-bottom: 0; margin-top: 0; }
   .home-catalog__title { display: none; }
@@ -1737,7 +1753,7 @@ img { max-width: 100%; display: block; }
 @media (min-width: 601px) and (max-width: 1024px) {
   .home-catalog { padding: 0; }
   .home-catalog__inner { padding: 0; max-width: 100%; }
-  .home-catalog .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; min-height: 100vh; align-content: start; padding: 0 0.2rem; margin: 0; }
+  .home-catalog .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; min-height: 100vh; align-content: start; padding: 0 0.25rem; margin: 0; }
   .home-catalog .apparel-grid.apparel-grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
   .home-catalog__header { height: 38px; padding: 0; top: 58px; border-radius: 0; margin-bottom: 0.2rem; }
   /* Match mobile tab behavior on tablet — equal-width fill + container-query font scaling */
@@ -4181,7 +4197,7 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #1e4a66; }
   overflow-y: auto;
   padding: 0.5rem 1rem 0.85rem;
   background: var(--ce-white);
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   margin: 2px;
 }
 .cart-item {
@@ -4195,7 +4211,7 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #1e4a66; }
   width: 56px;
   height: 44px;
   object-fit: cover;
-  border-radius: 2px;
+  border-radius: 0;
   flex-shrink: 0;
 }
 .cart-item__info { flex: 1; min-width: 0; }
@@ -4224,7 +4240,7 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #1e4a66; }
 .cart-item__remove {
   width: 24px;
   height: 24px;
-  border-radius: 50%;
+  border-radius: 0;
   border: none;
   background: var(--ce-gray-100);
   color: var(--ce-gray-500);
@@ -4281,7 +4297,7 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #1e4a66; }
   width: 52px;
   height: 52px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 0;
   flex-shrink: 0;
   background: var(--ce-gray-100);
 }
@@ -4312,7 +4328,7 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #1e4a66; }
   color: var(--ce-gray-500);
   width: 18px;
   height: 18px;
-  border-radius: 50%;
+  border-radius: 0;
   font-size: 0.8rem;
   cursor: pointer;
   padding: 0;
@@ -4335,7 +4351,7 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #1e4a66; }
   align-items: center;
   gap: 0;
   border: 1px solid var(--ce-gray-200);
-  border-radius: 6px;
+  border-radius: 0;
   overflow: hidden;
   background: var(--ce-white);
 }
@@ -4397,7 +4413,7 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #1e4a66; }
   border: 1px solid var(--ce-gold);
   color: #1e4a66;
   padding: 8px 12px;
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   font-size: 0.78rem;
   font-weight: 500;
 }
@@ -4422,11 +4438,13 @@ body:has(.apparel-page) .site-header .cart-btn svg { stroke: #1e4a66; }
 .cart-drawer__order-btn svg {
   flex-shrink: 0;
 }
-.checkout-modal__field--error input {
+.checkout-modal__field--error input,
+.checkout-modal__field--error select {
   border-color: #d97706;
   background: #eaf3fa;
 }
-.checkout-modal__field--error input:focus {
+.checkout-modal__field--error input:focus,
+.checkout-modal__field--error select:focus {
   border-color: #d97706;
   box-shadow: 0 0 0 2px rgba(217,119,6,0.1);
 }
@@ -4564,11 +4582,11 @@ details[open] > .cart-drawer__checkout-title::after {
 }
 .cart-drawer__back-btn:hover { color: var(--ce-gray-900); }
 .cart-drawer__details-step { flex: 1; overflow-y: auto; }
-.cart-drawer__summary { padding: 0.5rem 0.75rem; background: var(--ce-white); border-radius: var(--radius-sm); margin: 2px; }
+.cart-drawer__summary { padding: 0.5rem 0.75rem; background: var(--ce-white); border-radius: 0; margin: 2px; }
 .cart-drawer__summary-list { padding: 0.5rem 0; }
 .cart-drawer__summary-item { display: flex; justify-content: space-between; padding: 4px 0; font-size: 0.82rem; color: var(--ce-gray-600); }
 .cart-drawer__summary-total { font-weight: 600; color: var(--ce-gray-900); border-top: 1px solid var(--ce-gray-200); margin-top: 4px; padding-top: 8px; }
-.checkout-modal__form { padding: 0.75rem; background: var(--ce-white); border-radius: var(--radius-sm); margin: 2px; }
+.checkout-modal__form { padding: 0.75rem; background: var(--ce-white); border-radius: 0; margin: 2px; }
 .checkout-modal__form-title { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ce-gray-500); margin-bottom: 0.75rem; }
 .cart-drawer__footer {
   padding: 0.7rem 1rem;
@@ -4633,7 +4651,8 @@ details[open] > .cart-drawer__checkout-title::after {
   color: var(--ce-gray-500);
   margin-bottom: 0.35rem;
 }
-.checkout-modal__field input {
+.checkout-modal__field input,
+.checkout-modal__field select {
   width: 100%;
   padding: 10px 14px;
   border: 1.5px solid var(--ce-gray-200);
@@ -4645,10 +4664,28 @@ details[open] > .cart-drawer__checkout-title::after {
   transition: border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
   box-sizing: border-box;
 }
-.checkout-modal__field input:focus {
+.checkout-modal__field select {
+  /* Strip the native chrome (Safari double-arrow, Chrome chevron) and drop
+     in our own caret so the field reads as part of the same form. */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1.5L6 6.5L11 1.5' stroke='%234a4a46' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 34px;
+  cursor: pointer;
+  line-height: 1.2;
+}
+.checkout-modal__field select:invalid {
+  /* Style the placeholder option (value="") like an input placeholder */
+  color: var(--ce-gray-500);
+}
+.checkout-modal__field input:focus,
+.checkout-modal__field select:focus {
   outline: none;
   border-color: var(--ce-green);
-  background: var(--ce-white);
+  background-color: var(--ce-white);
   box-shadow: 0 0 0 2px rgba(37,99,235,0.06);
 }
 .checkout-modal__submit {
@@ -5586,6 +5623,8 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header .locale-btn { margin-right: 0; }
   .logout-form { display: inline-flex; }
   .hero-card-header__btn--logout { display: inline-flex; }
+  /* Tablet: logout shrinks to icon-only (the text "Logout" is dropped). */
+  .hero-card-header__btn--logout .hero-card-header__btn-label { display: none !important; }
   .hero { margin-top: 0; padding-top: 0; }
   .home-catalog__header { top: 58px; margin-top: 0; }
   .apparel-titlebar { top: 58px; margin-top: 0; }
@@ -5595,33 +5634,33 @@ details[open] > .cart-drawer__checkout-title::after {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
+  /* Match mobile: header slides in smoothly once the user scrolls past the
+     hero. Previously this used position: sticky + always-visible which gave
+     a visible bg flip / jank as the layout passed under it. */
   .site-header--hero-hidden {
-    position: sticky;
+    position: fixed;
     top: 0;
-    transform: none;
+    left: 0;
+    right: 0;
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    background: var(--ce-white) !important;
+    border-bottom: none !important;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  .site-header--hero-hidden.site-header--hero-visible {
+    transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
     background: var(--ce-white) !important;
     border-bottom: none !important;
-    transition: background 0.3s ease, border-bottom 0.3s ease;
-  }
-  .site-header--hero-hidden.site-header--white {
-    background: var(--ce-white) !important;
-    border-bottom: none !important;
+    box-shadow: none;
   }
   .site-header--hero-hidden .site-header__logo,
   .site-header--hero-hidden .site-header__logo-img,
   .site-header--hero-hidden .site-header__logo-text,
-  .site-header--hero-hidden .site-header__logo-brand { opacity: 1 !important; transition: opacity 0.3s ease; }
-  .site-header--hero-hidden.site-header--hero-visible {
-    background: var(--ce-white) !important;
-    border-bottom: none !important;
-    box-shadow: none;
-  }
-  .site-header--hero-hidden.site-header--hero-visible .site-header__logo,
-  .site-header--hero-hidden.site-header--hero-visible .site-header__logo-img,
-  .site-header--hero-hidden.site-header--hero-visible .site-header__logo-text,
-  .site-header--hero-hidden.site-header--hero-visible .site-header__logo-brand { opacity: 1 !important; }
+  .site-header--hero-hidden .site-header__logo-brand { opacity: 1 !important; }
 
   /* Hero card grid: in-card header row 1, cluster+carousel row 2, categories row 3 */
   .hero__logo-group {
@@ -5912,7 +5951,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .related-items__title { font-size: 0.9rem; margin-bottom: 0.5rem; }
   .product-modal__category { display: none; }
   .popular-grid { grid-template-columns: 1fr 1fr; }
-  .apparel-catalog:has(.product-detail) { padding: 0 0 0.35rem; }
+  .apparel-catalog:has(.product-detail) { padding: 0 0.25rem 0.35rem; }
   .product-detail { padding: 0; margin: 0; max-width: 600px; }
   .product-detail .product-modal__image { border-radius: 2px; padding: 0; }
   .product-detail .product-carousel { border-radius: 2px; aspect-ratio: 1/1; margin: 0; }
@@ -5978,7 +6017,9 @@ details[open] > .cart-drawer__checkout-title::after {
   .cart-drawer__checkout { padding: 0.5rem 0.75rem; gap: 0; margin: 0; border-radius: 0; }
   .cart-drawer__checkout[open] { gap: 0.5rem; }
   .checkout-modal__field label { margin-bottom: 0.1rem; font-size: 0.65rem; }
-  .checkout-modal__field input { padding: 6px 10px; font-size: 16px; }
+  .checkout-modal__field input,
+  .checkout-modal__field select { padding: 6px 10px; font-size: 16px; }
+  .checkout-modal__field select { padding-right: 30px; background-position: right 10px center; }
   .cart-drawer__footer { padding: 0.5rem 0.75rem; margin: 2px 0; border-radius: 0; }
   .modal { padding: 0.5rem 1rem 1rem; margin: 0 0.5rem; }
   .modal .modal__close { top: 0.35rem; right: 0.5rem; width: 28px; height: 28px; font-size: 0.85rem; }
@@ -6040,7 +6081,9 @@ details[open] > .cart-drawer__checkout-title::after {
 .hero {
   position: relative !important;
   background: var(--ce-gray-100) !important;
-  padding: 0 !important;
+  /* Tiny top gap so the dark overlay container doesn't butt up against
+     the sticky site header — matches the visual breathing on the sides. */
+  padding: 2px 0 0 !important;
   margin: 0 !important;
   min-height: 0 !important;
   height: 100vh !important;
@@ -6438,8 +6481,9 @@ details[open] > .cart-drawer__checkout-title::after {
 /* Tablet: same stacked column layout as desktop, container is 2/3 of the
    viewport width centered, brandmark + words sized larger. */
 @media (min-width: 601px) and (max-width: 1024px) {
-  /* Drop the 100vh lock so the carousel can grow to fit the cluster. */
-  .hero { height: auto !important; }
+  /* Drop the 100vh lock so the carousel can grow to fit the cluster.
+     Edge-to-edge: no x margin, tiny top gap to match the mobile treatment. */
+  .hero { height: auto !important; margin: 0 !important; padding: 2px 0 0 !important; }
   .hero__upper {
     flex: 0 0 auto !important;
     height: auto !important;
@@ -6461,7 +6505,7 @@ details[open] > .cart-drawer__checkout-title::after {
     align-items: center !important;
     justify-content: center !important;
     text-align: left !important;
-    gap: 5vw !important;
+    gap: 4.5vw !important;
     padding-top: 5rem !important;
     padding-bottom: 3rem !important;
     padding-left: 1vw !important;
@@ -6471,18 +6515,19 @@ details[open] > .cart-drawer__checkout-title::after {
     align-items: flex-start !important;
   }
   .hero__upper .hero__text .hero__brandmark {
-    width: 27vw !important;
-    margin-top: -7vw !important;
+    /* Slightly smaller brandmark and tighter pull-up on tablet. */
+    width: 23vw !important;
+    margin-top: -5.5vw !important;
   }
   .hero__upper .hero__text .hero__title-word {
-    font-size: 6.5vw !important;
+    font-size: 5.6vw !important;
   }
   .hero__upper .hero__text .hero__title-word--sub {
-    font-size: 6.5vw !important;
+    font-size: 5.6vw !important;
   }
-  /* MODERN / NIAGARA stack on their own lines, scaled up to fill the line. */
+  /* MODERN / NIAGARA stack on their own lines — also dialed back ~12%. */
   .hero__upper .hero__text .hero__title-word:nth-child(1) {
-    font-size: 9.4vw !important;
+    font-size: 8.2vw !important;
     line-height: 0.95 !important;
   }
 }

@@ -246,18 +246,18 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "Modern Niagara Building Services",
+  title: "Modern Niagara Building Services Apparel",
   meta: [
     { name: "description", content: "Modern Niagara Employee Apparel. Order branded jackets, polos, hats, and more." },
     { name: "robots", content: "noindex, nofollow" },
     { name: "theme-color", content: "#ffffff" },
-    { property: "og:title", content: "Modern Niagara Building Services" },
+    { property: "og:title", content: "Modern Niagara Building Services Apparel" },
     { property: "og:description", content: "Internal apparel ordering for Modern Niagara staff." },
     { property: "og:type", content: "website" },
     { property: "og:url", content: "https://modernniagaraapparel.ca/" },
     { property: "og:image", content: "https://modernniagaraapparel.ca/modernniagara-logo.png" },
     { name: "twitter:card", content: "summary" },
-    { name: "twitter:title", content: "Modern Niagara Building Services" },
+    { name: "twitter:title", content: "Modern Niagara Building Services Apparel" },
     { name: "twitter:description", content: "Internal apparel ordering for Modern Niagara staff." },
     { name: "twitter:image", content: "https://modernniagaraapparel.ca/modernniagara-logo.png" },
   ],
