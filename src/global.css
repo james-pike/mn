@@ -5964,7 +5964,6 @@ details[open] > .cart-drawer__checkout-title::after {
      side inset moves onto the product image and details below. */
   .apparel-catalog:has(.product-detail) { padding: 0 0 0.35rem; }
   .product-detail .product-image-row { padding-left: 0.25rem; padding-right: 0.25rem; }
-  .product-detail .product-modal__details { padding-left: calc(0.75rem + 0.25rem); padding-right: calc(0.75rem + 0.25rem); }
   .product-detail { padding: 0; margin: 0; max-width: 600px; }
   .product-detail .product-modal__image { border-radius: 2px; padding: 0; }
   .product-detail .product-carousel { border-radius: 2px; aspect-ratio: 1/1; margin: 0; }
@@ -5978,7 +5977,7 @@ details[open] > .cart-drawer__checkout-title::after {
     pointer-events: none;
     z-index: 5;
   }
-  .product-detail .product-modal__details { position: relative; padding: 1.25rem 0.75rem 1.5rem; background: var(--ce-white); border-radius: 2px; }
+  .product-detail .product-modal__details { position: relative; padding: 1.25rem 0.75rem 1.5rem; margin-left: 0.25rem; margin-right: 0.25rem; background: var(--ce-white); border-radius: 2px; }
   .product-detail .product-modal__details::after {
     content: '';
     position: absolute;
@@ -6328,13 +6327,18 @@ details[open] > .cart-drawer__checkout-title::after {
   opacity: 0;
   transform: translateY(20px);
   filter: blur(8px);
-  /* Each line fades within one third of the brandmark's ~1.5s triangle
-     cascade: MODERN/NIAGARA in the 1st third, BUILDING SERVICES in the
-     2nd, APPAREL (per-letter, see index.tsx) in the last. */
-  animation: hero-word-reveal 0.55s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+  /* Each line fades fully inside its 1/3 window of the brandmark's
+     ~1.48s triangle cascade:
+       MODERN NIAGARA   0      → 0.45s  (1st third 0-0.49s)
+       BUILDING SERVICES 0.49s → 0.94s  (2nd third 0.49-0.98s)
+       APPAREL          per-letter, see .hero__title-letter:nth-child
+                        rules below — last letter finishes at 1.48s. */
+  animation: hero-word-reveal 0.45s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
 }
-.hero__upper .hero__text .hero__title-word:nth-child(1) { animation-delay: 0.05s; animation-duration: 0.85s; }
-.hero__upper .hero__text .hero__title-word:nth-child(2) { animation-delay: 0.55s; }
+/* MODERN NIAGARA — starts at 0s so the fade is already in progress
+   when triangle 1 appears, and finishes inside the first 1/3 window. */
+.hero__upper .hero__text .hero__title-word:nth-child(1) { animation-delay: 0s; }
+.hero__upper .hero__text .hero__title-word:nth-child(2) { animation-delay: 0.49s; }
 .hero__upper .hero__text .hero__title-word.hero__title-word--sub {
   font-weight: 600 !important;
   color: #9a9a9a !important;
@@ -6359,6 +6363,18 @@ details[open] > .cart-drawer__checkout-title::after {
   filter: blur(4px);
   animation: hero-letter-reveal 0.35s cubic-bezier(0.33, 0.4, 0.55, 1) forwards;
 }
+/* APPAREL letter cascade — fully inside the last 1/3 of the brandmark
+   timeline (~0.95s through 1.48s). Spacing tightened to 0.03s per letter
+   so the 7-letter cascade fits the window. Pure CSS so timing is
+   deterministic across devices (no inline-style / CSS-var resolution
+   path that can stall on slower browsers). */
+.hero__upper .hero__text .hero__title-letter:nth-child(1) { animation-delay: 0.95s; }
+.hero__upper .hero__text .hero__title-letter:nth-child(2) { animation-delay: 0.98s; }
+.hero__upper .hero__text .hero__title-letter:nth-child(3) { animation-delay: 1.01s; }
+.hero__upper .hero__text .hero__title-letter:nth-child(4) { animation-delay: 1.04s; }
+.hero__upper .hero__text .hero__title-letter:nth-child(5) { animation-delay: 1.07s; }
+.hero__upper .hero__text .hero__title-letter:nth-child(6) { animation-delay: 1.10s; }
+.hero__upper .hero__text .hero__title-letter:nth-child(7) { animation-delay: 1.13s; }
 @keyframes hero-letter-reveal {
   to { opacity: 1; transform: translateX(0); filter: blur(0); }
 }
@@ -6569,12 +6585,8 @@ details[open] > .cart-drawer__checkout-title::after {
     width: 23vw !important;
     margin-top: -5.5vw !important;
   }
-  /* Tablet uses a row layout (brandmark left, words right), so the eye
-     finishes tracking the brandmark cascade before noticing APPAREL.
-     Start APPAREL earlier here so it visibly begins while the last
-     third of triangles is still fading in — matches the mobile/desktop
-     feel where they're stacked. */
-  .hero__upper .hero__text .hero__title-letter { --apparel-start: 0.55s; }
+  /* Timing for APPAREL letters is shared with desktop/mobile via the
+     pure-CSS nth-child rules above — tablet doesn't need its own offset. */
   .hero__upper .hero__text .hero__title-word {
     font-size: 5.6vw !important;
   }
@@ -6610,7 +6622,7 @@ details[open] > .cart-drawer__checkout-title::after {
     align-items: center !important;
     justify-content: center !important;
     text-align: left !important;
-    gap: 8vw !important;
+    gap: 11vw !important;
     width: 94% !important;
     padding-top: 3.5rem !important;
     padding-left: 0.75rem !important;

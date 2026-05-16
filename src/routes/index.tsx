@@ -166,11 +166,11 @@ export default component$(() => {
               <span class="hero__title-word hero__title-word--sub">BUILDING SERVICES</span>
               <span class="hero__title-word hero__title-word--letters">
                 {"APPAREL".split("").map((ch, i) => (
-                  <span
-                    key={i}
-                    class="hero__title-letter"
-                    style={{ animationDelay: `calc(var(--apparel-start, 1.05s) + ${i * 0.04}s)` }}
-                  >{ch}</span>
+                  /* Per-letter delays live in CSS (hero__title-letter:nth-child)
+                     instead of inline style — keeps timing deterministic across
+                     devices and avoids hydration jitter / CSS-var resolution
+                     stalls on slower browsers. */
+                  <span key={i} class="hero__title-letter">{ch}</span>
                 ))}
               </span>
             </div>

@@ -329,6 +329,7 @@ interface CartItem {
   waist?: string;
   length?: string;
   variant?: string;
+  code?: string;
 }
 
 const colorKeyMap: Record<string, string> = {
@@ -484,7 +485,7 @@ export default component$(() => {
 
     const orderData = {
       employee: { name: `${empFirstName.value} ${empLastName.value}`, email: empEmail.value, phone: empPhone.value, department: empDept.value, province: empProvince.value, po: empPO.value },
-      items: cart.items.map((i) => ({
+      items: cart.items.map((i: any) => ({
         name: i.name || "",
         sku: i.sku || "",
         color: i.color || "",
@@ -494,6 +495,7 @@ export default component$(() => {
         ...(i.waist ? { waist: i.waist } : {}),
         ...(i.length ? { length: i.length } : {}),
         ...(i.variant ? { variant: i.variant } : {}),
+        ...(i.code ? { code: i.code } : {}),
       })),
       date: new Date().toLocaleDateString("en-CA"),
     };
