@@ -243,7 +243,7 @@ export const allProducts = [
   {
     "sku": "MNFR-1",
     "name": "FR Pants - Navy",
-    "category": "FR Workwear",
+    "category": "Flame Resistant",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
@@ -277,7 +277,7 @@ export const allProducts = [
   {
     "sku": "MNFR-2",
     "name": "FR Long Sleeve Button-Up Shirt - Light Blue",
-    "category": "FR Workwear",
+    "category": "Flame Resistant",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
@@ -311,7 +311,7 @@ export const allProducts = [
   {
     "sku": "MNFR-3",
     "name": "FR Pullover Hoodie - Navy",
-    "category": "FR Workwear",
+    "category": "Flame Resistant",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
@@ -345,7 +345,7 @@ export const allProducts = [
   {
     "sku": "MNFR-4",
     "name": "FR Full Zip Hoodie - Navy",
-    "category": "FR Workwear",
+    "category": "Flame Resistant",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
@@ -361,7 +361,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-18",
-    "name": "Backpack - Carhartt Brown",
+    "name": "25L Laptop Backpack - Brown",
     "category": "SWAG",
     "sizes": "One Size",
     "badge": "",
@@ -374,12 +374,12 @@ export const allProducts = [
       "/sku/backpack.png"
     ],
     "material": "",
-    "details": ""
+    "details": "#B0000536"
   },
   {
     "sku": "MNFR-5",
     "name": "FR Insulated Bib - Navy",
-    "category": "FR Workwear",
+    "category": "Flame Resistant",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
@@ -394,7 +394,7 @@ export const allProducts = [
   {
     "sku": "MNFR-6",
     "name": "FR Insulated Jacket - Navy",
-    "category": "FR Workwear",
+    "category": "Flame Resistant",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [

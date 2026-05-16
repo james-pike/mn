@@ -20,13 +20,13 @@ type Seed = {
 };
 
 const seeds: Seed[] = [
-  // FR Workwear
-  { sku: "MNFR-1", name: "FR Pants", category: "FR Workwear", sizes: "S - 4XL", colors: [NAVY], price: 159.00, details: "Fire-resistant, #104204" },
-  { sku: "MNFR-2", name: "FR Long Sleeve Button-Up Shirt", category: "FR Workwear", sizes: "S - 4XL", colors: [LIGHT_BLUE], price: 124.99, details: "Fire-resistant, #FRS160" },
-  { sku: "MNFR-3", name: "FR Pullover Hoodie", category: "FR Workwear", sizes: "S - 4XL", colors: [NAVY], price: 214.99, details: "Fire-resistant, #104983" },
-  { sku: "MNFR-4", name: "FR Full Zip Hoodie", category: "FR Workwear", sizes: "S - 4XL", colors: [NAVY], price: 239.99, details: "Fire-resistant, #104982" },
-  { sku: "MNFR-5", name: "FR Insulated Bib", category: "FR Workwear", sizes: "S - 4XL", colors: [NAVY], price: 380.00, details: "Fire-resistant, #101626" },
-  { sku: "MNFR-6", name: "FR Insulated Jacket", category: "FR Workwear", sizes: "S - 4XL", colors: [NAVY], price: 290.00, details: "Fire-resistant, #101618" },
+  // Flame Resistant
+  { sku: "MNFR-1", name: "FR Pants", category: "Flame Resistant", sizes: "S - 4XL", colors: [NAVY], price: 159.00, details: "Fire-resistant, #104204" },
+  { sku: "MNFR-2", name: "FR Long Sleeve Button-Up Shirt", category: "Flame Resistant", sizes: "S - 4XL", colors: [LIGHT_BLUE], price: 124.99, details: "Fire-resistant, #FRS160" },
+  { sku: "MNFR-3", name: "FR Pullover Hoodie", category: "Flame Resistant", sizes: "S - 4XL", colors: [NAVY], price: 214.99, details: "Fire-resistant, #104983" },
+  { sku: "MNFR-4", name: "FR Full Zip Hoodie", category: "Flame Resistant", sizes: "S - 4XL", colors: [NAVY], price: 239.99, details: "Fire-resistant, #104982" },
+  { sku: "MNFR-5", name: "FR Insulated Bib", category: "Flame Resistant", sizes: "S - 4XL", colors: [NAVY], price: 380.00, details: "Fire-resistant, #101626" },
+  { sku: "MNFR-6", name: "FR Insulated Jacket", category: "Flame Resistant", sizes: "S - 4XL", colors: [NAVY], price: 290.00, details: "Fire-resistant, #101618" },
   // Regular MN apparel
   { sku: "MN-1",  name: "Pants",                       category: "Pants",     sizes: "S - 4XL",  colors: [NAVY], price: 69.99,  details: "#102291" },
   { sku: "MN-2",  name: "Long Sleeve Shirt",           category: "Shirts",    sizes: "S - 4XL",  colors: [NAVY], price: 59.99,  details: "#K126" },

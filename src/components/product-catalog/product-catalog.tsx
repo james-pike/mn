@@ -12,7 +12,7 @@ const CLOTHING_CATEGORIES = ["All", "Shirts", "Jackets", "Hats", "SWAG"];
 const SAFETY_SKU_PREFIX = "MNFR-";
 const SAFETY_EXTRA_SKUS = new Set(["MN-2", "MN-3", "MN-5", "MN-6"]);
 const SAFETY_HIDDEN_SKUS = new Set(["MNFR-5", "MNFR-6"]); // FR Insulated Bib & Jacket
-const SAFETY_CATEGORIES = ["All", "FR Workwear", "Shirts", "Hats"];
+const SAFETY_CATEGORIES = ["All", "Flame Resistant", "Shirts", "Hats"];
 // Explicit display order for the Safety "All" view: FR shirt + hoodies,
 // FR pants, then the standard-SKU allowlist (short-sleeve tee,
 // long-sleeve tee, ball cap, toque).
@@ -31,7 +31,7 @@ const CATEGORY_ICONS: Record<string, string> = {
   "Polos": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2 12 5.5 8 2 3.62 3.46a2 2 0 00-1.34 1.93v15.12a2 2 0 001.34 1.93L8 24l4-3.5L16 24l4.38-1.46a2 2 0 001.34-1.93V5.39a2 2 0 00-1.34-1.93z"/></svg>',
   "Hats": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>',
   "SWAG": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>',
-  "FR Workwear": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>',
+  "Flame Resistant": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>',
 };
 
 const ProductCard = component$<{ item: Product; sku: string }>(({ item, sku }) => {
@@ -91,7 +91,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
   const HASH_TO_CAT: Record<string, string> = isSingleCat.value
     ? {}
     : isSafety.value
-      ? { "shirts": "Shirts", "hats": "Hats", "fr": "FR Workwear" }
+      ? { "shirts": "Shirts", "hats": "Hats", "fr": "Flame Resistant" }
       : { "shirts": "Shirts", "jackets": "Jackets", "hats": "Hats", "swag": "SWAG" };
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -154,7 +154,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
         .slice()
         .sort((a, b) => rank(a.sku) - rank(b.sku));
     }
-    return allProducts.filter((p) => p.category !== "FR Workwear");
+    return allProducts.filter((p) => p.category !== "Flame Resistant");
   });
 
   const ALWAYS_SHOW = new Set(["All"]);
@@ -212,7 +212,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                   activeCat.value = cat;
                   searchQuery.value = "";
                   const isDesktop = window.innerWidth > 1024;
-                  const headerH = window.innerWidth <= 900 ? 49 : 58;
+                  const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 52 : 58);
                   if (isDesktop) {
                     const grid = document.querySelector('.home-catalog .apparel-grid');
                     const gridTop = grid ? grid.getBoundingClientRect().top + window.scrollY - headerH - 8 : 0;

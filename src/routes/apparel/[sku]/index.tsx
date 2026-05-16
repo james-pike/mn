@@ -303,7 +303,7 @@ export default component$(() => {
             const visibleByLogin: Record<string, string[]> = {
               clothing: ["Shirts", "Jackets", "Hats", "SWAG"],
               tech: ["Work Wear"],
-              safety: ["FR Workwear", "Shirts", "Hats"],
+              safety: ["Flame Resistant", "Shirts", "Hats"],
             };
             const visible = visibleByLogin[loginType.value] || visibleByLogin.clothing;
             const inVisible = visible.includes(p.category);

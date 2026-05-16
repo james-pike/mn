@@ -199,9 +199,12 @@ export default component$(() => {
                     <img src="/carmichael-services/chiller-retrofit.jpeg" alt="" width="400" height="300" loading="eager" decoding="sync" />
                   </a>
                 </>) : isSafety.value ? (<>
-                  <a href="/apparel/" class="category-card category-card--tech-primary">
-                    <img src="/hero.jpg" alt="FR Workwear" width="400" height="300" loading="eager" decoding="sync" />
-                    <span class="category-card__label">{t("cat.FR Workwear", locale.value)}</span>
+                  {/* Safety uses plain .category-card on all four cards (no
+                      --tech-primary / --tech-extra) so the layout is a uniform
+                      2x2 on mobile and tablet, 4-up row on desktop. */}
+                  <a href="/apparel/" class="category-card">
+                    <img src="/hero.jpg" alt="Flame Resistant" width="400" height="300" loading="eager" decoding="sync" />
+                    <span class="category-card__label">{t("cat.Flame Resistant", locale.value)}</span>
                   </a>
                   <a href="/apparel/#shirts" class="category-card">
                     <img src="/shirts.jpg" alt="Classic Shirts" width="400" height="300" loading="eager" decoding="sync" />
@@ -214,7 +217,7 @@ export default component$(() => {
                     </div>
                     <span class="category-card__label">{t("teaser.hats.title", locale.value)}</span>
                   </a>
-                  <a href="/apparel/" class="category-card category-card--tech-extra">
+                  <a href="/apparel/" class="category-card">
                     <img src="/jackets.jpg" alt="" width="400" height="300" loading="eager" decoding="sync" />
                   </a>
                 </>) : (<>
