@@ -6257,9 +6257,9 @@ details[open] > .cart-drawer__checkout-title::after {
     gap: clamp(2px, 0.25vw, 6px) !important;
   }
   /* Pagination dots centered horizontally inside the 1/3-wide logo-cluster
-     column (cluster center = 5vw left + 16.667vw half-width). */
+     column (cluster center = 5vw left + 16.666vw half-width). */
   .hero__upper .hero-carousel__dots {
-    left: calc(5vw + 16.667vw) !important;
+    left: calc(5vw + 16.666vw) !important;
     right: auto !important;
     transform: translateX(-50%) !important;
     bottom: 4vh !important;
@@ -6416,21 +6416,20 @@ details[open] > .cart-drawer__checkout-title::after {
    cards below it (≈50% of the cards-row, capped at 768px on wide screens). */
 @media (min-width: 1025px) {
   /* Logo cluster takes the left 1/3 of the carousel width, full carousel
-     height, stacked column (brandmark above words) with even vertical
-     distribution top/middle/bottom. Vertical padding tightens the y gap. */
+     height, stacked column (brandmark above words), center-aligned. */
   .hero__upper .hero__text {
     top: 0 !important;
     left: 5vw !important;
     transform: none !important;
     height: 100% !important;
-    width: 50vw !important;
+    width: 33.333vw !important;
     aspect-ratio: auto !important;
     max-width: none !important;
-    flex-direction: row !important;
+    flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    text-align: left !important;
-    gap: 3.5vw !important;
+    text-align: center !important;
+    gap: 1.5vw !important;
     padding-top: 1vw !important;
     padding-bottom: 1vw !important;
     padding-left: 1.2vw !important;
@@ -6438,7 +6437,7 @@ details[open] > .cart-drawer__checkout-title::after {
   }
   .hero__upper .hero__text .hero__words {
     gap: 0.4vw !important;
-    align-items: flex-start !important;
+    align-items: center !important;
   }
   /* Pure vw sizing across the board — every element inside the cluster is a
      fixed fraction of the viewport, so nothing drifts at any zoom level. */
@@ -6455,7 +6454,7 @@ details[open] > .cart-drawer__checkout-title::after {
   }
   .hero__upper .hero__text .hero__brandmark {
     width: 14vw !important;
-    margin-top: -3vw !important;
+    margin-top: 0 !important;
   }
   /* Black framed hero — small black border around carousel + cards row. */
   .hero { background: #000 !important; padding: 0.5rem !important; height: auto !important; }
