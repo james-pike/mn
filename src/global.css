@@ -6508,12 +6508,25 @@ details[open] > .cart-drawer__checkout-title::after {
        the word stack's optical center. */
     margin-left: 2.2vw !important;
   }
-  /* Black framed hero — small black border around carousel + cards row. */
-  .hero { background: #000 !important; padding: 0.5rem !important; height: auto !important; }
-  /* Carousel takes most of the viewport; just a sliver of the cards row
-     (about 1/4 of card height) peeks into the first viewport. */
-  .hero__upper { height: calc(100vh - 3.5vw - 1rem) !important; flex: 0 0 auto !important; }
+  /* Black framed hero — small black border around carousel + cards row.
+     Constrain the whole hero to 100vh and let the carousel + cards
+     row share the space via flex: cards auto-size to their content
+     (so they're always fully visible) and the carousel takes whatever
+     vertical space is left. */
+  .hero {
+    background: #000 !important;
+    padding: 0.5rem !important;
+    height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .hero__upper {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
   .hero__lower {
+    flex: 0 0 auto !important;
     position: relative !important;
     z-index: 2 !important;
     padding: 0.5rem 0 0 !important;

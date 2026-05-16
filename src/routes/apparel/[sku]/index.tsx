@@ -46,7 +46,10 @@ export default component$(() => {
     cleanup(() => clearInterval(interval));
   });
 
-  const waistLengthSkus = new Set(["CAR-12", "CAR-14"]);
+  // SKUs that use the waist x inseam size picker instead of a S–4XL run.
+  // Carhartt 102291 Rigby Dungaree (MN-1) and the FR pants (MNFR-1) ship
+  // in the same waist/inseam matrix.
+  const waistLengthSkus = new Set(["CAR-12", "CAR-14", "MN-1", "MNFR-1"]);
   // Per-SKU variant options. Each entry maps the variant label to the list
   // of sizes available *for that variant* — different lengths on the same
   // bib can carry different size runs (e.g. Carhartt 106672 Short comes
@@ -68,6 +71,20 @@ export default component$(() => {
   };
   const variantSkus = new Set(Object.keys(variantSizesBySku));
   const SIZE_ORDER = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"];
+  // Per-SKU waist + inseam runs. MN-1 (Carhartt 102291 Rigby) and MNFR-1
+  // (Carhartt 104204 FR Rigby) carry different waist/length grids.
+  // Carhartt CAR-12 / CAR-14 don't have a specific entry — they fall back
+  // to the default (full union) range.
+  const waistOptionsBySku: Record<string, string[]> = {
+    "MN-1": ["28", "29", "30", "31", "32", "33", "34", "35", "36", "38", "40", "42", "44", "46", "48", "50", "52", "54"],
+    "MNFR-1": ["30", "31", "32", "33", "34", "35", "36", "38", "40", "42", "44", "46"],
+  };
+  const lengthOptionsBySku: Record<string, string[]> = {
+    "MN-1": ["28", "30", "32", "34", "36"],
+    "MNFR-1": ["30", "32", "34", "36"],
+  };
+  // Default (CAR-12 / CAR-14, or any new waist-length SKU without an
+  // explicit entry above) — full union range.
   const waistOptions = ["28", "29", "30", "31", "32", "33", "34", "35", "36", "38", "40", "42", "44", "46", "48", "50"];
   const lengthOptions = ["30", "32", "34", "36"];
 
@@ -376,7 +393,7 @@ export default component$(() => {
                     onChange$={(_, el) => (selectedWaist.value = el.value)}
                   >
                     <option value="" disabled>{t("product.select", locale.value)}</option>
-                    {waistOptions.map((w) => (
+                    {(waistOptionsBySku[p.sku] ?? waistOptions).map((w) => (
                       <option key={w} value={w}>{w}</option>
                     ))}
                   </select>
@@ -389,7 +406,7 @@ export default component$(() => {
                     onChange$={(_, el) => (selectedLength.value = el.value)}
                   >
                     <option value="" disabled>{t("product.select", locale.value)}</option>
-                    {lengthOptions.map((l) => (
+                    {(lengthOptionsBySku[p.sku] ?? lengthOptions).map((l) => (
                       <option key={l} value={l}>{l}</option>
                     ))}
                   </select>
