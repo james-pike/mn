@@ -294,13 +294,31 @@ export default component$(() => {
               </div>
             )}
           </div>
-          <div class="product-modal__breadcrumb">
-            <span class="breadcrumb__link" onClick$={() => nav(`/apparel/#${p.category.toLowerCase().replace(/\s+/g, "-")}`)}>
-              {categoryLabel(p.category, locale.value)}
-            </span>
-            <span class="breadcrumb__sep">/</span>
-            <span class="breadcrumb__sku">{p.sku}</span>
-          </div>
+          {(() => {
+            // Categories that have a tab in the catalog for the current login.
+            // If the product's category isn't in the visible tab list, the
+            // breadcrumb falls back to a generic "Apparel" link to the whole
+            // catalog (no hash) instead of showing an orphan / un-translated
+            // category name like "cat.Pants".
+            const visibleByLogin: Record<string, string[]> = {
+              clothing: ["Shirts", "Jackets", "Hats", "SWAG"],
+              tech: ["Work Wear"],
+              safety: ["FR Workwear", "Shirts", "Hats"],
+            };
+            const visible = visibleByLogin[loginType.value] || visibleByLogin.clothing;
+            const inVisible = visible.includes(p.category);
+            const label = inVisible ? categoryLabel(p.category, locale.value) : t("nav.apparel", locale.value);
+            const href = inVisible ? `/apparel/#${p.category.toLowerCase().replace(/\s+/g, "-")}` : "/apparel/";
+            return (
+              <div class="product-modal__breadcrumb">
+                <span class="breadcrumb__link" onClick$={() => nav(href)}>
+                  {label}
+                </span>
+                <span class="breadcrumb__sep">/</span>
+                <span class="breadcrumb__sku">{p.sku}</span>
+              </div>
+            );
+          })()}
           <div class="product-modal__details">
             <h2 class="product-modal__name">{p.name}</h2>
             {!hidePrice && <div class="product-modal__price">${(Number(p.price) || 0).toFixed(2)}</div>}

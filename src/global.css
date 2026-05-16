@@ -6471,6 +6471,11 @@ details[open] > .cart-drawer__checkout-title::after {
   .hero__upper .hero__text .hero__brandmark {
     width: 14vw !important;
     margin-top: 0 !important;
+    /* Nudge just the brandmark slightly right of the left-aligned text
+       stack — the rotated diamond's bounding box leaves visual whitespace
+       on the left so a small positive shift makes it visually align with
+       the word stack's optical center. */
+    margin-left: 2.2vw !important;
   }
   /* Black framed hero — small black border around carousel + cards row. */
   .hero { background: #000 !important; padding: 0.5rem !important; height: auto !important; }
