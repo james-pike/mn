@@ -449,10 +449,26 @@ export default component$(() => {
         </div>
       </div>
       {(() => {
-        const related = allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && r.category === p.category).slice(0, 8);
+        // Same visibility map as the breadcrumb above — when the product's
+        // category isn't a tab in the current login's catalog (e.g.
+        // clothing user on MN-1 Pants), fall back to broader "More
+        // Apparel" pulled from every visible category, instead of a
+        // single-category list with a "cat.Pants" / "cat.Work Wear"
+        // un-translated heading.
+        const visibleByLogin: Record<string, string[]> = {
+          clothing: ["Shirts", "Jackets", "Hats", "SWAG"],
+          tech: ["Work Wear"],
+          safety: ["Flame Resistant", "Shirts", "Hats"],
+        };
+        const visible = visibleByLogin[loginType.value] || visibleByLogin.clothing;
+        const inVisible = visible.includes(p.category);
+        const related = inVisible
+          ? allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && r.category === p.category).slice(0, 8)
+          : allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && visible.includes(r.category)).slice(0, 8);
+        const headingSuffix = inVisible ? categoryLabel(p.category, locale.value) : t("nav.apparel", locale.value);
         return (
           <div class="related-items">
-            <h3 class="related-items__title">{t("product.more", locale.value)} {categoryLabel(p.category, locale.value)}</h3>
+            <h3 class="related-items__title">{t("product.more", locale.value)} {headingSuffix}</h3>
             {/* Desktop grid */}
             <div class="related-items__grid">
               {related.slice(0, 4).map((item) => (
