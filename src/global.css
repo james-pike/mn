@@ -1614,16 +1614,21 @@ img { max-width: 100%; display: block; }
 }
 .site-footer__links {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
-  gap: 0.5rem 1rem;
+  gap: clamp(0.5rem, 2vw, 1.25rem);
+  min-width: 0;
+  white-space: nowrap;
 }
 .site-footer__links a {
-  font-size: 0.82rem;
+  /* Shrink with viewport so all 5 links always fit on one line, even on
+     narrow phones — clamp keeps it readable at every width. */
+  font-size: clamp(0.7rem, 2.4vw, 0.82rem);
   font-weight: 500;
   color: rgba(255,255,255,0.6);
   text-decoration: none;
   transition: color 0.15s ease;
+  white-space: nowrap;
 }
 .site-footer__links a:hover {
   color: var(--ce-white);
@@ -1737,7 +1742,9 @@ img { max-width: 100%; display: block; }
   width: fit-content;
 }
 @media (max-width: 900px) {
-  .home-catalog__inner { padding: 0 0.25rem; }
+  /* Mobile: x margin lives only on the product grid — tab strip stays
+     edge-to-edge (its own padding-left handles the first-tab inset). */
+  .home-catalog__inner { padding: 0; }
   /* Mobile nav drawer: drop the per-product thumbnails — the list is
      long enough that the images crowd the row; clean text-only list. */
   .nav-drawer__cat-item-img { display: none; }
@@ -1747,7 +1754,7 @@ img { max-width: 100%; display: block; }
   .home-catalog__title { display: none; }
   .home-catalog__search-desktop { display: none !important; }
   .home-catalog .apparel-titlebar__action--mobile-search { display: flex; }
-  .home-catalog .apparel-grid { grid-template-columns: repeat(2, 1fr); gap: 0.2rem; min-height: 100vh; align-content: start; }
+  .home-catalog .apparel-grid { grid-template-columns: repeat(2, 1fr); gap: 0.2rem; min-height: 100vh; align-content: start; padding: 0 0.25rem; }
 }
 @media (min-width: 601px) and (max-width: 1024px) {
   .home-catalog { padding: 0; }
@@ -5980,7 +5987,10 @@ details[open] > .cart-drawer__checkout-title::after {
   .product-image-row { grid-column: 1; grid-row: auto; flex-direction: row; }
   .product-thumbs--column { display: none; }
   .product-carousel__indicators { display: flex; }
-  .product-modal__breadcrumb { grid-column: 1; grid-row: 1; padding: 0; background: var(--ce-white); border-radius: 0; font-size: 0.92rem; margin-top: 0; margin-bottom: -0.08rem; border-bottom: 1px solid var(--ce-gray-200); display: flex; align-items: center; height: 34px; padding-left: 0.25rem; position: sticky; top: 49px; z-index: 50; }
+  .product-modal__breadcrumb { grid-column: 1; grid-row: 1; padding: 0; background: var(--ce-white); border-radius: 0; font-size: 0.92rem; margin-top: 0; margin-bottom: -0.08rem; border-bottom: 1px solid var(--ce-gray-200); display: flex; align-items: center; height: 34px; padding-left: 0.5rem; position: sticky; top: 49px; z-index: 50; /* Pull the bar past the apparel-catalog 0.25rem x padding so it sits
+     flush with the viewport edges — only the product image + details get
+     the side inset, the sticky breadcrumb runs edge-to-edge. */
+  margin-left: -0.25rem; margin-right: -0.25rem; }
   .product-modal__breadcrumb .breadcrumb__link { font-size: 0.92rem; padding: 4px 6px; text-decoration: underline; text-underline-offset: 3px; font-weight: 500; color: var(--ce-gray-500); }
   .product-modal__breadcrumb .breadcrumb__link:hover { color: var(--ce-gray-900); }
   .product-modal__breadcrumb .breadcrumb__sep { color: var(--ce-gray-200); font-size: 0.92rem; }

@@ -157,7 +157,7 @@ const translations = {
   "cart.invoice.unit": { en: "Unit", fr: "Unit." },
   "cart.invoice.total": { en: "Total", fr: "Total" },
   "cart.invoice.subtotal": { en: "Subtotal", fr: "Sous-total" },
-  "cart.invoice.tax": { en: "Tax (13%)", fr: "Taxe (13%)" },
+  "cart.invoice.tax": { en: "Tax", fr: "Taxe" },
   "cart.orderdetails": { en: "Order Details", fr: "Détails de la commande" },
   "cart.firstname": { en: "First Name *", fr: "Prénom *" },
   "cart.lastname": { en: "Last Name *", fr: "Nom *" },
