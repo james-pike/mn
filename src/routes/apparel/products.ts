@@ -191,7 +191,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-8",
-    "name": "Winter Bibs - Navy",
+    "name": "Duck Insulted Bib Overall - Navy",
     "category": "Work Wear",
     "sizes": "S - 4XL",
     "badge": "",

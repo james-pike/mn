@@ -5959,7 +5959,12 @@ details[open] > .cart-drawer__checkout-title::after {
   .related-items__title { font-size: 0.9rem; margin-bottom: 0.5rem; }
   .product-modal__category { display: none; }
   .popular-grid { grid-template-columns: 1fr 1fr; }
-  .apparel-catalog:has(.product-detail) { padding: 0 0.25rem 0.35rem; }
+  /* Mobile: same pattern as the catalog — the wrapper sits edge-to-edge
+     so the sticky breadcrumb runs flush with the viewport, the 0.25rem
+     side inset moves onto the product image and details below. */
+  .apparel-catalog:has(.product-detail) { padding: 0 0 0.35rem; }
+  .product-detail .product-image-row { padding-left: 0.25rem; padding-right: 0.25rem; }
+  .product-detail .product-modal__details { padding-left: calc(0.75rem + 0.25rem); padding-right: calc(0.75rem + 0.25rem); }
   .product-detail { padding: 0; margin: 0; max-width: 600px; }
   .product-detail .product-modal__image { border-radius: 2px; padding: 0; }
   .product-detail .product-carousel { border-radius: 2px; aspect-ratio: 1/1; margin: 0; }
@@ -5987,10 +5992,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .product-image-row { grid-column: 1; grid-row: auto; flex-direction: row; }
   .product-thumbs--column { display: none; }
   .product-carousel__indicators { display: flex; }
-  .product-modal__breadcrumb { grid-column: 1; grid-row: 1; padding: 0; background: var(--ce-white); border-radius: 0; font-size: 0.92rem; margin-top: 0; margin-bottom: -0.08rem; border-bottom: 1px solid var(--ce-gray-200); display: flex; align-items: center; height: 34px; padding-left: 0.5rem; position: sticky; top: 49px; z-index: 50; /* Pull the bar past the apparel-catalog 0.25rem x padding so it sits
-     flush with the viewport edges — only the product image + details get
-     the side inset, the sticky breadcrumb runs edge-to-edge. */
-  margin-left: -0.25rem; margin-right: -0.25rem; }
+  .product-modal__breadcrumb { grid-column: 1; grid-row: 1; padding: 0; background: var(--ce-white); border-radius: 0; font-size: 0.92rem; margin-top: 0; margin-bottom: -0.08rem; border-bottom: 1px solid var(--ce-gray-200); display: flex; align-items: center; height: 34px; padding-left: 0.5rem; position: sticky; top: 49px; z-index: 50; }
   .product-modal__breadcrumb .breadcrumb__link { font-size: 0.92rem; padding: 4px 6px; text-decoration: underline; text-underline-offset: 3px; font-weight: 500; color: var(--ce-gray-500); }
   .product-modal__breadcrumb .breadcrumb__link:hover { color: var(--ce-gray-900); }
   .product-modal__breadcrumb .breadcrumb__sep { color: var(--ce-gray-200); font-size: 0.92rem; }
