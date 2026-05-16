@@ -114,7 +114,7 @@ export default component$(() => {
 
             <nav class="hero-card-header__nav">
               <a href="/" class="hero-card-header__nav-link active">{t("nav.home", locale.value)}</a>
-              <a href="/apparel/" class="hero-card-header__nav-link">{isTech.value ? t("teaser.workwear.title", locale.value) : isSafety.value ? t("cat.FR Workwear", locale.value) : t("nav.apparel", locale.value)}</a>
+              <a href="/apparel/" class="hero-card-header__nav-link">{isTech.value ? t("teaser.workwear.title", locale.value) : t("nav.apparel", locale.value)}</a>
             </nav>
             <div class="hero-card-header__actions">
               {/* <button class="hero-card-header__btn" onClick$={() => {
