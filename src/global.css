@@ -6476,8 +6476,10 @@ details[open] > .cart-drawer__checkout-title::after {
     align-items: flex-start !important;
     justify-content: center !important;
     text-align: left !important;
-    gap: 3.5vw !important;
-    padding-top: 1vw !important;
+    gap: 3vw !important;
+    /* More top breathing room so the brandmark sits lower in the dark
+       panel instead of hugging the top edge. */
+    padding-top: 4vw !important;
     padding-bottom: 1vw !important;
     padding-left: 1.2vw !important;
     padding-right: 2.2vw !important;
