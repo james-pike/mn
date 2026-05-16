@@ -163,6 +163,14 @@ const updates: Update[] = [
     imgs: ["/swag/Tundra.png"],
     sizes: "35L / 45L",
   },
+  // Insulated 18-can two-compartment cooler — image attached + reclassified as SWAG
+  {
+    sku: "MN-17",
+    category: "SWAG",
+    img: "/sku/cooler.png",
+    imgs: ["/sku/cooler.png"],
+    colors: ["#1a1a18"],
+  },
   // Merge MN-4 (Tall) into MN-3 as a size variant
   {
     sku: "MN-3",
@@ -186,6 +194,7 @@ const updates: Update[] = [
   { sku: "MN-6",  sort_order: 41 }, // Toque (Hats)
   { sku: "MN-13", sort_order: 50 }, // Yeti Mug (SWAG)
   { sku: "MN-14", sort_order: 51 }, // Yeti Cooler (SWAG)
+  { sku: "MN-17", sort_order: 52 }, // Insulated 18-Can Cooler (SWAG)
 ];
 
 async function main() {

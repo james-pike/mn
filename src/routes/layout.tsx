@@ -156,7 +156,7 @@ export const useSubmitOrder = routeAction$(
     "#2c3e50": "Navy", "#94a3b8": "Silver", "#4a4a4a": "Charcoal",
     "#8d5f18": "Bronze", "#c0392b": "Red", "#6b3fa0": "Purple",
     "#1e40af": "Royal", "#b8b8b8": "Grey Heather", "#7dd3fc": "Light Blue",
-    "#6b8bb0": "Solace Blue",
+    "#6b8bb0": "Solace Blue", "#8a5d3b": "Carhartt Brown",
   };
   const cName = (hex: string) => colorMap[hex] || hex;
 
@@ -232,6 +232,7 @@ export const useSubmitOrder = routeAction$(
         ${orderNumber ? `<p style="margin:0 0 4px"><strong>Order #:</strong> ${esc(orderNumber)}</p>` : ""}
         <p style="margin:0 0 4px"><strong>Date:</strong> ${esc(date)}</p>
         <p style="margin:0 0 4px"><strong>Employee:</strong> ${esc(employee.name)}</p>
+        ${employee.email ? `<p style="margin:0 0 4px"><strong>Email:</strong> <a href="mailto:${esc(employee.email)}">${esc(employee.email)}</a></p>` : ""}
         ${employee.phone ? `<p style="margin:0 0 4px"><strong>Phone:</strong> ${esc(employee.phone)}</p>` : ""}
         ${employee.department ? `<p style="margin:0 0 4px"><strong>Location:</strong> ${esc(employee.department)}</p>` : ""}
         <p style="margin:0 0 4px"><strong>Province:</strong> ${esc(PROVINCE_NAMES[province] || province)}</p>
@@ -346,6 +347,7 @@ const colorKeyMap: Record<string, string> = {
   "#6b8bb0": "color.solaceblue",
   "#4a4a4a": "color.charcoal",
   "#8d5f18": "color.bronze",
+  "#8a5d3b": "color.carharttbrown",
 };
 
 const colorName = (hex: string, locale: Locale): string => {

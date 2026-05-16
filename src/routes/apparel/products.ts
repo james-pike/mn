@@ -326,6 +326,23 @@ export const allProducts = [
     "details": "Pullover hood with adjustable drawcord, flame-resistant (NFPA 2112 / ASTM F1506), Force sweat-wicking, FastDry, odor-fighting, handwarmer pocket, #104983"
   },
   {
+    "sku": "MN-17",
+    "name": "Insulated 18 Can Two Compartment Cooler - Black",
+    "category": "SWAG",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 0,
+    "img": "/sku/cooler.png",
+    "imgs": [
+      "/sku/cooler.png"
+    ],
+    "material": "",
+    "details": "#B0000558"
+  },
+  {
     "sku": "MNFR-4",
     "name": "FR Full Zip Hoodie - Navy",
     "category": "FR Workwear",
@@ -341,6 +358,23 @@ export const allProducts = [
     ],
     "material": "10.5 oz 40% cotton / 35% modacrylic / 15% viscose / 8% aramid / 2% antistat FR fleece",
     "details": "Full-zip hood with adjustable drawcord, Vislon zip with Nomex tape, flame-resistant (meets NFPA 70E, ASTM F1506, UL classified to NFPA 2112), Force sweat-wicking, FastDry, #104982"
+  },
+  {
+    "sku": "MN-18",
+    "name": "Backpack - Carhartt Brown",
+    "category": "SWAG",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#8a5d3b"
+    ],
+    "price": 0,
+    "img": "/sku/backpack.png",
+    "imgs": [
+      "/sku/backpack.png"
+    ],
+    "material": "",
+    "details": ""
   },
   {
     "sku": "MNFR-5",
@@ -396,6 +430,7 @@ const colorNames: Record<string, Record<string, string>> = {
   "#6b3fa0": { en: "Purple", fr: "Violet" },
   "#c0392b": { en: "Red", fr: "Rouge" },
   "#1e40af": { en: "Royal", fr: "Bleu royal" },
+  "#8a5d3b": { en: "Carhartt Brown", fr: "Brun Carhartt" },
 };
 export function colorName(hex: string, locale: Locale): string {
   return colorNames[hex]?.[locale] || hex;
