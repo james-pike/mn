@@ -43,11 +43,11 @@ export const useLocaleLoader = routeLoader$(({ cookie }) => {
   return (saved === "fr" ? "fr" : "en") as Locale;
 });
 
-type LoginType = "clothing" | "tech" | null;
+type LoginType = "clothing" | "tech" | "safety" | null;
 
 function getLoginType(cookie: Cookie): LoginType {
   const val = cookie.get(AUTH_COOKIE)?.value;
-  if (val === "clothing" || val === "tech") return val;
+  if (val === "clothing" || val === "tech" || val === "safety") return val;
   if (val === "authenticated") return "clothing"; // backward compat
   return null;
 }
@@ -71,10 +71,24 @@ export const useLogin = routeAction$(
     const expectedPass = env.get("APP_PASSWORD") || env.get("VITE_APP_PASSWORD");
     const techUser = env.get("TECH_USERNAME") || env.get("VITE_TECH_USERNAME") || "tech";
     const techPass = env.get("TECH_PASSWORD") || env.get("VITE_TECH_PASSWORD");
+    const safetyUser = env.get("SAFETY_USERNAME") || env.get("VITE_SAFETY_USERNAME") || "Safety";
+    const safetyPass = env.get("SAFETY_PASSWORD") || env.get("VITE_SAFETY_PASSWORD");
 
     // Check Tech login first
     if (techPass && username === techUser && password === techPass) {
       cookie.set(AUTH_COOKIE, "tech", {
+        path: "/",
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 3,
+      });
+      return { success: true };
+    }
+
+    // Check Safety login
+    if (safetyPass && username === safetyUser && password === safetyPass) {
+      cookie.set(AUTH_COOKIE, "safety", {
         path: "/",
         httpOnly: true,
         secure: true,
@@ -127,7 +141,8 @@ export const useSubmitOrder = routeAction$(
     if (!isAuthenticated(cookie)) {
       return fail(401, { message: "Not authenticated" });
     }
-    const vendor = getLoginType(cookie) === "tech" ? "modernniagara-tech" : "modernniagara";
+    const lt = getLoginType(cookie);
+    const vendor = lt === "tech" ? "modernniagara-tech" : lt === "safety" ? "modernniagara-safety" : "modernniagara";
     // Read from non-prefixed names first, fall back to VITE_* for backward compat.
     // Both are safe at runtime — env.get() reads server env, never bundles.
     const tursoUrl = env.get("TURSO_URL") || env.get("VITE_TURSO_URL");
@@ -702,7 +717,7 @@ export default component$(() => {
           </Link>
           <nav class="site-header__categories">
             <Link href="/" class={loc.url.pathname === "/" ? "active" : ""}>{t("nav.home", locale.value)}</Link>
-            <Link href="/apparel/" class={loc.url.pathname.startsWith("/apparel") ? "active" : ""}>{loginType.value === "tech" ? t("cat.Work Wear", locale.value) : t("nav.apparel", locale.value)}</Link>
+            <Link href="/apparel/" class={loc.url.pathname.startsWith("/apparel") ? "active" : ""}>{loginType.value === "tech" ? t("cat.Work Wear", locale.value) : loginType.value === "safety" ? t("cat.FR Workwear", locale.value) : t("nav.apparel", locale.value)}</Link>
           </nav>
           <nav class="site-header__nav">
             {/* <button class={`locale-btn ${cartOpen.value ? "locale-btn--cart-open" : ""}`} onClick$={toggleLocale} aria-label="Toggle language">
@@ -771,7 +786,13 @@ export default component$(() => {
                   {t("cat.Work Wear", locale.value)}
                 </a>
               )}
-              {loginType.value !== "tech" && (() => {
+              {loginType.value === "safety" && (
+                <a href="/apparel/" class={`nav-drawer__link ${loc.url.pathname.startsWith("/apparel") ? "active" : ""}`} onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "FR Workwear" })); }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+                  {t("cat.FR Workwear", locale.value)}
+                </a>
+              )}
+              {(loginType.value !== "tech" && loginType.value !== "safety") && (() => {
                 const NAV_CATS: { key: TranslationKey; cat: string; icon: string }[] = [
                   { key: "cat.Shirts",  cat: "Shirts",  icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 2l4 4-3 3-2-1v14a1 1 0 01-1 1H10a1 1 0 01-1-1V8L7 9 4 6l4-4h2a2 2 0 004 0h2z"/></svg>' },
                   { key: "cat.Jackets", cat: "Jackets", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>' },
@@ -849,7 +870,7 @@ export default component$(() => {
               <span class="brand-cluster__word brand-cluster__word--muted">APPAREL</span>
             </div>
           </div>
-          {loginType.value !== "tech" && (
+          {(loginType.value !== "tech" && loginType.value !== "safety") && (
           <nav class="site-footer__links">
             <Link href="/">{t("nav.home", locale.value)}</Link>
             <a href="/apparel/#work-wear" onClick$={(e) => { if (loc.url.pathname.startsWith("/apparel")) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Work Wear" })); const headerH = window.innerWidth <= 900 ? 49 : 58; const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Work Wear", locale.value)}</a>
@@ -896,7 +917,7 @@ export default component$(() => {
                       <tr>
                         <th class="cart-table__th-product">{t("cart.invoice.product", locale.value)}</th>
                         <th class="cart-table__th-qty">{t("cart.invoice.qty", locale.value)}</th>
-                        {loginType.value !== "tech" && <th class="cart-table__th-total">{t("cart.invoice.total", locale.value)}</th>}
+                        {(loginType.value !== "tech" && loginType.value !== "safety") && <th class="cart-table__th-total">{t("cart.invoice.total", locale.value)}</th>}
                       </tr>
                     </thead>
                     <tbody>
@@ -921,11 +942,11 @@ export default component$(() => {
                               <button class="cart-table__qty-btn" aria-label={`Increase quantity of ${item.name}`} onClick$={() => updateQty(i, 1)}>+</button>
                             </div>
                           </td>
-                          {loginType.value !== "tech" && <td class="cart-table__total">${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</td>}
+                          {(loginType.value !== "tech" && loginType.value !== "safety") && <td class="cart-table__total">${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</td>}
                         </tr>
                       ))}
                     </tbody>
-                    {loginType.value !== "tech" && (
+                    {(loginType.value !== "tech" && loginType.value !== "safety") && (
                       <tfoot>
                         <tr>
                           <td colSpan={2} class="cart-table__subtotal-label">{t("cart.invoice.subtotal", locale.value)}</td>
@@ -954,7 +975,7 @@ export default component$(() => {
                 </div>
                 <div class="cart-drawer__footer">
                   <span class="cart-drawer__total">
-                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{loginType.value !== "tech" && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
+                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{(loginType.value !== "tech" && loginType.value !== "safety") && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
                   </span>
                   <button
                     class="btn btn--primary cart-drawer__order-btn"
@@ -984,10 +1005,10 @@ export default component$(() => {
                               {item.color && item.color.startsWith("#") && <span class="cart-drawer__summary-swatch" style={{ background: item.color }} aria-hidden="true" />}
                               {item.quantity}x {stripColorSuffix(item.name)}{(item.color || item.size) ? ` — ${item.color ? (item.color.startsWith("#") ? colorName(item.color, locale.value) : item.color) : ""}${item.color && item.size ? " / " : ""}${item.size || ""}` : ""}
                             </span>
-                            {loginType.value !== "tech" && <span>${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</span>}
+                            {(loginType.value !== "tech" && loginType.value !== "safety") && <span>${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</span>}
                           </div>
                         ))}
-                        {loginType.value !== "tech" && (
+                        {(loginType.value !== "tech" && loginType.value !== "safety") && (
                           <>
                             <div class="cart-drawer__summary-item cart-drawer__summary-total">
                               <span>{t("cart.invoice.subtotal", locale.value)}</span>
@@ -1100,7 +1121,7 @@ export default component$(() => {
                 )}
                 <div class="cart-drawer__footer">
                   <span class="cart-drawer__total">
-                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{loginType.value !== "tech" && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
+                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{(loginType.value !== "tech" && loginType.value !== "safety") && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
                   </span>
                   <button
                     class="btn btn--primary cart-drawer__order-btn"

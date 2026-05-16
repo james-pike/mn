@@ -9,6 +9,7 @@ export default component$(() => {
   const locale = useContext(LocaleContext);
   const loginType = useContext(LoginTypeContext);
   const isTech = useComputed$(() => loginType.value === "tech");
+  const isSafety = useComputed$(() => loginType.value === "safety");
   const hasCartItems = useSignal(false);
   const heroIndex = useSignal(0);
   const carouselPaused = useSignal(false);
@@ -60,14 +61,22 @@ export default component$(() => {
       {/* Hero */}
       <section class="hero">
         {/* Upper 2/3: full-width carousel as background, with text + nav overlaid */}
-        <div class="hero__upper">
+        <div
+          class="hero__upper"
+          onClick$={(e) => {
+            // Advance the carousel when the user taps the dark hero overlay
+            // (vignette / centered text). Skip clicks on real interactive
+            // elements so buttons, links, pagination dots, etc. still work.
+            const target = e.target as HTMLElement | null;
+            if (!target) return;
+            if (target.closest('button, a, input, label, [role="button"], .hero-carousel__dots, .hero-carousel__pagination')) return;
+            carouselPaused.value = true;
+            heroIndex.value = (heroIndex.value + 1) % 2;
+          }}
+        >
           <Carousel.Root class="hero-carousel" bind:selectedIndex={heroIndex} align="start" draggable={false} rewind>
             <Carousel.Scroller
               class="hero-carousel__scroller"
-              onClick$={() => {
-                carouselPaused.value = true;
-                heroIndex.value = (heroIndex.value + 1) % 2;
-              }}
               onTouchStart$={(e) => {
                 if (e.touches.length !== 1) return;
                 touchStartX.value = e.touches[0].clientX;
@@ -105,7 +114,7 @@ export default component$(() => {
 
             <nav class="hero-card-header__nav">
               <a href="/" class="hero-card-header__nav-link active">{t("nav.home", locale.value)}</a>
-              <a href="/apparel/" class="hero-card-header__nav-link">{isTech.value ? t("teaser.workwear.title", locale.value) : t("nav.apparel", locale.value)}</a>
+              <a href="/apparel/" class="hero-card-header__nav-link">{isTech.value ? t("teaser.workwear.title", locale.value) : isSafety.value ? t("cat.FR Workwear", locale.value) : t("nav.apparel", locale.value)}</a>
             </nav>
             <div class="hero-card-header__actions">
               {/* <button class="hero-card-header__btn" onClick$={() => {
@@ -184,6 +193,20 @@ export default component$(() => {
                   </a>
                   <a href="/apparel/" class="category-card category-card--tech-extra category-card--tech-tablet">
                     <img src="/carmichael-services/chiller-retrofit.jpeg" alt="" width="400" height="300" loading="eager" decoding="sync" />
+                  </a>
+                </>) : isSafety.value ? (<>
+                  <a href="/apparel/" class="category-card category-card--tech-primary">
+                    <img src="/sku/FRpullover.png" alt="FR Workwear" width="400" height="300" loading="eager" decoding="sync" />
+                    <span class="category-card__label">{t("cat.FR Workwear", locale.value)}</span>
+                  </a>
+                  <a href="/apparel/" class="category-card category-card--tech-extra category-card--tech-desktop">
+                    <img src="/sku/FRpants.png" alt="" width="400" height="300" loading="eager" decoding="sync" />
+                  </a>
+                  <a href="/apparel/" class="category-card category-card--tech-extra category-card--tech-desktop">
+                    <img src="/sku/FRsleeve.png" alt="" width="400" height="300" loading="eager" decoding="sync" />
+                  </a>
+                  <a href="/apparel/" class="category-card category-card--tech-extra category-card--tech-tablet">
+                    <img src="/sku/FRfullzip.png" alt="" width="400" height="300" loading="eager" decoding="sync" />
                   </a>
                 </>) : (<>
                   <a href="/apparel/#polos" class="category-card">

@@ -52,7 +52,7 @@ export const allProducts = [
       "#c0392b",
       "#1e40af"
     ],
-    "price": 55,
+    "price": 0,
     "img": "/sku/uapolo.png",
     "imgs": [
       "/sku/uapolo.png"
@@ -75,7 +75,7 @@ export const allProducts = [
       "#c0392b",
       "#1e40af"
     ],
-    "price": 55,
+    "price": 0,
     "img": "/sku/ua-womens.jpg",
     "imgs": [
       "/sku/ua-womens.jpg"
@@ -250,9 +250,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 159,
-    "img": "/sku/fr-pants.png",
+    "img": "/sku/FRpants.png",
     "imgs": [
-      "/sku/fr-pants.png"
+      "/sku/FRpants.png"
     ],
     "material": "9 oz 98% cotton / 2% spandex canvas with Rugged Flex stretch",
     "details": "Flame-resistant, NFPA 70E and UL classified to NFPA 2112, relaxed fit, straight leg, phone and utility pockets, OEKO-TEX Standard 100, #104204"
@@ -284,9 +284,9 @@ export const allProducts = [
       "#7dd3fc"
     ],
     "price": 124.99,
-    "img": "/sku/fr-lightblue.png",
+    "img": "/sku/FRsleeve.png",
     "imgs": [
-      "/sku/fr-lightblue.png"
+      "/sku/FRsleeve.png"
     ],
     "material": "7 oz 88% cotton / 12% high-tenacity nylon FR twill",
     "details": "Button-up long sleeve, button-down collar, two chest pockets with flaps, flame-resistant melamine buttons, triple-stitched seams, NFPA 2112 / UL classified, meets NFPA 70E, #FRS160"
@@ -318,9 +318,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 214.99,
-    "img": "/sku/fr-pullover.png",
+    "img": "/sku/FRpullover.png",
     "imgs": [
-      "/sku/fr-pullover.png"
+      "/sku/FRpullover.png"
     ],
     "material": "10.5 oz 40% cotton / 35% modacrylic / 15% viscose / 8% aramid / 2% antistat FR fleece",
     "details": "Pullover hood with adjustable drawcord, flame-resistant (NFPA 2112 / ASTM F1506), Force sweat-wicking, FastDry, odor-fighting, handwarmer pocket, #104983"
@@ -335,9 +335,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 239.99,
-    "img": "/sku/fr-fullzip.png",
+    "img": "/sku/FRfullzip.png",
     "imgs": [
-      "/sku/fr-fullzip.png"
+      "/sku/FRfullzip.png"
     ],
     "material": "10.5 oz 40% cotton / 35% modacrylic / 15% viscose / 8% aramid / 2% antistat FR fleece",
     "details": "Full-zip hood with adjustable drawcord, Vislon zip with Nomex tape, flame-resistant (meets NFPA 70E, ASTM F1506, UL classified to NFPA 2112), Force sweat-wicking, FastDry, #104982"

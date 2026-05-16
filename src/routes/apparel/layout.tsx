@@ -4,7 +4,7 @@ import { ProductCatalog } from "../../components/product-catalog/product-catalog
 
 export const useApparelAuthGuard = routeLoader$(({ cookie, redirect }) => {
   const val = cookie.get("ce_auth")?.value;
-  if (val !== "authenticated" && val !== "clothing" && val !== "tech") {
+  if (val !== "authenticated" && val !== "clothing" && val !== "tech" && val !== "safety") {
     throw redirect(302, "/?login=1");
   }
 });

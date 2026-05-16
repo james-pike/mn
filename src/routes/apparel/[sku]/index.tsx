@@ -11,6 +11,8 @@ export default component$(() => {
   const locale = useContext(LocaleContext);
   const loginType = useContext(LoginTypeContext);
   const isTech = loginType.value === "tech";
+  const isSafety = loginType.value === "safety";
+  const hidePrice = isTech || isSafety;
   const loc = useLocation();
   const nav = useNavigate();
 
@@ -255,7 +257,7 @@ export default component$(() => {
           </div>
           <div class="product-modal__details">
             <h2 class="product-modal__name">{p.name}</h2>
-            {!isTech && <div class="product-modal__price">${(Number(p.price) || 0).toFixed(2)}</div>}
+            {!hidePrice && <div class="product-modal__price">${(Number(p.price) || 0).toFixed(2)}</div>}
             {p.material && (
               <div class="product-modal__material">
                 <strong>{t("modal.material", locale.value)}:</strong> {p.material}
@@ -398,7 +400,7 @@ export default component$(() => {
                     <div class="product-card__name-row">
                       <div class="product-card__name">{item.name}</div>
                       <div class="product-card__price-group">
-                        {!isTech && <div class="product-card__price">${(Number(item.price) || 0).toFixed(2)}</div>}
+                        {!hidePrice && <div class="product-card__price">${(Number(item.price) || 0).toFixed(2)}</div>}
                         <span class="product-card__sizes">{item.sizes === "One Size" ? t("modal.onesize", locale.value) : item.sizes}</span>
                       </div>
                     </div>
@@ -423,7 +425,7 @@ export default component$(() => {
                           <div class="product-card__name-row">
                             <div class="product-card__name">{item.name}</div>
                             <div class="product-card__price-group">
-                              {!isTech && <div class="product-card__price">${(Number(item.price) || 0).toFixed(2)}</div>}
+                              {!hidePrice && <div class="product-card__price">${(Number(item.price) || 0).toFixed(2)}</div>}
                               <span class="product-card__sizes">{item.sizes === "One Size" ? t("modal.onesize", locale.value) : item.sizes}</span>
                             </div>
                           </div>

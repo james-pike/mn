@@ -291,7 +291,13 @@ img { max-width: 100%; display: block; }
   display: flex;
   align-items: center;
 }
-.site-header__logo { display: flex; align-items: center; flex-shrink: 0; margin-right: auto; gap: 2px; }
+.site-header__logo {
+  display: flex; align-items: center; flex-shrink: 0; margin-right: auto; gap: 2px;
+  /* Visual top/bottom breathing room around the logo — header height is
+     fixed, so shrink the logo box rather than adding (clipped) padding. */
+  transform: scale(0.9);
+  transform-origin: left center;
+}
 .site-header__logo-img { height: 50px; width: auto; flex-shrink: 0; }
 .site-header__logo-text { height: 24px; width: auto; flex-shrink: 0; }
 .site-header__logo-brand { display: flex; flex-direction: column; align-items: flex-start; transition: opacity 0.3s ease; }
@@ -1720,7 +1726,7 @@ img { max-width: 100%; display: block; }
   width: fit-content;
 }
 @media (max-width: 900px) {
-  .home-catalog__inner { padding: 0 0.15rem; }
+  .home-catalog__inner { padding: 0 0.05rem; }
   .home-catalog__hero-slot + .home-catalog__header { margin-top: 0; }
   .home-catalog__header { padding: 0; height: 34px; padding-left: 0.25rem; top: 48px; border-radius: 0; margin-bottom: 0; margin-top: 0; }
   .home-catalog__title { display: none; }
@@ -1731,7 +1737,7 @@ img { max-width: 100%; display: block; }
 @media (min-width: 601px) and (max-width: 1024px) {
   .home-catalog { padding: 0; }
   .home-catalog__inner { padding: 0; max-width: 100%; }
-  .home-catalog .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; min-height: 100vh; align-content: start; padding: 0 0.45rem; margin: 0; }
+  .home-catalog .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; min-height: 100vh; align-content: start; padding: 0 0.2rem; margin: 0; }
   .home-catalog .apparel-grid.apparel-grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
   .home-catalog__header { height: 38px; padding: 0; top: 58px; border-radius: 0; margin-bottom: 0.2rem; }
   /* Match mobile tab behavior on tablet — equal-width fill + container-query font scaling */
@@ -6612,8 +6618,11 @@ details[open] > .cart-drawer__checkout-title::after {
 }
 .brand-cluster--small .brand-cluster__mark { width: 44px; height: 44px; }
 .brand-cluster--small .brand-cluster__word { font-size: 0.85rem; }
-/* Footer-specific tweaks */
+/* Footer-specific tweaks — footer sits on a near-black bg, so lift the
+   brand-cluster word colors out of the default gray-700 (invisible on dark) */
 .site-footer .brand-cluster__mark { width: 48px; height: 48px; }
-.site-footer .brand-cluster__word { color: var(--ce-gray-700); font-size: 0.9rem; }
+.site-footer .brand-cluster__word { color: rgba(255,255,255,0.85); font-size: 0.9rem; }
+.site-footer .brand-cluster__word--sub { color: rgba(255,255,255,0.55); }
+.site-footer .brand-cluster__word--muted { color: rgba(255,255,255,0.55); opacity: 1; }
 /* Nav drawer */
 .nav-drawer .brand-cluster__word { color: var(--ce-gray-900); }

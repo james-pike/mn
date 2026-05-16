@@ -7,6 +7,18 @@ import { LoginTypeContext } from "../../routes/layout";
 
 const CLOTHING_CATEGORIES = ["All", "Shirts", "Jackets", "Hats", "SWAG"];
 
+// Safety catalog: every MNFR-* item plus a small allowlist of standard SKUs,
+// minus a deny list for FR items we don't carry yet.
+const SAFETY_SKU_PREFIX = "MNFR-";
+const SAFETY_EXTRA_SKUS = new Set(["MN-3", "MN-5", "MN-6"]);
+const SAFETY_HIDDEN_SKUS = new Set(["MNFR-5", "MNFR-6"]); // FR Insulated Bib & Jacket
+const SAFETY_CATEGORIES = ["All", "FR Workwear", "Shirts", "Hats"];
+// Explicit display order for the Safety "All" view: shirt, hoodies, pants,
+// then the standard-SKU allowlist (tee, ball cap, toque).
+const SAFETY_SKU_ORDER = ["MNFR-2", "MNFR-3", "MNFR-4", "MNFR-1", "MN-3", "MN-5", "MN-6"];
+const isSafetyProduct = (sku: string) =>
+  !SAFETY_HIDDEN_SKUS.has(sku) && (sku.startsWith(SAFETY_SKU_PREFIX) || SAFETY_EXTRA_SKUS.has(sku));
+
 // Colors hidden from catalog-card swatches (still visible on product detail page).
 const CARD_HIDDEN_COLORS = new Set(["#c0392b", "#1e40af", "#6b3fa0"]);
 
@@ -18,12 +30,14 @@ const CATEGORY_ICONS: Record<string, string> = {
   "Polos": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2 12 5.5 8 2 3.62 3.46a2 2 0 00-1.34 1.93v15.12a2 2 0 001.34 1.93L8 24l4-3.5L16 24l4.38-1.46a2 2 0 001.34-1.93V5.39a2 2 0 00-1.34-1.93z"/></svg>',
   "Hats": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>',
   "SWAG": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>',
+  "FR Workwear": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>',
 };
 
 const ProductCard = component$<{ item: Product; sku: string }>(({ item, sku }) => {
   const locale = useContext(LocaleContext);
   const loginType = useContext(LoginTypeContext);
   const isTech = loginType.value === "tech";
+  const isSafety = loginType.value === "safety";
 
   return (
     <a href={`/apparel/${sku}/`} class={`product-card product-card-link ${sku === "CAR-21" ? "product-card--cover" : ""}`}>
@@ -37,7 +51,7 @@ const ProductCard = component$<{ item: Product; sku: string }>(({ item, sku }) =
             <span class="product-card__name-code">{(item.name.match(/#\S+/) || [''])[0]}</span>
           </div>
           <div class="product-card__price-group">
-            {!isTech && <div class="product-card__price">${(Number(item.price) || 0).toFixed(2)}</div>}
+            {!isTech && !isSafety && <div class="product-card__price">${(Number(item.price) || 0).toFixed(2)}</div>}
           </div>
         </div>
         <div class="product-card__color-size-row">
@@ -67,14 +81,18 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
   const locale = useContext(LocaleContext);
   const loginType = useContext(LoginTypeContext);
   const isTech = useComputed$(() => loginType.value === "tech");
+  const isSafety = useComputed$(() => loginType.value === "safety");
+  const isSingleCat = useComputed$(() => isTech.value);
   const activeCat = useSignal("All");
   const searchQuery = useSignal("");
   const searchOpen = useSignal(false);
   const tabletCols = useSignal(3);
 
-  const HASH_TO_CAT: Record<string, string> = isTech.value
+  const HASH_TO_CAT: Record<string, string> = isSingleCat.value
     ? {}
-    : { "shirts": "Shirts", "jackets": "Jackets", "hats": "Hats", "swag": "SWAG" };
+    : isSafety.value
+      ? { "shirts": "Shirts", "hats": "Hats", "fr": "FR Workwear" }
+      : { "shirts": "Shirts", "jackets": "Jackets", "hats": "Hats", "swag": "SWAG" };
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup }) => {
@@ -126,6 +144,16 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
 
   const baseProducts = useComputed$(() => {
     if (isTech.value) return allProducts.filter((p) => p.category === "Work Wear");
+    if (isSafety.value) {
+      const rank = (sku: string) => {
+        const i = SAFETY_SKU_ORDER.indexOf(sku);
+        return i === -1 ? SAFETY_SKU_ORDER.length : i;
+      };
+      return allProducts
+        .filter((p) => isSafetyProduct(p.sku))
+        .slice()
+        .sort((a, b) => rank(a.sku) - rank(b.sku));
+    }
     return allProducts.filter((p) => p.category !== "FR Workwear");
   });
 
@@ -134,7 +162,8 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
   const visibleCategories = useComputed$(() => {
     if (isTech.value) return ["Work Wear"];
     const present = new Set(baseProducts.value.map((p) => p.category));
-    return CLOTHING_CATEGORIES.filter((c) => ALWAYS_SHOW.has(c) || present.has(c));
+    const source = isSafety.value ? SAFETY_CATEGORIES : CLOTHING_CATEGORIES;
+    return source.filter((c) => ALWAYS_SHOW.has(c) || present.has(c));
   });
 
   const filtered = useComputed$(() => {
@@ -176,9 +205,9 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
             {visibleCategories.value.map((cat) => (
               <button
                 key={cat}
-                class={`apparel-titlebar__tab ${isTech.value || activeCat.value === cat ? "active" : ""}`}
+                class={`apparel-titlebar__tab ${isSingleCat.value || activeCat.value === cat ? "active" : ""}`}
                 onClick$={() => {
-                  if (isTech.value) return;
+                  if (isSingleCat.value) return;
                   if (activeCat.value === cat) { activeCat.value = "All"; return; }
                   activeCat.value = cat;
                   searchQuery.value = "";
@@ -191,9 +220,12 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                     window.scrollTo({ top: gridTop, behavior: needsScrollUp ? 'instant' : 'smooth' });
                   } else {
                     const catalog = document.querySelector('.home-catalog');
-                    const tabH = (document.querySelector('.home-catalog__header') as HTMLElement)?.offsetHeight || 34;
                     const catalogTop = catalog ? catalog.getBoundingClientRect().top + window.scrollY : 0;
-                    const stickyPos = catalogTop - headerH + tabH - 28;
+                    // Scroll a hair past the sticky threshold so the tab strip
+                    // pins flush under the site header (no dark gap above it).
+                    // The +2px sits inside the tab strip's bottom margin so the
+                    // first row of product images is not clipped.
+                    const stickyPos = catalogTop - headerH + 2;
                     window.scrollTo({ top: stickyPos, behavior: 'instant' });
                   }
                 }}
