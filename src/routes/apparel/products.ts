@@ -191,7 +191,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-8",
-    "name": "Duck Insulted Bib Overall - Navy",
+    "name": "Duck Insulated Bib Overall - Navy",
     "category": "Work Wear",
     "sizes": "S - 4XL",
     "badge": "",
