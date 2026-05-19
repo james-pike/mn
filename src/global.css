@@ -748,14 +748,14 @@ img { max-width: 100%; display: block; }
   left: 0.6rem;
   color: var(--ce-white);
   /* Shrink with the card on narrow mobile widths instead of ellipsis-cutting
-     the title. Preferred 7cqi (= 7% of card width) keeps things proportional;
-     clamps stop it from being unreadably small or jumping above the desktop
-     size. The desktop @media block below opts back into a viewport-based
-     clamp for the wider layout. */
-  font-size: clamp(0.6rem, 7cqi, 0.9rem);
+     the title. Preferred 8.5cqi (= 8.5% of card width) keeps things
+     proportional and a touch larger than before; clamps stop it from being
+     unreadably small or jumping above the desktop size. The desktop @media
+     block below opts back into a viewport-based clamp for the wider layout. */
+  font-size: clamp(0.7rem, 8.5cqi, 1.05rem);
   font-weight: 700;
   z-index: 1;
-  padding: 0.4rem 0.7rem;
+  padding: 0.4rem 0.45rem;
   background: rgba(0,0,0,0.45);
   backdrop-filter: blur(4px);
   border-radius: 2px;
@@ -5664,13 +5664,15 @@ details[open] > .cart-drawer__checkout-title::after {
      Also apply the 2px gray bottom line on every route (not just
      apparel) so the home-route sticky tab strip reads flush against
      the header the same way it does on /apparel/. */
-  /* No bottom box-shadow on tablet: the .apparel-catalog wrapper has
-     z-index: 1 which isolates the apparel-titlebar's stacking context
-     below the header's z-index 9999, so a 2px box-shadow here would
-     render on top of the titlebar's white row as a thin gray "gap" line
-     when scrolling. The titlebar's own border-bottom handles the visual
-     separator below the tab strip. */
-  .site-header { height: 52px; border-bottom: none !important; }
+  /* Bottom border (not box-shadow) so the separator paints inside the
+     52px envelope at z 9999 (header's z). A box-shadow would render
+     below the layout box and get covered by the apparel-titlebar's
+     stacking context (.apparel-catalog has z-index: 1 which isolates
+     the titlebar below the header), causing the thin gray gap that
+     used to show up when scrolling. With border-box sizing, the 2px
+     border eats into the header's content area (52px → 50px); the
+     logo image at 46px still fits with 2px each side breathing. */
+  .site-header { height: 52px; border-bottom: 2px solid var(--ce-gray-200) !important; }
   /* Asymmetric padding: left keeps 0.5rem for the logo cluster, right
      trimmed to 0.25rem so the cart/logout buttons sit closer to the
      viewport edge (tighter with the page margin). */
@@ -6745,14 +6747,15 @@ details[open] > .cart-drawer__checkout-title::after {
   .hero__upper .hero__text .hero__words { align-items: flex-start !important; }
   /* Pure vw so the text always fills the same proportion of the viewport
      regardless of zoom (no rem-based step changes). */
-  .hero__upper .hero__text .hero__title-word { font-size: 8vw !important; }
-  .hero__upper .hero__text .hero__title-word--sub { font-size: 8vw !important; }
-  /* MODERN NIAGARA on a single line — sized to fill the 94vw cluster
-     width with minimal horizontal padding while still avoiding clipping. */
+  .hero__upper .hero__text .hero__title-word { font-size: 9vw !important; }
+  .hero__upper .hero__text .hero__title-word--sub { font-size: 9vw !important; }
+  /* MODERN NIAGARA on a single line — sized to fill the cluster width
+     with minimal horizontal padding while still avoiding clipping. */
   .hero__upper .hero__text .hero__title-word:nth-child(1) {
-    font-size: 9vw !important;
+    font-size: 10vw !important;
     font-weight: 600 !important;
     line-height: 0.95 !important;
+    letter-spacing: -0.09em !important;
   }
   /* Pagination dots: bottom-right of the cluster. */
   .hero__upper .hero-carousel__dots {
