@@ -6701,15 +6701,15 @@ details[open] > .cart-drawer__checkout-title::after {
   /* Timing for APPAREL letters is shared with desktop/mobile via the
      pure-CSS nth-child rules above — tablet doesn't need its own offset. */
   .hero__upper .hero__text .hero__title-word {
-    font-size: 7.5vw !important;
+    font-size: 6.5vw !important;
   }
   .hero__upper .hero__text .hero__title-word--sub {
-    font-size: 7.5vw !important;
+    font-size: 6.5vw !important;
   }
   /* MODERN NIAGARA on a single line — sized to fill the tablet cluster
      width (95vw container) similarly to how mobile fills its width. */
   .hero__upper .hero__text .hero__title-word:nth-child(1) {
-    font-size: 9vw !important;
+    font-size: 8vw !important;
     font-weight: 600 !important;
     line-height: 0.95 !important;
   }
@@ -6739,12 +6739,12 @@ details[open] > .cart-drawer__checkout-title::after {
     text-align: left !important;
     gap: 11vw !important;
     width: 94% !important;
-    padding-top: 2.75rem !important;
+    padding-top: 3.25rem !important;
     padding-left: 0.75rem !important;
     padding-bottom: 2.75rem !important;
   }
-  .hero__upper .hero__text .hero__brandmark { width: 28vw !important; }
-  .hero__upper .hero__text .hero__words { align-items: flex-start !important; }
+  .hero__upper .hero__text .hero__brandmark { width: 32vw !important; }
+  .hero__upper .hero__text .hero__words { align-items: flex-start !important; gap: 0.2rem !important; }
   /* Pure vw so the text always fills the same proportion of the viewport
      regardless of zoom (no rem-based step changes). */
   .hero__upper .hero__text .hero__title-word { font-size: 9vw !important; }
