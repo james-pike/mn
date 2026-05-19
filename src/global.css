@@ -6503,7 +6503,12 @@ details[open] > .cart-drawer__checkout-title::after {
     aspect-ratio: auto !important;
     max-width: none !important;
     flex-direction: column !important;
-    align-items: flex-start !important;
+    /* Center the cluster (brandmark + words container) horizontally inside
+       the dark overlay panel. The words container is sized to its widest
+       line (MODERN NIAGARA) and its internal text still hugs flex-start,
+       so MODERN NIAGARA / BUILDING SERVICES / APPAREL stay left-aligned
+       to each other beneath the centered brandmark. */
+    align-items: center !important;
     justify-content: center !important;
     text-align: left !important;
     /* Each spacing/size value is capped by a vh equivalent so the cluster
@@ -6539,11 +6544,10 @@ details[open] > .cart-drawer__checkout-title::after {
   .hero__upper .hero__text .hero__brandmark {
     width: min(12vw, 20vh) !important;
     margin-top: 0 !important;
-    /* Nudge just the brandmark slightly right of the left-aligned text
-       stack — the rotated diamond's bounding box leaves visual whitespace
-       on the left so a small positive shift makes it visually align with
-       the word stack's optical center. */
-    margin-left: 2.2vw !important;
+    /* Brandmark is centered by the parent's align-items: center (no
+       margin-left offset needed since the cluster is no longer
+       left-aligned). */
+    margin-left: 0 !important;
   }
   /* Black framed hero — small black border around carousel + cards row.
      Constrain the whole hero to 100vh and let the carousel + cards
