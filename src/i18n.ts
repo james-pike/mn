@@ -131,6 +131,7 @@ const translations = {
   "color.charcoal": { en: "Charcoal", fr: "Charbon" },
   "color.bronze": { en: "Bronze", fr: "Bronze" },
   "color.carharttbrown": { en: "Carhartt Brown", fr: "Brun Carhartt" },
+  "color.skyblue": { en: "Sky Blue", fr: "Bleu ciel" },
 
   // Product modal
   "modal.material": { en: "Material", fr: "Matière" },

@@ -352,6 +352,7 @@ const colorKeyMap: Record<string, string> = {
   "#4a4a4a": "color.charcoal",
   "#8d5f18": "color.bronze",
   "#8a5d3b": "color.carharttbrown",
+  "#00b5e2": "color.skyblue",
 };
 
 const colorName = (hex: string, locale: Locale): string => {

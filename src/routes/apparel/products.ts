@@ -430,6 +430,23 @@ export const allProducts = [
     "details": "Fire-resistant, #101626"
   },
   {
+    "sku": "MN-21",
+    "name": "Mardi Gras Magic Pen",
+    "category": "SWAG",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#00b5e2"
+    ],
+    "price": 0,
+    "img": "/sku/pen-bg.png",
+    "imgs": [
+      "/sku/pen-bg.png"
+    ],
+    "material": "Plastic, push-retractable ballpoint, ultra-smooth cartridge, rubber grip",
+    "details": "Glossy black barrel with vivid neon trim, blue ink, 5 2/5\" L × 2/5\" Dia, #416"
+  },
+  {
     "sku": "MNFR-6",
     "name": "FR Insulated Jacket - Navy",
     "category": "Flame Resistant",
@@ -471,6 +488,7 @@ const colorNames: Record<string, Record<string, string>> = {
   "#c0392b": { en: "Red", fr: "Rouge" },
   "#1e40af": { en: "Royal", fr: "Bleu royal" },
   "#8a5d3b": { en: "Carhartt Brown", fr: "Brun Carhartt" },
+  "#00b5e2": { en: "Sky Blue", fr: "Bleu ciel" },
 };
 export function colorName(hex: string, locale: Locale): string {
   return colorNames[hex]?.[locale] || hex;

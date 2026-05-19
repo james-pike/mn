@@ -224,6 +224,15 @@ const updates: Update[] = [
     imgs: ["/sku/women-jacket.jpg"],
     sort_order: 24,
   },
+  // Mardi Gras Magic Pen — SWAG
+  {
+    sku: "MN-21",
+    material: "Plastic, push-retractable ballpoint, ultra-smooth cartridge, rubber grip",
+    details: "Glossy black barrel with vivid neon trim, blue ink, 5 2/5\" L × 2/5\" Dia, #416",
+    img: "/sku/pen-bg.png",
+    imgs: ["/sku/pen-bg.png"],
+    sort_order: 54,
+  },
 ];
 
 async function main() {

@@ -48,6 +48,8 @@ const seeds: Seed[] = [
   // (MN-18 is the brown laptop backpack — keep it; soft shells use MN-19 / MN-20)
   { sku: "MN-20", name: "Men's Active Soft Shell Jacket",   category: "Jackets", sizes: "XS - 6XL", colors: [BLACK, "#6e6e6e", NAVY], price: 0, details: "Port Authority, #J7603" },
   { sku: "MN-19", name: "Ladies' Active Soft Shell Jacket", category: "Jackets", sizes: "XS - 4XL", colors: [BLACK, "#6e6e6e", NAVY], price: 0, details: "Port Authority, #L7603" },
+  // SWAG — pen
+  { sku: "MN-21", name: "Mardi Gras Magic Pen",             category: "SWAG",    sizes: "One Size", colors: ["#00b5e2"], price: 0, details: "Push-retractable ballpoint, #416" },
 ];
 
 async function main() {
