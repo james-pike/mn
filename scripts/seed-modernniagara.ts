@@ -44,6 +44,10 @@ const seeds: Seed[] = [
   { sku: "MN-14", name: "Yeti Tundra Cooler",          category: "SWAG",      sizes: "35L / 45L", colors: [NAVY],     price: 0, details: "YETI Tundra® Hard Cooler" },
   { sku: "MN-15", name: "Men's UA Tech Polo",          category: "SWAG",      sizes: "S - 4XL",   colors: [NAVY, BLACK, "#ffffff", "#b8b8b8", "#6b3fa0", "#c0392b", "#1e40af"], price: 55.00, details: "#1370399" },
   { sku: "MN-16", name: "Women's UA Tech Polo",        category: "SWAG",      sizes: "XS - 2XL",  colors: [NAVY, BLACK, "#ffffff", "#b8b8b8", "#6b3fa0", "#c0392b", "#1e40af"], price: 55.00, details: "#1370431" },
+  // Port Authority Active Soft Shell — Jackets
+  // (MN-18 is the brown laptop backpack — keep it; soft shells use MN-19 / MN-20)
+  { sku: "MN-20", name: "Men's Active Soft Shell Jacket",   category: "Jackets", sizes: "XS - 6XL", colors: [BLACK, "#6e6e6e", NAVY], price: 0, details: "Port Authority, #J7603" },
+  { sku: "MN-19", name: "Ladies' Active Soft Shell Jacket", category: "Jackets", sizes: "XS - 4XL", colors: [BLACK, "#6e6e6e", NAVY], price: 0, details: "Port Authority, #L7603" },
 ];
 
 async function main() {

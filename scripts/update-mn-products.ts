@@ -195,6 +195,35 @@ const updates: Update[] = [
   { sku: "MN-13", sort_order: 50 }, // Yeti Mug (SWAG)
   { sku: "MN-14", sort_order: 51 }, // Yeti Cooler (SWAG)
   { sku: "MN-17", sort_order: 52 }, // Insulated 18-Can Cooler (SWAG)
+  // MN-18 (25L Laptop Backpack) — restore SWAG data clobbered by an earlier
+  // soft-shell update that hit this SKU by mistake.
+  {
+    sku: "MN-18",
+    category: "SWAG",
+    material: "",
+    details: "#B0000536",
+    img: "/sku/backpack.png",
+    imgs: ["/sku/backpack.png"],
+    sort_order: 53,
+  },
+  // Port Authority Active Soft Shell — material, details, images, sort_order
+  {
+    sku: "MN-20",
+    material: "100% polyester woven soft shell bonded to 100% polyester microfleece",
+    details: "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #J7603",
+    img: "/softshell/j7603-soft-shell.png",
+    imgs: ["/softshell/j7603-soft-shell.png"],
+    sizes: "XS - 6XL",
+    sort_order: 23,
+  },
+  {
+    sku: "MN-19",
+    material: "100% polyester woven soft shell bonded to 100% polyester microfleece",
+    details: "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #L7603",
+    img: "/softshell/l7603-ladies-soft-shell.png",
+    imgs: ["/softshell/l7603-ladies-soft-shell.png"],
+    sort_order: 24,
+  },
 ];
 
 async function main() {
