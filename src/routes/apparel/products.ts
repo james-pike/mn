@@ -173,8 +173,46 @@ export const allProducts = [
     "details": "Three-piece hood with drawcord, full-length brass zipper, rib-knit cuffs and waist, two front handwarmer pockets, Carhartt patch on pocket, loose fit, #K122"
   },
   {
+    "sku": "MN-20",
+    "name": "Men's Soft Shell Jacket",
+    "category": "Jackets",
+    "sizes": "XS - 6XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#6e6e6e",
+      "#2c3e50"
+    ],
+    "price": 0,
+    "img": "/sku/mens-jacket.webp",
+    "imgs": [
+      "/sku/mens-jacket.webp"
+    ],
+    "material": "100% polyester woven soft shell bonded to 100% polyester microfleece",
+    "details": "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #J7603"
+  },
+  {
+    "sku": "MN-19",
+    "name": "Women's Soft Shell Jacket",
+    "category": "Jackets",
+    "sizes": "XS - 4XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#6e6e6e",
+      "#2c3e50"
+    ],
+    "price": 0,
+    "img": "/sku/women-jacket.jpg",
+    "imgs": [
+      "/sku/women-jacket.jpg"
+    ],
+    "material": "100% polyester woven soft shell bonded to 100% polyester microfleece",
+    "details": "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #L7603"
+  },
+  {
     "sku": "MN-1",
-    "name": "Pants - Navy",
+    "name": "Rigby Dungaree Pants - Navy",
     "category": "Pants",
     "sizes": "S - 4XL",
     "badge": "",
@@ -225,7 +263,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-6",
-    "name": "Toque - Navy",
+    "name": "Flip Toque - Navy",
     "category": "Hats",
     "sizes": "One Size",
     "badge": "",
@@ -242,7 +280,7 @@ export const allProducts = [
   },
   {
     "sku": "MNFR-1",
-    "name": "FR Pants - Navy",
+    "name": "FR Rigby Pants - Navy",
     "category": "Flame Resistant",
     "sizes": "S - 4XL",
     "badge": "",
@@ -422,6 +460,8 @@ const colorNames: Record<string, Record<string, string>> = {
   "#1a1a18": { en: "Black", fr: "Noir" },
   "#ffffff": { en: "White", fr: "Blanc" },
   "#2c3e50": { en: "Navy", fr: "Marine" },
+  "#6e6e6e": { en: "Grey", fr: "Gris" },
+  "#ff6600": { en: "Safety Orange", fr: "Orange sécurité" },
   "#94a3b8": { en: "Silver", fr: "Argent" },
   "#4a4a4a": { en: "Charcoal", fr: "Charbon" },
   "#6b8bb0": { en: "Solace Blue", fr: "Bleu Solace" },
