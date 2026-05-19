@@ -5664,7 +5664,13 @@ details[open] > .cart-drawer__checkout-title::after {
      Also apply the 2px gray bottom line on every route (not just
      apparel) so the home-route sticky tab strip reads flush against
      the header the same way it does on /apparel/. */
-  .site-header { height: 52px; border-bottom: none !important; box-shadow: 0 2px 0 var(--ce-gray-200); }
+  /* No bottom box-shadow on tablet: the .apparel-catalog wrapper has
+     z-index: 1 which isolates the apparel-titlebar's stacking context
+     below the header's z-index 9999, so a 2px box-shadow here would
+     render on top of the titlebar's white row as a thin gray "gap" line
+     when scrolling. The titlebar's own border-bottom handles the visual
+     separator below the tab strip. */
+  .site-header { height: 52px; border-bottom: none !important; }
   /* Asymmetric padding: left keeps 0.5rem for the logo cluster, right
      trimmed to 0.25rem so the cart/logout buttons sit closer to the
      viewport edge (tighter with the page margin). */
