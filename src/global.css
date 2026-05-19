@@ -5684,8 +5684,12 @@ details[open] > .cart-drawer__checkout-title::after {
   /* Tablet: logout shrinks to icon-only (the text "Logout" is dropped). */
   .hero-card-header__btn--logout .hero-card-header__btn-label { display: none !important; }
   .hero { margin-top: 0; padding-top: 0; }
-  .home-catalog__header { top: 52px; margin-top: 0; }
-  .apparel-titlebar { top: 52px; margin-top: 0; }
+  /* Sticky tab strips pin flush against the 52px tablet header. z-index
+     bumped above the header's 9999 so the row's white background covers
+     the header's 2px bottom box-shadow line (otherwise that gray line
+     renders on top of the titlebar as a thin gap when scrolling). */
+  .home-catalog__header { top: 52px; margin-top: 0; z-index: 10000; }
+  .apparel-titlebar { top: 52px; margin-top: 0; z-index: 10000; }
 
   /* Transparent header over hero — logos hidden until scroll, like desktop */
   .site-header {
@@ -6502,14 +6506,16 @@ details[open] > .cart-drawer__checkout-title::after {
     width: 42vw !important;
     aspect-ratio: auto !important;
     max-width: none !important;
-    flex-direction: column !important;
-    /* Center the cluster (brandmark + words container) horizontally inside
-       the dark overlay panel. The words container is sized to its widest
-       line (MODERN NIAGARA) and its internal text still hugs flex-start,
-       so MODERN NIAGARA / BUILDING SERVICES / APPAREL stay left-aligned
-       to each other beneath the centered brandmark. */
-    align-items: center !important;
+    /* Grid so brandmark + words share one auto-sized column. The column
+       is sized to the widest item (the words container) and centered in
+       the panel; both items sit at the column's left edge, so the
+       brandmark stays left-aligned with the words while the cluster as
+       a whole is centered in the dark overlay. */
+    display: grid !important;
+    grid-template-columns: max-content !important;
     justify-content: center !important;
+    justify-items: start !important;
+    align-content: center !important;
     text-align: left !important;
     /* Each spacing/size value is capped by a vh equivalent so the cluster
        shrinks on shorter desktop viewports instead of overflowing the
@@ -6518,7 +6524,7 @@ details[open] > .cart-drawer__checkout-title::after {
     gap: min(4vw, 6.5vh) !important;
     padding-top: min(4vw, 6.5vh) !important;
     padding-bottom: min(3.5vw, 5.5vh) !important;
-    padding-left: 1.2vw !important;
+    padding-left: 3vw !important;
     padding-right: 2.2vw !important;
   }
   .hero__upper .hero__text .hero__words {
@@ -6544,10 +6550,10 @@ details[open] > .cart-drawer__checkout-title::after {
   .hero__upper .hero__text .hero__brandmark {
     width: min(12vw, 20vh) !important;
     margin-top: 0 !important;
-    /* Brandmark is centered by the parent's align-items: center (no
-       margin-left offset needed since the cluster is no longer
-       left-aligned). */
-    margin-left: 0 !important;
+    /* Rightward nudge so the rotated-diamond's visible mass sits a touch
+     right of the words' left edge (the bounding box has whitespace on
+     the left from the rotation). */
+    margin-left: 2vw !important;
   }
   /* Black framed hero — small black border around carousel + cards row.
      Constrain the whole hero to 100vh and let the carousel + cards
