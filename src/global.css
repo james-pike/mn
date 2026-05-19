@@ -6476,33 +6476,36 @@ details[open] > .cart-drawer__checkout-title::after {
     align-items: flex-start !important;
     justify-content: center !important;
     text-align: left !important;
-    gap: 3vw !important;
-    /* More top breathing room so the brandmark sits lower in the dark
-       panel instead of hugging the top edge. */
-    padding-top: 4vw !important;
-    padding-bottom: 3.5vw !important;
+    /* Each spacing/size value is capped by a vh equivalent so the cluster
+       shrinks on shorter desktop viewports instead of overflowing the
+       carousel's available height. Ratio: ~1.7vh per vw, tuned so the
+       cluster fits within ~80% of viewport height. */
+    gap: min(3vw, 5vh) !important;
+    padding-top: min(4vw, 6.5vh) !important;
+    padding-bottom: min(3.5vw, 5.5vh) !important;
     padding-left: 1.2vw !important;
     padding-right: 2.2vw !important;
   }
   .hero__upper .hero__text .hero__words {
-    gap: 0.4vw !important;
+    gap: min(0.4vw, 0.7vh) !important;
     align-items: flex-start !important;
   }
-  /* Pure vw sizing across the board — every element inside the cluster is a
-     fixed fraction of the viewport, so nothing drifts at any zoom level. */
+  /* Sizes are min(vw, vh) so the cluster scales with the smaller of the
+     two viewport dimensions — never overflows vertically on short
+     desktop windows, never bloats on tall narrow ones. */
   .hero__upper .hero__text .hero__title-word {
-    font-size: 3.2vw !important;
+    font-size: min(3.2vw, 5.4vh) !important;
   }
   .hero__upper .hero__text .hero__title-word--sub {
-    font-size: 3.2vw !important;
+    font-size: min(3.2vw, 5.4vh) !important;
   }
   /* MODERN / NIAGARA stack on their own lines, scaled up to fill the line. */
   .hero__upper .hero__text .hero__title-word:nth-child(1) {
-    font-size: 4.1vw !important;
+    font-size: min(4.1vw, 6.9vh) !important;
     line-height: 0.95 !important;
   }
   .hero__upper .hero__text .hero__brandmark {
-    width: 14vw !important;
+    width: min(14vw, 24vh) !important;
     margin-top: 0 !important;
     /* Nudge just the brandmark slightly right of the left-aligned text
        stack — the rotated diamond's bounding box leaves visual whitespace
