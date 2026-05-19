@@ -157,6 +157,7 @@ export const useSubmitOrder = routeAction$(
     "#8d5f18": "Bronze", "#c0392b": "Red", "#6b3fa0": "Purple",
     "#1e40af": "Royal", "#b8b8b8": "Grey Heather", "#7dd3fc": "Light Blue",
     "#6b8bb0": "Solace Blue", "#8a5d3b": "Carhartt Brown",
+    "#6e6e6e": "Grey", "#ff6600": "Safety Orange",
   };
   const cName = (hex: string) => colorMap[hex] || hex;
 

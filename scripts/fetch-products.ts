@@ -74,7 +74,7 @@ export function categoryLabel(cat: string, locale: Locale): string {
 
 export function expandSizes(sizes: string): string[] {
   if (sizes === "One Size") return ["One Size"];
-  const order = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
+  const order = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"];
   const match = sizes.match(/^(\\w+)\\s*-\\s*(\\w+)$/);
   if (!match) return [sizes];
   const start = order.indexOf(match[1]);

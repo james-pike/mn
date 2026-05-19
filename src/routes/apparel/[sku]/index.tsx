@@ -70,7 +70,7 @@ export default component$(() => {
     },
   };
   const variantSkus = new Set(Object.keys(variantSizesBySku));
-  const SIZE_ORDER = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"];
+  const SIZE_ORDER = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"];
   // Per-SKU waist + inseam runs. MN-1 (Carhartt 102291 Rigby) and MNFR-1
   // (Carhartt 104204 FR Rigby) carry different waist/length grids.
   // Carhartt CAR-12 / CAR-14 don't have a specific entry — they fall back
