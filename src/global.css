@@ -6546,10 +6546,15 @@ details[open] > .cart-drawer__checkout-title::after {
      two viewport dimensions — never overflows vertically on short
      desktop windows, never bloats on tall narrow ones. */
   .hero__upper .hero__text .hero__title-word {
-    font-size: min(3.6vw, 6vh) !important;
+    font-size: min(4.6vw, 7.7vh) !important;
   }
-  .hero__upper .hero__text .hero__title-word--sub {
-    font-size: min(3.6vw, 6vh) !important;
+  /* Chained class to outspecificity the base
+     `.hero__title-word.hero__title-word--sub { font-weight: 600 }` rule
+     so BUILDING SERVICES sits at 500 (matching APPAREL) rather than
+     the heavier 600 of MODERN NIAGARA. */
+  .hero__upper .hero__text .hero__title-word.hero__title-word--sub {
+    font-size: min(4.6vw, 7.7vh) !important;
+    font-weight: 500 !important;
   }
   /* MODERN NIAGARA on a single line, scaled up to fill more of the
      widened desktop panel. */
@@ -6559,7 +6564,7 @@ details[open] > .cart-drawer__checkout-title::after {
     line-height: 0.95 !important;
   }
   .hero__upper .hero__text .hero__brandmark {
-    width: min(12vw, 20vh) !important;
+    width: min(14vw, 23vh) !important;
     margin-top: 0 !important;
     /* Rightward nudge so the rotated-diamond's visible mass sits a touch
      right of the words' left edge (the bounding box has whitespace on
@@ -6567,24 +6572,19 @@ details[open] > .cart-drawer__checkout-title::after {
     margin-left: 2vw !important;
   }
   /* Black framed hero — small black border around carousel + cards row.
-     Constrain the whole hero to 100vh and let the carousel + cards
-     row share the space via flex: cards auto-size to their content
-     (so they're always fully visible) and the carousel takes whatever
-     vertical space is left. */
+     Hero is not constrained to 100vh; the carousel takes calc(100vh
+     - 7vw - 1rem) so roughly the top half of the 14vw-tall cards row
+     sits above the 100vh fold and the bottom half hangs below. */
   .hero {
     background: #000 !important;
     padding: 0.5rem !important;
-    height: 100vh !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-  .hero__upper {
-    flex: 1 1 0 !important;
-    min-height: 0 !important;
     height: auto !important;
   }
-  .hero__lower {
+  .hero__upper {
+    height: calc(100vh - 7vw - 1rem) !important;
     flex: 0 0 auto !important;
+  }
+  .hero__lower {
     position: relative !important;
     z-index: 2 !important;
     padding: 0.5rem 0 0 !important;
