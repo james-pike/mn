@@ -1761,7 +1761,7 @@ img { max-width: 100%; display: block; }
   .home-catalog__inner { padding: 0; max-width: 100%; }
   .home-catalog .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; min-height: 100vh; align-content: start; padding: 0 0.25rem; margin: 0; }
   .home-catalog .apparel-grid.apparel-grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
-  .home-catalog__header { height: 38px; padding: 0; top: 52px; border-radius: 0; margin-bottom: 0.2rem; }
+  .home-catalog__header { height: 38px; padding: 0; top: 51px; border-radius: 0; margin-bottom: 0.2rem; }
   /* Match mobile tab behavior on tablet — equal-width fill + container-query font scaling */
   .home-catalog__tabs { overflow-x: hidden; container-type: inline-size; }
   .home-catalog__tabs .apparel-titlebar__tab { flex: 1; text-align: center; justify-content: center; font-size: clamp(0.78rem, 3.5cqi, 1.2rem); padding: 4px 6px; }
@@ -5534,7 +5534,7 @@ details[open] > .cart-drawer__checkout-title::after {
     grid-column: 1 / -1;
     grid-row: 1;
     position: sticky;
-    top: 52px;
+    top: 51px;
     z-index: 50;
     height: 38px;
     display: flex;
@@ -5694,8 +5694,11 @@ details[open] > .cart-drawer__checkout-title::after {
      bumped above the header's 9999 so the row's white background covers
      the header's 2px bottom box-shadow line (otherwise that gray line
      renders on top of the titlebar as a thin gap when scrolling). */
-  .home-catalog__header { top: 52px; margin-top: 0; z-index: 10000; }
-  .apparel-titlebar { top: 52px; margin-top: 0; z-index: 10000; }
+  /* Sticky tab strips pin 1px earlier so they overlap the header's
+     bottom edge — eliminates the thin gap visible on some viewport
+     widths from sub-pixel rounding. */
+  .home-catalog__header { top: 51px; margin-top: 0; z-index: 10000; }
+  .apparel-titlebar { top: 51px; margin-top: 0; z-index: 10000; }
 
   /* Transparent header over hero — logos hidden until scroll, like desktop */
   .site-header {
