@@ -6,6 +6,7 @@ import {
   routeAction$,
   routeLoader$,
   useLocation,
+  useNavigate,
   Form,
   z,
   zod$,
@@ -363,6 +364,7 @@ const colorName = (hex: string, locale: Locale): string => {
 
 export default component$(() => {
   const loc = useLocation();
+  const nav = useNavigate();
   const auth = useAuthCheck();
   const loginAction = useLogin();
   const logoutAction = useLogout();
@@ -815,7 +817,7 @@ export default component$(() => {
               )}
               {loginType.value !== "tech" && (() => {
                 const NAV_CATS: { key: TranslationKey; cat: string; icon: string }[] = [
-                  { key: "cat.Shirts",  cat: "Shirts",  icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 2l4 4-3 3-2-1v14a1 1 0 01-1 1H10a1 1 0 01-1-1V8L7 9 4 6l4-4h2a2 2 0 004 0h2z"/></svg>' },
+                  { key: "cat.Shirts",  cat: "Shirts",  icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>' },
                   { key: "cat.Jackets", cat: "Jackets", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>' },
                   { key: "cat.Hats",    cat: "Hats",    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>' },
                   { key: "cat.SWAG",    cat: "SWAG",    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>' },
@@ -828,7 +830,23 @@ export default component$(() => {
                         <Accordion.Item key={c.cat} value={c.cat} class="nav-drawer__cat">
                           <Accordion.Header as="h3">
                             <Accordion.Trigger class="nav-drawer__cat-trigger">
-                              <span class="nav-drawer__cat-label">
+                              {/* When the category is already expanded, clicking
+                                  the name navigates to the full category view
+                                  (all products) instead of collapsing. When
+                                  collapsed, the click bubbles to the trigger and
+                                  expands the accordion as usual. */}
+                              <span
+                                class="nav-drawer__cat-label"
+                                onClick$={async (e, el) => {
+                                  const trigger = el.closest(".nav-drawer__cat-trigger");
+                                  if (trigger?.hasAttribute("data-open")) {
+                                    e.stopPropagation();
+                                    menuOpen.value = false;
+                                    window.dispatchEvent(new CustomEvent("select-category", { detail: c.cat }));
+                                    await nav(`/apparel/#${c.cat.toLowerCase()}`);
+                                  }
+                                }}
+                              >
                                 <span class="nav-drawer__cat-icon" dangerouslySetInnerHTML={c.icon} />
                                 {t(c.key, locale.value)}
                               </span>

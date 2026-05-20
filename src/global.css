@@ -1682,7 +1682,7 @@ img { max-width: 100%; display: block; }
   border-radius: var(--radius-sm);
   padding: 0.5rem 1rem;
   margin-bottom: 0.2rem;
-  border-bottom: 2px solid var(--ce-gray-200);
+  border-bottom: 1px solid var(--ce-gray-200);
   position: sticky;
   top: 58px;
   z-index: 50;
@@ -1761,7 +1761,11 @@ img { max-width: 100%; display: block; }
   .home-catalog__inner { padding: 0; max-width: 100%; }
   .home-catalog .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; min-height: 100vh; align-content: start; padding: 0 0.25rem; margin: 0; }
   .home-catalog .apparel-grid.apparel-grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
-  .home-catalog__header { height: 38px; padding: 0; top: 51px; border-radius: 0; margin-bottom: 0.2rem; }
+  /* border-top: the home tab strip sits above the header (z-index: 10000,
+     not inside a stacking-context-isolating wrapper like the apparel
+     route's .apparel-catalog), so it covers the header's bottom border.
+     It needs its own 1px top border to show the separator from the header. */
+  .home-catalog__header { height: 38px; padding: 0; top: 51px; border-radius: 0; margin-bottom: 0.2rem; border-top: 1px solid var(--ce-gray-200); }
   /* Match mobile tab behavior on tablet — equal-width fill + container-query font scaling */
   .home-catalog__tabs { overflow-x: hidden; container-type: inline-size; }
   .home-catalog__tabs .apparel-titlebar__tab { flex: 1; text-align: center; justify-content: center; font-size: clamp(0.78rem, 3.5cqi, 1.2rem); padding: 4px 6px; }
@@ -1937,6 +1941,15 @@ img { max-width: 100%; display: block; }
 .nav-drawer__cat-icon svg { width: 20px; height: 20px; }
 .nav-drawer__cat-chevron { opacity: 0.6; transition: transform 0.2s ease; flex-shrink: 0; }
 .nav-drawer__cat-trigger[data-open] .nav-drawer__cat-chevron { transform: rotate(180deg); }
+/* When expanded, the category name acts as a link to the full category
+   view — subtle underline so it reads as clickable without shouting. */
+.nav-drawer__cat-trigger[data-open] .nav-drawer__cat-label {
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 0, 0, 0.25);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
 .nav-drawer__cat-content {
   display: flex;
   flex-direction: column;
@@ -3008,7 +3021,7 @@ img { max-width: 100%; display: block; }
   gap: 1rem;
   margin: 0 0 0.2rem;
   border-radius: var(--radius-sm);
-  border-bottom: 2px solid var(--ce-gray-200);
+  border-bottom: 1px solid var(--ce-gray-200);
 }
 
 .apparel-titlebar__left {
@@ -5543,7 +5556,7 @@ details[open] > .cart-drawer__checkout-title::after {
     margin: 0;
     background: var(--ce-white);
     border-radius: 0;
-    border-bottom: 2px solid var(--ce-gray-200);
+    border-bottom: 1px solid var(--ce-gray-200);
   }
   .product-modal__breadcrumb .breadcrumb__link { font-size: 1.15rem; }
   .product-modal__breadcrumb .breadcrumb__sep { font-size: 1.15rem; }
@@ -5672,7 +5685,7 @@ details[open] > .cart-drawer__checkout-title::after {
      used to show up when scrolling. With border-box sizing, the 2px
      border eats into the header's content area (52px → 50px); the
      logo image at 46px still fits with 2px each side breathing. */
-  .site-header { height: 52px; border-bottom: 2px solid var(--ce-gray-200) !important; }
+  .site-header { height: 52px; border-bottom: 1px solid var(--ce-gray-200) !important; }
   /* Asymmetric padding: left keeps 0.5rem for the logo cluster, right
      trimmed to 0.25rem so the cart/logout buttons sit closer to the
      viewport edge (tighter with the page margin). */
@@ -5799,7 +5812,7 @@ details[open] > .cart-drawer__checkout-title::after {
     opacity: 1;
     pointer-events: auto;
     background: var(--ce-white) !important;
-    border-bottom: 2px solid var(--ce-gray-200) !important;
+    border-bottom: 1px solid var(--ce-gray-200) !important;
     margin-bottom: 0;
   }
 
