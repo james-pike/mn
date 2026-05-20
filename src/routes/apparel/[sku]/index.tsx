@@ -55,6 +55,13 @@ export default component$(() => {
   // bib can carry different size runs (e.g. Carhartt 106672 Short comes
   // M-4XL, Regular S-5XL, Tall M-4XL).
   const variantSizesBySku: Record<string, Record<string, string[]>> = {
+    // MN-3 tee ships S-4XL regular plus a tall run (LT-4XLT). Tall starts at
+    // L, so the size labels stay plain (L-4XL) and the tall-ness is carried
+    // by the variant pick — same as the rest of the catalog.
+    "MN-3": {
+      "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+      "Tall": ["L", "XL", "2XL", "3XL", "4XL"],
+    },
     "CAR-11": {
       "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
       "Tall": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
@@ -326,22 +333,6 @@ export default component$(() => {
                 ))}
               </ul>
             )}
-            {variantSkus.has(p.sku) && (
-              <div class="product-modal__field">
-                <label class="product-modal__label">{t("product.variant", locale.value)}</label>
-                <div class="product-modal__options">
-                  {(variantSizesBySku[p.sku] ? Object.keys(variantSizesBySku[p.sku]) : []).map((v) => (
-                    <button
-                      key={v}
-                      class={`product-modal__option ${selectedVariant.value === v ? "active" : ""}`}
-                      onClick$={() => (selectedVariant.value = v)}
-                    >
-                      {v}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
             {!waistLengthSkus.has(p.sku) && (
             <div class="product-modal__field">
               <label class="product-modal__label">{t("modal.size", locale.value)}{variantSkus.has(p.sku) && selectedVariant.value && <span class="product-modal__color-inline"> — {selectedVariant.value}</span>}</label>
@@ -357,6 +348,22 @@ export default component$(() => {
                 ))}
               </div>
             </div>
+            )}
+            {variantSkus.has(p.sku) && (
+              <div class="product-modal__field">
+                <label class="product-modal__label">{t("product.variant", locale.value)}</label>
+                <div class="product-modal__options">
+                  {(variantSizesBySku[p.sku] ? Object.keys(variantSizesBySku[p.sku]) : []).map((v) => (
+                    <button
+                      key={v}
+                      class={`product-modal__option ${selectedVariant.value === v ? "active" : ""}`}
+                      onClick$={() => (selectedVariant.value = v)}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
+              </div>
             )}
             {waistLengthSkus.has(p.sku) && (
               <div class="product-modal__field product-modal__waist-length-row">
