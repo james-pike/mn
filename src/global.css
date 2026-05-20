@@ -1633,6 +1633,23 @@ img { max-width: 100%; display: block; }
 .site-footer__links a:hover {
   color: var(--ce-white);
 }
+/* Mobile: stretch the footer links across the full page width and scale
+   the text up with the viewport. Sized so the widest set (the safety
+   footer's Home / Flame Resistant / Shirts / Hats) still fits one line. */
+@media (max-width: 600px) {
+  .site-footer__links {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.4rem;
+    padding: 0 1.25rem;
+    /* A bit more breathing room between the brand logotext above and
+       the links row. */
+    margin-top: 0.5rem;
+  }
+  .site-footer__links a {
+    font-size: clamp(0.78rem, 3.2vw, 0.92rem);
+  }
+}
 .site-footer__copy {
   font-size: 0.7rem;
   color: rgba(255,255,255,0.35);
@@ -1640,7 +1657,7 @@ img { max-width: 100%; display: block; }
   text-align: center;
 }
 .site-footer__contact {
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   font-weight: 500;
   color: rgba(255,255,255,0.6);
   margin: 0;
@@ -1653,16 +1670,32 @@ img { max-width: 100%; display: block; }
 .site-footer__contact a:hover {
   color: var(--ce-white);
 }
-.site-footer__contact--stacked {
+.site-footer__contact--inline {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.site-footer__contact-label {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.4);
+  font-weight: 500;
+}
+.site-footer__contact-icon {
+  flex-shrink: 0;
+  opacity: 0.55;
+  color: rgba(255,255,255,0.85);
+}
+/* Footer right column: route links stacked above the contact line,
+   aligned as a unit opposite the brand. */
+.site-footer__col {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.2rem;
-}
-.site-footer__contact-label {
-  font-size: 0.72rem;
-  color: rgba(255,255,255,0.35);
-  font-weight: 500;
+  justify-content: center;
+  gap: 0.85rem;
 }
 
 .home-catalog {
@@ -2846,6 +2879,32 @@ img { max-width: 100%; display: block; }
 }
 .site-footer__logo { height: 32px; width: auto; filter: brightness(1.8) contrast(0.9); }
 .site-footer__text { font-size: 0.78rem; }
+/* Tablet + desktop: lay the footer out horizontally — brand on the left,
+   the links + contact column on the right, both vertically centered so
+   the right-hand stack lines up against the brand. The base
+   .site-footer__inner is flex-direction: column for the stacked mobile
+   layout (<=600px); this overrides it from tablet up. */
+@media (min-width: 601px) {
+  .site-footer__inner { flex-direction: row; align-items: center; }
+}
+/* Tablet: route links + contact stay stacked as a column on the right. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .site-footer__col { align-items: flex-end; }
+  .site-footer__links { gap: 1.5rem; }
+  .site-footer__links a { font-size: 1.05rem; }
+}
+/* Desktop: unwrap the column (display: contents) so brand / links /
+   contact spread across the row again — links sit centered in the
+   middle of the footer. Links bumped a touch larger. */
+@media (min-width: 1025px) {
+  .site-footer__col { display: contents; }
+  .site-footer__links a { font-size: 0.95rem; }
+}
+/* Mobile: the right column spans full width so the links row can stretch
+   edge-to-edge under the brand. */
+@media (max-width: 600px) {
+  .site-footer__col { width: 100%; }
+}
 
 /* ===== Apparel Catalog ===== */
 .apparel-page {
@@ -4146,6 +4205,19 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
 }
 .btn--secondary:hover {
   background: var(--ce-green);
+  color: var(--ce-white);
+}
+/* Order Now button: ghost button in the logo's darker-blue triangle
+   color (#31759c) instead of green — transparent with a blue border
+   and blue text, filling blue on hover. */
+.product-modal__add.btn--secondary {
+  background: transparent;
+  border-color: #31759c;
+  color: #31759c;
+}
+.product-modal__add.btn--secondary:hover {
+  background: #31759c;
+  border-color: #31759c;
   color: var(--ce-white);
 }
 .product-modal__add:disabled {
