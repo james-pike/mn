@@ -3876,7 +3876,9 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
 }
 .product-modal__details {
   grid-column: 2;
-  grid-row: 2;
+  /* Span both rows now that the breadcrumb (row 1) is gone, so the
+     info panel starts at the top of column 2 with no empty gap above. */
+  grid-row: 1 / -1;
 }
 
 .product-modal__breadcrumb {
@@ -5533,8 +5535,10 @@ details[open] > .cart-drawer__checkout-title::after {
   .teaser-card-section { margin: 0 16px; }
   .hero { padding-bottom: 1rem; }
   .product-detail { max-width: 100%; }
-  .product-modal__layout { grid-template-columns: 1fr 1fr; grid-template-rows: auto 1fr; column-gap: 0.2rem; row-gap: 0.1rem; }
-  .product-detail .product-modal__details { padding: 1.25rem 1rem 1rem; background: var(--ce-white); border-radius: 0; box-shadow: none; border: none; grid-column: 2; grid-row: 2; margin-right: 0.1rem; }
+  /* Single row now that the breadcrumb (former row 1) is removed —
+     image + details sit at the top with no empty gap above. */
+  .product-modal__layout { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; column-gap: 0.2rem; row-gap: 0.1rem; }
+  .product-detail .product-modal__details { padding: 1.25rem 1rem 1rem; background: var(--ce-white); border-radius: 0; box-shadow: none; border: none; grid-column: 2; grid-row: 1; margin-right: 0.1rem; }
   .product-detail .product-modal__details::after { display: none; }
   .product-detail .product-modal__details::before { display: none; }
   /* Tablet product page containers: flat. Matches the flat product
@@ -5561,7 +5565,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .product-modal__breadcrumb .breadcrumb__link { font-size: 1.15rem; }
   .product-modal__breadcrumb .breadcrumb__sep { font-size: 1.15rem; }
   .product-modal__breadcrumb .breadcrumb__sku { font-size: 1.05rem; }
-  .product-image-row { flex-direction: column; gap: 0.2rem; grid-column: 1; grid-row: 2; margin-left: 0.1rem; }
+  .product-image-row { flex-direction: column; gap: 0.2rem; grid-column: 1; grid-row: 1; margin-left: 0.1rem; }
   .product-thumbs--column { flex-direction: row; width: auto; }
   .product-thumbs__item { width: 64px; }
   .product-detail .product-carousel { aspect-ratio: 1/1; }
@@ -6074,8 +6078,11 @@ details[open] > .cart-drawer__checkout-title::after {
   .product-modal__breadcrumb .breadcrumb__link:hover { color: var(--ce-gray-900); }
   .product-modal__breadcrumb .breadcrumb__sep { color: var(--ce-gray-200); font-size: 0.92rem; }
   .product-modal__breadcrumb .breadcrumb__sku { font-size: 0.92rem; padding: 4px 6px; color: var(--ce-gray-400); font-weight: 400; }
-  .product-image-row { grid-row: 2; }
-  .product-modal__details { grid-column: 1; grid-row: auto; }
+  /* Breadcrumb (former row 1) removed — pin image to row 1 and details
+     to row 2 so the image stays on top and details don't auto-fill the
+     now-empty first row. */
+  .product-image-row { grid-row: 1; }
+  .product-modal__details { grid-column: 1; grid-row: 2; }
   .product-modal__image { max-height: none; aspect-ratio: 1/1; }
   .product-modal__image img { width: 100%; height: 100%; object-fit: contain; }
   .product-modal__name-row { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; }
