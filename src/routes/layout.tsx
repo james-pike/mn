@@ -679,7 +679,6 @@ export default component$(() => {
                   <span class="brand-cluster__word brand-cluster__word--muted">APPAREL</span>
                 </div>
               </div>
-              <h2 class="login-modal__title">{t("login.title", locale.value)}</h2>
               <p class="login-modal__subtitle">
                 {t("login.subtitle", locale.value)}
               </p>

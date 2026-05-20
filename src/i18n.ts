@@ -20,12 +20,12 @@ const translations = {
 
   // Login modal
   "login.title": { en: "Employee Login", fr: "Connexion employé" },
-  "login.subtitle": { en: "Sign in to access apparel", fr: "Connectez-vous pour accéder aux vêtements" },
+  "login.subtitle": { en: "Login to access apparel", fr: "Connectez-vous pour accéder aux vêtements" },
   "login.username": { en: "Username", fr: "Nom d'utilisateur" },
   "login.username.placeholder": { en: "Enter username", fr: "Entrez le nom d'utilisateur" },
   "login.password": { en: "Password", fr: "Mot de passe" },
   "login.password.placeholder": { en: "Enter password", fr: "Entrez le mot de passe" },
-  "login.submit": { en: "Sign In", fr: "Se connecter" },
+  "login.submit": { en: "Login", fr: "Se connecter" },
   "login.submitting": { en: "Signing in...", fr: "Connexion..." },
   "login.error": { en: "Invalid username or password", fr: "Nom d'utilisateur ou mot de passe invalide" },
   "login.logout": { en: "Log out", fr: "Déconnexion" },
