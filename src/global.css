@@ -6511,6 +6511,7 @@ details[open] > .cart-drawer__checkout-title::after {
   font-weight: 600 !important;
   color: #9a9a9a !important;
   white-space: nowrap !important;
+  letter-spacing: -0.08em !important;
 }
 /* APPAREL is per-letter (left to right) — disable the whole-word fade.
    Higher specificity (chained class) so the muted gray color wins over the
@@ -6779,8 +6780,8 @@ details[open] > .cart-drawer__checkout-title::after {
     align-items: flex-start !important;
     justify-content: center !important;
     text-align: left !important;
-    gap: 6vw !important;
-    padding-top: 4rem !important;
+    gap: 7.5vw !important;
+    padding-top: 4.75rem !important;
     padding-bottom: 3rem !important;
     padding-left: 4vw !important;
     padding-right: 4vw !important;
@@ -6795,13 +6796,13 @@ details[open] > .cart-drawer__checkout-title::after {
     margin-top: 0 !important;
     align-self: center !important;
   }
-  /* Timing for APPAREL letters is shared with desktop/mobile via the
-     pure-CSS nth-child rules above — tablet doesn't need its own offset. */
+  /* BUILDING SERVICES + APPAREL match the MODERN NIAGARA size (8vw),
+     same as the equal-size treatment on desktop and mobile. */
   .hero__upper .hero__text .hero__title-word {
-    font-size: 6.5vw !important;
+    font-size: 8vw !important;
   }
   .hero__upper .hero__text .hero__title-word--sub {
-    font-size: 6.5vw !important;
+    font-size: 8vw !important;
   }
   /* MODERN NIAGARA on a single line — sized to fill the tablet cluster
      width (95vw container) similarly to how mobile fills its width. */
