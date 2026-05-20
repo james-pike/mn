@@ -18,7 +18,7 @@ export const allProducts = [
       "/sku/tshirt.png"
     ],
     "material": "6 oz/yd² 100% US cotton, 18 singles",
-    "details": "Classic fit, rib collar, taped neck and shoulders, tear-away label, no optical brighteners for consistent dye adherence, OEKO-TEX and FLA certified, #2000 / #2000T"
+    "details": "Classic fit, rib collar, taped neck and shoulders, tear-away label, no optical brighteners for consistent dye adherence, #2000 / #2000T"
   },
   {
     "sku": "MN-2",

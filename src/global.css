@@ -4036,6 +4036,10 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
   overflow-wrap: break-word;
   word-break: break-word;
 }
+/* Capitalize the first letter of every detail bullet, regardless of DB text */
+.product-modal__details-list li::first-letter {
+  text-transform: uppercase;
+}
 .product-modal__details-list--single {
   columns: 1;
 }
