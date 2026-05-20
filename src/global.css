@@ -760,12 +760,17 @@ img { max-width: 100%; display: block; }
   backdrop-filter: blur(4px);
   border-radius: 2px;
   letter-spacing: -0.01em;
-  white-space: nowrap;
+  line-height: 1.15;
   max-width: calc(100% - 1.2rem);
-  /* Safety net for extreme/long translations — should rarely trigger now
-     because the font already scales down with card width. */
+  /* Allow the title to wrap onto a second line (e.g. "Jackets & Hoodies")
+     instead of being ellipsis-truncated on one line. Clamp at 2 lines so
+     an unusually long label still degrades gracefully. */
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 @media (min-width: 1025px) {
   .category-row {
@@ -6831,7 +6836,7 @@ details[open] > .cart-drawer__checkout-title::after {
     text-align: left !important;
     gap: 11vw !important;
     width: 94% !important;
-    padding-top: 3.25rem !important;
+    padding-top: 3.75rem !important;
     padding-left: 0.75rem !important;
     padding-bottom: 2.75rem !important;
   }
