@@ -28,23 +28,9 @@ export default component$(() => {
   const added = useSignal(false);
   const addedInfo = useSignal("");
   const imgFullscreen = useSignal(false);
-  const userSelectedImg = useSignal(false);
 
   // Set initial color once product is known
   const colorInitialized = useSignal(false);
-
-  // Auto-advance carousel (stops when user selects an image)
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ track, cleanup }) => {
-    track(() => userSelectedImg.value);
-    if (userSelectedImg.value) return;
-    const p = product.value;
-    if (!p?.imgs || p.imgs.length < 2) return;
-    const interval = setInterval(() => {
-      imgIndex.value = (imgIndex.value + 1) % p.imgs.length;
-    }, 6000);
-    cleanup(() => clearInterval(interval));
-  });
 
   // SKUs that use the waist x inseam size picker instead of a S–4XL run.
   // Carhartt 102291 Rigby Dungaree (MN-1) and the FR pants (MNFR-1) ship
@@ -265,7 +251,6 @@ export default component$(() => {
                 const diff = touchStartX.value - e.changedTouches[0].clientX;
                 const imgs = ((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[]);
                 if (Math.abs(diff) > 40) {
-                  userSelectedImg.value = true;
                   if (diff > 0) {
                     imgIndex.value = (imgIndex.value + 1) % imgs.length;
                   } else {
@@ -273,7 +258,14 @@ export default component$(() => {
                   }
                 }
               }}
-              onClick$={() => { if (window.innerWidth > 1024) imgFullscreen.value = true; }}
+              onClick$={() => {
+                const imgs = ((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[]);
+                if (window.innerWidth > 1024) {
+                  imgFullscreen.value = true;
+                } else if (imgs.length > 1) {
+                  imgIndex.value = (imgIndex.value + 1) % imgs.length;
+                }
+              }}
             >
               {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).map((src, i) => (
                 <img
@@ -298,7 +290,7 @@ export default component$(() => {
                       key={i}
                       class={`product-carousel__dot ${imgIndex.value === i ? "active" : ""}`}
                       aria-label={`Image ${i + 1}`}
-                      onClick$={(e) => { e.stopPropagation(); imgIndex.value = i; userSelectedImg.value = true; }}
+                      onClick$={(e) => { e.stopPropagation(); imgIndex.value = i; }}
                     />
                   ))}
                 </div>
@@ -310,7 +302,7 @@ export default component$(() => {
                   <button
                     key={i}
                     class={`product-thumbs__item ${imgIndex.value === i ? "active" : ""}`}
-                    onClick$={() => { imgIndex.value = i; userSelectedImg.value = true; }}
+                    onClick$={() => { imgIndex.value = i; }}
                   >
                     <img src={src} alt={`${p.name} ${i + 1}`} width="80" height="80" />
                   </button>

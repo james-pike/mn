@@ -130,8 +130,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 198.49,
-    "img": "/sku/winterjacket.png",
+    "img": "/sku/mwinterjacket.png",
     "imgs": [
+      "/sku/mwinterjacket.png",
       "/sku/winterjacket.png"
     ],
     "material": "12 oz 100% ringspun cotton duck shell, quilted nylon lining, Arctic-weight polyester insulation",
@@ -164,8 +165,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 89.99,
-    "img": "/sku/fullziphoodie.png",
+    "img": "/sku/mfullzip.png",
     "imgs": [
+      "/sku/mfullzip.png",
       "/sku/fullziphoodie.png"
     ],
     "material": "10.5 oz midweight 50% cotton / 50% polyester blend",

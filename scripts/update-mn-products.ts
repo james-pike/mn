@@ -44,8 +44,8 @@ const updates: Update[] = [
     sku: "MN-7",
     material: "12 oz 100% ringspun cotton duck shell, quilted nylon lining, Arctic-weight polyester insulation",
     details: "Two-way brass zip, pleated bi-swing back, internal rib-knit storm cuffs, four exterior pockets, two interior pockets, triple-stitched seams, #106674",
-    img: "/sku/winterjacket.png",
-    imgs: ["/sku/winterjacket.png"],
+    img: "/sku/mwinterjacket.png",
+    imgs: ["/sku/mwinterjacket.png", "/sku/winterjacket.png"],
   },
   {
     sku: "MN-9",
@@ -58,8 +58,8 @@ const updates: Update[] = [
     sku: "MN-10",
     material: "10.5 oz midweight 50% cotton / 50% polyester blend",
     details: "Three-piece hood with drawcord, full-length brass zipper, rib-knit cuffs and waist, two front handwarmer pockets, Carhartt patch on pocket, loose fit, #K122",
-    img: "/sku/fullziphoodie.png",
-    imgs: ["/sku/fullziphoodie.png"],
+    img: "/sku/mfullzip.png",
+    imgs: ["/sku/mfullzip.png", "/sku/fullziphoodie.png"],
   },
   {
     sku: "MN-3",
