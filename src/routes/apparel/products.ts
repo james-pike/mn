@@ -238,8 +238,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 189.99,
-    "img": "/sku/bib.png",
+    "img": "/sku/106672_NVY_MF21_b_V4.png",
     "imgs": [
+      "/sku/106672_NVY_MF21_b_V4.png",
       "/sku/bib.png"
     ],
     "material": "",

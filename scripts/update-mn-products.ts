@@ -112,8 +112,8 @@ const updates: Update[] = [
   },
   {
     sku: "MN-8",
-    img: "/sku/bib.png",
-    imgs: ["/sku/bib.png"],
+    img: "/sku/106672_NVY_MF21_b_V4.png",
+    imgs: ["/sku/106672_NVY_MF21_b_V4.png", "/sku/bib.png"],
   },
   {
     sku: "MN-1",
