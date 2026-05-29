@@ -1105,22 +1105,9 @@ export default component$(() => {
                         />
                       </div>
                     </div>
-                    <div class={`checkout-modal__field ${formTouched.value && !empPhone.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.phone", locale.value)}</label>
-                      <input
-                        type="tel"
-                        value={empPhone.value}
-                        onInput$={(_, el) => { empPhone.value = el.value; formError.value = ""; }}
-                      />
-                    </div>
-                    <div class={`checkout-modal__field ${formTouched.value && !empEmail.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.email", locale.value)}</label>
-                      <input
-                        type="email"
-                        value={empEmail.value}
-                        onInput$={(_, el) => { empEmail.value = el.value; formError.value = ""; }}
-                      />
-                    </div>
+                    {/* Province sits directly under the name row so the
+                        tax line in the cart total updates as soon as
+                        possible — before the user fills in phone/email. */}
                     <div class={`checkout-modal__field ${formTouched.value && !empProvince.value ? "checkout-modal__field--error" : ""}`}>
                       <label>{t("cart.province", locale.value)}</label>
                       <select
@@ -1145,6 +1132,10 @@ export default component$(() => {
                         <option value="SK">Saskatchewan</option>
                       </select>
                     </div>
+                    {/* Location renders only for multi-branch provinces
+                        (see needsLocation). Kept directly under Province so
+                        the conditional field appears next to the trigger
+                        that toggled it. */}
                     {needsLocation(empProvince.value) && (
                       <div class={`checkout-modal__field ${formTouched.value && !empDept.value ? "checkout-modal__field--error" : ""}`}>
                         <label>{t("cart.location", locale.value)}</label>
@@ -1155,6 +1146,22 @@ export default component$(() => {
                         />
                       </div>
                     )}
+                    <div class={`checkout-modal__field ${formTouched.value && !empEmail.value ? "checkout-modal__field--error" : ""}`}>
+                      <label>{t("cart.email", locale.value)}</label>
+                      <input
+                        type="email"
+                        value={empEmail.value}
+                        onInput$={(_, el) => { empEmail.value = el.value; formError.value = ""; }}
+                      />
+                    </div>
+                    <div class={`checkout-modal__field ${formTouched.value && !empPhone.value ? "checkout-modal__field--error" : ""}`}>
+                      <label>{t("cart.phone", locale.value)}</label>
+                      <input
+                        type="tel"
+                        value={empPhone.value}
+                        onInput$={(_, el) => { empPhone.value = el.value; formError.value = ""; }}
+                      />
+                    </div>
                     <div class={`checkout-modal__field ${formTouched.value && !empPO.value ? "checkout-modal__field--error" : ""}`}>
                       <label>{t("cart.po", locale.value)}</label>
                       <input
