@@ -6605,6 +6605,38 @@ details[open] > .cart-drawer__checkout-title::after {
   display: inline !important;
   text-align: left !important;
 }
+/* All three title lines share MODERN NIAGARA's plain opacity fade (no
+   translate, no blur, no per-letter cascade), with a tight stagger so the
+   last line completes inside the brandmark triangle cascade above (which
+   finishes at ~1.48s).
+     MODERN NIAGARA    0    → 0.45s
+     BUILDING SERVICES 0.35 → 0.80s
+     APPAREL           0.70 → 1.15s
+   Applies on every breakpoint — mobile, tablet, and desktop. */
+.hero__upper .hero__text .hero__title-word:nth-child(2) {
+  transform: none;
+  filter: none;
+  animation: hero-word-fade 0.45s ease-out 0.35s forwards;
+}
+/* APPAREL: the parent word's base rule pins it at `opacity: 1 !important`
+   (so the per-letter cascade can drive the reveal). CSS animations sit
+   *below* !important in the cascade, so we can't fade the parent — instead
+   animate the letters themselves with one synchronised fade so APPAREL
+   reads as a single block (matching MODERN NIAGARA's style). */
+.hero__upper .hero__text .hero__title-letter {
+  opacity: 0;
+  transform: none;
+  filter: none;
+  animation: hero-word-fade 0.45s ease-out 0.7s forwards;
+}
+/* Collapse the original per-letter stagger (0.95s, 0.98s, …) onto one
+   shared delay so every letter starts and finishes together. Same
+   specificity as the per-letter :nth-child(N) rules; this rule is later
+   in source order, so it wins. */
+.hero__upper .hero__text .hero__title-letter:nth-child(n) {
+  animation-delay: 0.7s;
+}
+
 /* Desktop: overlay locked to the same width as the leftmost two collection
    cards below it (≈50% of the cards-row, capped at 768px on wide screens). */
 @media (min-width: 1025px) {
@@ -6849,13 +6881,23 @@ details[open] > .cart-drawer__checkout-title::after {
   .hero__upper .hero__text .hero__brandmark { width: 32vw !important; }
   .hero__upper .hero__text .hero__words { align-items: flex-start !important; gap: 0.2rem !important; }
   /* Pure vw so the text always fills the same proportion of the viewport
-     regardless of zoom (no rem-based step changes). */
-  .hero__upper .hero__text .hero__title-word { font-size: 9vw !important; }
-  .hero__upper .hero__text .hero__title-word--sub { font-size: 9vw !important; }
+     regardless of zoom (no rem-based step changes). All three lines share
+     one font-size — set at 9.5vw, a half-step below the original 10vw so
+     a visible x-padding gap remains between the text and the dark overlay
+     panel's inner edge (10vw was too wide and reached the side padding). */
+  .hero__upper .hero__text .hero__title-word { font-size: 9.5vw !important; }
+  .hero__upper .hero__text .hero__title-word--sub {
+    font-size: 9.5vw !important;
+    /* BUILDING SERVICES is 16 chars vs MODERN NIAGARA's 14, so it needs a
+       tighter letter-spacing to render at the same visual line length as
+       the headline above. -0.18em compresses the longer line just enough
+       to line up with MODERN NIAGARA's right edge. */
+    letter-spacing: -0.18em !important;
+  }
   /* MODERN NIAGARA on a single line — sized to fill the cluster width
      with minimal horizontal padding while still avoiding clipping. */
   .hero__upper .hero__text .hero__title-word:nth-child(1) {
-    font-size: 10vw !important;
+    font-size: 9.5vw !important;
     font-weight: 600 !important;
     line-height: 0.95 !important;
     letter-spacing: -0.09em !important;
