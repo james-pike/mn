@@ -376,6 +376,16 @@ export default component$(() => {
   const savedLocale = useLocaleLoader();
   const locale = useSignal<Locale>(savedLocale.value);
 
+  // Mobile/tablet apparel search lives in the header (not the catalog tab
+  // strip). It relays keystrokes to the catalog via an "apparel-search" event.
+  const searchOpen = useSignal(false);
+  const searchValue = useSignal("");
+  // The catalog (and therefore search) is only rendered on the home page and
+  // the apparel listing — not on product detail or 404 pages.
+  const showSearch = useComputed$(
+    () => loc.url.pathname === "/" || /^\/apparel\/?$/.test(loc.url.pathname),
+  );
+
   useContextProvider(LocaleContext, locale);
 
   const loginType = useSignal(auth.value.loginType);
@@ -417,9 +427,10 @@ export default component$(() => {
   });
   const headerScrolled = useSignal(false);
 
-  // Locale toggle removed — buttons commented out site-wide.
-  // To re-enable: restore the const toggleLocale = $(() => { ... }) and the
-  // commented-out buttons in the site/header/drawer.
+  const toggleLocale = $(() => {
+    locale.value = locale.value === "en" ? "fr" : "en";
+    document.cookie = `${LOCALE_COOKIE}=${locale.value};path=/;max-age=31536000`;
+  });
 
   // Load cart from localStorage — eager strategy to ensure it runs immediately
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -592,11 +603,12 @@ export default component$(() => {
     }
   }, { strategy: 'document-ready' });
 
-  // Close cart on navigation
+  // Close cart and collapse the header search on navigation
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     track(() => loc.url.pathname);
     cartOpen.value = false;
+    searchOpen.value = false;
   }, { strategy: 'document-ready' });
 
   // Lock scroll when cart is open
@@ -740,13 +752,21 @@ export default component$(() => {
           <nav class="site-header__categories">
             <Link href="/" class={loc.url.pathname === "/" ? "active" : ""}>{t("nav.home", locale.value)}</Link>
             <Link href="/apparel/" class={loc.url.pathname.startsWith("/apparel") ? "active" : ""}>{loginType.value === "tech" ? t("cat.Work Wear", locale.value) : t("nav.apparel", locale.value)}</Link>
+            {loginType.value !== "tech" && loginType.value !== "safety" && (
+              <a href="/apparel/#new-hire-kit" onClick$={() => { window.dispatchEvent(new CustomEvent("select-category", { detail: "New Hire Kit" })); }}>{t("nav.newhirekit", locale.value)}</a>
+            )}
           </nav>
           <nav class="site-header__nav">
-            {/* <button class={`locale-btn ${cartOpen.value ? "locale-btn--cart-open" : ""}`} onClick$={toggleLocale} aria-label="Toggle language">
+            {showSearch.value && (
+              <button class="site-header__search-btn" onClick$={() => { searchOpen.value = true; }} aria-label="Search apparel">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              </button>
+            )}
+            <button class={`locale-btn ${locale.value === "en" ? "locale-btn--to-fr" : "locale-btn--to-en"} ${cartOpen.value ? "locale-btn--cart-open" : ""}`} onClick$={toggleLocale} aria-label="Toggle language">
               <span class="locale-btn__full">{locale.value === "en" ? "Français" : "English"}</span>
               <span class="locale-btn__short">{locale.value === "en" ? "FR" : "EN"}</span>
               <svg class="locale-btn__icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-            </button> */}
+            </button>
             <button class={`cart-btn ${cart.items.length > 0 ? "cart-btn--active" : ""}`} onClick$={() => { cartOpen.value = !cartOpen.value; if (!cartOpen.value) checkoutStep.value = "cart"; }}>
               <span class="cart-btn__label">{t("cart.mycart", locale.value)}</span>
               {cartOpen.value ? (
@@ -768,6 +788,26 @@ export default component$(() => {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></svg>
             </button>
           </nav>
+          {showSearch.value && searchOpen.value && (
+            <div class="site-header__search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              <input
+                type="text"
+                class="site-header__search-input"
+                aria-label="Search apparel"
+                autoFocus
+                value={searchValue.value}
+                onInput$={(_, el) => { searchValue.value = el.value; window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value })); }}
+                onKeyDown$={(e) => {
+                  if (e.key === "Enter") { searchOpen.value = false; }
+                  if (e.key === "Escape") { searchValue.value = ""; window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" })); searchOpen.value = false; }
+                }}
+              />
+              <button class="site-header__search-close" aria-label="Close search" onClick$={() => { searchValue.value = ""; window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" })); searchOpen.value = false; }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+              </button>
+            </div>
+          )}
         </div>
       </header>
 
@@ -868,12 +908,18 @@ export default component$(() => {
                   </Accordion.Root>
                 );
               })()}
+              {loginType.value !== "tech" && loginType.value !== "safety" && (
+                <a href="/apparel/#new-hire-kit" class="nav-drawer__link" onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "New Hire Kit" })); }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+                  {t("nav.newhirekit", locale.value)}
+                </a>
+              )}
             </div>
             <div class="nav-drawer__footer">
-              {/* <button class="nav-drawer__locale" onClick$={() => { toggleLocale(); }}>
+              <button class={`nav-drawer__locale ${locale.value === "en" ? "nav-drawer__locale--to-fr" : "nav-drawer__locale--to-en"}`} onClick$={() => { toggleLocale(); }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
                 {locale.value === "en" ? "Français" : "English"}
-              </button> */}
+              </button>
               <Form action={logoutAction} reloadDocument>
                 <button type="submit" class="nav-drawer__locale nav-drawer__logout">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>

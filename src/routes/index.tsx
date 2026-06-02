@@ -117,14 +117,14 @@ export default component$(() => {
               <a href="/apparel/" class="hero-card-header__nav-link">{isTech.value ? t("teaser.workwear.title", locale.value) : t("nav.apparel", locale.value)}</a>
             </nav>
             <div class="hero-card-header__actions">
-              {/* <button class="hero-card-header__btn" onClick$={() => {
+              <button class={`hero-card-header__btn ${locale.value === "en" ? "hero-card-header__btn--to-fr" : "hero-card-header__btn--to-en"}`} onClick$={() => {
                 const btn = document.querySelector('.locale-btn') as HTMLElement;
                 btn?.click();
               }} aria-label="Language">
                 <span class="hero-card-header__locale-short">{locale.value === "en" ? "FR" : "EN"}</span>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
                 <span class="hero-card-header__btn-label">{locale.value === "en" ? "Français" : "English"}</span>
-              </button> */}
+              </button>
               <button class={`hero-card-header__btn ${hasCartItems.value ? "hero-card-header__btn--cart-active" : ""}`} onClick$={() => {
                 const btn = document.querySelector('.cart-btn') as HTMLElement;
                 btn?.click();

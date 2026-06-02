@@ -50,6 +50,10 @@ const seeds: Seed[] = [
   { sku: "MN-19", name: "Ladies' Active Soft Shell Jacket", category: "Jackets", sizes: "XS - 4XL", colors: [BLACK, "#6e6e6e", NAVY], price: 0, details: "Port Authority, #L7603" },
   // SWAG — pen
   { sku: "MN-21", name: "Mardi Gras Magic Pen",             category: "SWAG",    sizes: "One Size", colors: ["#00b5e2"], price: 0, details: "Push-retractable ballpoint, #416" },
+  { sku: "MN-22", name: "Tranzip Recycled Computer Tote - Black", category: "New Hire Kit", sizes: "One Size", colors: [BLACK], price: 0, details: "Padded laptop sleeve, Double drop handles, Detachable adjustable shoulder strap, Exterior water bottle pocket, Tranzip, #2020-27" },
+  { sku: "MN-23", name: "Eco Spiral Notebook with Pen - Blue", category: "New Hire Kit", sizes: "One Size", colors: ["#1e40af"], price: 0, details: "60 ruled cream sheets, Matching elastic pen loop, Ballpoint pen included, 5\" × 7\", Bullet, #SM-3468" },
+  { sku: "MN-24", name: "2 Buds Pro Wireless ANC Earbuds - White", category: "New Hire Kit", sizes: "One Size", colors: ["#ffffff"], price: 0, details: "Active noise cancellation, Wireless charging case, Charging cable included, Handstands, #70300" },
+  { sku: "MN-25", name: "New Hire Kit", category: "New Hire Kit", sizes: "One Size", colors: [], price: 0, details: "Tranzip recycled computer tote, Eco spiral notebook with pen, 2 Buds Pro wireless ANC earbuds" },
 ];
 
 async function main() {

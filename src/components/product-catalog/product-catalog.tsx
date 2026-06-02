@@ -1,11 +1,11 @@
-import { component$, useSignal, useComputed$, useContext, $, useVisibleTask$, useOnDocument } from "@builder.io/qwik";
+import { component$, useSignal, useComputed$, useContext, $, useVisibleTask$ } from "@builder.io/qwik";
 import { LocaleContext, t } from "../../i18n";
 import { allProducts, categoryLabel } from "../../routes/apparel/products";
 import type { Product } from "../../routes/apparel/products";
 import { sortColorsWhiteLast } from "../../routes/apparel/utils";
 import { LoginTypeContext } from "../../routes/layout";
 
-const CLOTHING_CATEGORIES = ["All", "Shirts", "Jackets", "Hats", "SWAG"];
+const CLOTHING_CATEGORIES = ["All", "Shirts", "Jackets", "Hats", "SWAG", "New Hire Kit"];
 
 // Safety catalog: every MNFR-* item plus a small allowlist of standard SKUs,
 // minus a deny list for FR items we don't carry yet.
@@ -31,6 +31,7 @@ const CATEGORY_ICONS: Record<string, string> = {
   "Polos": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2 12 5.5 8 2 3.62 3.46a2 2 0 00-1.34 1.93v15.12a2 2 0 001.34 1.93L8 24l4-3.5L16 24l4.38-1.46a2 2 0 001.34-1.93V5.39a2 2 0 00-1.34-1.93z"/></svg>',
   "Hats": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>',
   "SWAG": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>',
+  "New Hire Kit": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>',
   "Flame Resistant": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>',
 };
 
@@ -54,24 +55,41 @@ const ProductCard = component$<{ item: Product; sku: string }>(({ item, sku }) =
             {!isTech && <div class="product-card__price">${(Number(item.price) || 0).toFixed(2)}</div>}
           </div>
         </div>
-        <div class="product-card__color-size-row">
-          {(() => {
-            const visible = sortColorsWhiteLast((item.colors || []).filter((c) => !CARD_HIDDEN_COLORS.has(c)));
-            return visible.length > 0 ? (
-              <div class="product-card__colors">
-                {visible.map((c) => (
-                  <span
-                    key={c}
-                    class="product-card__color-dot"
-                    style={{ background: c }}
-                    aria-hidden="true"
-                  />
-                ))}
-              </div>
-            ) : <span />;
-          })()}
-          <span class="product-card__sizes">{item.sizes === "One Size" ? t("modal.onesize", locale.value) : item.sizes}</span>
-        </div>
+        {item.name === "New Hire Kit" ? (
+          // The bundle: no colour/size, so use that gray text area to list the
+          // kit's contents (same size/colour as the sizes text).
+          <div class="product-card__color-size-row">
+            <span class="product-card__sizes product-card__kit-items">
+              {item.details.split(",").map((it, i) => (
+                <span key={i}>{it.trim()}</span>
+              ))}
+            </span>
+          </div>
+        ) : (
+          <div class="product-card__color-size-row">
+            {(() => {
+              const all = item.colors || [];
+              const shown = all.filter((c) => !CARD_HIDDEN_COLORS.has(c));
+              // If every colour got hidden (e.g. a single-colour product whose one
+              // colour is in the declutter list, like the Royal-blue notebook),
+              // fall back to the product's own colours so its swatch still shows.
+              const visible = sortColorsWhiteLast(shown.length ? shown : all);
+              return visible.length > 0 ? (
+                <div class="product-card__colors">
+                  {visible.map((c) => (
+                    <span
+                      key={c}
+                      class="product-card__color-dot"
+                      style={{ background: c }}
+                      aria-hidden="true"
+                    />
+                  ))}
+                </div>
+              ) : <span />;
+            })()}
+            <span class="product-card__sizes">{item.sizes === "One Size" ? t("modal.onesize", locale.value) : item.sizes}</span>
+          </div>
+        )}
       </div>
     </a>
   );
@@ -85,14 +103,13 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
   const isSingleCat = useComputed$(() => isTech.value);
   const activeCat = useSignal("All");
   const searchQuery = useSignal("");
-  const searchOpen = useSignal(false);
   const tabletCols = useSignal(3);
 
   const HASH_TO_CAT: Record<string, string> = isSingleCat.value
     ? {}
     : isSafety.value
       ? { "shirts": "Shirts", "hats": "Hats", "fr": "Flame Resistant" }
-      : { "shirts": "Shirts", "jackets": "Jackets", "hats": "Hats", "swag": "SWAG" };
+      : { "new-hire-kit": "New Hire Kit", "shirts": "Shirts", "jackets": "Jackets", "hats": "Hats", "swag": "SWAG" };
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup }) => {
@@ -110,28 +127,24 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
         searchQuery.value = "";
       }
     };
+    // The mobile/tablet search input lives in the site header (layout.tsx) so it
+    // doesn't crowd the category tab strip; it relays keystrokes here via this
+    // event. Mirrors the desktop input: live filter + collapse to "All".
+    const onExternalSearch = (e: Event) => {
+      const q = ((e as CustomEvent).detail ?? "") as string;
+      searchQuery.value = q;
+      if (q.trim()) activeCat.value = "All";
+    };
     applyHash();
     window.addEventListener("hashchange", applyHash);
     window.addEventListener("select-category", onSelectCategory);
+    window.addEventListener("apparel-search", onExternalSearch);
     cleanup(() => {
       window.removeEventListener("hashchange", applyHash);
       window.removeEventListener("select-category", onSelectCategory);
+      window.removeEventListener("apparel-search", onExternalSearch);
     });
   });
-
-  // When mobile/tablet search is open, close it on any click outside the
-  // search bar. Uses useOnDocument so the listener stays attached and is
-  // re-checked on every click — works for every open/close cycle.
-  useOnDocument(
-    'click',
-    $((e: Event) => {
-      if (!searchOpen.value) return;
-      const target = e.target as HTMLElement | null;
-      if (!target) return;
-      if (target.closest('.apparel-titlebar__search--mobile')) return;
-      searchOpen.value = false;
-    })
-  );
 
   const doSearch = $((query: string) => {
     if (query.trim()) {
@@ -157,7 +170,8 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     return allProducts.filter((p) => p.category !== "Flame Resistant");
   });
 
-  const ALWAYS_SHOW = new Set(["All"]);
+  // "New Hire Kit" is always shown even before any products are tagged into it.
+  const ALWAYS_SHOW = new Set(["All", "New Hire Kit"]);
 
   const visibleCategories = useComputed$(() => {
     if (isTech.value) return ["Work Wear"];
@@ -249,42 +263,20 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                 onBlur$={() => doSearch(searchQuery.value)}
               />
             </div>
-            {searchOpen.value ? (
-              <div class="apparel-titlebar__search apparel-titlebar__search--mobile">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                <input
-                  type="text"
-                  class="apparel-titlebar__search-input"
-                  placeholder=""
-                  aria-label="Search apparel"
-                  autoFocus
-                  value={searchQuery.value}
-                  onInput$={(_, el) => { searchQuery.value = el.value; }}
-                  onKeyDown$={(e) => { if (e.key === "Enter") { doSearch(searchQuery.value); searchOpen.value = false; } if (e.key === "Escape") { searchQuery.value = ""; searchOpen.value = false; } }}
-                  onBlur$={() => { doSearch(searchQuery.value); searchOpen.value = false; }}
-                />
-                <button class="apparel-titlebar__action" aria-label="Close search" onClick$={() => { doSearch(searchQuery.value); searchOpen.value = false; }} style="padding:2px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
-                </button>
-              </div>
-            ) : (
-              <>
-                <button
-                  class="apparel-titlebar__action apparel-titlebar__action--tablet-cols"
-                  aria-label={`Show ${tabletCols.value === 2 ? 3 : 2} per row`}
-                  onClick$={() => { tabletCols.value = tabletCols.value === 2 ? 3 : 2; }}
-                >
-                  {tabletCols.value === 2 ? (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="18"/><rect x="9.5" y="3" width="5" height="18"/><rect x="16" y="3" width="5" height="18"/></svg>
-                  ) : (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="18"/><rect x="13" y="3" width="8" height="18"/></svg>
-                  )}
-                </button>
-                <button class="apparel-titlebar__action apparel-titlebar__action--mobile-search" aria-label="Search" onClick$={() => (searchOpen.value = true)}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                </button>
-              </>
-            )}
+            {/* Tablet column-count toggle. The mobile/tablet search input now
+                lives in the site header (see layout.tsx) so it no longer
+                crowds the category tab strip. */}
+            <button
+              class="apparel-titlebar__action apparel-titlebar__action--tablet-cols"
+              aria-label={`Show ${tabletCols.value === 2 ? 3 : 2} per row`}
+              onClick$={() => { tabletCols.value = tabletCols.value === 2 ? 3 : 2; }}
+            >
+              {tabletCols.value === 2 ? (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="18"/><rect x="9.5" y="3" width="5" height="18"/><rect x="16" y="3" width="5" height="18"/></svg>
+              ) : (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="18"/><rect x="13" y="3" width="8" height="18"/></svg>
+              )}
+            </button>
           </div>
         </div>
         <div class={`apparel-grid apparel-grid--cols-${tabletCols.value}`}>

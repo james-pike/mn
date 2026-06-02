@@ -462,6 +462,75 @@ export const allProducts = [
     "imgs": [],
     "material": "",
     "details": "Fire-resistant, #101618"
+  },
+  {
+    "sku": "MN-25",
+    "name": "New Hire Kit",
+    "category": "New Hire Kit",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [],
+    "price": 0,
+    "img": "/sku/new-hire-kit.jpg",
+    "imgs": [
+      "/sku/new-hire-kit.jpg",
+      "/newbag.jpg",
+      "/notebook.jpg",
+      "/earphones.jpg"
+    ],
+    "material": "Everything a new hire needs to get started, in Modern Niagara branding",
+    "details": "Tranzip recycled computer tote, Eco spiral notebook with pen, 2 Buds Pro wireless ANC earbuds"
+  },
+  {
+    "sku": "MN-22",
+    "name": "Tranzip Recycled Computer Tote - Black",
+    "category": "New Hire Kit",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 0,
+    "img": "/newbag.jpg",
+    "imgs": [
+      "/newbag.jpg"
+    ],
+    "material": "Recycled RPET made from post-consumer plastic bottles",
+    "details": "Padded laptop sleeve, Double drop handles, Detachable adjustable shoulder strap, Exterior water bottle pocket, Tranzip, #2020-27"
+  },
+  {
+    "sku": "MN-23",
+    "name": "Eco Spiral Notebook with Pen - Blue",
+    "category": "New Hire Kit",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#1e40af"
+    ],
+    "price": 0,
+    "img": "/notebook.jpg",
+    "imgs": [
+      "/notebook.jpg"
+    ],
+    "material": "FSC®-certified Mix paper and recycled materials, spiral bound",
+    "details": "60 ruled cream sheets, Matching elastic pen loop, Ballpoint pen included, 5\" × 7\", Bullet, #SM-3468"
+  },
+  {
+    "sku": "MN-24",
+    "name": "2 Buds Pro Wireless ANC Earbuds - White",
+    "category": "New Hire Kit",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#ffffff"
+    ],
+    "price": 0,
+    "img": "/earphones.jpg",
+    "imgs": [
+      "/earphones.jpg"
+    ],
+    "material": "Recycled ABS plastic (rABS)",
+    "details": "Active noise cancellation, Wireless charging case, Charging cable included, Handstands, #70300"
   }
 ];
 

@@ -203,6 +203,8 @@ const translations = {
   "cat.Flame Resistant": { en: "Flame Resistant", fr: "Vêtements ignifuges" },
   "cat.Shirts": { en: "Shirts", fr: "Chemises" },
   "cat.SWAG": { en: "SWAG", fr: "SWAG" },
+  "cat.New Hire Kit": { en: "New Hire Kit", fr: "Trousse du nouvel employé" },
+  "nav.newhirekit": { en: "New Hire Kit", fr: "Trousse du nouvel employé" },
 
   // Product detail
   "product.taptoclose": { en: "Tap anywhere to close", fr: "Appuyez pour fermer" },
