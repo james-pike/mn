@@ -22,6 +22,9 @@
   --radius-md: 8px;
   --radius-lg: 10px;
   --radius-xl: 12px;
+  /* Responsive category-tab label sizes (container-query based, matches cm) */
+  --text-tab:      clamp(0.7rem, 3.95cqi, 1.15rem);  /* phone tab labels */
+  --text-tab-wide: clamp(0.85rem, 2.9cqi, 1.2rem);   /* tablet tab labels */
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
   --shadow-md: 0 4px 20px rgba(0,0,0,0.07);
   --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
@@ -309,6 +312,11 @@ img { max-width: 100%; display: block; }
 }
 .site-header__categories a:hover { color: var(--ce-gold); }
 .site-header__categories a.active { color: var(--ce-green); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+/* New Hire Kit shortcut only appears in the top category nav on desktop;
+   tablet/mobile reach it via the menu drawer instead. */
+@media (max-width: 1024px) {
+  .site-header__cat-newhire { display: none !important; }
+}
 
 .site-header__nav { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
 .site-header__nav a {
@@ -1781,19 +1789,19 @@ img { max-width: 100%; display: block; }
   width: fit-content;
 }
 @media (max-width: 900px) {
-  /* Mobile: x margin lives only on the product grid — tab strip stays
-     edge-to-edge (its own padding-left handles the first-tab inset). */
-  .home-catalog__inner { padding: 0; }
+  /* Mobile: a small x-inset on the inner applies to both the tab strip and the
+     product grid so they line up and neither runs edge-to-edge (matches cm). */
+  .home-catalog__inner { padding: 0 0.15rem; }
   /* Mobile nav drawer: drop the per-product thumbnails — the list is
      long enough that the images crowd the row; clean text-only list. */
   .nav-drawer__cat-item-img { display: none; }
   .nav-drawer__cat-item { gap: 0; padding-left: 26px; }
   .home-catalog__hero-slot + .home-catalog__header { margin-top: 0; }
-  .home-catalog__header { padding: 0; height: 34px; padding-left: 0.25rem; top: 48px; border-radius: 0; margin-bottom: 0; margin-top: 0; }
+  .home-catalog__header { padding: 0; height: 34px; top: 48px; border-radius: 0; margin-bottom: 0; margin-top: 0; }
   .home-catalog__title { display: none; }
   .home-catalog__search-desktop { display: none !important; }
   .home-catalog .apparel-titlebar__action--mobile-search { display: flex; }
-  .home-catalog .apparel-grid { grid-template-columns: repeat(2, 1fr); gap: 0.2rem; min-height: 100vh; align-content: start; padding: 0 0.25rem; }
+  .home-catalog .apparel-grid { grid-template-columns: repeat(2, 1fr); gap: 0.2rem; min-height: 100vh; align-content: start; }
 }
 @media (min-width: 601px) and (max-width: 1024px) {
   .home-catalog { padding: 0; }
@@ -1807,7 +1815,7 @@ img { max-width: 100%; display: block; }
   .home-catalog__header { height: 38px; padding: 0; top: 51px; border-radius: 0; margin-bottom: 0.2rem; border-top: 1px solid var(--ce-gray-200); }
   /* Match mobile tab behavior on tablet — equal-width fill + container-query font scaling */
   .home-catalog__tabs { overflow-x: hidden; container-type: inline-size; }
-  .home-catalog__tabs .apparel-titlebar__tab { flex: 1; text-align: center; justify-content: center; font-size: clamp(0.78rem, 3.5cqi, 1.2rem); padding: 4px 6px; }
+  .home-catalog__tabs .apparel-titlebar__tab { flex: 1; text-align: center; justify-content: center; font-size: var(--text-tab-wide); padding: 4px 6px; }
   .home-catalog__tabs .apparel-titlebar__tab:only-child { flex: 0 0 auto; margin-right: auto; text-align: left; justify-content: flex-start; padding-left: 0.75rem; }
   .home-catalog__title { display: none; }
   /* Tablet — flat, minimal roundedness on product cards. */
@@ -3201,6 +3209,10 @@ img { max-width: 100%; display: block; }
 .apparel-titlebar__action--mobile-search {
   display: none;
 }
+/* Tablet tab-bar search (icon button + field that opens over the tab strip).
+   Hidden by default; shown only in the tablet media query. */
+.apparel-titlebar__action--tabbar-search { display: none; }
+.home-catalog__tabbar-search { display: none; }
 .apparel-titlebar__search--mobile {
   display: none;
 }
@@ -3239,6 +3251,7 @@ img { max-width: 100%; display: block; }
   background: none;
   font-size: 1rem;
   font-weight: 500;
+  letter-spacing: -0.02em;
   color: var(--ce-gray-500);
   cursor: pointer;
   font-family: var(--font-sans);
@@ -3503,13 +3516,17 @@ img { max-width: 100%; display: block; }
 .nav-drawer__locale--to-en svg { stroke: #c0334a; }
 .nav-drawer__locale--to-en:hover { background: rgba(212,57,80,0.10); }
 
-/* On mobile/tablet the language toggle is removed from the header (both the
-   site header and the floating home-hero header) — it lives only in the
-   hamburger menu drawer there. Desktop keeps the header toggle. */
+/* The floating home-hero header drops its language toggle on mobile/tablet
+   (it lives in the hamburger drawer there). */
 @media (max-width: 1024px) {
-  .site-header .locale-btn,
   .hero-card-header__btn--to-fr,
   .hero-card-header__btn--to-en { display: none !important; }
+}
+/* Phones reach the language toggle from the hamburger menu drawer, so the
+   site-header toggle is dropped there. Tablet (768–1024px) has no drawer, so
+   it keeps the compact header toggle. */
+@media (max-width: 767px) {
+  .site-header .locale-btn { display: none !important; }
 }
 
 /* ===== Header apparel search (mobile/tablet) ===== */
@@ -3529,14 +3546,12 @@ img { max-width: 100%; display: block; }
 }
 .site-header__search-btn svg { stroke: var(--ce-gray-700); }
 .site-header__search {
-  position: absolute;
-  inset: 0;
-  z-index: 20;
-  display: flex;
+  /* Shown only in search mode (phones). It sits as a flex child filling the
+     space to the right of the logo — the logo stays visible, only the icon
+     cluster is replaced (matches the cm storefront). */
+  display: none;
   align-items: center;
-  gap: 8px;
-  padding: 0 0.75rem;
-  background: var(--ce-white);
+  gap: 6px;
 }
 .site-header__search > svg { flex-shrink: 0; color: var(--ce-gray-500); }
 .site-header__search-input {
@@ -3562,9 +3577,28 @@ img { max-width: 100%; display: block; }
 }
 @media (max-width: 1024px) {
   .site-header__search-btn { display: inline-flex; }
-  /* Search now lives in the header across all touch widths — suppress the
-     in-strip desktop search so it isn't shown twice on tablets. */
+  /* Suppress the in-strip desktop search on touch so search isn't duplicated. */
   .home-catalog__search-desktop { display: none !important; }
+  /* When open, the search bar fills only the right side of the header — where
+     the icon cluster sits — and leaves the logo visible. Hide the icons and
+     drop the logo's auto-margin so the bar takes the remaining width. */
+  .site-header--search-open .site-header__logo { margin-right: 0; }
+  .site-header--search-open .site-header__search-btn { display: none; }
+  .site-header--search-open .site-header__nav { display: none; }
+  .site-header--search-open .site-header__search {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0 6px 0 8px;
+    border: 1px solid var(--ce-gray-200);
+    border-radius: var(--radius-sm);
+    background: var(--ce-white);
+    padding: 4px 8px;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+  }
+  .site-header--search-open .site-header__search-input { flex: 1; width: auto; min-width: 0; font-size: 0.95rem; }
 }
 /* Phones: the catalog tab strip's right cluster (search/column toggle) is now
    empty here — search moved to the header and the column toggle is tablet-only
@@ -5058,8 +5092,22 @@ details[open] > .cart-drawer__checkout-title::after {
   .apparel-titlebar__search { display: none; }
   .apparel-titlebar__action--mobile-search { display: flex; }
   .apparel-titlebar__tab { padding: 4px 6px; font-size: clamp(0.82rem, 2.2vw, 1rem); }
-  .home-catalog__tabs { overflow-x: hidden; container-type: inline-size; }
-  .home-catalog__tabs .apparel-titlebar__tab { flex: 1; text-align: center; justify-content: center; font-size: clamp(0.72rem, 4.5cqi, 1.1rem); }
+  .home-catalog__tabs { overflow-x: hidden; container-type: inline-size; gap: 0; align-self: stretch; }
+  .home-catalog__tabs .apparel-titlebar__tab { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; text-align: center; justify-content: center; position: relative; isolation: isolate; font-size: var(--text-tab); letter-spacing: -0.04em; padding: 2px 1px; }
+  /* Active fill as an inset pill so a uniform ~1px of the bar shows on all four
+     sides — matches cm (instead of an edge-to-edge full-width fill). */
+  .home-catalog__tabs .apparel-titlebar__tab.active { background: none; }
+  .home-catalog__tabs .apparel-titlebar__tab.active::before {
+    content: '';
+    position: absolute;
+    inset: 2px 1px 1px;
+    background: var(--ce-gray-100);
+    border-radius: 2px;
+    z-index: -1;
+  }
+  /* Drop the "All" tab on phones so the real categories fill the row. A lone
+     tab (e.g. tech = Work Wear only) is exempted by the :only-child rule. */
+  .home-catalog__tabs .apparel-titlebar__tab:first-child { display: none; }
   .home-catalog__tabs .apparel-titlebar__tab:only-child { flex: 0 0 auto; margin-right: auto; text-align: left; justify-content: flex-start; padding-left: 0.75rem; }
   .home-catalog__tabs .apparel-titlebar__tab:only-child { display: flex; }
   .collection-hero { padding: 0; margin: 0 0.15rem 2px; margin-top: 0; }
@@ -5083,7 +5131,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .stats-row__card:last-child { border-radius: 0 0 var(--radius-lg) 0; }
   .site-header--cart-open { position: fixed; top: 0; left: 0; right: 0; z-index: 100; }
   .site-header__categories { display: none; }
-  .site-header { height: 49px; top: 0; }
+  .site-header { height: 49px; top: 0; background: var(--ce-off-white); }
   .site-header__inner { padding: 0 0.1rem 0 0.38rem; height: 49px; overflow: hidden; }
   .site-header__logo { margin-left: -1px; gap: 0; }
   /* Logo-img shrunk so the cluster gains 2px of breathing room above and
@@ -6080,9 +6128,26 @@ details[open] > .cart-drawer__checkout-title::after {
   /* Show "All" tab on iPad/tablet apparel header (overrides mobile hide rule) */
   .apparel-titlebar__tab:first-child,
   .home-catalog__tabs .apparel-titlebar__tab:first-child { display: inline-flex !important; }
-  /* Show desktop search field in apparel header on tablet (overrides mobile hide rule) */
-  .home-catalog__search-desktop { display: flex !important; }
+  /* Tablet: search lives in the tab bar (icon at the far right of the strip
+     opens a field over the bar) — matching the cm storefront. The header
+     search icon and the always-on in-strip desktop search field are both
+     suppressed here so search isn't duplicated. */
+  .site-header__search-btn { display: none !important; }
+  .home-catalog__search-desktop { display: none !important; }
   .home-catalog .apparel-titlebar__action--mobile-search { display: none !important; }
+  .apparel-titlebar__action--tabbar-search { display: inline-flex; align-items: center; justify-content: center; }
+  .home-catalog__tabbar-search {
+    display: flex;
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    align-items: center;
+    gap: 6px;
+    padding: 0 0.5rem;
+    background: var(--ce-white);
+  }
+  .home-catalog__tabbar-search .apparel-titlebar__search-input { flex: 1; width: auto; min-width: 0; font-size: 0.9rem; }
+  .home-catalog__tabbar-search-close { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 4px; border: none; background: none; color: var(--ce-gray-600); cursor: pointer; }
   /* Force the full locale word + cart label to show on tablet (overrides mobile rules at 768-900) */
   .site-header .locale-btn__full { display: none !important; }
   .site-header .locale-btn__short { display: inline !important; font-size: 0.85rem; font-weight: 600; }

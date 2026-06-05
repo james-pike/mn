@@ -730,7 +730,7 @@ export default component$(() => {
       )}
 
       {(auth.value.loggedIn || (loginAction.value && !loginAction.value.failed)) && <>
-      <header class={`site-header site-header--white ${cartOpen.value ? "site-header--cart-open" : ""} ${loc.url.pathname === "/" && !cartOpen.value ? `site-header--hero-hidden ${headerScrolled.value ? "site-header--hero-visible" : ""}` : ""}`}>
+      <header class={`site-header site-header--white ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value ? "site-header--cart-open" : ""} ${loc.url.pathname === "/" && !cartOpen.value ? `site-header--hero-hidden ${headerScrolled.value ? "site-header--hero-visible" : ""}` : ""}`}>
         <div class="site-header__inner">
           <Link href="/" class="site-header__logo brand-cluster brand-cluster--small">
             <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -753,7 +753,7 @@ export default component$(() => {
             <Link href="/" class={loc.url.pathname === "/" ? "active" : ""}>{t("nav.home", locale.value)}</Link>
             <Link href="/apparel/" class={loc.url.pathname.startsWith("/apparel") ? "active" : ""}>{loginType.value === "tech" ? t("cat.Work Wear", locale.value) : t("nav.apparel", locale.value)}</Link>
             {loginType.value !== "tech" && loginType.value !== "safety" && (
-              <a href="/apparel/#new-hire-kit" onClick$={() => { window.dispatchEvent(new CustomEvent("select-category", { detail: "New Hire Kit" })); }}>{t("nav.newhirekit", locale.value)}</a>
+              <a href="/apparel/#new-hire-kit" class="site-header__cat-newhire" onClick$={() => { window.dispatchEvent(new CustomEvent("select-category", { detail: "New Hire Kit" })); }}>{t("nav.newhirekit", locale.value)}</a>
             )}
           </nav>
           <nav class="site-header__nav">

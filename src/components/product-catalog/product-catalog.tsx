@@ -103,6 +103,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
   const isSingleCat = useComputed$(() => isTech.value);
   const activeCat = useSignal("All");
   const searchQuery = useSignal("");
+  const searchOpen = useSignal(false); // tablet: search field opens over the tab bar
   const tabletCols = useSignal(3);
 
   const HASH_TO_CAT: Record<string, string> = isSingleCat.value
@@ -225,6 +226,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                   if (activeCat.value === cat) { activeCat.value = "All"; return; }
                   activeCat.value = cat;
                   searchQuery.value = "";
+                  searchOpen.value = false;
                   const isDesktop = window.innerWidth > 1024;
                   const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 52 : 58);
                   if (isDesktop) {
@@ -277,7 +279,29 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="18"/><rect x="13" y="3" width="8" height="18"/></svg>
               )}
             </button>
+            {/* Tablet: search icon opens a field over the tab bar (cm-style),
+                so search no longer needs a slot in the site header. */}
+            <button class="apparel-titlebar__action apparel-titlebar__action--tabbar-search" aria-label="Search" onClick$={() => (searchOpen.value = true)}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            </button>
           </div>
+          {searchOpen.value && (
+            <div class="home-catalog__tabbar-search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              <input
+                type="text"
+                class="apparel-titlebar__search-input"
+                placeholder=""
+                aria-label="Search apparel"
+                value={searchQuery.value}
+                onInput$={(_, el) => { searchQuery.value = el.value; if (el.value.trim()) activeCat.value = "All"; }}
+                onKeyDown$={(e) => { if (e.key === "Enter") doSearch(searchQuery.value); if (e.key === "Escape") { searchQuery.value = ""; searchOpen.value = false; } }}
+              />
+              <button class="home-catalog__tabbar-search-close" aria-label="Close search" onClick$={() => { doSearch(searchQuery.value); searchOpen.value = false; }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+              </button>
+            </div>
+          )}
         </div>
         <div class={`apparel-grid apparel-grid--cols-${tabletCols.value}`}>
           {filtered.value.map((item) => (
