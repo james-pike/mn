@@ -830,9 +830,11 @@ export default component$(() => {
                 value={searchValue.value}
                 onInput$={(_, el) => { searchValue.value = el.value; window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value })); }}
                 onKeyDown$={(e, el) => {
-                  // Enter keeps the search bar open (like cm) and just dismisses
-                  // the keyboard — results already filter live as you type.
-                  if (e.key === "Enter") { el.blur(); }
+                  // Enter keeps the search bar open and focused (like cm) and
+                  // re-applies the search so results reposition. We deliberately
+                  // do NOT blur — programmatic blur leaves the sticky header
+                  // mis-painted on mobile until the next touch.
+                  if (e.key === "Enter") { e.preventDefault(); window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value })); }
                   if (e.key === "Escape") { searchValue.value = ""; window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" })); searchOpen.value = false; }
                 }}
               />
