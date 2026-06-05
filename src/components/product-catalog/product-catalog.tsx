@@ -183,7 +183,9 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       const q = ((e as CustomEvent).detail ?? "") as string;
       searchQuery.value = q;
       activeCat.value = categoryForQuery(q, baseProducts.value);
-      if (q.trim()) scrollProductsBelowBar();
+      // No scroll here: scrolling on every keystroke while the mobile keyboard
+      // is open pushes the sticky header out of view. Positioning happens once
+      // when the search opens (apparel-search-open).
     };
     // Opening the search (header icon) scrolls the catalog up so the sticky tab
     // bar pins under the header and products sit right below the search bar —
@@ -265,7 +267,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
               placeholder=""
               aria-label="Search apparel"
               value={searchQuery.value}
-              onInput$={(_, el) => { searchQuery.value = el.value; activeCat.value = categoryForQuery(el.value, baseProducts.value); if (el.value.trim()) scrollProductsBelowBar(); }}
+              onInput$={(_, el) => { searchQuery.value = el.value; activeCat.value = categoryForQuery(el.value, baseProducts.value); }}
               onKeyDown$={(e) => { if (e.key === "Enter") doSearch(searchQuery.value); }}
               onBlur$={() => doSearch(searchQuery.value)}
             />
@@ -300,7 +302,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                 placeholder=""
                 aria-label="Search apparel"
                 value={searchQuery.value}
-                onInput$={(_, el) => { searchQuery.value = el.value; activeCat.value = categoryForQuery(el.value, baseProducts.value); if (el.value.trim()) scrollProductsBelowBar(); }}
+                onInput$={(_, el) => { searchQuery.value = el.value; activeCat.value = categoryForQuery(el.value, baseProducts.value); }}
                 onKeyDown$={(e) => { if (e.key === "Enter") doSearch(searchQuery.value); }}
                 onBlur$={() => doSearch(searchQuery.value)}
               />
@@ -334,7 +336,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                 placeholder=""
                 aria-label="Search apparel"
                 value={searchQuery.value}
-                onInput$={(_, el) => { searchQuery.value = el.value; activeCat.value = categoryForQuery(el.value, baseProducts.value); if (el.value.trim()) scrollProductsBelowBar(); }}
+                onInput$={(_, el) => { searchQuery.value = el.value; activeCat.value = categoryForQuery(el.value, baseProducts.value); }}
                 onKeyDown$={(e) => { if (e.key === "Enter") doSearch(searchQuery.value); if (e.key === "Escape") { searchQuery.value = ""; searchOpen.value = false; } }}
               />
               <button class="home-catalog__tabbar-search-close" aria-label="Close search" onClick$={() => { doSearch(searchQuery.value); searchOpen.value = false; }}>
