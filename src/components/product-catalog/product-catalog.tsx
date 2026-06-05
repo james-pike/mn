@@ -190,9 +190,17 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     // important on the home/hero route where search may be opened from the
     // hero cover before the catalog has scrolled into its sticky position.
     const onSearchOpen = () => {
-      // Two frames so the scroll lands after the header switches to its solid
-      // (search-open) state and the sticky bar settles.
-      requestAnimationFrame(() => requestAnimationFrame(() => scrollProductsBelowBar()));
+      // Only needed when search is opened from ABOVE the catalog (e.g. the hero
+      // cover): scroll down so the sticky tab bar pins under the header. If the
+      // catalog is already scrolled into its sticky position, do nothing —
+      // re-scrolling while the keyboard opens leaves a gap above the tabs.
+      const catalog = document.querySelector(".home-catalog") as HTMLElement | null;
+      if (!catalog) return;
+      const headerH = window.innerWidth < 768 ? 49 : window.innerWidth <= 1024 ? 52 : 58;
+      const stickyPos = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2;
+      if (window.scrollY < stickyPos - 1) {
+        requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo({ top: stickyPos, behavior: "instant" })));
+      }
     };
     applyHash();
     window.addEventListener("hashchange", applyHash);
