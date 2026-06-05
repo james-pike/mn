@@ -121,9 +121,9 @@ export default component$(() => {
                 const btn = document.querySelector('.locale-btn') as HTMLElement;
                 btn?.click();
               }} aria-label="Language">
+                <span class="hero-card-header__btn-label">{locale.value === "en" ? "Français" : "English"}</span>
                 <span class="hero-card-header__locale-short">{locale.value === "en" ? "FR" : "EN"}</span>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-                <span class="hero-card-header__btn-label">{locale.value === "en" ? "Français" : "English"}</span>
               </button>
               <button class={`hero-card-header__btn ${hasCartItems.value ? "hero-card-header__btn--cart-active" : ""}`} onClick$={() => {
                 const btn = document.querySelector('.cart-btn') as HTMLElement;
@@ -165,7 +165,7 @@ export default component$(() => {
               <span class="hero__title-word"><span class="hero__title-word-part">MODERN</span> <span class="hero__title-word-part">NIAGARA</span></span>
               <span class="hero__title-word hero__title-word--sub">BUILDING SERVICES</span>
               <span class="hero__title-word hero__title-word--letters">
-                {"APPAREL".split("").map((ch, i) => (
+                {t("logo.apparel", locale.value).toUpperCase().split("").map((ch, i) => (
                   /* Per-letter delays live in CSS (hero__title-letter:nth-child)
                      instead of inline style — keeps timing deterministic across
                      devices and avoids hydration jitter / CSS-var resolution

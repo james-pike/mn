@@ -688,7 +688,7 @@ export default component$(() => {
                 <div class="brand-cluster__words">
                   <span class="brand-cluster__word">MODERN NIAGARA</span>
                   <span class="brand-cluster__word brand-cluster__word--sub">BUILDING SERVICES</span>
-                  <span class="brand-cluster__word brand-cluster__word--muted">APPAREL</span>
+                  <span class="brand-cluster__word brand-cluster__word--muted">{t("logo.apparel", locale.value).toUpperCase()}</span>
                 </div>
               </div>
               <p class="login-modal__subtitle">
@@ -746,7 +746,7 @@ export default component$(() => {
             <div class="brand-cluster__words">
               <span class="brand-cluster__word">MODERN NIAGARA</span>
               <span class="brand-cluster__word brand-cluster__word--sub">BUILDING SERVICES</span>
-              <span class="brand-cluster__word brand-cluster__word--muted">APPAREL</span>
+              <span class="brand-cluster__word brand-cluster__word--muted">{t("logo.apparel", locale.value).toUpperCase()}</span>
             </div>
           </Link>
           <nav class="site-header__categories">
@@ -830,7 +830,7 @@ export default component$(() => {
                 <div class="brand-cluster__words">
                   <span class="brand-cluster__word">MODERN NIAGARA</span>
                   <span class="brand-cluster__word brand-cluster__word--sub">BUILDING SERVICES</span>
-                  <span class="brand-cluster__word brand-cluster__word--muted">APPAREL</span>
+                  <span class="brand-cluster__word brand-cluster__word--muted">{t("logo.apparel", locale.value).toUpperCase()}</span>
                 </div>
               </div>
               <button class="nav-drawer__close" onClick$={() => (menuOpen.value = false)} aria-label="Close">
@@ -951,7 +951,7 @@ export default component$(() => {
             <div class="brand-cluster__words">
               <span class="brand-cluster__word">MODERN NIAGARA</span>
               <span class="brand-cluster__word brand-cluster__word--sub">BUILDING SERVICES</span>
-              <span class="brand-cluster__word brand-cluster__word--muted">APPAREL</span>
+              <span class="brand-cluster__word brand-cluster__word--muted">{t("logo.apparel", locale.value).toUpperCase()}</span>
             </div>
           </div>
           <div class="site-footer__col">

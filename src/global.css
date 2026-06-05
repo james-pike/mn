@@ -5277,6 +5277,9 @@ details[open] > .cart-drawer__checkout-title::after {
   /* Show "My Cart" label on desktop in the floating hero header.
      Logout button stays icon-only. */
   .hero__upper .hero-card-header__btn-label { display: inline !important; }
+  /* Desktop: show only the full locale word + globe icon (FR/EN short label is
+     a mobile/tablet affordance), matching the on-scroll site-header. */
+  .hero__upper .hero-card-header__locale-short { display: none !important; }
   .hero__upper .hero-card-header__btn--logout .hero-card-header__btn-label { display: none !important; }
   .hero-card-header__btn--cart-active {
     background: rgba(0, 0, 0, 0.5) !important;
