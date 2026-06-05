@@ -761,7 +761,7 @@ export default component$(() => {
       )}
 
       {(auth.value.loggedIn || (loginAction.value && !loginAction.value.failed)) && <>
-      <header class={`site-header site-header--white ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value ? "site-header--cart-open" : ""} ${loc.url.pathname === "/" && !cartOpen.value ? `site-header--hero-hidden ${headerScrolled.value ? "site-header--hero-visible" : ""}` : ""}`}>
+      <header class={`site-header site-header--white ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value ? "site-header--cart-open" : ""} ${loc.url.pathname === "/" && !cartOpen.value ? `site-header--hero-hidden ${headerScrolled.value || searchOpen.value ? "site-header--hero-visible" : ""}` : ""}`}>
         <div class="site-header__inner">
           <Link href="/" class="site-header__logo brand-cluster brand-cluster--small">
             <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -789,7 +789,7 @@ export default component$(() => {
           </nav>
           <nav class="site-header__nav">
             {showSearch.value && (
-              <button class="site-header__search-btn" onClick$={() => { searchOpen.value = true; }} aria-label="Search apparel">
+              <button class="site-header__search-btn" onClick$={() => { searchOpen.value = true; window.dispatchEvent(new CustomEvent("apparel-search-open")); }} aria-label="Search apparel">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
               </button>
             )}

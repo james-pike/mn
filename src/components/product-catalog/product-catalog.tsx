@@ -185,14 +185,25 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       activeCat.value = categoryForQuery(q, baseProducts.value);
       if (q.trim()) scrollProductsBelowBar();
     };
+    // Opening the search (header icon) scrolls the catalog up so the sticky tab
+    // bar pins under the header and products sit right below the search bar —
+    // important on the home/hero route where search may be opened from the
+    // hero cover before the catalog has scrolled into its sticky position.
+    const onSearchOpen = () => {
+      // Two frames so the scroll lands after the header switches to its solid
+      // (search-open) state and the sticky bar settles.
+      requestAnimationFrame(() => requestAnimationFrame(() => scrollProductsBelowBar()));
+    };
     applyHash();
     window.addEventListener("hashchange", applyHash);
     window.addEventListener("select-category", onSelectCategory);
     window.addEventListener("apparel-search", onExternalSearch);
+    window.addEventListener("apparel-search-open", onSearchOpen);
     cleanup(() => {
       window.removeEventListener("hashchange", applyHash);
       window.removeEventListener("select-category", onSelectCategory);
       window.removeEventListener("apparel-search", onExternalSearch);
+      window.removeEventListener("apparel-search-open", onSearchOpen);
     });
   });
 
