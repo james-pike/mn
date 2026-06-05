@@ -35,6 +35,39 @@ const CATEGORY_ICONS: Record<string, string> = {
   "Flame Resistant": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>',
 };
 
+// Return the category of the FIRST product that matches the search, so its tab
+// can be highlighted as active (matches the cm storefront). "All" if nothing
+// matches or the query is empty.
+function categoryForQuery(query: string, products: Product[]): string {
+  const q = query.trim().toLowerCase();
+  if (!q) return "All";
+  const match = products.find(
+    (p) => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q),
+  );
+  return match ? match.category : "All";
+}
+
+// Scroll the product grid up so it pins just below the sticky tab bar, so the
+// first results aren't hidden under it. Used by the category tabs and by search
+// (auto-position, mirroring the cm storefront).
+function scrollProductsBelowBar() {
+  const isDesktop = window.innerWidth > 1024;
+  const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 52 : 58);
+  if (isDesktop) {
+    const grid = document.querySelector('.home-catalog .apparel-grid');
+    const gridTop = grid ? grid.getBoundingClientRect().top + window.scrollY - headerH - 8 : 0;
+    const needsScrollUp = gridTop < window.scrollY;
+    window.scrollTo({ top: gridTop, behavior: needsScrollUp ? 'instant' : 'smooth' });
+  } else {
+    const catalog = document.querySelector('.home-catalog');
+    const catalogTop = catalog ? catalog.getBoundingClientRect().top + window.scrollY : 0;
+    // +2px keeps the tab strip pinned flush under the site header without
+    // clipping the first row of product images.
+    const stickyPos = catalogTop - headerH + 2;
+    window.scrollTo({ top: stickyPos, behavior: 'instant' });
+  }
+}
+
 const ProductCard = component$<{ item: Product; sku: string }>(({ item, sku }) => {
   const locale = useContext(LocaleContext);
   const loginType = useContext(LoginTypeContext);
@@ -112,6 +145,21 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       ? { "shirts": "Shirts", "hats": "Hats", "fr": "Flame Resistant" }
       : { "new-hire-kit": "New Hire Kit", "shirts": "Shirts", "jackets": "Jackets", "hats": "Hats", "swag": "SWAG" };
 
+  const baseProducts = useComputed$(() => {
+    if (isTech.value) return allProducts.filter((p) => p.category === "Work Wear");
+    if (isSafety.value) {
+      const rank = (sku: string) => {
+        const i = SAFETY_SKU_ORDER.indexOf(sku);
+        return i === -1 ? SAFETY_SKU_ORDER.length : i;
+      };
+      return allProducts
+        .filter((p) => isSafetyProduct(p.sku))
+        .slice()
+        .sort((a, b) => rank(a.sku) - rank(b.sku));
+    }
+    return allProducts.filter((p) => p.category !== "Flame Resistant");
+  });
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup }) => {
     const applyHash = () => {
@@ -128,13 +176,14 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
         searchQuery.value = "";
       }
     };
-    // The mobile/tablet search input lives in the site header (layout.tsx) so it
-    // doesn't crowd the category tab strip; it relays keystrokes here via this
-    // event. Mirrors the desktop input: live filter + collapse to "All".
+    // The phone search input lives in the site header (layout.tsx); it relays
+    // keystrokes here via this event. Mirrors the desktop input: live filter +
+    // highlight the tab of the first matching result.
     const onExternalSearch = (e: Event) => {
       const q = ((e as CustomEvent).detail ?? "") as string;
       searchQuery.value = q;
-      if (q.trim()) activeCat.value = "All";
+      activeCat.value = categoryForQuery(q, baseProducts.value);
+      if (q.trim()) scrollProductsBelowBar();
     };
     applyHash();
     window.addEventListener("hashchange", applyHash);
@@ -149,26 +198,12 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
 
   const doSearch = $((query: string) => {
     if (query.trim()) {
-      activeCat.value = "All";
+      activeCat.value = categoryForQuery(query, baseProducts.value);
       searchQuery.value = query.trim();
+      scrollProductsBelowBar();
     } else {
       searchQuery.value = "";
     }
-  });
-
-  const baseProducts = useComputed$(() => {
-    if (isTech.value) return allProducts.filter((p) => p.category === "Work Wear");
-    if (isSafety.value) {
-      const rank = (sku: string) => {
-        const i = SAFETY_SKU_ORDER.indexOf(sku);
-        return i === -1 ? SAFETY_SKU_ORDER.length : i;
-      };
-      return allProducts
-        .filter((p) => isSafetyProduct(p.sku))
-        .slice()
-        .sort((a, b) => rank(a.sku) - rank(b.sku));
-    }
-    return allProducts.filter((p) => p.category !== "Flame Resistant");
   });
 
   // "New Hire Kit" is always shown even before any products are tagged into it.
@@ -211,7 +246,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
               placeholder=""
               aria-label="Search apparel"
               value={searchQuery.value}
-              onInput$={(_, el) => { searchQuery.value = el.value; }}
+              onInput$={(_, el) => { searchQuery.value = el.value; activeCat.value = categoryForQuery(el.value, baseProducts.value); if (el.value.trim()) scrollProductsBelowBar(); }}
               onKeyDown$={(e) => { if (e.key === "Enter") doSearch(searchQuery.value); }}
               onBlur$={() => doSearch(searchQuery.value)}
             />
@@ -223,27 +258,13 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                 class={`apparel-titlebar__tab ${isSingleCat.value || activeCat.value === cat ? "active" : ""}`}
                 onClick$={() => {
                   if (isSingleCat.value) return;
-                  if (activeCat.value === cat) { activeCat.value = "All"; return; }
+                  // Changing category clears + exits the search (header + tab bar).
+                  window.dispatchEvent(new CustomEvent("apparel-search-clear"));
+                  searchOpen.value = false;
+                  if (activeCat.value === cat) { activeCat.value = "All"; searchQuery.value = ""; return; }
                   activeCat.value = cat;
                   searchQuery.value = "";
-                  searchOpen.value = false;
-                  const isDesktop = window.innerWidth > 1024;
-                  const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 52 : 58);
-                  if (isDesktop) {
-                    const grid = document.querySelector('.home-catalog .apparel-grid');
-                    const gridTop = grid ? grid.getBoundingClientRect().top + window.scrollY - headerH - 8 : 0;
-                    const needsScrollUp = gridTop < window.scrollY;
-                    window.scrollTo({ top: gridTop, behavior: needsScrollUp ? 'instant' : 'smooth' });
-                  } else {
-                    const catalog = document.querySelector('.home-catalog');
-                    const catalogTop = catalog ? catalog.getBoundingClientRect().top + window.scrollY : 0;
-                    // Scroll a hair past the sticky threshold so the tab strip
-                    // pins flush under the site header (no dark gap above it).
-                    // The +2px sits inside the tab strip's bottom margin so the
-                    // first row of product images is not clipped.
-                    const stickyPos = catalogTop - headerH + 2;
-                    window.scrollTo({ top: stickyPos, behavior: 'instant' });
-                  }
+                  scrollProductsBelowBar();
                 }}
               >
                 <span class="apparel-titlebar__tab-icon" dangerouslySetInnerHTML={CATEGORY_ICONS[cat]} />
@@ -260,7 +281,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                 placeholder=""
                 aria-label="Search apparel"
                 value={searchQuery.value}
-                onInput$={(_, el) => { searchQuery.value = el.value; }}
+                onInput$={(_, el) => { searchQuery.value = el.value; activeCat.value = categoryForQuery(el.value, baseProducts.value); if (el.value.trim()) scrollProductsBelowBar(); }}
                 onKeyDown$={(e) => { if (e.key === "Enter") doSearch(searchQuery.value); }}
                 onBlur$={() => doSearch(searchQuery.value)}
               />
@@ -294,7 +315,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                 placeholder=""
                 aria-label="Search apparel"
                 value={searchQuery.value}
-                onInput$={(_, el) => { searchQuery.value = el.value; if (el.value.trim()) activeCat.value = "All"; }}
+                onInput$={(_, el) => { searchQuery.value = el.value; activeCat.value = categoryForQuery(el.value, baseProducts.value); if (el.value.trim()) scrollProductsBelowBar(); }}
                 onKeyDown$={(e) => { if (e.key === "Enter") doSearch(searchQuery.value); if (e.key === "Escape") { searchQuery.value = ""; searchOpen.value = false; } }}
               />
               <button class="home-catalog__tabbar-search-close" aria-label="Close search" onClick$={() => { doSearch(searchQuery.value); searchOpen.value = false; }}>

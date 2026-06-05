@@ -585,6 +585,37 @@ export default component$(() => {
     cleanup(() => window.removeEventListener("scroll", onScroll));
   }, { strategy: 'document-ready' });
 
+  // Header search: close when clicking anywhere outside it; clear + close it
+  // whenever the category changes (tab bar or menu drawer). Mirrors cm.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ cleanup }) => {
+    const onDocClick = (e: MouseEvent) => {
+      if (!searchOpen.value) return;
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      if (target.closest(".site-header__search") || target.closest(".site-header__search-btn")) return;
+      // Outside click: clear the filter and exit the search bar.
+      searchValue.value = "";
+      window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" }));
+      searchOpen.value = false;
+    };
+    // Category change clears the header input and closes it. The catalog already
+    // resets its own filter/active tab, so we must NOT re-dispatch apparel-search
+    // here (that would override the newly selected category).
+    const onCategoryChange = () => {
+      searchValue.value = "";
+      searchOpen.value = false;
+    };
+    document.addEventListener("click", onDocClick);
+    window.addEventListener("select-category", onCategoryChange);
+    window.addEventListener("apparel-search-clear", onCategoryChange);
+    cleanup(() => {
+      document.removeEventListener("click", onDocClick);
+      window.removeEventListener("select-category", onCategoryChange);
+      window.removeEventListener("apparel-search-clear", onCategoryChange);
+    });
+  }, { strategy: 'document-ready' });
+
   // Lock scroll when menu is open
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
@@ -798,8 +829,10 @@ export default component$(() => {
                 autoFocus
                 value={searchValue.value}
                 onInput$={(_, el) => { searchValue.value = el.value; window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value })); }}
-                onKeyDown$={(e) => {
-                  if (e.key === "Enter") { searchOpen.value = false; }
+                onKeyDown$={(e, el) => {
+                  // Enter keeps the search bar open (like cm) and just dismisses
+                  // the keyboard — results already filter live as you type.
+                  if (e.key === "Enter") { el.blur(); }
                   if (e.key === "Escape") { searchValue.value = ""; window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" })); searchOpen.value = false; }
                 }}
               />
