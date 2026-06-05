@@ -449,6 +449,23 @@ export const allProducts = [
     "details": "Glossy black barrel with vivid neon trim, blue ink, 5 2/5\" L × 2/5\" Dia, #416"
   },
   {
+    "sku": "MN-26",
+    "name": "Srixon Premium Golf Cart Bag - Navy",
+    "category": "SWAG",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 315,
+    "img": "/golfbag.jpg",
+    "imgs": [
+      "/golfbag.jpg"
+    ],
+    "material": "",
+    "details": "Premium Cart Bag offering storage and organization in a lightweight design, Optimized for accessibility and convenience, 14-way top with full-length dividers, 11 storage compartments, Waterproof valuables pocket, Insulated cooler pocket, Hook and loop glove holder, Cart strap pass-through, 5.5 lbs."
+  },
+  {
     "sku": "MNFR-6",
     "name": "FR Insulated Jacket - Navy",
     "category": "Flame Resistant",
