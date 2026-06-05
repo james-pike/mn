@@ -789,7 +789,18 @@ export default component$(() => {
           </nav>
           <nav class="site-header__nav">
             {showSearch.value && (
-              <button class="site-header__search-btn" onClick$={() => { searchOpen.value = true; window.dispatchEvent(new CustomEvent("apparel-search-open")); }} aria-label="Search apparel">
+              <button class="site-header__search-btn" onClick$={() => {
+                searchOpen.value = true;
+                window.dispatchEvent(new CustomEvent("apparel-search-open"));
+                // Reveal + focus the field synchronously within this tap so mobile
+                // opens the keyboard on the first click. preventScroll stops the
+                // browser from scroll-jumping the field into view (that jump was
+                // the gap above the tabs).
+                const header = document.querySelector(".site-header");
+                header?.classList.add("site-header--search-open");
+                const input = document.querySelector(".site-header__search-input") as HTMLInputElement | null;
+                input?.focus({ preventScroll: true });
+              }} aria-label="Search apparel">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
               </button>
             )}
@@ -819,14 +830,13 @@ export default component$(() => {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></svg>
             </button>
           </nav>
-          {showSearch.value && searchOpen.value && (
+          {showSearch.value && (
             <div class="site-header__search">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
               <input
                 type="text"
                 class="site-header__search-input"
                 aria-label="Search apparel"
-                autoFocus
                 value={searchValue.value}
                 onInput$={(_, el) => { searchValue.value = el.value; window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value })); }}
                 onKeyDown$={(e, el) => {
