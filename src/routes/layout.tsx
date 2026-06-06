@@ -791,15 +791,10 @@ export default component$(() => {
             {showSearch.value && (
               <button class="site-header__search-btn" onClick$={() => {
                 searchOpen.value = true;
-                // Switch the header to sticky (CSS) BEFORE measuring/scrolling —
-                // a fixed header drops out of view when the keyboard opens; a
-                // sticky one stays. Everything here runs only in the mobile
-                // search button (hidden on desktop), so desktop is never touched
-                // (no global useVisibleTask, no VisualViewport — those broke it).
-                const header = document.querySelector(".site-header");
+                const header = document.querySelector(".site-header") as (HTMLElement & { __pin?: (() => void) | null }) | null;
                 header?.classList.add("site-header--search-open");
-                // On the home/hero route, scroll the catalog up to its sticky
-                // position so products sit under the search bar.
+                // On the home/hero route, scroll the catalog up so products sit
+                // under the search bar.
                 if (loc.url.pathname === "/") {
                   const catalog = document.querySelector(".home-catalog") as HTMLElement | null;
                   if (catalog) {
@@ -814,10 +809,33 @@ export default component$(() => {
                 // browser from scroll-jumping the field into view.
                 const input = document.querySelector(".site-header__search-input") as HTMLInputElement | null;
                 input?.focus({ preventScroll: true });
-                // Close the search on the first scroll/drag (any contact). Imperative
-                // + { once } so there's NO global useVisibleTask and nothing runs on
-                // desktop (this handler is only reachable from the mobile button).
-                const onTouchMove = () => { input?.blur(); searchOpen.value = false; };
+                // Keep the fixed header visible over the keyboard by pinning it to
+                // the visual viewport (iOS reports the keyboard offset via the
+                // viewport "scroll" event). This is done IMPERATIVELY here (no
+                // global useVisibleTask) and only on the mobile search button
+                // (unreachable on desktop), so it can't trigger the Chrome grey.
+                const vvp = window.visualViewport;
+                if (vvp && header && loc.url.pathname === "/") {
+                  header.__pin?.();
+                  // Self-tears down once the search closes (via any path), so we
+                  // don't leak the pin and move the header when typing elsewhere.
+                  const pin = () => {
+                    if (!searchOpen.value) { header.__pin?.(); return; }
+                    header.style.top = `${vvp.offsetTop}px`;
+                  };
+                  pin();
+                  vvp.addEventListener("resize", pin);
+                  vvp.addEventListener("scroll", pin);
+                  header.__pin = () => {
+                    vvp.removeEventListener("resize", pin);
+                    vvp.removeEventListener("scroll", pin);
+                    header.style.top = "";
+                    header.__pin = null;
+                  };
+                }
+                // Close the search on the first scroll/drag (any contact), tearing
+                // down the pin so scrolling is smooth.
+                const onTouchMove = () => { header?.__pin?.(); input?.blur(); searchOpen.value = false; };
                 window.addEventListener("touchmove", onTouchMove, { passive: true, once: true });
               }} aria-label="Search apparel">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
