@@ -791,6 +791,20 @@ export default component$(() => {
             {showSearch.value && (
               <button class="site-header__search-btn" onClick$={() => {
                 searchOpen.value = true;
+                // On the home/hero route, scroll the catalog up to its sticky
+                // position BEFORE opening the keyboard. Opening the keyboard at
+                // the hero cover drops the fixed header out of view; opening it
+                // once scrolled (where the tabs are sticky) keeps it put. This
+                // runs only in the mobile search button (hidden on desktop), so
+                // desktop is never touched (no global task, no visualViewport).
+                if (loc.url.pathname === "/") {
+                  const catalog = document.querySelector(".home-catalog") as HTMLElement | null;
+                  if (catalog) {
+                    const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 52 : 58);
+                    const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2;
+                    window.scrollTo({ top, behavior: "instant" });
+                  }
+                }
                 window.dispatchEvent(new CustomEvent("apparel-search-open"));
                 // Reveal + focus the field synchronously within this tap so mobile
                 // opens the keyboard on the first click. preventScroll stops the
