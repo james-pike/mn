@@ -633,15 +633,16 @@ export default component$(() => {
     }
   }, { strategy: 'document-ready' });
 
-  // Close cart and RESET the search on navigation (route change clears the
-  // filter; closing the bar via click-away/scroll keeps it).
+  // Close the cart and the search bar on navigation. We do NOT clear the search
+  // filter here — closing the bar (click-away, scroll, X, nav) keeps the
+  // searched items, matching cm. The filter only resets on a tab/category
+  // change (see onCategoryChange) or because a cross-route nav remounts the
+  // catalog fresh.
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     track(() => loc.url.pathname);
     cartOpen.value = false;
     searchOpen.value = false;
-    searchValue.value = "";
-    window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" }));
   }, { strategy: 'document-ready' });
 
   // Lock scroll when cart is open
@@ -885,7 +886,7 @@ export default component$(() => {
                     if (e.key === "Escape") { searchValue.value = ""; window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" })); searchOpen.value = false; }
                   }}
                 />
-                <button class="site-header__search-close" aria-label="Close search" onClick$={() => { searchValue.value = ""; window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" })); searchOpen.value = false; }}>
+                <button class="site-header__search-close" aria-label="Close search" onClick$={() => { searchOpen.value = false; }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
                 </button>
               </div>
