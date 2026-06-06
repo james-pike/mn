@@ -594,9 +594,8 @@ export default component$(() => {
       const target = e.target as HTMLElement | null;
       if (!target) return;
       if (target.closest(".site-header__search") || target.closest(".site-header__search-btn")) return;
-      // Outside click: clear the filter and exit the search bar.
-      searchValue.value = "";
-      window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" }));
+      // Outside click closes the bar but KEEPS the filtered results. The search
+      // is only reset by a tab/category change or a route change.
       searchOpen.value = false;
     };
     // Category change clears the header input and closes it. The catalog already
@@ -634,12 +633,15 @@ export default component$(() => {
     }
   }, { strategy: 'document-ready' });
 
-  // Close cart and collapse the header search on navigation
+  // Close cart and RESET the search on navigation (route change clears the
+  // filter; closing the bar via click-away/scroll keeps it).
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     track(() => loc.url.pathname);
     cartOpen.value = false;
     searchOpen.value = false;
+    searchValue.value = "";
+    window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" }));
   }, { strategy: 'document-ready' });
 
   // Lock scroll when cart is open
@@ -793,9 +795,10 @@ export default component$(() => {
                 searchOpen.value = true;
                 const header = document.querySelector(".site-header") as (HTMLElement & { __pin?: (() => void) | null }) | null;
                 header?.classList.add("site-header--search-open");
-                // On the home/hero route, scroll the catalog up so products sit
-                // under the search bar.
-                if (loc.url.pathname === "/") {
+                // Scroll the catalog up so products sit under the tabs/search bar
+                // — on every route (home AND /apparel/) and width (phone + tablet),
+                // so the reposition is consistent.
+                {
                   const catalog = document.querySelector(".home-catalog") as HTMLElement | null;
                   if (catalog) {
                     const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 52 : 58);
@@ -863,33 +866,34 @@ export default component$(() => {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
               </button>
             </Form>
+            {/* Search field lives INSIDE the nav, BEFORE the hamburger. On tablet
+                it absolutely overlays the nav (the buttons stay visibility:hidden
+                to hold the width → no shift); on mobile it's an in-flow flex
+                field that fills up to the hamburger (which stays at the far
+                right). */}
+            {showSearch.value && (
+              <div class="site-header__search">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <input
+                  type="text"
+                  class="site-header__search-input"
+                  aria-label="Search apparel"
+                  value={searchValue.value}
+                  onInput$={(_, el) => { searchValue.value = el.value; window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value })); }}
+                  onKeyDown$={(e, el) => {
+                    if (e.key === "Enter") { e.preventDefault(); window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value })); }
+                    if (e.key === "Escape") { searchValue.value = ""; window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" })); searchOpen.value = false; }
+                  }}
+                />
+                <button class="site-header__search-close" aria-label="Close search" onClick$={() => { searchValue.value = ""; window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" })); searchOpen.value = false; }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+                </button>
+              </div>
+            )}
             <button class="hamburger-btn" onClick$={() => (menuOpen.value = !menuOpen.value)} aria-label="Menu">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></svg>
             </button>
           </nav>
-          {showSearch.value && (
-            <div class="site-header__search">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-              <input
-                type="text"
-                class="site-header__search-input"
-                aria-label="Search apparel"
-                value={searchValue.value}
-                onInput$={(_, el) => { searchValue.value = el.value; window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value })); }}
-                onKeyDown$={(e, el) => {
-                  // Enter keeps the search bar open and focused (like cm) and
-                  // re-applies the search so results reposition. We deliberately
-                  // do NOT blur — programmatic blur leaves the sticky header
-                  // mis-painted on mobile until the next touch.
-                  if (e.key === "Enter") { e.preventDefault(); window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value })); }
-                  if (e.key === "Escape") { searchValue.value = ""; window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" })); searchOpen.value = false; }
-                }}
-              />
-              <button class="site-header__search-close" aria-label="Close search" onClick$={() => { searchValue.value = ""; window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" })); searchOpen.value = false; }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
-              </button>
-            </div>
-          )}
         </div>
       </header>
 
@@ -1058,6 +1062,12 @@ export default component$(() => {
             <svg class="site-footer__contact-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
             <a href="mailto:info@modernniagaraapparel.ca">info@modernniagaraapparel.ca</a>
           </div>
+          {/* Tablet language toggle lives in the footer (the header has no room
+              and there's no hamburger drawer at tablet widths). */}
+          <button class="site-footer__locale" onClick$={() => { toggleLocale(); }} aria-label="Toggle language">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+            {locale.value === "en" ? "Français" : "English"}
+          </button>
           </div>
         </div>
       </footer>

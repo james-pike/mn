@@ -318,7 +318,7 @@ img { max-width: 100%; display: block; }
   .site-header__cat-newhire { display: none !important; }
 }
 
-.site-header__nav { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+.site-header__nav { display: flex; align-items: center; gap: 2px; flex-shrink: 0; position: relative; }
 .site-header__nav a {
   font-size: 0.95rem; font-weight: 500;
   color: var(--ce-gray-700);
@@ -1808,6 +1808,36 @@ img { max-width: 100%; display: block; }
   .home-catalog__inner { padding: 0; max-width: 100%; }
   .home-catalog .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; min-height: 100vh; align-content: start; padding: 0 0.25rem; margin: 0; }
   .home-catalog .apparel-grid.apparel-grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
+  /* List view: two columns of short, horizontal rows — small square thumbnail
+     on the left, all the product details beside it. Shows many products at
+     once without the tall image tiles. */
+  .home-catalog .apparel-grid.apparel-grid--list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.35rem;
+    padding: 0 0.25rem;
+  }
+  .apparel-grid--list .product-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .apparel-grid--list .product-card__image {
+    flex: 0 0 64px;
+    width: 64px;
+    height: 64px;
+  }
+  .apparel-grid--list .product-card__info {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    padding: 0.35rem 0.5rem;
+  }
+  /* Keep the name/price row and the colour/size row on their own lines, tight. */
+  .apparel-grid--list .product-card__name-row { width: 100%; }
+  .apparel-grid--list .product-card__color-size-row { margin-top: 0; }
   /* border-top: the home tab strip sits above the header (z-index: 10000,
      not inside a stacking-context-isolating wrapper like the apparel
      route's .apparel-catalog), so it covers the header's bottom border.
@@ -3522,11 +3552,35 @@ img { max-width: 100%; display: block; }
   .hero-card-header__btn--to-fr,
   .hero-card-header__btn--to-en { display: none !important; }
 }
-/* Phones reach the language toggle from the hamburger menu drawer, so the
-   site-header toggle is dropped there. Tablet (768–1024px) has no drawer, so
-   it keeps the compact header toggle. */
-@media (max-width: 767px) {
+/* On touch widths the header language toggle is dropped: phones reach it from
+   the hamburger drawer, tablet from the footer (see .site-footer__locale).
+   Desktop keeps the header toggle. */
+@media (max-width: 1024px) {
   .site-header .locale-btn { display: none !important; }
+}
+/* Footer language toggle — shown only on tablet (phone uses the hamburger
+   drawer, desktop uses the header). Styled for the dark footer. */
+.site-footer__locale { display: none; }
+@media (min-width: 768px) and (max-width: 1024px) {
+  .site-footer__locale {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 0.6rem;
+    padding: 8px 14px;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 4px;
+    background: transparent;
+    color: rgba(255,255,255,0.85);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+  }
+  .site-footer__locale svg { stroke: rgba(255,255,255,0.85); }
+  .site-footer__locale:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+  .site-footer__locale:hover svg { stroke: #fff; }
 }
 
 /* ===== Header apparel search (mobile/tablet) ===== */
@@ -3582,21 +3636,16 @@ img { max-width: 100%; display: block; }
   /* When open, the search bar fills only the right side of the header — where
      the icon cluster sits — and leaves the logo visible. Hide the icons and
      drop the logo's auto-margin so the bar takes the remaining width. */
-  .site-header--search-open .site-header__logo { margin-right: 0; }
-  .site-header--search-open .site-header__search-btn { display: none; }
-  .site-header--search-open .site-header__nav { display: none; }
+  /* Shared search-field look (positioning differs per breakpoint: tablet
+     absolutely overlays the nav, phone is an in-flow flex item). */
   .site-header--search-open .site-header__search {
     display: flex;
-    flex: 1 1 auto;
-    min-width: 0;
-    margin: 0 6px 0 8px;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
     border: 1px solid var(--ce-gray-200);
     border-radius: var(--radius-sm);
     background: var(--ce-white);
-    padding: 4px 8px;
-    align-items: center;
-    gap: 6px;
-    height: 32px;
   }
   .site-header--search-open .site-header__search-input { flex: 1; width: auto; min-width: 0; font-size: 0.95rem; }
 }
@@ -3605,6 +3654,39 @@ img { max-width: 100%; display: block; }
    — so drop it and give the category tabs the full row width. */
 @media (max-width: 767px) {
   .home-catalog__right { display: none; }
+  /* Mobile: the open search is an in-flow flex field that fills the gap between
+     the logo and the hamburger. It replaces the cart + search buttons but NOT
+     the menu (hamburger) button, which stays at the far right (the search sits
+     before it in the DOM). It extends left to just past the logo. */
+  /* Comfortable gap to the logo cluster; collapses on narrow phones (below)
+     where the width is needed for the field itself. */
+  .site-header--search-open .site-header__logo { margin-right: 12px; }
+  .site-header--search-open .site-header__nav { flex: 1 1 auto; min-width: 0; }
+  .site-header--search-open .site-header__search-btn,
+  .site-header--search-open .cart-btn { display: none; }
+  /* Field grows from a ZERO basis so its width is purely (nav − hamburger):
+     the input's intrinsic width can't inflate it past the right edge. The
+     tighter inner gap + side padding reclaim wasted space. */
+  .site-header--search-open .site-header__search {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 44px;
+    margin-right: 2px;
+    gap: 3px;
+    padding: 4px 6px;
+  }
+  /* Shrink the leading magnifier + the X and strip their padding so they get
+     out of the way — every px goes to the input text on tight screens. */
+  .site-header--search-open .site-header__search > svg { width: 13px; height: 13px; }
+  .site-header--search-open .site-header__search-close { padding: 4px 0 4px 2px; }
+  .site-header--search-open .site-header__search-close svg { width: 13px; height: 13px; }
+  /* Hamburger keeps its size and stays pinned at the far right. */
+  .site-header--search-open .hamburger-btn { flex: 0 0 auto; }
+}
+/* Narrow phones (incl. iPhone SE, 375px): drop the logo gap so the field
+   keeps its width. */
+@media (max-width: 380px) {
+  .site-header--search-open .site-header__logo { margin-right: 3px; }
 }
 
 /* ===== Cart Button ===== */
@@ -5150,7 +5232,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header__apparel-link { display: none; }
   .cart-btn__label { display: none; }
   .locale-btn--cart-open { display: none; }
-  .cart-btn { padding: 10px; font-size: 0.78rem; min-width: auto; margin-right: 0; gap: 4px; border: 1px solid var(--ce-gray-200); background: rgba(0,0,0,0.04); border-radius: 2px; box-shadow: inset 0 1px 4px rgba(0,0,0,0.08), inset 0 0 6px rgba(0,0,0,0.04); }
+  .cart-btn { padding: 11px 10px; font-size: 0.78rem; min-width: auto; margin-right: 0; gap: 4px; border: 1px solid var(--ce-gray-200); background: rgba(0,0,0,0.04); border-radius: 2px; box-shadow: inset 0 1px 4px rgba(0,0,0,0.08), inset 0 0 6px rgba(0,0,0,0.04); }
   .logout-form { display: none; }
   .hero-card-header__btn--logout { display: none; }
   .cart-btn svg { width: 22px; height: 22px; }
@@ -5163,12 +5245,14 @@ details[open] > .cart-drawer__checkout-title::after {
   .locale-btn__short { display: inline; font-size: 0.7rem; font-weight: 600; }
   .locale-btn__icon { display: inline-flex; }
   .locale-btn__icon svg { width: 22px; height: 22px; }
-  .hamburger-btn { padding: 10px; border-radius: 2px; box-shadow: inset 0 1px 4px rgba(0,0,0,0.08), inset 0 0 6px rgba(0,0,0,0.04); }
+  .hamburger-btn { padding: 11px 10px; border-radius: 2px; box-shadow: inset 0 1px 4px rgba(0,0,0,0.08), inset 0 0 6px rgba(0,0,0,0.04); }
   .hamburger-btn svg { width: 22px; height: 22px; }
   /* Search icon button matches the cart/hamburger squares (same padding + icon). */
-  .site-header__search-btn { padding: 10px; }
+  .site-header__search-btn { padding: 11px 10px; }
   .site-header__search-btn svg { width: 22px; height: 22px; }
-  .site-header__nav { gap: 1px; margin-right: 0.1rem; }
+  /* Tight, even cluster: 1px sliver between buttons AND a matching 1px sliver to
+     the right margin (shifted hard right). */
+  .site-header__nav { gap: 1px; margin-right: 1px; }
   .site-header__nav-home { display: none; }
 }
 
@@ -5177,7 +5261,7 @@ details[open] > .cart-drawer__checkout-title::after {
   html { font-size: 18px; }
   .site-header .cart-btn,
   .site-header .locale-btn,
-  .site-header .logout-btn { height: 40px; padding: 0 12px; min-width: auto; gap: 6px; font-size: 0.78rem; border-radius: 4px; box-shadow: inset 0 1px 4px rgba(0,0,0,0.08), inset 0 0 6px rgba(0,0,0,0.04); }
+  .site-header .logout-btn { height: 42px; padding: 0 12px; min-width: auto; gap: 6px; font-size: 0.78rem; border-radius: 4px; box-shadow: inset 0 1px 4px rgba(0,0,0,0.08), inset 0 0 6px rgba(0,0,0,0.04); }
   .site-header .cart-btn svg,
   .site-header .locale-btn svg,
   .site-header .logout-btn svg { width: 20px; height: 20px; }
@@ -5196,7 +5280,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header__categories { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; margin-right: 0.5rem; }
   .site-header__categories a { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ce-gray-600); text-decoration: none; padding: 4px 8px; }
   .site-header__categories a.active { color: var(--ce-green); }
-  .site-header__nav { gap: 2px; }
+  .site-header__nav { gap: 1px; }
   .site-header { overflow: hidden; }
   .site-header::before {
     content: '';
@@ -5969,7 +6053,7 @@ details[open] > .cart-drawer__checkout-title::after {
      tablet header (was 44px → 4px each side, now 40px → 6px each side). */
   .site-header .brand-cluster--small .brand-cluster__mark { width: 40px !important; height: 40px !important; }
   .site-header__logo-text { height: 25px; }
-  .site-header__nav { gap: 3px; margin-right: 0; }
+  .site-header__nav { gap: 1px; margin-right: 0; }
   .site-header .locale-btn { margin-right: 0; }
   .logout-form { display: inline-flex; }
   .hero-card-header__btn--logout { display: inline-flex; }
@@ -6057,12 +6141,12 @@ details[open] > .cart-drawer__checkout-title::after {
   .hero-card-header__nav { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; margin-right: 0.5rem; }
   .hero-card-header__nav-link { font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; padding: 8px 10px; line-height: 1; }
   .hero-card-header__actions { display: flex; gap: 3px; margin-right: 0; }
-  .hero-card-header__btn { height: 50px; padding: 0 14px; font-size: 0.78rem; min-width: auto; gap: 4px; border-radius: 2px; }
+  .hero-card-header__btn { height: 52px; padding: 0 14px; font-size: 0.78rem; min-width: auto; gap: 4px; border-radius: 2px; }
   .hero-card-header__btn svg { width: 22px; height: 22px; }
   .hero-card-header__btn-label { display: inline; font-size: 0.78rem; font-weight: 500; }
   .hero-card-header__btn:first-child .hero-card-header__btn-label { display: none; }
   .hero-card-header__locale-short { display: inline; font-size: 0.85rem; font-weight: 600; }
-  .site-header__nav { gap: 3px; margin-right: 0; }
+  .site-header__nav { gap: 1px; margin-right: 0; }
   /* Brand text in the in-card header is hidden until page is scrolled; small icon stays visible */
   .hero-card-header__brand { opacity: 0; transition: opacity 0.3s ease; }
   html.scrolled .hero-card-header__brand { opacity: 1; }
@@ -6097,8 +6181,28 @@ details[open] > .cart-drawer__checkout-title::after {
     border-radius: 2px !important;
     color: rgba(0,0,0,0.7) !important;
     box-shadow: inset 0 2px 6px rgba(0,0,0,0.12), inset 0 1px 2px rgba(0,0,0,0.08) !important;
-    height: 50px;
+    height: 52px;
     padding: 0 14px;
+  }
+  /* Search icon button is the same height as the cart/logout buttons; cart and
+     logout get 1px more padding so their icons sit a touch more inset. All three
+     share one icon size for consistency. */
+  .site-header__search-btn { height: 52px; padding: 0 14px; }
+  .site-header__search-btn svg { width: 20px; height: 20px; }
+  .site-header .cart-btn,
+  .site-header .logout-btn { padding: 0 15px; }
+  .site-header .cart-btn svg,
+  .site-header .logout-btn svg { width: 20px; height: 20px; }
+  /* Tablet: the open search field absolutely overlays the nav (pixel-perfect,
+     zero shift) — buttons stay as visibility:hidden to hold the nav width. The
+     field is flush to the right margin with a 1px inset on top/bottom/left. */
+  .site-header--search-open .site-header__nav > :not(.site-header__search) { visibility: hidden; }
+  .site-header--search-open .site-header__search {
+    position: absolute;
+    top: 1px;
+    bottom: 1px;
+    left: 1px;
+    right: 6px;
   }
   /* Cart button always gets the yellow recessed shade when the header is visible
      (apparel route always, home page on scroll) */
@@ -6131,26 +6235,13 @@ details[open] > .cart-drawer__checkout-title::after {
   /* Show "All" tab on iPad/tablet apparel header (overrides mobile hide rule) */
   .apparel-titlebar__tab:first-child,
   .home-catalog__tabs .apparel-titlebar__tab:first-child { display: inline-flex !important; }
-  /* Tablet: search lives in the tab bar (icon at the far right of the strip
-     opens a field over the bar) — matching the cm storefront. The header
-     search icon and the always-on in-strip desktop search field are both
-     suppressed here so search isn't duplicated. */
-  .site-header__search-btn { display: none !important; }
+  /* Tablet: search lives in the HEADER (like phone), not the tab bar — the
+     header search button + the visual-viewport pin keep it visible over the
+     keyboard. Show the header search button (via the <=1024 rule above) and
+     suppress the in-strip + tab-bar search affordances. */
   .home-catalog__search-desktop { display: none !important; }
   .home-catalog .apparel-titlebar__action--mobile-search { display: none !important; }
-  .apparel-titlebar__action--tabbar-search { display: inline-flex; align-items: center; justify-content: center; }
-  .home-catalog__tabbar-search {
-    display: flex;
-    position: absolute;
-    inset: 0;
-    z-index: 20;
-    align-items: center;
-    gap: 6px;
-    padding: 0 0.5rem;
-    background: var(--ce-white);
-  }
-  .home-catalog__tabbar-search .apparel-titlebar__search-input { flex: 1; width: auto; min-width: 0; font-size: 0.9rem; }
-  .home-catalog__tabbar-search-close { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 4px; border: none; background: none; color: var(--ce-gray-600); cursor: pointer; }
+  .apparel-titlebar__action--tabbar-search { display: none !important; }
   /* Force the full locale word + cart label to show on tablet (overrides mobile rules at 768-900) */
   .site-header .locale-btn__full { display: none !important; }
   .site-header .locale-btn__short { display: inline !important; font-size: 0.85rem; font-weight: 600; }

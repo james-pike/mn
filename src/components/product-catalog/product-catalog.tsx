@@ -137,7 +137,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
   const activeCat = useSignal("All");
   const searchQuery = useSignal("");
   const searchOpen = useSignal(false); // tablet: search field opens over the tab bar
-  const tabletCols = useSignal(3);
+  const tabletCols = useSignal<number | "list">(3);
 
   const HASH_TO_CAT: Record<string, string> = isSingleCat.value
     ? {}
@@ -183,9 +183,10 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       const q = ((e as CustomEvent).detail ?? "") as string;
       searchQuery.value = q;
       activeCat.value = categoryForQuery(q, baseProducts.value);
-      // No scroll here: scrolling on every keystroke while the mobile keyboard
-      // is open pushes the sticky header out of view. Positioning happens once
-      // when the search opens (apparel-search-open).
+      // Reposition the catalog under the tabs on every keystroke so results stay
+      // at the right scroll height while search is active. Safe now that the
+      // header is pinned to the visual viewport during search.
+      if (q.trim()) scrollProductsBelowBar();
     };
     // Opening the search (header icon) scrolls the catalog up so the sticky tab
     // bar pins under the header and products sit right below the search bar —
@@ -310,15 +311,22 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
             {/* Tablet column-count toggle. The mobile/tablet search input now
                 lives in the site header (see layout.tsx) so it no longer
                 crowds the category tab strip. */}
+            {/* Tablet view toggle cycles 3-per-row → list → 2-per-row → 3…
+                The icon shown is the view you'll switch TO next. */}
             <button
               class="apparel-titlebar__action apparel-titlebar__action--tablet-cols"
-              aria-label={`Show ${tabletCols.value === 2 ? 3 : 2} per row`}
-              onClick$={() => { tabletCols.value = tabletCols.value === 2 ? 3 : 2; }}
+              aria-label={tabletCols.value === 3 ? "Show list view" : tabletCols.value === "list" ? "Show 2 per row" : "Show 3 per row"}
+              onClick$={() => { tabletCols.value = tabletCols.value === 3 ? "list" : tabletCols.value === "list" ? 2 : 3; }}
             >
-              {tabletCols.value === 2 ? (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="18"/><rect x="9.5" y="3" width="5" height="18"/><rect x="16" y="3" width="5" height="18"/></svg>
-              ) : (
+              {tabletCols.value === 3 ? (
+                // next: list view — rows with a thumbnail + detail lines
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="4" height="4"/><line x1="10" y1="6" x2="21" y2="6"/><rect x="3" y="10" width="4" height="4"/><line x1="10" y1="12" x2="21" y2="12"/><rect x="3" y="16" width="4" height="4"/><line x1="10" y1="18" x2="21" y2="18"/></svg>
+              ) : tabletCols.value === "list" ? (
+                // next: 2 per row
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="18"/><rect x="13" y="3" width="8" height="18"/></svg>
+              ) : (
+                // next: 3 per row
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="18"/><rect x="9.5" y="3" width="5" height="18"/><rect x="16" y="3" width="5" height="18"/></svg>
               )}
             </button>
             {/* Tablet: search icon opens a field over the tab bar (cm-style),
@@ -345,7 +353,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
             </div>
           )}
         </div>
-        <div class={`apparel-grid apparel-grid--cols-${tabletCols.value}`}>
+        <div class={`apparel-grid ${tabletCols.value === "list" ? "apparel-grid--list" : `apparel-grid--cols-${tabletCols.value}`}`}>
           {filtered.value.map((item) => (
             <ProductCard key={item.sku} item={item} sku={item.sku} />
           ))}
