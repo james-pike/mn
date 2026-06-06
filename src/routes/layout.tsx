@@ -791,12 +791,15 @@ export default component$(() => {
             {showSearch.value && (
               <button class="site-header__search-btn" onClick$={() => {
                 searchOpen.value = true;
+                // Switch the header to sticky (CSS) BEFORE measuring/scrolling —
+                // a fixed header drops out of view when the keyboard opens; a
+                // sticky one stays. Everything here runs only in the mobile
+                // search button (hidden on desktop), so desktop is never touched
+                // (no global useVisibleTask, no VisualViewport — those broke it).
+                const header = document.querySelector(".site-header");
+                header?.classList.add("site-header--search-open");
                 // On the home/hero route, scroll the catalog up to its sticky
-                // position BEFORE opening the keyboard. Opening the keyboard at
-                // the hero cover drops the fixed header out of view; opening it
-                // once scrolled (where the tabs are sticky) keeps it put. This
-                // runs only in the mobile search button (hidden on desktop), so
-                // desktop is never touched (no global task, no visualViewport).
+                // position so products sit under the search bar.
                 if (loc.url.pathname === "/") {
                   const catalog = document.querySelector(".home-catalog") as HTMLElement | null;
                   if (catalog) {
@@ -808,12 +811,14 @@ export default component$(() => {
                 window.dispatchEvent(new CustomEvent("apparel-search-open"));
                 // Reveal + focus the field synchronously within this tap so mobile
                 // opens the keyboard on the first click. preventScroll stops the
-                // browser from scroll-jumping the field into view (that jump was
-                // the gap above the tabs).
-                const header = document.querySelector(".site-header");
-                header?.classList.add("site-header--search-open");
+                // browser from scroll-jumping the field into view.
                 const input = document.querySelector(".site-header__search-input") as HTMLInputElement | null;
                 input?.focus({ preventScroll: true });
+                // Close the search on the first scroll/drag (any contact). Imperative
+                // + { once } so there's NO global useVisibleTask and nothing runs on
+                // desktop (this handler is only reachable from the mobile button).
+                const onTouchMove = () => { input?.blur(); searchOpen.value = false; };
+                window.addEventListener("touchmove", onTouchMove, { passive: true, once: true });
               }} aria-label="Search apparel">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
               </button>

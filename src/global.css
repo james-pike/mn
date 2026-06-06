@@ -3599,6 +3599,15 @@ img { max-width: 100%; display: block; }
     height: 32px;
   }
   .site-header--search-open .site-header__search-input { flex: 1; width: auto; min-width: 0; font-size: 0.95rem; }
+  /* While searching on the home/hero route, use sticky positioning instead of
+     the fixed hero header: a fixed header drops out of the visual viewport when
+     the mobile keyboard opens, but a sticky one stays put (same as the apparel
+     route, which works). CSS-only + mobile @media, so desktop is never touched. */
+  .site-header--hero-hidden.site-header--search-open {
+    position: sticky !important;
+    top: 0 !important;
+    transform: none !important;
+  }
 }
 /* Phones: the catalog tab strip's right cluster (search/column toggle) is now
    empty here — search moved to the header and the column toggle is tablet-only
