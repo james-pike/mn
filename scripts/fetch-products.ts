@@ -4,8 +4,17 @@ import { writeFileSync } from "fs";
 
 config();
 
+const TURSO_URL = process.env.TURSO_URL || process.env.VITE_TURSO_URL || "";
+
+// On environments without Turso credentials (e.g. a Cloudflare Pages preview /
+// staging deploy), skip the refresh and build against the committed products.ts.
+if (!TURSO_URL) {
+  console.log("No TURSO_URL set — skipping product refresh; using the committed products.ts.");
+  process.exit(0);
+}
+
 const db = createClient({
-  url: process.env.TURSO_URL || process.env.VITE_TURSO_URL || "",
+  url: TURSO_URL,
   authToken: process.env.TURSO_AUTH_TOKEN || process.env.VITE_TURSO_AUTH_TOKEN || undefined,
 });
 
