@@ -5,14 +5,14 @@ import type { Product } from "../../routes/apparel/products";
 import { sortColorsWhiteLast } from "../../routes/apparel/utils";
 import { LoginTypeContext } from "../../routes/layout";
 
-const CLOTHING_CATEGORIES = ["All", "Shirts", "Jackets", "Hats", "SWAG", "New Hire Kit"];
+export const CLOTHING_CATEGORIES = ["All", "Shirts", "Jackets", "Hats", "SWAG", "New Hire Kit"];
 
 // Safety catalog: every MNFR-* item plus a small allowlist of standard SKUs,
 // minus a deny list for FR items we don't carry yet.
 const SAFETY_SKU_PREFIX = "MNFR-";
 const SAFETY_EXTRA_SKUS = new Set(["MN-2", "MN-3", "MN-5", "MN-6"]);
 const SAFETY_HIDDEN_SKUS = new Set(["MNFR-5", "MNFR-6"]); // FR Insulated Bib & Jacket
-const SAFETY_CATEGORIES = ["All", "Flame Resistant", "Shirts", "Hats"];
+export const SAFETY_CATEGORIES = ["All", "Flame Resistant", "Shirts", "Hats"];
 // Explicit display order for the Safety "All" view: FR shirt + hoodies,
 // FR pants, then the standard-SKU allowlist (short-sleeve tee,
 // long-sleeve tee, ball cap, toque).
@@ -23,7 +23,7 @@ const isSafetyProduct = (sku: string) =>
 // Colors hidden from catalog-card swatches (still visible on product detail page).
 const CARD_HIDDEN_COLORS = new Set(["#c0392b", "#1e40af", "#6b3fa0"]);
 
-const CATEGORY_ICONS: Record<string, string> = {
+export const CATEGORY_ICONS: Record<string, string> = {
   "All": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
   "Work Wear": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M4 6h16v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/><path d="M4 6l-2 4v2h4V8"/><path d="M20 6l2 4v2h-4V8"/></svg>',
   "Jackets": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>',
@@ -38,13 +38,27 @@ const CATEGORY_ICONS: Record<string, string> = {
 // Return the category of the FIRST product that matches the search, so its tab
 // can be highlighted as active (matches the cm storefront). "All" if nothing
 // matches or the query is empty.
-function categoryForQuery(query: string, products: Product[]): string {
+export function categoryForQuery(query: string, products: Product[]): string {
   const q = query.trim().toLowerCase();
   if (!q) return "All";
   const match = products.find(
     (p) => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.category.toLowerCase().includes(q),
   );
   return match ? match.category : "All";
+}
+
+// The catalog's product set for a given login type (used by both the catalog and
+// the header search overlay).
+export function getBaseProducts(login: string): Product[] {
+  if (login === "tech") return allProducts.filter((p) => p.category === "Work Wear");
+  if (login === "safety") {
+    const rank = (sku: string) => {
+      const i = SAFETY_SKU_ORDER.indexOf(sku);
+      return i === -1 ? SAFETY_SKU_ORDER.length : i;
+    };
+    return allProducts.filter((p) => isSafetyProduct(p.sku)).slice().sort((a, b) => rank(a.sku) - rank(b.sku));
+  }
+  return allProducts.filter((p) => p.category !== "Flame Resistant");
 }
 
 // Scroll the product grid up so it pins just below the sticky tab bar, so the
@@ -68,7 +82,7 @@ function scrollProductsBelowBar() {
   }
 }
 
-const ProductCard = component$<{ item: Product; sku: string }>(({ item, sku }) => {
+export const ProductCard = component$<{ item: Product; sku: string }>(({ item, sku }) => {
   const locale = useContext(LocaleContext);
   const loginType = useContext(LoginTypeContext);
   const isTech = loginType.value === "tech";
@@ -145,20 +159,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       ? { "shirts": "Shirts", "hats": "Hats", "fr": "Flame Resistant" }
       : { "new-hire-kit": "New Hire Kit", "shirts": "Shirts", "jackets": "Jackets", "hats": "Hats", "swag": "SWAG" };
 
-  const baseProducts = useComputed$(() => {
-    if (isTech.value) return allProducts.filter((p) => p.category === "Work Wear");
-    if (isSafety.value) {
-      const rank = (sku: string) => {
-        const i = SAFETY_SKU_ORDER.indexOf(sku);
-        return i === -1 ? SAFETY_SKU_ORDER.length : i;
-      };
-      return allProducts
-        .filter((p) => isSafetyProduct(p.sku))
-        .slice()
-        .sort((a, b) => rank(a.sku) - rank(b.sku));
-    }
-    return allProducts.filter((p) => p.category !== "Flame Resistant");
-  });
+  const baseProducts = useComputed$(() => getBaseProducts(loginType.value));
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup }) => {

@@ -17,6 +17,7 @@ import { createClient } from "@libsql/client";
 import { LocaleContext, t } from "../i18n";
 import type { Locale, TranslationKey } from "../i18n";
 import { allProducts } from "./apparel/products";
+import { SearchOverlay } from "../components/search-overlay/search-overlay";
 
 const AUTH_COOKIE = "ce_auth"; // v2: orders persist to db
 const LOCALE_COOKIE = "ce_locale";
@@ -593,9 +594,8 @@ export default component$(() => {
       if (!searchOpen.value) return;
       const target = e.target as HTMLElement | null;
       if (!target) return;
-      if (target.closest(".site-header__search") || target.closest(".site-header__search-btn")) return;
-      // Outside click closes the bar but KEEPS the filtered results. The search
-      // is only reset by a tab/category change or a route change.
+      if (target.closest(".site-header__search") || target.closest(".site-header__search-btn") || target.closest(".search-overlay")) return;
+      // Outside click (outside the search bar AND the results overlay) closes it.
       searchOpen.value = false;
     };
     // Category change clears the header input and closes it. The catalog already
@@ -645,11 +645,14 @@ export default component$(() => {
     searchOpen.value = false;
   }, { strategy: 'document-ready' });
 
-  // Lock scroll when cart is open
+  // Lock scroll when the cart OR the search overlay is open — the page stays
+  // frozen so nothing scrolls/repaints behind it (no header flicker) and the
+  // header can't be pushed out of view by the keyboard.
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     track(() => cartOpen.value);
-    if (cartOpen.value) {
+    track(() => searchOpen.value);
+    if (cartOpen.value || searchOpen.value) {
       const scrollY = window.scrollY;
       document.body.style.position = "fixed";
       document.body.style.top = `-${scrollY}px`;
@@ -793,55 +796,17 @@ export default component$(() => {
           <nav class="site-header__nav">
             {showSearch.value && (
               <button class="site-header__search-btn" onClick$={() => {
+                // Open the in-place search overlay (tabs + results render below the
+                // header — see <SearchOverlay/>). No window scroll and no
+                // visual-viewport pin: the body is locked while the overlay is open,
+                // so the page never moves and the header can't flicker or be pushed
+                // out of view by the keyboard.
                 searchOpen.value = true;
                 const header = document.querySelector(".site-header") as (HTMLElement & { __pin?: (() => void) | null }) | null;
                 header?.classList.add("site-header--search-open");
-                // Scroll the catalog up so products sit under the tabs/search bar
-                // — on every route (home AND /apparel/) and width (phone + tablet),
-                // so the reposition is consistent.
-                {
-                  const catalog = document.querySelector(".home-catalog") as HTMLElement | null;
-                  if (catalog) {
-                    const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 52 : 58);
-                    const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2;
-                    window.scrollTo({ top, behavior: "instant" });
-                  }
-                }
-                window.dispatchEvent(new CustomEvent("apparel-search-open"));
-                // Reveal + focus the field synchronously within this tap so mobile
-                // opens the keyboard on the first click. preventScroll stops the
-                // browser from scroll-jumping the field into view.
                 const input = document.querySelector(".site-header__search-input") as HTMLInputElement | null;
                 input?.focus({ preventScroll: true });
-                // Keep the fixed header visible over the keyboard by pinning it to
-                // the visual viewport (iOS reports the keyboard offset via the
-                // viewport "scroll" event). This is done IMPERATIVELY here (no
-                // global useVisibleTask) and only on the mobile search button
-                // (unreachable on desktop), so it can't trigger the Chrome grey.
-                const vvp = window.visualViewport;
-                if (vvp && header && loc.url.pathname === "/") {
-                  header.__pin?.();
-                  // Self-tears down once the search closes (via any path), so we
-                  // don't leak the pin and move the header when typing elsewhere.
-                  const pin = () => {
-                    if (!searchOpen.value) { header.__pin?.(); return; }
-                    header.style.top = `${vvp.offsetTop}px`;
-                  };
-                  pin();
-                  vvp.addEventListener("resize", pin);
-                  vvp.addEventListener("scroll", pin);
-                  header.__pin = () => {
-                    vvp.removeEventListener("resize", pin);
-                    vvp.removeEventListener("scroll", pin);
-                    header.style.top = "";
-                    header.__pin = null;
-                  };
-                }
-                // Close the search on the first scroll/drag (any contact), tearing
-                // down the pin so scrolling is smooth.
-                const onTouchMove = () => { header?.__pin?.(); input?.blur(); searchOpen.value = false; };
-                window.addEventListener("touchmove", onTouchMove, { passive: true, once: true });
-              }} aria-label="Search apparel">
+               }} aria-label="Search apparel">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
               </button>
             )}
@@ -880,13 +845,13 @@ export default component$(() => {
                   class="site-header__search-input"
                   aria-label="Search apparel"
                   value={searchValue.value}
-                  onInput$={(_, el) => { searchValue.value = el.value; window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value })); }}
-                  onKeyDown$={(e, el) => {
-                    if (e.key === "Enter") { e.preventDefault(); window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value })); }
-                    if (e.key === "Escape") { searchValue.value = ""; window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" })); searchOpen.value = false; }
+                  onInput$={(_, el) => { searchValue.value = el.value; }}
+                  onKeyDown$={(e) => {
+                    if (e.key === "Enter") { e.preventDefault(); }
+                    if (e.key === "Escape") { searchValue.value = ""; searchOpen.value = false; }
                   }}
                 />
-                <button class="site-header__search-close" aria-label="Close search" onClick$={() => { searchOpen.value = false; }}>
+                <button class="site-header__search-close" aria-label="Close search" onClick$={() => { searchValue.value = ""; searchOpen.value = false; }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
                 </button>
               </div>
@@ -897,6 +862,9 @@ export default component$(() => {
           </nav>
         </div>
       </header>
+
+      {/* In-place search results (mobile/tablet): tabs + grid below the header. */}
+      <SearchOverlay open={searchOpen} query={searchValue} />
 
       {/* Mobile Nav Drawer */}
       {menuOpen.value && (

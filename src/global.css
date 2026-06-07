@@ -7305,3 +7305,51 @@ details[open] > .cart-drawer__checkout-title::after {
 .site-footer .brand-cluster__word--muted { color: rgba(255,255,255,0.55); opacity: 1; }
 /* Nav drawer */
 .nav-drawer .brand-cluster__word { color: var(--ce-gray-900); }
+
+/* ===== Header search overlay (mobile/tablet in-place search results) =====
+   A fixed panel below the header that shows category tabs + a filtered product
+   grid while the header search is open. The body is scroll-locked, so the page
+   never moves (no scroll-repaint flicker, header stays put over the keyboard). */
+.search-overlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 49px;
+  bottom: 0;
+  z-index: 10001;
+  background: var(--ce-gray-200);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+.search-overlay__tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 1px;
+  padding: 4px 4px 6px;
+  background: var(--ce-off-white);
+  border-bottom: 1px solid var(--ce-gray-200);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.search-overlay__tabs::-webkit-scrollbar { display: none; }
+.search-overlay__tabs .apparel-titlebar__tab { flex: 1 1 auto; min-width: 0; justify-content: center; }
+.search-overlay__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.2rem;
+  padding: 0.2rem;
+  align-content: start;
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  .search-overlay__grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .search-overlay { top: 52px; }
+}
+@media (min-width: 1025px) {
+  .search-overlay { display: none; }
+}
