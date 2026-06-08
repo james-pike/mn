@@ -22,25 +22,6 @@ import { SearchOverlay } from "../components/search-overlay/search-overlay";
 const AUTH_COOKIE = "ce_auth"; // v2: orders persist to db
 const LOCALE_COOKIE = "ce_locale";
 
-// Run a state change through the View Transitions API so the browser crossfades
-// between the old and new views (no exit/enter render flicker). Qwik renders
-// asynchronously, so we hold the transition open for a couple of frames to let
-// the DOM update before the API snapshots the new view. Falls back to a plain
-// state change where the API isn't supported.
-function runViewTransition(apply: () => void) {
-  const doc = document as Document & { startViewTransition?: (cb: () => unknown) => unknown };
-  if (typeof doc.startViewTransition === "function") {
-    doc.startViewTransition(() => {
-      apply();
-      return new Promise<void>((resolve) =>
-        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
-      );
-    });
-  } else {
-    apply();
-  }
-}
-
 // Canadian provincial sales tax rates (combined GST/HST/PST/QST)
 const PROVINCE_TAX: Record<string, number> = {
   AB: 0.05, BC: 0.12, MB: 0.12, NB: 0.15, NL: 0.15,
@@ -829,13 +810,14 @@ export default component$(() => {
             {showSearch.value && (
               <button class="site-header__search-btn" onClick$={() => {
                 // Open the in-place search overlay (tabs + results render below the
-                // header — see <SearchOverlay/>), crossfaded via the View Transitions
-                // API so there's no enter/exit render flicker.
+                // header — see <SearchOverlay/>). No window scroll and no
+                // visual-viewport pin: the body is locked while the overlay is open,
+                // so the page never moves and the header can't flicker or be pushed
+                // out of view by the keyboard.
+                searchOpen.value = true;
+                const header = document.querySelector(".site-header") as (HTMLElement & { __pin?: (() => void) | null }) | null;
+                header?.classList.add("site-header--search-open");
                 const input = document.querySelector(".site-header__search-input") as HTMLInputElement | null;
-                runViewTransition(() => {
-                  searchOpen.value = true;
-                  document.querySelector(".site-header")?.classList.add("site-header--search-open");
-                });
                 input?.focus({ preventScroll: true });
                }} aria-label="Search apparel">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
@@ -879,10 +861,10 @@ export default component$(() => {
                   onInput$={(_, el) => { searchValue.value = el.value; }}
                   onKeyDown$={(e) => {
                     if (e.key === "Enter") { e.preventDefault(); }
-                    if (e.key === "Escape") { runViewTransition(() => { searchValue.value = ""; searchOpen.value = false; }); }
+                    if (e.key === "Escape") { searchValue.value = ""; searchOpen.value = false; }
                   }}
                 />
-                <button class="site-header__search-close" aria-label="Close search" onClick$={() => { runViewTransition(() => { searchValue.value = ""; searchOpen.value = false; }); }}>
+                <button class="site-header__search-close" aria-label="Close search" onClick$={() => { searchValue.value = ""; searchOpen.value = false; }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
                 </button>
               </div>
