@@ -876,8 +876,9 @@ export default component$(() => {
         </div>
       </header>
 
-      {/* In-place search results (mobile/tablet): tabs + grid below the header. */}
-      <SearchOverlay open={searchOpen} query={searchValue} />
+      {/* In-place search results (mobile/tablet): tabs + grid below the header.
+          Mounted on catalog pages and toggled via CSS (instant, no remount). */}
+      {showSearch.value && <SearchOverlay open={searchOpen} query={searchValue} />}
 
       {/* Mobile Nav Drawer */}
       {menuOpen.value && (

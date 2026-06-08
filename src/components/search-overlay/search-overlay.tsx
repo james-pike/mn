@@ -62,10 +62,10 @@ export const SearchOverlay = component$<Props>(({ open, query }) => {
     return products;
   });
 
-  if (!open.value) return null;
-
+  // Stay mounted and toggle with CSS (display) rather than mount/unmount, so
+  // there's no enter/exit render frame — the show/hide is instant.
   return (
-    <div class="search-overlay">
+    <div class={`search-overlay ${open.value ? "search-overlay--open" : ""}`} aria-hidden={!open.value}>
       <div class="search-overlay__tabs">
         {visibleCategories.value.map((cat) => (
           <button

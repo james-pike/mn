@@ -7311,6 +7311,7 @@ details[open] > .cart-drawer__checkout-title::after {
    grid while the header search is open. The body is scroll-locked, so the page
    never moves (no scroll-repaint flicker, header stays put over the keyboard). */
 .search-overlay {
+  display: none;
   position: fixed;
   left: 0;
   right: 0;
@@ -7322,6 +7323,7 @@ details[open] > .cart-drawer__checkout-title::after {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
+.search-overlay--open { display: block; }
 .search-overlay__tabs {
   display: flex;
   align-items: stretch;
