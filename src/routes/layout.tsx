@@ -381,9 +381,6 @@ export default component$(() => {
   // strip). It relays keystrokes to the catalog via an "apparel-search" event.
   const searchOpen = useSignal(false);
   const searchValue = useSignal("");
-  // True while the search overlay is/was the thing open, so on close we land on
-  // the catalog (tabs under the header) instead of restoring the old scroll.
-  const searchWasOpen = useSignal(false);
   // The catalog (and therefore search) is only rendered on the home page and
   // the apparel listing — not on product detail or 404 pages.
   const showSearch = useComputed$(
@@ -657,29 +654,28 @@ export default component$(() => {
     track(() => searchOpen.value);
     if (cartOpen.value || searchOpen.value) {
       if (document.body.style.position !== "fixed") {
-        const scrollY = window.scrollY;
+        let lockY = window.scrollY;
+        // For the search overlay, freeze the page at the catalog's tab position
+        // (not wherever the user was). The overlay covers it, so the shift is
+        // invisible — and on close the page is revealed exactly at the sticky
+        // tabs, a seamless transition from the overlay's tabs.
+        if (searchOpen.value && !cartOpen.value) {
+          const catalog = document.querySelector(".home-catalog") as HTMLElement | null;
+          if (catalog) {
+            const headerH = window.innerWidth < 768 ? 49 : window.innerWidth <= 1024 ? 52 : 58;
+            lockY = Math.max(0, catalog.getBoundingClientRect().top + window.scrollY - headerH + 2);
+          }
+        }
         document.body.style.position = "fixed";
-        document.body.style.top = `-${scrollY}px`;
+        document.body.style.top = `-${lockY}px`;
         document.body.style.left = "0";
         document.body.style.right = "0";
         document.body.style.overflow = "hidden";
       }
-      if (searchOpen.value) searchWasOpen.value = true;
     } else {
       const scrollY = Math.abs(parseInt(document.body.style.top || "0", 10));
       document.body.style.cssText = "";
-      // Closing the search overlay: land on the catalog (tabs just under the
-      // header) rather than wherever the user was when they opened search.
-      const catalog = searchWasOpen.value
-        ? (document.querySelector(".home-catalog") as HTMLElement | null)
-        : null;
-      if (catalog) {
-        const headerH = window.innerWidth < 768 ? 49 : window.innerWidth <= 1024 ? 52 : 58;
-        window.scrollTo({ top: catalog.getBoundingClientRect().top + window.scrollY - headerH + 2, behavior: "instant" });
-      } else {
-        window.scrollTo({ top: scrollY, behavior: "instant" });
-      }
-      searchWasOpen.value = false;
+      window.scrollTo({ top: scrollY, behavior: "instant" });
     }
   }, { strategy: 'document-ready' });
 
