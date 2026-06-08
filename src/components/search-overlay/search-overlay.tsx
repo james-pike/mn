@@ -1,5 +1,5 @@
 import { component$, useComputed$, useContext, useSignal, type Signal } from "@builder.io/qwik";
-import { LocaleContext, t } from "../../i18n";
+import { LocaleContext } from "../../i18n";
 import { LoginTypeContext } from "../../routes/layout";
 import { categoryLabel } from "../../routes/apparel/products";
 import {
@@ -36,7 +36,8 @@ export const SearchOverlay = component$<Props>(({ open, query }) => {
     if (loginType.value === "tech") return ["Work Wear"];
     const present = new Set(baseProducts.value.map((p) => p.category));
     const source = loginType.value === "safety" ? SAFETY_CATEGORIES : CLOTHING_CATEGORIES;
-    return source.filter((c) => ALWAYS_SHOW.has(c) || present.has(c));
+    // Identical to the catalog tabs, minus the "All" tab.
+    return source.filter((c) => c !== "All" && (ALWAYS_SHOW.has(c) || present.has(c)));
   });
 
   // The category being browsed in the overlay (when not actively typing a query).
@@ -66,7 +67,7 @@ export const SearchOverlay = component$<Props>(({ open, query }) => {
   // there's no enter/exit render frame — the show/hide is instant.
   return (
     <div class={`search-overlay ${open.value ? "search-overlay--open" : ""}`} aria-hidden={!open.value}>
-      <div class="search-overlay__tabs">
+      <div class="home-catalog__tabs search-overlay__tabs">
         {visibleCategories.value.map((cat) => (
           <button
             key={cat}
@@ -79,7 +80,7 @@ export const SearchOverlay = component$<Props>(({ open, query }) => {
             }}
           >
             <span class="apparel-titlebar__tab-icon" dangerouslySetInnerHTML={CATEGORY_ICONS[cat]} />
-            {cat === "All" ? t("apparel.all", locale.value) : categoryLabel(cat, locale.value).replace(/^T-/, "")}
+            {categoryLabel(cat, locale.value)}
           </button>
         ))}
       </div>

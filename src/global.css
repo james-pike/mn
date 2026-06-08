@@ -3670,7 +3670,7 @@ img { max-width: 100%; display: block; }
   .site-header--search-open .site-header__search {
     flex: 1 1 0;
     min-width: 0;
-    height: 44px;
+    height: 40px;
     margin-right: 2px;
     gap: 3px;
     padding: 4px 6px;
@@ -5224,6 +5224,10 @@ details[open] > .cart-drawer__checkout-title::after {
      header to gain 2px above and below within the 49px envelope (was
      44px → 2.5px each side, now 38px → 5.5px each side). */
   .site-header .brand-cluster--small .brand-cluster__mark { width: 38px !important; height: 38px !important; }
+  /* Pull the logotext closer to the colored-triangle mark in the mobile header. */
+  .site-header .brand-cluster { gap: 0.52rem !important; }
+  /* Tighter letter-spacing on BUILDING SERVICES in the mobile header logo. */
+  .site-header .brand-cluster__word--sub { letter-spacing: -0.02em; }
   .site-header__logo-text { height: 22px; }
   .site-header__logo-apparel { font-size: 0.65rem; }
   .apparel-page { }
@@ -7315,7 +7319,9 @@ details[open] > .cart-drawer__checkout-title::after {
   position: fixed;
   left: 0;
   right: 0;
-  top: 49px;
+  /* Match the catalog header's sticky top (48px) so the tab strip lands in the
+     exact same spot in and out of search — no 1px header shift on toggle. */
+  top: 48px;
   bottom: 0;
   z-index: 10001;
   background: var(--ce-gray-200);
@@ -7324,21 +7330,21 @@ details[open] > .cart-drawer__checkout-title::after {
   overscroll-behavior: contain;
 }
 .search-overlay--open { display: block; }
+/* Reuse the catalog tab-strip styling (.home-catalog__tabs) verbatim; only
+   override the position so it sticks to the top of the overlay. */
 .search-overlay__tabs {
-  display: flex;
-  align-items: stretch;
-  gap: 1px;
-  padding: 4px 4px 6px;
-  background: var(--ce-off-white);
-  border-bottom: 1px solid var(--ce-gray-200);
   position: sticky;
   top: 0;
-  z-index: 1;
-  overflow-x: auto;
-  scrollbar-width: none;
+  z-index: 2;
+  background: var(--ce-off-white);
+  /* Match the catalog header height so the tab strip is the exact same height
+     in and out of search — otherwise the toggle shifts the header up/down. */
+  height: 34px;
+  align-items: stretch;
 }
-.search-overlay__tabs::-webkit-scrollbar { display: none; }
-.search-overlay__tabs .apparel-titlebar__tab { flex: 1 1 auto; min-width: 0; justify-content: center; }
+/* The overlay has no "All" tab, so ensure the first (category) tab shows — the
+   catalog hides its first tab ("All") on phones. */
+.search-overlay .apparel-titlebar__tab:first-child { display: inline-flex !important; }
 .search-overlay__grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -7348,9 +7354,9 @@ details[open] > .cart-drawer__checkout-title::after {
 }
 @media (min-width: 601px) and (max-width: 1024px) {
   .search-overlay__grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (min-width: 768px) and (max-width: 1024px) {
-  .search-overlay { top: 52px; }
+  /* Match the catalog header at this range: top 51px, strip height 38px. */
+  .search-overlay { top: 51px; }
+  .search-overlay__tabs { height: 38px; }
 }
 @media (min-width: 1025px) {
   .search-overlay { display: none; }
