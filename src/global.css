@@ -7323,7 +7323,11 @@ details[open] > .cart-drawer__checkout-title::after {
      exact same spot in and out of search — no 1px header shift on toggle. */
   top: 48px;
   bottom: 0;
-  z-index: 10001;
+  /* Mobile: sit just BELOW the site header (z 9999), exactly like the catalog
+     header (z 50) — so the overlay's top 1px tucks behind the header and its
+     bottom border isn't covered, and the tab strip aligns pixel-for-pixel.
+     (Tablet overrides this to sit above the header, mirroring the catalog there.) */
+  z-index: 9990;
   background: var(--ce-gray-200);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -7336,7 +7340,9 @@ details[open] > .cart-drawer__checkout-title::after {
   position: sticky;
   top: 0;
   z-index: 2;
-  background: var(--ce-off-white);
+  /* Match the catalog header exactly: white bg + 1px bottom separator. */
+  background: var(--ce-white);
+  border-bottom: 1px solid var(--ce-gray-200);
   /* Match the catalog header height so the tab strip is the exact same height
      in and out of search — otherwise the toggle shifts the header up/down. */
   height: 34px;
@@ -7354,9 +7360,15 @@ details[open] > .cart-drawer__checkout-title::after {
 }
 @media (min-width: 601px) and (max-width: 1024px) {
   .search-overlay__grid { grid-template-columns: repeat(3, 1fr); }
-  /* Match the catalog header at this range: top 51px, strip height 38px. */
+  /* Match the catalog header at this range: top 51px, strip height 38px, 1px top
+     separator. (z stays 9990 here — at 601-767 the catalog header is still z 50.) */
   .search-overlay { top: 51px; }
-  .search-overlay__tabs { height: 38px; }
+  .search-overlay__tabs { height: 38px; border-top: 1px solid var(--ce-gray-200); }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Real tablet: the catalog header jumps to z 10000 (above the site header), so
+     the overlay must sit above the header too (z 10001) to land in the same spot. */
+  .search-overlay { z-index: 10001; }
 }
 @media (min-width: 1025px) {
   .search-overlay { display: none; }

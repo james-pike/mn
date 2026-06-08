@@ -72,11 +72,11 @@ export const SearchOverlay = component$<Props>(({ open, query }) => {
           <button
             key={cat}
             class={`apparel-titlebar__tab ${activeTab.value === cat ? "active" : ""}`}
-            // Tapping a tab filters the overlay in place (clears any typed query),
-            // keeping the search view — you continue browsing from here.
+            // Tapping a tab closes search and returns to the regular catalog with
+            // that category selected. The "select-category" event both activates
+            // the catalog tab and (via the layout listener) clears + closes search.
             onClick$={() => {
-              query.value = "";
-              activeCat.value = activeCat.value === cat ? "All" : cat;
+              window.dispatchEvent(new CustomEvent("select-category", { detail: cat }));
             }}
           >
             <span class="apparel-titlebar__tab-icon" dangerouslySetInnerHTML={CATEGORY_ICONS[cat]} />
