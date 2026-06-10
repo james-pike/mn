@@ -9,11 +9,10 @@ const db = createClient({
 });
 
 const SKU = "MN-19"; // Women's Soft Shell Jacket, Port Authority #L7603
-const NEW_IMG = "/womensjacket.webp"; // the intended primary
-// Desired final order: new primary, then the studio shot, then the original.
+const NEW_IMG = "/womensjacket.webp"; // the primary
+// Drop the studio shot; keep just the new primary and the original.
 const ORDER = [
   "/womensjacket.webp",
-  "/l7603_blackheather_modl_studio3.webp",
   "/sku/women-jacket.jpg",
 ];
 
