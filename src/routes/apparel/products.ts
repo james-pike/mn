@@ -205,8 +205,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 0,
-    "img": "/l7603_blackheather_modl_studio3.webp",
+    "img": "/womensjacket.webp",
     "imgs": [
+      "/womensjacket.webp",
       "/l7603_blackheather_modl_studio3.webp",
       "/sku/women-jacket.jpg"
     ],

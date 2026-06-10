@@ -9,8 +9,13 @@ const db = createClient({
 });
 
 const SKU = "MN-19"; // Women's Soft Shell Jacket, Port Authority #L7603
-const NEW_IMG = "/l7603_blackheather_modl_studio3.webp";
-const OLD_IMG = "/sku/women-jacket.jpg";
+const NEW_IMG = "/womensjacket.webp"; // the intended primary
+// Desired final order: new primary, then the studio shot, then the original.
+const ORDER = [
+  "/womensjacket.webp",
+  "/l7603_blackheather_modl_studio3.webp",
+  "/sku/women-jacket.jpg",
+];
 
 const before = await db.execute({
   sql: "SELECT sku, name, img, imgs FROM products WHERE vendor='modernniagara' AND sku=?",
@@ -24,14 +29,9 @@ if (before.rows.length !== 1) {
   process.exit(1);
 }
 
-const current = JSON.parse((before.rows[0] as any).imgs || "[]") as string[];
-const rest = current.filter((p) => p !== NEW_IMG);
-const newImgs = [NEW_IMG, ...rest];
-if (!newImgs.includes(OLD_IMG)) newImgs.splice(1, 0, OLD_IMG);
-
 await db.execute({
   sql: "UPDATE products SET img=?, imgs=? WHERE vendor='modernniagara' AND sku=?",
-  args: [NEW_IMG, JSON.stringify(newImgs), SKU],
+  args: [NEW_IMG, JSON.stringify(ORDER), SKU],
 });
 
 const after = await db.execute({
