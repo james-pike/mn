@@ -185,8 +185,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 0,
-    "img": "/sku/mens-jacket.webp",
+    "img": "/j7603model.webp",
     "imgs": [
+      "/j7603model.webp",
       "/sku/mens-jacket.webp"
     ],
     "material": "100% polyester woven soft shell bonded to 100% polyester microfleece",
