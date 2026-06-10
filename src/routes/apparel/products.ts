@@ -31,8 +31,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 74.99,
-    "img": "/sku/pullover.png",
+    "img": "/pullovermodel.png",
     "imgs": [
+      "/pullovermodel.png",
       "/sku/pullover.png"
     ],
     "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
@@ -88,9 +89,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 0,
-    "img": "/womensjacket.webp",
+    "img": "/womensjacket1.webp",
     "imgs": [
-      "/womensjacket.webp",
+      "/womensjacket1.webp",
       "/sku/women-jacket.jpg"
     ],
     "material": "100% polyester woven soft shell bonded to 100% polyester microfleece",

@@ -6712,6 +6712,41 @@ details[open] > .cart-drawer__checkout-title::after {
   .hero__upper .hero-card-header__btn-label {
     font-size: inherit !important;
   }
+  /* Desktop hero header: the language toggle is a plain ghost button (matching
+     the cart's previous look), showing just FR/EN — not the blue/red filled word. */
+  .hero__upper .hero-card-header__btn--to-fr,
+  .hero__upper .hero-card-header__btn--to-en {
+    background: transparent !important;
+    border-color: transparent !important;
+    color: rgba(255,255,255,0.85) !important;
+    box-shadow: none !important;
+  }
+  .hero__upper .hero-card-header__btn--to-fr:hover,
+  .hero__upper .hero-card-header__btn--to-en:hover {
+    background: rgba(255,255,255,0.12) !important;
+    color: #ffffff !important;
+  }
+  .hero__upper .hero-card-header__btn--to-fr svg,
+  .hero__upper .hero-card-header__btn--to-en svg { stroke: rgba(255,255,255,0.85) !important; }
+  /* Locale shows the short FR/EN, not the full word, on desktop. */
+  .hero__upper .hero-card-header__btn--to-fr .hero-card-header__btn-label,
+  .hero__upper .hero-card-header__btn--to-en .hero-card-header__btn-label { display: none !important; }
+  .hero__upper .hero-card-header__btn--to-fr .hero-card-header__locale-short,
+  .hero__upper .hero-card-header__btn--to-en .hero-card-header__locale-short { display: inline !important; font-size: inherit !important; }
+  /* The cart is now the filled blue button. */
+  .hero__upper .hero-card-header__btn--cart,
+  .hero__upper .hero-card-header__btn--cart.hero-card-header__btn--cart-active {
+    background: #4689b3 !important;
+    border-color: #4689b3 !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important;
+  }
+  .hero__upper .hero-card-header__btn--cart:hover {
+    background: #31759c !important;
+    border-color: #31759c !important;
+    color: #ffffff !important;
+  }
+  .hero__upper .hero-card-header__btn--cart svg { stroke: #ffffff !important; }
   .hero__upper .hero-card-header__actions {
     gap: clamp(2px, 0.25vw, 6px) !important;
   }
