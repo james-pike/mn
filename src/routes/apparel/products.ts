@@ -4,6 +4,99 @@ import type { Locale } from "../../i18n";
 
 export const allProducts = [
   {
+    "sku": "MN-7",
+    "name": "Winter Jacket - Navy",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 198.49,
+    "img": "/sku/mwinterjacket.png",
+    "imgs": [
+      "/sku/mwinterjacket.png",
+      "/sku/winterjacket.png"
+    ],
+    "material": "12 oz 100% ringspun cotton duck shell, quilted nylon lining, Arctic-weight polyester insulation",
+    "details": "Two-way brass zip, pleated bi-swing back, internal rib-knit storm cuffs, four exterior pockets, two interior pockets, triple-stitched seams, #106674"
+  },
+  {
+    "sku": "MN-9",
+    "name": "Pullover Hoodie - Navy",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 74.99,
+    "img": "/sku/pullover.png",
+    "imgs": [
+      "/sku/pullover.png"
+    ],
+    "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
+    "details": "Three-piece hood with drawcord, rib-knit cuffs and waist, front handwarmer pocket, triple-stitched seams, Carhartt patch, #K121"
+  },
+  {
+    "sku": "MN-10",
+    "name": "Full Zip Hoodie - Navy",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 89.99,
+    "img": "/sku/mfullzip.png",
+    "imgs": [
+      "/sku/mfullzip.png",
+      "/sku/fullziphoodie.png"
+    ],
+    "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
+    "details": "Three-piece hood with drawcord, full-length brass zipper, rib-knit cuffs and waist, two front handwarmer pockets, Carhartt patch on pocket, loose fit, #K122"
+  },
+  {
+    "sku": "MN-20",
+    "name": "Men's Soft Shell Jacket",
+    "category": "Jackets",
+    "sizes": "XS - 6XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#6e6e6e",
+      "#2c3e50"
+    ],
+    "price": 0,
+    "img": "/j7603model.webp",
+    "imgs": [
+      "/j7603model.webp",
+      "/sku/mens-jacket.webp"
+    ],
+    "material": "100% polyester woven soft shell bonded to 100% polyester microfleece",
+    "details": "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #J7603"
+  },
+  {
+    "sku": "MN-19",
+    "name": "Women's Soft Shell Jacket",
+    "category": "Jackets",
+    "sizes": "XS - 4XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#6e6e6e",
+      "#2c3e50"
+    ],
+    "price": 0,
+    "img": "/womensjacket.webp",
+    "imgs": [
+      "/womensjacket.webp",
+      "/sku/women-jacket.jpg"
+    ],
+    "material": "100% polyester woven soft shell bonded to 100% polyester microfleece",
+    "details": "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #L7603"
+  },
+  {
     "sku": "MN-3",
     "name": "Short Sleeve T-Shirt - Navy",
     "category": "Shirts",
@@ -119,99 +212,6 @@ export const allProducts = [
     ],
     "material": "ProDry® performance polyester",
     "details": "Moisture-wicking, anti-microbial, double-stitched seams, lock-stitched hem, extended back shirt tail, machine washable, FootJoy, #96324"
-  },
-  {
-    "sku": "MN-7",
-    "name": "Winter Jacket - Navy",
-    "category": "Jackets",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 198.49,
-    "img": "/sku/mwinterjacket.png",
-    "imgs": [
-      "/sku/mwinterjacket.png",
-      "/sku/winterjacket.png"
-    ],
-    "material": "12 oz 100% ringspun cotton duck shell, quilted nylon lining, Arctic-weight polyester insulation",
-    "details": "Two-way brass zip, pleated bi-swing back, internal rib-knit storm cuffs, four exterior pockets, two interior pockets, triple-stitched seams, #106674"
-  },
-  {
-    "sku": "MN-9",
-    "name": "Pullover Hoodie - Navy",
-    "category": "Jackets",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 74.99,
-    "img": "/sku/pullover.png",
-    "imgs": [
-      "/sku/pullover.png"
-    ],
-    "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
-    "details": "Three-piece hood with drawcord, rib-knit cuffs and waist, front handwarmer pocket, triple-stitched seams, Carhartt patch, #K121"
-  },
-  {
-    "sku": "MN-10",
-    "name": "Full Zip Hoodie - Navy",
-    "category": "Jackets",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 89.99,
-    "img": "/sku/mfullzip.png",
-    "imgs": [
-      "/sku/mfullzip.png",
-      "/sku/fullziphoodie.png"
-    ],
-    "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
-    "details": "Three-piece hood with drawcord, full-length brass zipper, rib-knit cuffs and waist, two front handwarmer pockets, Carhartt patch on pocket, loose fit, #K122"
-  },
-  {
-    "sku": "MN-20",
-    "name": "Men's Soft Shell Jacket",
-    "category": "Jackets",
-    "sizes": "XS - 6XL",
-    "badge": "",
-    "colors": [
-      "#1a1a18",
-      "#6e6e6e",
-      "#2c3e50"
-    ],
-    "price": 0,
-    "img": "/j7603model.webp",
-    "imgs": [
-      "/j7603model.webp",
-      "/sku/mens-jacket.webp"
-    ],
-    "material": "100% polyester woven soft shell bonded to 100% polyester microfleece",
-    "details": "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #J7603"
-  },
-  {
-    "sku": "MN-19",
-    "name": "Women's Soft Shell Jacket",
-    "category": "Jackets",
-    "sizes": "XS - 4XL",
-    "badge": "",
-    "colors": [
-      "#1a1a18",
-      "#6e6e6e",
-      "#2c3e50"
-    ],
-    "price": 0,
-    "img": "/womensjacket.webp",
-    "imgs": [
-      "/womensjacket.webp",
-      "/sku/women-jacket.jpg"
-    ],
-    "material": "100% polyester woven soft shell bonded to 100% polyester microfleece",
-    "details": "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #L7603"
   },
   {
     "sku": "MN-1",
