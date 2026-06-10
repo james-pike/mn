@@ -34,6 +34,7 @@ export const allProducts = [
     "img": "/pullovermodel.png",
     "imgs": [
       "/pullovermodel.png",
+      "/K121_472_AVF2_MS26_b_w_1.png",
       "/sku/pullover.png"
     ],
     "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
