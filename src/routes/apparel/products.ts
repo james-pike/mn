@@ -205,8 +205,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 0,
-    "img": "/sku/women-jacket.jpg",
+    "img": "/l7603_blackheather_modl_studio3.webp",
     "imgs": [
+      "/l7603_blackheather_modl_studio3.webp",
       "/sku/women-jacket.jpg"
     ],
     "material": "100% polyester woven soft shell bonded to 100% polyester microfleece",
