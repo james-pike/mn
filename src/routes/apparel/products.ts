@@ -125,8 +125,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 59.99,
-    "img": "/sku/sleeve.png",
+    "img": "/K126-model.png",
     "imgs": [
+      "/K126-model.png",
       "/sku/sleeve.png"
     ],
     "material": "100% cotton jersey, 6.75 oz heavyweight",
@@ -148,9 +149,9 @@ export const allProducts = [
       "#1e40af"
     ],
     "price": 0,
-    "img": "/sku/uapolo.png",
+    "img": "/uapolomodel.webp",
     "imgs": [
-      "/sku/uapolo.png"
+      "/uapolomodel.webp"
     ],
     "material": "5.3 oz/yd² (US), 8.8 oz/L yd (CA), 100% polyester",
     "details": "Moisture-management properties, Anti-odor technology, Textured fabric that's soft, light and breathable, Self-fabric collar, Three-button placket, #1370399"
