@@ -471,6 +471,25 @@ export const allProducts = [
     "details": "Premium Cart Bag offering storage and organization in a lightweight design, Optimized for accessibility and convenience, 14-way top with full-length dividers, 11 storage compartments, Waterproof valuables pocket, Insulated cooler pocket, Hook and loop glove holder, Cart strap pass-through, 5.5 lbs."
   },
   {
+    "sku": "MN-27",
+    "name": "Srixon Q-Star Tour Golf Balls (6) - White",
+    "category": "SWAG",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#ffffff"
+    ],
+    "price": 60,
+    "img": "/ball1.webp",
+    "imgs": [
+      "/ball1.webp",
+      "/ball2.png",
+      "/ball3.webp"
+    ],
+    "material": "",
+    "details": "Low compression tuned for moderate swing speeds, Tour-level distance and greenside spin, Soft feel with urethane cover, 3-piece construction"
+  },
+  {
     "sku": "MNFR-6",
     "name": "FR Insulated Jacket - Navy",
     "category": "Flame Resistant",
@@ -502,25 +521,6 @@ export const allProducts = [
     ],
     "material": "Everything a new hire needs to get started, in Modern Niagara branding",
     "details": "Tranzip recycled computer tote, Eco spiral notebook with pen, 2 Buds Pro wireless ANC earbuds"
-  },
-  {
-    "sku": "MN-27",
-    "name": "Srixon Q-Star Tour Golf Balls (6) - White",
-    "category": "SWAG",
-    "sizes": "One Size",
-    "badge": "",
-    "colors": [
-      "#ffffff"
-    ],
-    "price": 60,
-    "img": "/ball1.webp",
-    "imgs": [
-      "/ball1.webp",
-      "/ball2.png",
-      "/ball3.webp"
-    ],
-    "material": "",
-    "details": "Low compression tuned for moderate swing speeds, Tour-level distance and greenside spin, Soft feel with urethane cover, 3-piece construction"
   },
   {
     "sku": "MN-22",

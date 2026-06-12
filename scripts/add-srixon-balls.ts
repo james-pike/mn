@@ -27,7 +27,7 @@ const product = {
     "3-piece construction",
   ].join(", "),
   pdf: null as string | null,
-  sort_order: 55,
+  sort_order: 54,
 };
 
 async function main() {
