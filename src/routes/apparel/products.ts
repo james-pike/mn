@@ -504,6 +504,25 @@ export const allProducts = [
     "details": "Tranzip recycled computer tote, Eco spiral notebook with pen, 2 Buds Pro wireless ANC earbuds"
   },
   {
+    "sku": "MN-27",
+    "name": "Srixon Q-Star Tour Golf Balls (6) - White",
+    "category": "SWAG",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#ffffff"
+    ],
+    "price": 60,
+    "img": "/ball1.webp",
+    "imgs": [
+      "/ball1.webp",
+      "/ball2.png",
+      "/ball3.webp"
+    ],
+    "material": "",
+    "details": "Low compression tuned for moderate swing speeds, Tour-level distance and greenside spin, Soft feel with urethane cover, 3-piece construction"
+  },
+  {
     "sku": "MN-22",
     "name": "Tranzip Recycled Computer Tote - Black",
     "category": "New Hire Kit",
