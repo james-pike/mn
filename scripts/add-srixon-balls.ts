@@ -13,7 +13,7 @@ const product = {
   sku: "MN-27",
   name: "Srixon Q-Star Tour Golf Balls (6) - White",
   category: "SWAG",
-  sizes: "One Size",
+  sizes: "Pack of 6",
   badge: "",
   colors: JSON.stringify(["#ffffff"]),
   price: 60,
