@@ -277,7 +277,7 @@ export const allProducts = [
     "colors": [
       "#2c3e50"
     ],
-    "price": 33.99,
+    "price": 18.5,
     "img": "/sku/toque.png",
     "imgs": [
       "/sku/toque.png"
