@@ -69,7 +69,7 @@ export const allProducts = [
       "#6e6e6e",
       "#2c3e50"
     ],
-    "price": 0,
+    "price": 65,
     "img": "/j7603model.webp",
     "imgs": [
       "/j7603model.webp",
@@ -89,7 +89,7 @@ export const allProducts = [
       "#6e6e6e",
       "#2c3e50"
     ],
-    "price": 0,
+    "price": 65,
     "img": "/womensjacket1.webp",
     "imgs": [
       "/womensjacket1.webp",
@@ -148,7 +148,7 @@ export const allProducts = [
       "#c0392b",
       "#1e40af"
     ],
-    "price": 0,
+    "price": 65,
     "img": "/uapolomodel.webp",
     "imgs": [
       "/uapolomodel.webp"
@@ -171,7 +171,7 @@ export const allProducts = [
       "#c0392b",
       "#1e40af"
     ],
-    "price": 0,
+    "price": 65,
     "img": "/sku/ua-womens.jpg",
     "imgs": [
       "/sku/ua-womens.jpg"
@@ -196,7 +196,7 @@ export const allProducts = [
       "/sku/footjoy.png"
     ],
     "material": "ProDry® performance polyester",
-    "details": "Moisture-wicking, anti-microbial, double-stitched seams, extended back shirt tail, easy-care fabric, FootJoy, #16324"
+    "details": "Moisture-wicking, anti-microbial, double-stitched seams, extended back shirt tail, easy-care fabric, #16324"
   },
   {
     "sku": "MN-12",
@@ -572,6 +572,42 @@ export const allProducts = [
     ],
     "material": "Recycled ABS plastic (rABS)",
     "details": "Active noise cancellation, Wireless charging case, Charging cable included, Handstands, #70300"
+  },
+  {
+    "sku": "MN-28",
+    "name": "Nomad Air Stand Bag - Black",
+    "category": "SWAG",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 210,
+    "img": "/nomad.jpeg",
+    "imgs": [
+      "/nomad.jpeg"
+    ],
+    "material": "Durable Polyester",
+    "details": "Deluxe 9.5\" stand bag with 7 pockets, 3 full-length dividers and integrated grab handle, Lightweight high-mount automatic stand system for added stability, Two extra-thick hip pads with airflow channel, 4-point adjustable equilibrium dual strap for balance and comfort, Extra-large club cover/rain hood, Removable ball pocket, Fur-lined welded waterproof valuables pocket."
+  },
+  {
+    "sku": "MN-29",
+    "name": "Microfiber Waffle Towel",
+    "category": "SWAG",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#6e6e6e",
+      "#ffffff"
+    ],
+    "price": 20,
+    "img": "/towel.jpg",
+    "imgs": [
+      "/towel.jpg"
+    ],
+    "material": "Microfibre Waffle",
+    "details": "Absorbent microfibre waffle towel, Includes carabiner clip for attachment to golf or duffel bag, Hangs folded or fully open, 18\" x 18\""
   }
 ];
 
