@@ -454,42 +454,6 @@ export const allProducts = [
     "details": "Glossy black barrel with vivid neon trim, blue ink, 5 2/5\" L × 2/5\" Dia, #416"
   },
   {
-    "sku": "MN-26",
-    "name": "Srixon Premium Golf Cart Bag - Navy",
-    "category": "SWAG",
-    "sizes": "One Size",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 315,
-    "img": "/golfbag.jpg",
-    "imgs": [
-      "/golfbag.jpg"
-    ],
-    "material": "",
-    "details": "Premium Cart Bag offering storage and organization in a lightweight design, Optimized for accessibility and convenience, 14-way top with full-length dividers, 11 storage compartments, Waterproof valuables pocket, Insulated cooler pocket, Hook and loop glove holder, Cart strap pass-through, 5.5 lbs."
-  },
-  {
-    "sku": "MN-27",
-    "name": "Srixon Q-Star Tour Golf Balls (6) - White",
-    "category": "SWAG",
-    "sizes": "Pack of 6",
-    "badge": "",
-    "colors": [
-      "#ffffff"
-    ],
-    "price": 60,
-    "img": "/ball1.webp",
-    "imgs": [
-      "/ball1.webp",
-      "/ball2.png",
-      "/ball3.webp"
-    ],
-    "material": "",
-    "details": "Low compression tuned for moderate swing speeds, Tour-level distance and greenside spin, Soft feel with urethane cover, 3-piece construction"
-  },
-  {
     "sku": "MNFR-6",
     "name": "FR Insulated Jacket - Navy",
     "category": "Flame Resistant",
@@ -574,6 +538,42 @@ export const allProducts = [
     "details": "Active noise cancellation, Wireless charging case, Charging cable included, Handstands, #70300"
   },
   {
+    "sku": "MN-26",
+    "name": "Srixon Premium Golf Cart Bag - Navy",
+    "category": "SWAG",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 315,
+    "img": "/golfbag.jpg",
+    "imgs": [
+      "/golfbag.jpg"
+    ],
+    "material": "",
+    "details": "Premium Cart Bag offering storage and organization in a lightweight design, Optimized for accessibility and convenience, 14-way top with full-length dividers, 11 storage compartments, Waterproof valuables pocket, Insulated cooler pocket, Hook and loop glove holder, Cart strap pass-through, 5.5 lbs."
+  },
+  {
+    "sku": "MN-27",
+    "name": "Srixon Q-Star Tour Golf Balls (6) - White",
+    "category": "SWAG",
+    "sizes": "Pack of 6",
+    "badge": "",
+    "colors": [
+      "#ffffff"
+    ],
+    "price": 60,
+    "img": "/ball1.webp",
+    "imgs": [
+      "/ball1.webp",
+      "/ball2.png",
+      "/ball3.webp"
+    ],
+    "material": "",
+    "details": "Low compression tuned for moderate swing speeds, Tour-level distance and greenside spin, Soft feel with urethane cover, 3-piece construction"
+  },
+  {
     "sku": "MN-28",
     "name": "Nomad Air Stand Bag - Black",
     "category": "SWAG",
@@ -589,6 +589,23 @@ export const allProducts = [
     ],
     "material": "Durable Polyester",
     "details": "Deluxe 9.5\" stand bag with 7 pockets, 3 full-length dividers and integrated grab handle, Lightweight high-mount automatic stand system for added stability, Two extra-thick hip pads with airflow channel, 4-point adjustable equilibrium dual strap for balance and comfort, Extra-large club cover/rain hood, Removable ball pocket, Fur-lined welded waterproof valuables pocket."
+  },
+  {
+    "sku": "MN-30",
+    "name": "Noodle Easy Distance Golf Balls (12) - White",
+    "category": "SWAG",
+    "sizes": "Pack of 12",
+    "badge": "",
+    "colors": [
+      "#ffffff"
+    ],
+    "price": 34,
+    "img": "/noodle.jpeg",
+    "imgs": [
+      "/noodle.jpeg"
+    ],
+    "material": "",
+    "details": "Anti-sheer cover for added durability, Explosive core with max compression for spring-like energy transfer at impact, Cross-linked material construction, Made to go and made to last"
   },
   {
     "sku": "MN-29",

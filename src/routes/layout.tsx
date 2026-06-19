@@ -786,9 +786,6 @@ export default component$(() => {
           <nav class="site-header__categories">
             <Link href="/" class={loc.url.pathname === "/" ? "active" : ""}>{t("nav.home", locale.value)}</Link>
             <Link href="/apparel/" class={loc.url.pathname.startsWith("/apparel") ? "active" : ""}>{loginType.value === "tech" ? t("cat.Work Wear", locale.value) : t("nav.apparel", locale.value)}</Link>
-            {loginType.value !== "tech" && loginType.value !== "safety" && (
-              <a href="/apparel/#new-hire-kit" class="site-header__cat-newhire" onClick$={() => { window.dispatchEvent(new CustomEvent("select-category", { detail: "New Hire Kit" })); }}>{t("nav.newhirekit", locale.value)}</a>
-            )}
           </nav>
           <nav class="site-header__nav">
             {showSearch.value && (

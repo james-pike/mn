@@ -242,7 +242,7 @@ img { max-width: 100%; display: block; }
   background: #31759c !important;
   border-color: #31759c !important;
   color: #ffffff !important;
-  border-radius: 0 !important;
+  border-radius: 4px !important;
   box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important;
 }
 .site-header--hero-visible .cart-btn svg,
@@ -3511,18 +3511,18 @@ img { max-width: 100%; display: block; }
   color: var(--ce-gray-900) !important;
 }
 .locale-btn--to-en {
-  background: #d43950 !important;
-  border-color: #bb2f44 !important;
-  color: #ffffff !important;
-  box-shadow: 0 1px 3px rgba(212,57,80,0.35) !important;
+  background: rgba(0,0,0,0.04) !important;
+  border-color: var(--ce-gray-200) !important;
+  color: var(--ce-gray-700) !important;
+  box-shadow: none !important;
 }
 .locale-btn--to-en:hover, .locale-btn--to-en:focus, .locale-btn--to-en:active {
-  background: #ae1f2a !important;
-  border-color: #ae1f2a !important;
-  color: #ffffff !important;
+  background: rgba(0,0,0,0.07) !important;
+  border-color: var(--ce-gray-300) !important;
+  color: var(--ce-gray-900) !important;
 }
 .locale-btn--to-fr svg { stroke: var(--ce-gray-700) !important; }
-.locale-btn--to-en svg { stroke: #ffffff !important; }
+.locale-btn--to-en svg { stroke: var(--ce-gray-700) !important; }
 
 /* Same colour language for the floating home-hero toggle. */
 .hero-card-header__btn--to-fr {
@@ -4473,9 +4473,9 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
   color: #31759c;
 }
 .product-modal__add.btn--secondary:hover {
-  background: #31759c;
-  border-color: #31759c;
-  color: var(--ce-white);
+  background: #ffd25b;
+  border-color: #f0bf3f;
+  color: #1e4a66;
 }
 .product-modal__add:disabled {
   opacity: 0.5;
@@ -5637,7 +5637,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header--hero-hidden.site-header--hero-visible .site-header__logo-apparel { color: var(--ce-gray-400); }
   .site-header--hero-hidden.site-header--hero-visible .locale-btn { color: var(--ce-gray-700); background: rgba(0,0,0,0.03); border: 1px solid var(--ce-gray-200); border-radius: 4px; }
   .site-header--hero-hidden.site-header--hero-visible .locale-btn:hover { color: var(--ce-gray-700); background: rgba(0,0,0,0.03); border-color: var(--ce-gray-200); }
-  .site-header--hero-hidden.site-header--hero-visible .cart-btn { background: #31759c; border: 1px solid #31759c; border-radius: 0; color: #ffffff; }
+  .site-header--hero-hidden.site-header--hero-visible .cart-btn { background: #31759c; border: 1px solid #31759c; border-radius: 4px; color: #ffffff; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn:hover { color: #ffffff; background: #265f80; border-color: #265f80; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn svg { stroke: #ffffff; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn:hover svg { stroke: #ffffff; }
@@ -5789,7 +5789,8 @@ details[open] > .cart-drawer__checkout-title::after {
     align-content: start;
   }
   .cart-btn__label { display: inline; }
-  .locale-btn__full { display: inline; }
+  .locale-btn__full { display: none; }
+  .locale-btn__short { display: inline; }
   .locale-btn__icon { display: inline-flex; }
   .teaser-card-section {
     display: none;
@@ -6042,9 +6043,9 @@ details[open] > .cart-drawer__checkout-title::after {
      logo image at 46px still fits with 2px each side breathing. */
   .site-header { height: 52px; border-bottom: 1px solid var(--ce-gray-200) !important; }
   /* Asymmetric padding: left keeps 0.5rem for the logo cluster, right
-     trimmed to 0.25rem so the cart/logout buttons sit closer to the
-     viewport edge (tighter with the page margin). */
-  .site-header__inner { height: 52px; padding: 0 0.25rem 0 0.5rem; }
+     trimmed to 0 so the cart/logout buttons sit flush to the viewport
+     edge (no gap on the right). */
+  .site-header__inner { height: 52px; padding: 0 0 0 0.5rem; }
   /* Logo-img shrunk so the cluster gains 2px of breathing room above and
      below within the fixed 52px tablet header (cart-drawer mini header). */
   .site-header__logo-img { height: 46px; }
@@ -6053,7 +6054,7 @@ details[open] > .cart-drawer__checkout-title::after {
      tablet header (was 44px → 4px each side, now 40px → 6px each side). */
   .site-header .brand-cluster--small .brand-cluster__mark { width: 40px !important; height: 40px !important; }
   .site-header__logo-text { height: 25px; }
-  .site-header__nav { gap: 1px; margin-right: 0; }
+  .site-header__nav { gap: 1px; margin-right: -4px; }
   .site-header .locale-btn { margin-right: 0; }
   .logout-form { display: inline-flex; }
   .hero-card-header__btn--logout { display: inline-flex; }
