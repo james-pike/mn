@@ -4439,18 +4439,174 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  flex: 1;
-  padding: 12px 20px;
+  gap: 0.15rem;
+  flex: 0 0 auto;
+  padding: 1px 8px 1px 18px;
 }
-.product-modal__add.btn--primary {
-  background: var(--ce-gold);
+
+/* ===== Branded action buttons =====
+   Both the Add-to-Cart and Order-Now CTAs carry the Modern Niagara
+   pinwheel mark in a white chip on the left, plus a fancier finish:
+   a soft brand-coloured edge, a triangle-tinted glow on hover, and a
+   gentle lift. The colour treatment differs (filled vs. ghost) so the
+   two actions stay distinct. */
+.product-modal__add--branded {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  border-radius: 5px;
+  transition: transform var(--transition-fast), box-shadow var(--transition), background var(--transition), color var(--transition), border-color var(--transition);
+}
+/* The pinwheel logo chip */
+.product-modal__add-mark {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+}
+/* At rest the mark is an axis-aligned square; on hover it rotates into a
+   diamond (matching the header logo) as the colours come in. */
+.product-modal__add-pinwheel {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(0deg) scale(0.7);
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.25));
+  transition: transform var(--transition);
+}
+/* Default: nothing shown — the triangles are transparent. The brand
+   colours stagger in (forward) on hover/press, stay coloured while the
+   "Added" state shows, then fade out in the reverse order. */
+.product-modal__add-pinwheel polygon {
+  fill: transparent;
+  transition: fill 0.3s ease;
+}
+/* Fade-OUT stagger = reverse of the fade-in order. These delays apply
+   whenever the polygons return to transparent (on unhover, or when the
+   "Added" state ends). Hover/added rules below override the delay while
+   the colours are coming in, so fade-in stays forward. */
+.product-modal__add-pinwheel polygon:nth-child(1) { transition-delay: 0.28s; }
+.product-modal__add-pinwheel polygon:nth-child(2) { transition-delay: 0.24s; }
+.product-modal__add-pinwheel polygon:nth-child(3) { transition-delay: 0.20s; }
+.product-modal__add-pinwheel polygon:nth-child(4) { transition-delay: 0.16s; }
+.product-modal__add-pinwheel polygon:nth-child(5) { transition-delay: 0.12s; }
+.product-modal__add-pinwheel polygon:nth-child(6) { transition-delay: 0.08s; }
+.product-modal__add-pinwheel polygon:nth-child(7) { transition-delay: 0.04s; }
+.product-modal__add-pinwheel polygon:nth-child(8) { transition-delay: 0s; }
+.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(1),
+.product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(1),
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(1) { fill: #ffe2a6; transition-delay: 0s; }
+.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(2),
+.product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(2),
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(2) { fill: #ae1f2a; transition-delay: 0.04s; }
+.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(3),
+.product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(3),
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(3) { fill: #d43950; transition-delay: 0.08s; }
+.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(4),
+.product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(4),
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(4) { fill: #9ec069; transition-delay: 0.12s; }
+.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(5),
+.product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(5),
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(5) { fill: #7fa244; transition-delay: 0.16s; }
+.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(6),
+.product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(6),
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(6) { fill: #4689b3; transition-delay: 0.20s; }
+.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(7),
+.product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(7),
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(7) { fill: #31759c; transition-delay: 0.24s; }
+.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(8),
+.product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(8),
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(8) { fill: #ffd25b; transition-delay: 0.28s; }
+/* Cart outline at the centre — always white, with a soft dark shadow so
+   it stays crisp on the blue button at rest and over the colourful
+   triangles on hover. */
+.product-modal__add-glyph {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  width: 19px;
+  height: 19px;
   color: var(--ce-white);
-  box-shadow: 0 4px 20px rgba(49,117,156,0.3);
+  stroke-width: 2.6px;
+  filter: drop-shadow(0 1px 1.5px rgba(0,0,0,0.6));
+  transition: opacity 0.3s ease;
+}
+/* Crossfade cart -> checkmark in place when added */
+.product-modal__add-glyph--check { opacity: 0; }
+.product-modal__add--added .product-modal__add-glyph--cart { opacity: 0; }
+.product-modal__add--added .product-modal__add-glyph--check { opacity: 1; }
+
+/* Stack the "Add to Cart" / "Added" labels in one cell so the label keeps
+   the wider label's width — "Added" then swaps in without shifting the
+   icon to its right. */
+.product-modal__add-label {
+  display: inline-grid;
+  text-align: center;
+}
+.product-modal__add-label-text {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+}
+.product-modal__add-label-text--added { opacity: 0; }
+.product-modal__add--added .product-modal__add-label-text--primary { opacity: 0; }
+.product-modal__add--added .product-modal__add-label-text--added { opacity: 1; }
+/* Rotate the square into a diamond on hover (and while "Added" shows) as
+   the colours fill in. Scale down by 1/√2 so the diamond's points line up
+   with where the square's edges were — same footprint in both states. */
+.product-modal__add--branded:not(:disabled):hover .product-modal__add-pinwheel,
+.product-modal__add--added .product-modal__add-pinwheel {
+  transform: rotate(45deg) scale(0.62);
+}
+/* A light that fades in and travels around the button's perimeter on hover */
+@property --sheen-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.product-modal__add--branded::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from var(--sheen-angle), rgba(255,255,255,0.9) 0deg, transparent 55deg, transparent 305deg, rgba(255,255,255,0.9) 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.product-modal__add--branded:not(:disabled):hover::before {
+  opacity: 1;
+  animation: sheen-travel 1.8s linear 1;
+}
+@keyframes sheen-travel {
+  to { --sheen-angle: 360deg; }
+}
+
+/* Add to Cart — filled, in the logo's blue→teal triangle palette */
+.product-modal__add.btn--primary {
+  background: linear-gradient(135deg, #31759c 0%, #4689b3 100%);
+  color: var(--ce-white);
+  border: none;
+  box-shadow: 0 6px 22px rgba(49,117,156,0.34);
 }
 .product-modal__add.btn--primary:hover {
-  background: #7fa244;
+  background: linear-gradient(135deg, #2c6890 0%, #4f95bf 100%);
+  box-shadow: 0 10px 30px rgba(49,117,156,0.42);
 }
+
 @media (min-width: 769px) {
   .product-modal__actions { flex-wrap: wrap; }
   .product-modal__add { flex: 0 1 auto; }
@@ -4464,25 +4620,42 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
   background: var(--ce-green);
   color: var(--ce-white);
 }
-/* Order Now button: ghost button in the logo's darker-blue triangle
-   color (#31759c) instead of green — transparent with a blue border
-   and blue text, filling blue on hover. */
+/* Order Now — ghost button edged in the logo's darker-blue triangle
+   colour (#31759c). Fills with the warm gold triangle on hover so the
+   two buttons echo opposite corners of the pinwheel. */
 .product-modal__add.btn--secondary {
-  background: transparent;
-  border-color: #31759c;
-  color: #31759c;
+  background: var(--ce-white);
+  border: 1.5px solid #31759c;
+  color: #1e4a66;
+  box-shadow: 0 4px 16px rgba(49,117,156,0.14);
 }
 .product-modal__add.btn--secondary:hover {
-  background: #ffd25b;
+  background: linear-gradient(135deg, #ffd25b 0%, #ffe2a6 100%);
   border-color: #f0bf3f;
   color: #1e4a66;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(240,191,63,0.4);
 }
+.product-modal__add.btn--secondary:active { transform: translateY(0); }
+
+/* Disabled: stay fully opaque (no washed-out half-transparency) and
+   instead read as clearly inactive via a muted grey fill. */
 .product-modal__add:disabled {
-  opacity: 0.5;
+  opacity: 1;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
+.product-modal__add.btn--primary:disabled {
+  background: var(--ce-gray-200);
+  color: var(--ce-gray-500);
+}
+.product-modal__add.btn--secondary:disabled {
+  background: var(--ce-gray-100);
+  border-color: var(--ce-gray-300);
+  color: var(--ce-gray-500);
+}
+.product-modal__add--branded:disabled .product-modal__add-mark { box-shadow: none; }
 
 /* ===== Cart Drawer ===== */
 .drawer {
@@ -4806,10 +4979,12 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
   gap: 0.4rem;
   padding: 10px 18px;
   font-size: 0.82rem;
+  color: var(--ce-white);
   /* Match the flat surrounding cart-drawer containers — overrides the
      .btn base radius (3px). */
   border-radius: 0;
 }
+.cart-drawer__order-btn:hover { color: var(--ce-white); }
 .cart-drawer__order-btn svg {
   flex-shrink: 0;
 }

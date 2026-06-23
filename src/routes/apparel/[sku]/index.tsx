@@ -162,7 +162,7 @@ export default component$(() => {
     addedInfo.value = selectedColor.value ? `${p.name} — ${colorName(selectedColor.value, "en")} / ${sizeVal}` : `${p.name} — ${sizeVal}`;
     added.value = true;
     selectedQty.value = 1;
-    setTimeout(() => { added.value = false; }, 3800);
+    setTimeout(() => { added.value = false; }, 1300);
   });
 
   const orderNow = $(() => {
@@ -212,11 +212,23 @@ export default component$(() => {
 
   // Initialize color and auto-select default size (prefer L)
   if (!colorInitialized.value && product.value) {
-    selectedColor.value = sortColorsWhiteLast(product.value.colors)[0];
-    if (waistLengthSkus.has(product.value.sku)) {
+    const p0 = product.value;
+    selectedColor.value = sortColorsWhiteLast(p0.colors)[0];
+    if (waistLengthSkus.has(p0.sku)) {
       selectedSize.value = "W/L";
+    } else if (variantSkus.has(p0.sku)) {
+      // Variant SKUs always start on a selected variant — "Regular" when
+      // available, otherwise the first variant — so the picker is never
+      // left blank. Size is then chosen from that variant's run (prefer L).
+      const variantMap = variantSizesBySku[p0.sku];
+      const variantKeys = Object.keys(variantMap);
+      const defVariant = variantKeys.includes("Regular") ? "Regular" : variantKeys[0];
+      selectedVariant.value = defVariant;
+      const sizes = variantMap[defVariant];
+      const lIdx = sizes.indexOf("L");
+      selectedSize.value = lIdx !== -1 ? sizes[lIdx] : sizes[0];
     } else {
-      const sizes = expandSizes(product.value.sizes);
+      const sizes = expandSizes(p0.sizes);
       const lIdx = sizes.indexOf("L");
       selectedSize.value = lIdx !== -1 ? sizes[lIdx] : sizes[0];
     }
@@ -387,54 +399,79 @@ export default component$(() => {
                 </div>
               </div>
             )}
-            <div class="product-modal__field product-modal__color-qty-row">
-              {p.colors.length > 0 && (
-                <div class="product-modal__color-group">
-                  <label class="product-modal__label">{t("modal.color", locale.value)}{selectedColor.value && <span class="product-modal__color-inline"> — {colorName(selectedColor.value, locale.value)}</span>}</label>
-                  <div class="product-modal__options">
-                    {sortColorsWhiteLast(p.colors).map((color) => (
-                      <button
-                        key={color}
-                        class={`product-modal__color ${selectedColor.value === color ? "active" : ""}`}
-                        style={{ background: color }}
-                        onClick$={() => (selectedColor.value = color)}
-                        aria-label={colorName(color, locale.value)}
-                        title={colorName(color, locale.value)}
-                      />
-                    ))}
-                  </div>
+            {p.colors.length > 0 && (
+              <div class="product-modal__field">
+                <label class="product-modal__label">{t("modal.color", locale.value)}{selectedColor.value && <span class="product-modal__color-inline"> — {colorName(selectedColor.value, locale.value)}</span>}</label>
+                <div class="product-modal__options">
+                  {sortColorsWhiteLast(p.colors).map((color) => (
+                    <button
+                      key={color}
+                      class={`product-modal__color ${selectedColor.value === color ? "active" : ""}`}
+                      style={{ background: color }}
+                      onClick$={() => (selectedColor.value = color)}
+                      aria-label={colorName(color, locale.value)}
+                      title={colorName(color, locale.value)}
+                    />
+                  ))}
                 </div>
-              )}
-              <div class="product-modal__qty-group">
-                <label class="product-modal__label">{t("modal.quantity", locale.value)}</label>
-                <div class="product-modal__qty">
-                  <button class="product-modal__qty-btn" aria-label="Decrease quantity" onClick$={() => { if (selectedQty.value > 1) selectedQty.value--; }}>-</button>
-                  <span class="product-modal__qty-val">{selectedQty.value}</span>
-                  <button class="product-modal__qty-btn" aria-label="Increase quantity" onClick$={() => (selectedQty.value++)}>+</button>
-                </div>
+              </div>
+            )}
+            <div class="product-modal__field product-modal__qty-group">
+              <label class="product-modal__label">{t("modal.quantity", locale.value)}</label>
+              <div class="product-modal__qty">
+                <button class="product-modal__qty-btn" aria-label="Decrease quantity" onClick$={() => { if (selectedQty.value > 1) selectedQty.value--; }}>-</button>
+                <span class="product-modal__qty-val">{selectedQty.value}</span>
+                <button class="product-modal__qty-btn" aria-label="Increase quantity" onClick$={() => (selectedQty.value++)}>+</button>
               </div>
             </div>
             <div class="product-modal__actions">
               <button
-                class="btn btn--primary product-modal__add"
+                class={`btn btn--primary product-modal__add product-modal__add--branded ${added.value ? "product-modal__add--added" : ""}`}
                 disabled={!selectedSize.value || (waistLengthSkus.has(p.sku) && (!selectedWaist.value || !selectedLength.value)) || (variantSkus.has(p.sku) && !selectedVariant.value)}
                 onClick$={addToCart}
               >
-                {added.value ? (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-                ) : (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
-                )}
-                {added.value ? t("modal.added", locale.value) : selectedSize.value ? t("modal.addtocart", locale.value) : t("modal.selectsize", locale.value)}
+                <span class="product-modal__add-label">
+                  <span class="product-modal__add-label-text product-modal__add-label-text--primary">{selectedSize.value ? t("modal.addtocart", locale.value) : t("modal.selectsize", locale.value)}</span>
+                  <span class="product-modal__add-label-text product-modal__add-label-text--added">{t("modal.added", locale.value)}</span>
+                </span>
+                <span class="product-modal__add-mark" aria-hidden="true">
+                  <svg class="product-modal__add-pinwheel" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
+                    <polygon points="50,50 100,0 100,50" fill="#ae1f2a" />
+                    <polygon points="50,50 100,50 100,100" fill="#d43950" />
+                    <polygon points="50,50 100,100 50,100" fill="#9ec069" />
+                    <polygon points="50,50 50,100 0,100" fill="#7fa244" />
+                    <polygon points="50,50 0,100 0,50" fill="#4689b3" />
+                    <polygon points="50,50 0,50 0,0" fill="#31759c" />
+                    <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
+                  </svg>
+                  <svg class="product-modal__add-glyph product-modal__add-glyph--cart" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+                  <svg class="product-modal__add-glyph product-modal__add-glyph--check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                </span>
               </button>
+              {/* Order Now — hidden for now, handler kept in case it's needed later */}
+              {false && (
               <button
-                class="btn btn--secondary product-modal__add"
+                class="btn btn--secondary product-modal__add product-modal__add--branded"
                 disabled={!selectedSize.value || (waistLengthSkus.has(p.sku) && (!selectedWaist.value || !selectedLength.value)) || (variantSkus.has(p.sku) && !selectedVariant.value)}
                 onClick$={orderNow}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                <span class="product-modal__add-mark" aria-hidden="true">
+                  <svg class="product-modal__add-pinwheel" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
+                    <polygon points="50,50 100,0 100,50" fill="#ae1f2a" />
+                    <polygon points="50,50 100,50 100,100" fill="#d43950" />
+                    <polygon points="50,50 100,100 50,100" fill="#9ec069" />
+                    <polygon points="50,50 50,100 0,100" fill="#7fa244" />
+                    <polygon points="50,50 0,100 0,50" fill="#4689b3" />
+                    <polygon points="50,50 0,50 0,0" fill="#31759c" />
+                    <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
+                  </svg>
+                  <svg class="product-modal__add-glyph" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                </span>
                 {t("modal.ordernow", locale.value)}
               </button>
+              )}
             </div>
           </div>
         </div>
