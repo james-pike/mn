@@ -165,51 +165,6 @@ export default component$(() => {
     setTimeout(() => { added.value = false; }, 1300);
   });
 
-  const orderNow = $(() => {
-    const p = product.value;
-    if (!p || !selectedSize.value) return;
-    if (p.colors.length > 0 && !selectedColor.value) return;
-    if (waistLengthSkus.has(p.sku) && (!selectedWaist.value || !selectedLength.value)) return;
-    if (variantSkus.has(p.sku) && !selectedVariant.value) return;
-    const sizeVal = waistLengthSkus.has(p.sku)
-      ? `W${selectedWaist.value} x L${selectedLength.value}`
-      : variantSkus.has(p.sku)
-        ? `${selectedSize.value} ${selectedVariant.value}`
-        : selectedSize.value;
-    try {
-      const saved = localStorage.getItem(`ce_cart_mn_${loginType.value || "clothing"}`);
-      const items = saved ? JSON.parse(saved) : [];
-      const codeMatch = p.details?.match(/#[A-Za-z0-9]+/);
-      let colorVal2 = selectedColor.value;
-      if (!colorVal2 && (!p.colors || p.colors.length === 0)) {
-        const nm = p.name.match(/\s-\s([A-Za-z ]+)$/);
-        if (nm) colorVal2 = nm[1].trim();
-      }
-      const item: any = {
-        name: p.name,
-        sku: p.sku,
-        category: p.category,
-        size: sizeVal,
-        color: colorVal2,
-        quantity: selectedQty.value,
-        price: p.price,
-        img: p.img,
-      };
-      if (codeMatch) item.code = codeMatch[0];
-      if (waistLengthSkus.has(p.sku)) {
-        item.waist = selectedWaist.value;
-        item.length = selectedLength.value;
-      }
-      if (variantSkus.has(p.sku)) {
-        item.variant = selectedVariant.value;
-      }
-      items.push(item);
-      localStorage.setItem(`ce_cart_mn_${loginType.value || "clothing"}`, JSON.stringify(items));
-      window.dispatchEvent(new CustomEvent("cart-updated"));
-      window.dispatchEvent(new CustomEvent("open-cart"));
-    } catch { /* ignore */ }
-  });
-
   // Initialize color and auto-select default size (prefer L)
   if (!colorInitialized.value && product.value) {
     const p0 = product.value;
@@ -449,29 +404,6 @@ export default component$(() => {
                   <svg class="product-modal__add-glyph product-modal__add-glyph--check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
                 </span>
               </button>
-              {/* Order Now — hidden for now, handler kept in case it's needed later */}
-              {false && (
-              <button
-                class="btn btn--secondary product-modal__add product-modal__add--branded"
-                disabled={!selectedSize.value || (waistLengthSkus.has(p.sku) && (!selectedWaist.value || !selectedLength.value)) || (variantSkus.has(p.sku) && !selectedVariant.value)}
-                onClick$={orderNow}
-              >
-                <span class="product-modal__add-mark" aria-hidden="true">
-                  <svg class="product-modal__add-pinwheel" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
-                    <polygon points="50,50 100,0 100,50" fill="#ae1f2a" />
-                    <polygon points="50,50 100,50 100,100" fill="#d43950" />
-                    <polygon points="50,50 100,100 50,100" fill="#9ec069" />
-                    <polygon points="50,50 50,100 0,100" fill="#7fa244" />
-                    <polygon points="50,50 0,100 0,50" fill="#4689b3" />
-                    <polygon points="50,50 0,50 0,0" fill="#31759c" />
-                    <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
-                  </svg>
-                  <svg class="product-modal__add-glyph" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-                </span>
-                {t("modal.ordernow", locale.value)}
-              </button>
-              )}
             </div>
           </div>
         </div>
