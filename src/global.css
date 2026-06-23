@@ -4499,28 +4499,23 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .product-modal__add-pinwheel polygon:nth-child(6) { transition-delay: 0.08s; }
 .product-modal__add-pinwheel polygon:nth-child(7) { transition-delay: 0.04s; }
 .product-modal__add-pinwheel polygon:nth-child(8) { transition-delay: 0s; }
-.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(1),
+/* Press (touch/click) and the "Added" state reveal the colours. Hover is
+   handled separately under @media (hover: hover) so it doesn't stick on
+   touch devices after the tap. */
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(1),
 .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(1) { fill: #ffe2a6; transition-delay: 0s; }
-.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(2),
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(2),
 .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(2) { fill: #ae1f2a; transition-delay: 0.04s; }
-.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(3),
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(3),
 .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(3) { fill: #d43950; transition-delay: 0.08s; }
-.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(4),
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(4),
 .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(4) { fill: #9ec069; transition-delay: 0.12s; }
-.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(5),
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(5),
 .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(5) { fill: #7fa244; transition-delay: 0.16s; }
-.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(6),
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(6),
 .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(6) { fill: #4689b3; transition-delay: 0.20s; }
-.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(7),
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(7),
 .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(7) { fill: #31759c; transition-delay: 0.24s; }
-.product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(8),
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(8),
 .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(8) { fill: #ffd25b; transition-delay: 0.28s; }
 /* Cart outline at the centre — always white, with a soft dark shadow so
@@ -4562,7 +4557,7 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
 /* Rotate the square into a diamond on hover (and while "Added" shows) as
    the colours fill in. Scale down by 1/√2 so the diamond's points line up
    with where the square's edges were — same footprint in both states. */
-.product-modal__add--branded:not(:disabled):hover .product-modal__add-pinwheel,
+.product-modal__add--branded:not(:disabled):active .product-modal__add-pinwheel,
 .product-modal__add--added .product-modal__add-pinwheel {
   transform: rotate(45deg) scale(0.62);
 }
@@ -4587,12 +4582,27 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
   opacity: 0;
   transition: opacity 0.3s ease;
 }
-.product-modal__add--branded:not(:disabled):hover::before {
-  opacity: 1;
-  animation: sheen-travel 1.8s linear 1;
-}
 @keyframes sheen-travel {
   to { --sheen-angle: 360deg; }
+}
+
+/* Hover-only effects — gated so they never "stick" on touch devices after
+   a tap (which would leave the colours/diamond showing once "Added" ends).
+   Touch relies on :active + the .product-modal__add--added state instead. */
+@media (hover: hover) {
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(1) { fill: #ffe2a6; transition-delay: 0s; }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(2) { fill: #ae1f2a; transition-delay: 0.04s; }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(3) { fill: #d43950; transition-delay: 0.08s; }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(4) { fill: #9ec069; transition-delay: 0.12s; }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(5) { fill: #7fa244; transition-delay: 0.16s; }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(6) { fill: #4689b3; transition-delay: 0.20s; }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(7) { fill: #31759c; transition-delay: 0.24s; }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(8) { fill: #ffd25b; transition-delay: 0.28s; }
+  .product-modal__add--branded:not(:disabled):hover .product-modal__add-pinwheel { transform: rotate(45deg) scale(0.62); }
+  .product-modal__add--branded:not(:disabled):hover::before {
+    opacity: 1;
+    animation: sheen-travel 1.8s linear 1;
+  }
 }
 
 /* Add to Cart — filled, in the logo's blue→teal triangle palette */
@@ -6644,7 +6654,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .product-modal__details-list { margin-bottom: 1rem; }
   .product-modal__field { margin-bottom: 1rem; }
   .product-modal__actions { margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
-  .product-modal__add { padding: 10px 16px; flex: 0 0 auto; width: auto; font-size: 0.82rem; font-weight: 500; }
+  .product-modal__add { padding: 2px 8px 2px 18px; flex: 0 0 auto; width: auto; font-size: 0.82rem; font-weight: 500; }
   .product-modal__color-qty-row { gap: 1.25rem; }
   .product-modal__actions { flex-direction: row; }
   .cart-drawer__header { display: none; }
