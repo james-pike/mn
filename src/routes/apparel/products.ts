@@ -470,7 +470,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-25",
-    "name": "New Hire Kit",
+    "name": "Office Welcome Kit",
     "category": "New Hire Kit",
     "sizes": "One Size",
     "badge": "",
@@ -483,7 +483,7 @@ export const allProducts = [
       "/notebook.jpg",
       "/earphones.jpg"
     ],
-    "material": "Everything a new hire needs to get started, in Modern Niagara branding",
+    "material": "Everything you need to get started, in Modern Niagara branding",
     "details": "Tranzip recycled computer tote, Eco spiral notebook with pen, 2 Buds Pro wireless ANC earbuds"
   },
   {
@@ -556,7 +556,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-27",
-    "name": "Srixon Q-Star Tour Golf Balls (6) - White",
+    "name": "Srixon Q-Star Tour Golf Balls (6)",
     "category": "SWAG",
     "sizes": "Pack of 6",
     "badge": "",
@@ -591,23 +591,6 @@ export const allProducts = [
     "details": "Deluxe 9.5\" stand bag with 7 pockets, 3 full-length dividers and integrated grab handle, Lightweight high-mount automatic stand system for added stability, Two extra-thick hip pads with airflow channel, 4-point adjustable equilibrium dual strap for balance and comfort, Extra-large club cover/rain hood, Removable ball pocket, Fur-lined welded waterproof valuables pocket."
   },
   {
-    "sku": "MN-30",
-    "name": "Noodle Easy Distance Golf Balls (12) - White",
-    "category": "SWAG",
-    "sizes": "Pack of 12",
-    "badge": "",
-    "colors": [
-      "#ffffff"
-    ],
-    "price": 34,
-    "img": "/noodle.jpeg",
-    "imgs": [
-      "/noodle.jpeg"
-    ],
-    "material": "",
-    "details": "Anti-sheer cover for added durability, Explosive core with max compression for spring-like energy transfer at impact, Cross-linked material construction, Made to go and made to last"
-  },
-  {
     "sku": "MN-29",
     "name": "Microfiber Waffle Towel",
     "category": "SWAG",
@@ -625,6 +608,23 @@ export const allProducts = [
     ],
     "material": "Microfibre Waffle",
     "details": "Absorbent microfibre waffle towel, Includes carabiner clip for attachment to golf or duffel bag, Hangs folded or fully open, 18\" x 18\""
+  },
+  {
+    "sku": "MN-30",
+    "name": "Wilson Ultra Distance Golf Balls (12)",
+    "category": "SWAG",
+    "sizes": "Pack of 12",
+    "badge": "",
+    "colors": [
+      "#ffffff"
+    ],
+    "price": 36,
+    "img": "/wilson.jpeg",
+    "imgs": [
+      "/wilson.jpeg"
+    ],
+    "material": "",
+    "details": "High-energy core for maximum initial velocity, Guaranteed cutproof cover for ultimate playability, Engineered for maximum allowable distance, #WG2006301"
   }
 ];
 

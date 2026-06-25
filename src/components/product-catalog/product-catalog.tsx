@@ -88,7 +88,7 @@ const ProductCard = component$<{ item: Product; sku: string }>(({ item, sku }) =
             {!isTech && <div class="product-card__price">${(Number(item.price) || 0).toFixed(2)}</div>}
           </div>
         </div>
-        {item.name === "New Hire Kit" ? (
+        {item.name === "Office Welcome Kit" ? (
           // The bundle: no colour/size, so use that gray text area to list the
           // kit's contents (same size/colour as the sizes text).
           <div class="product-card__color-size-row">

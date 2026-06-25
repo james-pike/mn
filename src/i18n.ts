@@ -6,6 +6,10 @@ export type Locale = "en" | "fr";
 export const LocaleContext = createContextId<Signal<Locale>>("locale");
 
 const translations = {
+  // Footer / privacy
+  "footer.privacypolicy": { en: "Privacy Policy", fr: "Politique de confidentialité" },
+  "privacy.title": { en: "Privacy Policy", fr: "Politique de confidentialité" },
+  "privacy.body": { en: "Order details are used only to fulfil your order. Customer email and phone numbers aren't stored in our database — they're used only to send your order confirmation by email.", fr: "Les détails de la commande servent uniquement à traiter votre commande. Les courriels et numéros de téléphone des clients ne sont pas conservés dans notre base de données — ils servent uniquement à envoyer la confirmation de commande par courriel." },
   // Header nav
   "logo.apparel": { en: "Apparel", fr: "Vêtements" },
   "nav.home": { en: "Home", fr: "Accueil" },
@@ -203,8 +207,8 @@ const translations = {
   "cat.Flame Resistant": { en: "Flame Resistant", fr: "Vêtements ignifuges" },
   "cat.Shirts": { en: "Shirts", fr: "Chemises" },
   "cat.SWAG": { en: "SWAG", fr: "SWAG" },
-  "cat.New Hire Kit": { en: "New Hire Kit", fr: "Trousse d'accueil" },
-  "nav.newhirekit": { en: "New Hire Kit", fr: "Trousse d'accueil" },
+  "cat.New Hire Kit": { en: "Office Kit", fr: "Trousse de bureau" },
+  "nav.newhirekit": { en: "Office Kit", fr: "Trousse de bureau" },
 
   // Product detail
   "product.taptoclose": { en: "Tap anywhere to close", fr: "Appuyez pour fermer" },

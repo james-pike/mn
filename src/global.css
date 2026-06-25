@@ -47,6 +47,15 @@ body {
   text-rendering: optimizeLegibility;
   overscroll-behavior: none;
   position: relative;
+  /* Sticky footer: keep the footer pinned to the bottom even when a page's
+     content is short (e.g. the privacy page). */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+body > main {
+  flex: 1 0 auto;
 }
 /* Tap highlight removal on mobile */
 button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
@@ -1590,6 +1599,7 @@ img { max-width: 100%; display: block; }
   background: #1e40af;
   color: rgba(255,255,255,0.7);
   padding: 2rem 1rem 1.5rem;
+  flex-shrink: 0;
 }
 .site-footer__inner {
   max-width: 1536px;
@@ -1598,6 +1608,45 @@ img { max-width: 100%; display: block; }
   flex-direction: column;
   align-items: center;
   gap: 1.25rem;
+}
+/* Privacy Policy page */
+.privacy-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 4rem;
+}
+.privacy-page__title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--ce-gray-900);
+  margin: 0 0 1rem;
+}
+.privacy-page__body {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ce-gray-700);
+  margin: 0;
+}
+
+/* Contact email with the Privacy Policy link stacked beneath it. Kept as one
+   block so that on desktop (where .site-footer__col is display:contents) the
+   privacy link stays directly under the email instead of spreading into the row. */
+.site-footer__contact-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+}
+/* Privacy Policy link under the contact email. */
+.site-footer__privacy-link {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.78rem;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.site-footer__privacy-link:hover {
+  color: rgba(255,255,255,0.95);
+  text-decoration: underline;
 }
 .site-footer__brand {
   display: flex;
@@ -4485,19 +4534,19 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
    "Added" state shows, then fade out in the reverse order. */
 .product-modal__add-pinwheel polygon {
   fill: transparent;
-  transition: fill 0.3s ease;
+  transition: fill 0.2s ease;
 }
 /* Fade-OUT stagger = reverse of the fade-in order. These delays apply
    whenever the polygons return to transparent (on unhover, or when the
    "Added" state ends). Hover/added rules below override the delay while
    the colours are coming in, so fade-in stays forward. */
-.product-modal__add-pinwheel polygon:nth-child(1) { transition-delay: 0.28s; }
-.product-modal__add-pinwheel polygon:nth-child(2) { transition-delay: 0.24s; }
-.product-modal__add-pinwheel polygon:nth-child(3) { transition-delay: 0.20s; }
-.product-modal__add-pinwheel polygon:nth-child(4) { transition-delay: 0.16s; }
-.product-modal__add-pinwheel polygon:nth-child(5) { transition-delay: 0.12s; }
-.product-modal__add-pinwheel polygon:nth-child(6) { transition-delay: 0.08s; }
-.product-modal__add-pinwheel polygon:nth-child(7) { transition-delay: 0.04s; }
+.product-modal__add-pinwheel polygon:nth-child(1) { transition-delay: 0.175s; }
+.product-modal__add-pinwheel polygon:nth-child(2) { transition-delay: 0.15s; }
+.product-modal__add-pinwheel polygon:nth-child(3) { transition-delay: 0.125s; }
+.product-modal__add-pinwheel polygon:nth-child(4) { transition-delay: 0.1s; }
+.product-modal__add-pinwheel polygon:nth-child(5) { transition-delay: 0.075s; }
+.product-modal__add-pinwheel polygon:nth-child(6) { transition-delay: 0.05s; }
+.product-modal__add-pinwheel polygon:nth-child(7) { transition-delay: 0.025s; }
 .product-modal__add-pinwheel polygon:nth-child(8) { transition-delay: 0s; }
 /* Press (touch/click) and the "Added" state reveal the colours. Hover is
    handled separately under @media (hover: hover) so it doesn't stick on
@@ -4505,19 +4554,19 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(1),
 .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(1) { fill: #ffe2a6; transition-delay: 0s; }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(2),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(2) { fill: #ae1f2a; transition-delay: 0.04s; }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(2) { fill: #ae1f2a; transition-delay: 0.025s; }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(3),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(3) { fill: #d43950; transition-delay: 0.08s; }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(3) { fill: #d43950; transition-delay: 0.05s; }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(4),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(4) { fill: #9ec069; transition-delay: 0.12s; }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(4) { fill: #9ec069; transition-delay: 0.075s; }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(5),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(5) { fill: #7fa244; transition-delay: 0.16s; }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(5) { fill: #7fa244; transition-delay: 0.1s; }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(6),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(6) { fill: #4689b3; transition-delay: 0.20s; }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(6) { fill: #4689b3; transition-delay: 0.125s; }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(7),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(7) { fill: #31759c; transition-delay: 0.24s; }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(7) { fill: #31759c; transition-delay: 0.15s; }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(8),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(8) { fill: #ffd25b; transition-delay: 0.28s; }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(8) { fill: #ffd25b; transition-delay: 0.175s; }
 /* Cart outline at the centre — always white, with a soft dark shadow so
    it stays crisp on the blue button at rest and over the colourful
    triangles on hover. */
@@ -4532,7 +4581,12 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
   color: var(--ce-white);
   stroke-width: 2.6px;
   filter: drop-shadow(0 1px 1.5px rgba(0,0,0,0.6));
-  transition: opacity 0.3s ease;
+  /* Exit (added -> rest): snap back quickly. */
+  transition: opacity 0.12s ease;
+}
+/* Entry (rest -> added): slightly quicker than before, still a soft fade. */
+.product-modal__add--added .product-modal__add-glyph {
+  transition: opacity 0.2s ease;
 }
 /* Crossfade cart -> checkmark in place when added */
 .product-modal__add-glyph--check { opacity: 0; }
@@ -4591,13 +4645,13 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
    Touch relies on :active + the .product-modal__add--added state instead. */
 @media (hover: hover) {
   .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(1) { fill: #ffe2a6; transition-delay: 0s; }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(2) { fill: #ae1f2a; transition-delay: 0.04s; }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(3) { fill: #d43950; transition-delay: 0.08s; }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(4) { fill: #9ec069; transition-delay: 0.12s; }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(5) { fill: #7fa244; transition-delay: 0.16s; }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(6) { fill: #4689b3; transition-delay: 0.20s; }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(7) { fill: #31759c; transition-delay: 0.24s; }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(8) { fill: #ffd25b; transition-delay: 0.28s; }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(2) { fill: #ae1f2a; transition-delay: 0.025s; }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(3) { fill: #d43950; transition-delay: 0.05s; }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(4) { fill: #9ec069; transition-delay: 0.075s; }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(5) { fill: #7fa244; transition-delay: 0.1s; }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(6) { fill: #4689b3; transition-delay: 0.125s; }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(7) { fill: #31759c; transition-delay: 0.15s; }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(8) { fill: #ffd25b; transition-delay: 0.175s; }
   .product-modal__add--branded:not(:disabled):hover .product-modal__add-pinwheel { transform: rotate(45deg) scale(0.62); }
   .product-modal__add--branded:not(:disabled):hover::before {
     opacity: 1;
