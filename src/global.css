@@ -1634,11 +1634,13 @@ img { max-width: 100%; display: block; }
 
 /* Contact email with the Privacy Policy link stacked beneath it. Kept as one
    block so that on desktop (where .site-footer__col is display:contents) the
-   privacy link stays directly under the email instead of spreading into the row. */
+   privacy link stays directly under the email instead of spreading into the row.
+   Centered on mobile/tablet; right-aligned only on desktop (see the >=1025px
+   block) to match the email's position in the row. */
 .site-footer__contact-block {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   gap: 0.4rem;
 }
 /* Privacy Policy link under the contact email. */
@@ -3005,6 +3007,7 @@ img { max-width: 100%; display: block; }
 @media (min-width: 1025px) {
   .site-footer__col { display: contents; }
   .site-footer__links a { font-size: 0.95rem; }
+  .site-footer__contact-block { align-items: flex-end; }
 }
 /* Mobile: the right column spans full width so the links row can stretch
    edge-to-edge under the brand. */

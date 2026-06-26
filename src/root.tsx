@@ -38,7 +38,7 @@ export default component$(() => {
       </head>
       <body lang="en" translate="no" class="notranslate loading">
         <RouterOutlet />
-        <script dangerouslySetInnerHTML="window.addEventListener('load',function(){document.body.classList.remove('loading');document.body.classList.add('ready')})" />
+        <script dangerouslySetInnerHTML="(function(){function r(){document.body.classList.remove('loading');document.body.classList.add('ready')}if(document.readyState!=='loading'){r()}else{document.addEventListener('DOMContentLoaded',r)}})()" />
       </body>
     </QwikCityProvider>
   );

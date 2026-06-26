@@ -9,7 +9,7 @@ const translations = {
   // Footer / privacy
   "footer.privacypolicy": { en: "Privacy Policy", fr: "Politique de confidentialité" },
   "privacy.title": { en: "Privacy Policy", fr: "Politique de confidentialité" },
-  "privacy.body": { en: "Order details are used only to fulfil your order. Customer email and phone numbers aren't stored in our database — they're used only to send your order confirmation by email.", fr: "Les détails de la commande servent uniquement à traiter votre commande. Les courriels et numéros de téléphone des clients ne sont pas conservés dans notre base de données — ils servent uniquement à envoyer la confirmation de commande par courriel." },
+  "privacy.body": { en: "This application collects order information solely for the purpose of fulfilling and processing your order. Customer email addresses and telephone numbers are not retained in our database; they are used only to send your order confirmation by email.", fr: "Cette application recueille les renseignements de commande uniquement aux fins du traitement et de l'exécution de votre commande. Les adresses courriel et les numéros de téléphone des clients ne sont pas conservés dans notre base de données; ils servent uniquement à envoyer la confirmation de commande par courriel." },
   // Header nav
   "logo.apparel": { en: "Apparel", fr: "Vêtements" },
   "nav.home": { en: "Home", fr: "Accueil" },
