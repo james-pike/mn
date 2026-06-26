@@ -185,8 +185,11 @@ export const useSubmitOrder = routeAction$(
       args: [
         vendor,
         "",
-        employee.name,
-        employee.department,
+        // Customer name and address are intentionally NOT stored in the
+        // database — they appear only in the confirmation email below (built
+        // from the submitted form data). See the privacy policy.
+        "",
+        "",
         employee.po || "",
         JSON.stringify(items),
         total,
@@ -222,7 +225,16 @@ export const useSubmitOrder = routeAction$(
   ).join("");
 
   const fromAddress = env.get("RESEND_FROM") || env.get("VITE_RESEND_FROM") || "Modern Niagara Building Services <onboarding@resend.dev>";
-  const toAddress = env.get("ORDER_NOTIFY_TO") || env.get("VITE_ORDER_NOTIFY_TO") || "cs@safetyhouse.ca";
+  // Staff notification address(es), comma-separated. The customer is the
+  // visible recipient (To); staff is BCC'd. If the customer didn't provide an
+  // email, send To staff directly so the order still arrives.
+  const staffAddresses = (env.get("ORDER_NOTIFY_TO") || env.get("VITE_ORDER_NOTIFY_TO") || "cs@safetyhouse.ca")
+    .split(",")
+    .map((a) => a.trim())
+    .filter(Boolean);
+  const customerEmail = (employee.email || "").trim();
+  const toAddresses = customerEmail ? [customerEmail] : staffAddresses;
+  const bccAddresses = customerEmail ? staffAddresses : [];
 
   const html = `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
@@ -273,7 +285,8 @@ export const useSubmitOrder = routeAction$(
     const resend = new Resend(apiKey);
     await resend.emails.send({
       from: fromAddress,
-      to: [toAddress],
+      to: toAddresses,
+      ...(bccAddresses.length ? { bcc: bccAddresses } : {}),
       subject: `${orderNumber ? `${orderNumber} — ` : ""}Apparel Order — ${employee.name} — ${date}`,
       html,
     });
@@ -1055,7 +1068,7 @@ export default component$(() => {
             <a href="/apparel/#jackets" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Jackets" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 52 : 58); const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Jackets", locale.value)}</a>
             <a href="/apparel/#hats" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Hats" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 52 : 58); const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Hats", locale.value)}</a>
             <a href="/apparel/#swag" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "SWAG" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 52 : 58); const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.SWAG", locale.value)}</a>
-            <a href="/apparel/#new-hire-kit" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "New Hire Kit" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 52 : 58); const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.New Hire Kit", locale.value)}</a>
+            <a href="/apparel/#new-hire-kit" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "New Hire Kit" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 52 : 58); const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}><span class="site-footer__officekit-short">{t("cat.New Hire Kit", locale.value)}</span><span class="site-footer__officekit-full">{t("nav.officewelcomekit", locale.value)}</span></a>
             <Link class="site-footer__links-privacy" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>
           </nav>
           )}

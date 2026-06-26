@@ -32,6 +32,14 @@ export default component$(() => {
     // (Earlier we gated this on sessionStorage; that suppressed the animation
     // even on login, so the gate has been removed.)
     document.documentElement.classList.remove("mn-hero-no-anim");
+    // Once the intro has finished, re-pin the final state. Otherwise a later
+    // re-render that adds letters to the headline — e.g. switching language,
+    // where APPAREL (7) becomes VÊTEMENTS (9) — replays the per-letter fade on
+    // just the newly-added trailing letters, so they appear to lag behind.
+    const introDone = setTimeout(() => {
+      document.documentElement.classList.add("mn-hero-no-anim");
+    }, 3000);
+    cleanup(() => clearTimeout(introDone));
   });
 
   // Carousel autoplay (manual to avoid qwik-ui serialization bug)

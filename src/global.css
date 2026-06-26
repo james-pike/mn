@@ -1631,6 +1631,12 @@ img { max-width: 100%; display: block; }
   color: var(--ce-gray-700);
   margin: 0;
 }
+.privacy-page__contact-link {
+  color: #1e40af;
+  text-decoration: underline;
+  font-weight: 500;
+}
+.privacy-page__contact-link:hover { text-decoration: none; }
 
 /* Contact email with the Privacy Policy link stacked beneath it. Kept as one
    block so that on desktop (where .site-footer__col is display:contents) the
@@ -1653,6 +1659,13 @@ img { max-width: 100%; display: block; }
 /* Inline copy of the Privacy Policy link that joins the footer links row on
    mobile only; hidden elsewhere (the under-email copy is used on tablet/desktop). */
 .site-footer__links-privacy { display: none; }
+/* Office Kit footer link: short label on mobile/tablet, full "Office Welcome
+   Kit" on desktop where there's room. */
+.site-footer__officekit-full { display: none; }
+@media (min-width: 1025px) {
+  .site-footer__officekit-full { display: inline; }
+  .site-footer__officekit-short { display: none; }
+}
 .site-footer__privacy-link:hover {
   color: rgba(255,255,255,0.95);
   text-decoration: underline;

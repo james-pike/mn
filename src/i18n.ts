@@ -9,7 +9,7 @@ const translations = {
   // Footer / privacy
   "footer.privacypolicy": { en: "Privacy Policy", fr: "Politique de confidentialité" },
   "privacy.title": { en: "Privacy Policy", fr: "Politique de confidentialité" },
-  "privacy.body": { en: "This application collects order information solely for the purpose of fulfilling and processing your order. Customer email addresses and telephone numbers are not retained in our database; they are used only to send your order confirmation by email.", fr: "Cette application recueille les renseignements de commande uniquement aux fins du traitement et de l'exécution de votre commande. Les adresses courriel et les numéros de téléphone des clients ne sont pas conservés dans notre base de données; ils servent uniquement à envoyer la confirmation de commande par courriel." },
+  "privacy.body": { en: "This application is intended for internal use only. We do not store customer names, addresses, email addresses, or phone numbers in our database; this information appears only in order confirmation emails, which are processed by our third-party email provider (Resend) and retained for up to 30 days before deletion. This information is not sold. To learn more, please contact info@modernniagaraapparel.ca.", fr: "Cette application est réservée à un usage interne. Nous ne conservons pas dans notre base de données les noms, adresses, adresses courriel ni numéros de téléphone des clients; ces renseignements figurent uniquement dans les courriels de confirmation de commande, traités par notre fournisseur de courriel tiers (Resend) et conservés pendant un maximum de 30 jours avant leur suppression. Ces renseignements ne sont pas vendus. Pour en savoir plus, veuillez communiquer avec info@modernniagaraapparel.ca." },
   // Header nav
   "logo.apparel": { en: "Apparel", fr: "Vêtements" },
   "nav.home": { en: "Home", fr: "Accueil" },
@@ -209,6 +209,7 @@ const translations = {
   "cat.SWAG": { en: "SWAG", fr: "SWAG" },
   "cat.New Hire Kit": { en: "Office Kit", fr: "Trousse bureau" },
   "nav.newhirekit": { en: "Office Kit", fr: "Trousse bureau" },
+  "nav.officewelcomekit": { en: "Office Welcome Kit", fr: "Trousse d'accueil de bureau" },
 
   // Product detail
   "product.taptoclose": { en: "Tap anywhere to close", fr: "Appuyez pour fermer" },
