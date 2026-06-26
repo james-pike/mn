@@ -209,7 +209,7 @@ const translations = {
   "cat.SWAG": { en: "SWAG", fr: "SWAG" },
   "cat.New Hire Kit": { en: "Office Kit", fr: "Trousse bureau" },
   "nav.newhirekit": { en: "Office Kit", fr: "Trousse bureau" },
-  "nav.officewelcomekit": { en: "Office Welcome Kit", fr: "Trousse d'accueil de bureau" },
+  "nav.officewelcomekit": { en: "Office Welcome Kit", fr: "Trousse bureau" },
 
   // Product detail
   "product.taptoclose": { en: "Tap anywhere to close", fr: "Appuyez pour fermer" },

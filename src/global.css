@@ -63,6 +63,9 @@ body:has(.privacy-page) > main {
 }
 /* Tap highlight removal on mobile */
 button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+/* Disable the iOS double-tap-to-zoom gesture on interactive elements (pinch
+   zoom still works) so a quick tap on e.g. the search icon never zooms in. */
+button, a, input, select, textarea, label, [role="button"] { touch-action: manipulation; }
 /* Prevent image dragging */
 img { -webkit-user-drag: none; user-drag: none; }
 /* Selection color */

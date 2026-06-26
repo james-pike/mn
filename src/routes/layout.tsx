@@ -803,6 +803,8 @@ export default component$(() => {
           <nav class="site-header__nav">
             {showSearch.value && (
               <button class="site-header__search-btn" onClick$={() => {
+                // If the cart drawer is open, close it first.
+                cartOpen.value = false;
                 searchOpen.value = true;
                 const header = document.querySelector(".site-header") as (HTMLElement & { __pin?: (() => void) | null }) | null;
                 header?.classList.add("site-header--search-open");
