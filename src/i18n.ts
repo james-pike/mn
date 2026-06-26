@@ -188,7 +188,7 @@ const translations = {
   "cart.requiredfields": { en: "* required", fr: "* requis" },
 
   // Order confirmation
-  "order.title": { en: "Order Submitted", fr: "Commande soumise" },
+  "order.title": { en: "Order Submitted!", fr: "Commande soumise!" },
   "order.text": {
     en: "Your order has been recorded and sent for processing.",
     fr: "Votre commande a été enregistrée et envoyée pour traitement.",
@@ -207,8 +207,8 @@ const translations = {
   "cat.Flame Resistant": { en: "Flame Resistant", fr: "Vêtements ignifuges" },
   "cat.Shirts": { en: "Shirts", fr: "Chemises" },
   "cat.SWAG": { en: "SWAG", fr: "SWAG" },
-  "cat.New Hire Kit": { en: "Office Kit", fr: "Trousse de bureau" },
-  "nav.newhirekit": { en: "Office Kit", fr: "Trousse de bureau" },
+  "cat.New Hire Kit": { en: "Office Kit", fr: "Trousse bureau" },
+  "nav.newhirekit": { en: "Office Kit", fr: "Trousse bureau" },
 
   // Product detail
   "product.taptoclose": { en: "Tap anywhere to close", fr: "Appuyez pour fermer" },

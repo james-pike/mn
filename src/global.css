@@ -47,14 +47,18 @@ body {
   text-rendering: optimizeLegibility;
   overscroll-behavior: none;
   position: relative;
-  /* Sticky footer: keep the footer pinned to the bottom even when a page's
-     content is short (e.g. the privacy page). */
+}
+/* Sticky footer scoped to the privacy page only. Making <body> a global flex
+   column breaks position:sticky on the catalog tabs (it changes the sticky
+   containing block), so limit it to the short page that needs the footer
+   pinned to the bottom. */
+body:has(.privacy-page) {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   min-height: 100dvh;
 }
-body > main {
+body:has(.privacy-page) > main {
   flex: 1 0 auto;
 }
 /* Tap highlight removal on mobile */
