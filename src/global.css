@@ -218,7 +218,9 @@ img { max-width: 100%; display: block; }
   top: 0;
   z-index: 9999;
   pointer-events: auto;
-  background: var(--ce-white);
+  /* Slightly off-white (like the cm project) so the header reads distinct from
+     the white tab bar and page content below it. */
+  background: var(--ce-off-white);
   border-bottom: none;
   height: 58px;
   margin-bottom: -1px;
@@ -266,7 +268,7 @@ img { max-width: 100%; display: block; }
 /* Landing page header — white */
 
 .site-header--white {
-  background: var(--ce-white);
+  background: var(--ce-off-white);
   border-bottom: 1px solid var(--ce-gray-200);
 }
 .site-header--white .site-header__categories a {
@@ -1923,10 +1925,10 @@ img { max-width: 100%; display: block; }
      not inside a stacking-context-isolating wrapper like the apparel
      route's .apparel-catalog), so it covers the header's bottom border.
      It needs its own 1px top border to show the separator from the header. */
-  .home-catalog__header { height: 38px; padding: 0; top: 51px; border-radius: 0; margin-bottom: 0.2rem; border-top: 1px solid var(--ce-gray-200); }
+  .home-catalog__header { height: 50px; padding: 0; top: 54px; border-radius: 0; margin-bottom: 0.2rem; border-top: 1px solid var(--ce-gray-200); }
   /* Match mobile tab behavior on tablet — equal-width fill + container-query font scaling */
   .home-catalog__tabs { overflow-x: hidden; container-type: inline-size; }
-  .home-catalog__tabs .apparel-titlebar__tab { flex: 1; text-align: center; justify-content: center; font-size: var(--text-tab-wide); padding: 4px 6px; }
+  .home-catalog__tabs .apparel-titlebar__tab { flex: 1; text-align: center; justify-content: center; font-size: clamp(1.08rem, 3.6cqi, 1.45rem); padding: 6px 6px; }
   .home-catalog__tabs .apparel-titlebar__tab:only-child { flex: 0 0 auto; margin-right: auto; text-align: left; justify-content: flex-start; padding-left: 0.75rem; }
   .home-catalog__title { display: none; }
   /* Tablet — flat, minimal roundedness on product cards. */
@@ -5578,6 +5580,17 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header__nav { gap: 1px; margin-right: 1px; }
   .site-header__nav-home { display: none; }
 }
+/* Portrait tablet: scale the compact header up slightly to stay proportional
+   with the taller tab bar (phones <=600px keep the 49px header; landscape
+   tablet >900px already uses the taller 58px header). */
+@media (min-width: 601px) and (max-width: 900px) {
+  .site-header { height: 54px; }
+  .site-header__inner { height: 54px; }
+  .site-header .brand-cluster--small .brand-cluster__mark { width: 42px !important; height: 42px !important; }
+  .site-header__logo-text { height: 24px; }
+  .site-header__logo-img { height: 42px; }
+  .hero { margin-top: -54px; padding-top: 54px; }
+}
 
 /* ===== Desktop (1025px+) ===== */
 @media (min-width: 1025px) {
@@ -7014,11 +7027,12 @@ details[open] > .cart-drawer__checkout-title::after {
 /* Floating hero header has no logo — the in-hero overlay carries the brand. */
 .hero__upper .hero-card-header__logo { visibility: hidden !important; pointer-events: none !important; }
 @media (min-width: 1025px) {
-  /* Pull header content in from the right edge to match the logo-cluster's
-     5vw offset on the left. */
+  /* Right-align the buttons to the same content edge as the sticky
+     .site-header (max-width 1536px inner, 0.75rem padding) so there's no
+     horizontal shift when the on-scroll header replaces this one. */
   .hero__upper .hero-card-header {
     padding-left: 0 !important;
-    padding-right: 5vw !important;
+    padding-right: max(0.75rem, calc((100% - 1536px) / 2 + 0.75rem)) !important;
   }
   /* Buttons scale with the viewport so they stay visually proportional to
      the hero text + header padding (which are vw-based). Without this, the
@@ -7662,5 +7676,13 @@ details[open] > .cart-drawer__checkout-title::after {
 .site-footer .brand-cluster__word { color: rgba(255,255,255,0.85); font-size: 0.9rem; }
 .site-footer .brand-cluster__word--sub { color: rgba(255,255,255,0.55); }
 .site-footer .brand-cluster__word--muted { color: rgba(255,255,255,0.55); opacity: 1; }
+/* Mobile header: condense BUILDING SERVICES (more characters + wider tracking
+   than MODERN NIAGARA) so it's no wider than the line above it, freeing
+   horizontal room for the search field when it expands. */
+@media (max-width: 600px) {
+  .site-header .brand-cluster--small .brand-cluster__word--sub {
+    letter-spacing: -0.03em;
+  }
+}
 /* Nav drawer */
 .nav-drawer .brand-cluster__word { color: var(--ce-gray-900); }
