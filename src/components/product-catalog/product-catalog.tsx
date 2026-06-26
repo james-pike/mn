@@ -52,7 +52,7 @@ function categoryForQuery(query: string, products: Product[]): string {
 // (auto-position, mirroring the cm storefront).
 function scrollProductsBelowBar() {
   const isDesktop = window.innerWidth > 1024;
-  const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 52 : 58);
+  const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58);
   if (isDesktop) {
     const grid = document.querySelector('.home-catalog .apparel-grid');
     const gridTop = grid ? grid.getBoundingClientRect().top + window.scrollY - headerH - 8 : 0;
@@ -199,7 +199,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       // re-scrolling while the keyboard opens leaves a gap above the tabs.
       const catalog = document.querySelector(".home-catalog") as HTMLElement | null;
       if (!catalog) return;
-      const headerH = window.innerWidth < 768 ? 49 : window.innerWidth <= 1024 ? 52 : 58;
+      const headerH = window.innerWidth < 768 ? 49 : window.innerWidth <= 1024 ? 61 : 58;
       const stickyPos = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2;
       if (window.scrollY < stickyPos - 1) {
         requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo({ top: stickyPos, behavior: "instant" })));
