@@ -6576,7 +6576,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header--hero-hidden.site-header--hero-visible {
     opacity: 1;
     pointer-events: auto;
-    background: var(--ce-white) !important;
+    background: var(--ce-off-white) !important;
     border-bottom: 1px solid var(--ce-gray-200) !important;
     margin-bottom: 0;
   }
