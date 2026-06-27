@@ -859,8 +859,15 @@ export default component$(() => {
                   window.addEventListener("touchmove", onTouchMove, { passive: true, once: true });
                 };
                 if (needsReposition) {
-                  // Reposition first (like a tab click), then open once it settles
-                  // — no flash. (The keyboard doesn't auto-raise here; see note.)
+                  // The real field is display:none until open, so it can't be
+                  // focused yet — and a deferred focus is ignored by iOS. So focus
+                  // a hidden primer input synchronously within this tap to raise
+                  // the keyboard now, then run the smooth deferred open. open()
+                  // moves focus to the real field; the keyboard stays up because
+                  // focus only ever passes input -> input, and it's decoupled from
+                  // the visual transition so there's no flash.
+                  const primer = document.querySelector(".mn-kbd-primer") as HTMLInputElement | null;
+                  primer?.focus({ preventScroll: true });
                   window.scrollTo({ top: stickyPos, behavior: "instant" });
                   requestAnimationFrame(() => requestAnimationFrame(open));
                 } else {
@@ -869,6 +876,12 @@ export default component$(() => {
               }} aria-label="Search apparel">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
               </button>
+            )}
+            {/* Hidden primer: focused synchronously on the search tap to raise the
+                iOS keyboard before the real (display:none-until-open) field can be
+                focused. See the search button handler. */}
+            {showSearch.value && (
+              <input type="text" class="mn-kbd-primer" aria-hidden="true" tabIndex={-1} />
             )}
             <button class={`locale-btn ${locale.value === "en" ? "locale-btn--to-fr" : "locale-btn--to-en"} ${cartOpen.value ? "locale-btn--cart-open" : ""}`} onClick$={toggleLocale} aria-label="Toggle language">
               <span class="locale-btn__full">{locale.value === "en" ? "Français" : "English"}</span>

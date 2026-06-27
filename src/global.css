@@ -3751,6 +3751,26 @@ img { max-width: 100%; display: block; }
   gap: 6px;
 }
 .site-header__search > svg { flex-shrink: 0; color: var(--ce-gray-500); }
+/* Hidden keyboard primer (see the search button handler): a real focusable text
+   input kept invisible/off-screen so it can be focused synchronously in the tap
+   to raise the iOS keyboard before the real field (display:none until open) is
+   focusable. Must NOT be display:none/visibility:hidden — that blocks the
+   keyboard. font-size:16px avoids the iOS focus-zoom. */
+.mn-kbd-primer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+  background: transparent;
+  caret-color: transparent;
+  z-index: -1;
+}
 .site-header__search-input {
   flex: 1;
   min-width: 0;
