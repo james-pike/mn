@@ -215,9 +215,7 @@ export default component$(() => {
           <svg class="pdp-breadcrumb__arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
           <span>{backLabel}</span>
         </a>
-        <span class="pdp-breadcrumb__sep" aria-hidden="true">/</span>
         <a href={`/apparel/#${catHash}`} class="pdp-breadcrumb__link pdp-breadcrumb__cat">{categoryLabel(p.category, locale.value)}</a>
-        <span class="pdp-breadcrumb__sep" aria-hidden="true">/</span>
         <span class="pdp-breadcrumb__sku">{p.sku}</span>
       </nav>
       <div class="product-detail">

@@ -988,6 +988,7 @@ export default component$(() => {
                   { key: "cat.Jackets", cat: "Jackets", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>' },
                   { key: "cat.Hats",    cat: "Hats",    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>' },
                   { key: "cat.SWAG",    cat: "SWAG",    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>' },
+                  ...(loginType.value !== "safety" ? [{ key: "nav.officewelcomekit" as TranslationKey, cat: "New Hire Kit", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>' }] : []),
                 ];
                 return (
                   <Accordion.Root class="nav-drawer__accordion" collapsible>
@@ -1010,7 +1011,7 @@ export default component$(() => {
                                     e.stopPropagation();
                                     menuOpen.value = false;
                                     window.dispatchEvent(new CustomEvent("select-category", { detail: c.cat }));
-                                    await nav(`/apparel/#${c.cat.toLowerCase()}`);
+                                    await nav(`/apparel/#${c.cat.toLowerCase().replace(/\s+/g, "-")}`);
                                   }
                                 }}
                               >
@@ -1036,12 +1037,6 @@ export default component$(() => {
                   </Accordion.Root>
                 );
               })()}
-              {loginType.value !== "tech" && loginType.value !== "safety" && (
-                <a href="/apparel/#new-hire-kit" class="nav-drawer__link" onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "New Hire Kit" })); }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
-                  {t("nav.newhirekit", locale.value)}
-                </a>
-              )}
             </div>
             <div class="nav-drawer__footer">
               <button class={`nav-drawer__locale ${locale.value === "en" ? "nav-drawer__locale--to-fr" : "nav-drawer__locale--to-en"}`} onClick$={() => { toggleLocale(); }}>
