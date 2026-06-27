@@ -3011,6 +3011,9 @@ img { max-width: 100%; display: block; }
   background: var(--ce-gray-900);
   color: rgba(255,255,255,0.4);
   padding: 2.5rem 2rem;
+  /* Extend the dark colour a few px below the footer so a sub-pixel rounding
+     gap at the very bottom never shows the light page behind it. */
+  box-shadow: 0 4px 0 0 var(--ce-gray-900);
 }
 .site-footer__inner {
   max-width: 1536px; margin: 0 auto;
