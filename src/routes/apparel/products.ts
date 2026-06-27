@@ -60,7 +60,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-20",
-    "name": "Men's Soft Shell Jacket",
+    "name": "Men's Cole Harbour Soft Shell Jacket",
     "category": "Jackets",
     "sizes": "XS - 6XL",
     "badge": "",
@@ -80,7 +80,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-19",
-    "name": "Women's Soft Shell Jacket",
+    "name": "Women's Cole Harbour Soft Shell Jacket",
     "category": "Jackets",
     "sizes": "XS - 4XL",
     "badge": "",

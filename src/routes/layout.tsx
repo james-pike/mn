@@ -721,6 +721,27 @@ export default component$(() => {
     }
   }, { strategy: 'document-ready' });
 
+  // Footer separator dots dangle at the end of a wrapped line (mobile). Flag each
+  // link whose next visible sibling drops to a new line so CSS drops its trailing dot.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track, cleanup }) => {
+    track(() => locale.value);
+    track(() => loginType.value);
+    const update = () => requestAnimationFrame(() => {
+      document.querySelectorAll(".site-footer__links").forEach((nav) => {
+        const links = (Array.from(nav.querySelectorAll("a")) as HTMLElement[])
+          .filter((a) => a.offsetParent !== null);
+        links.forEach((a, i) => {
+          const next = links[i + 1];
+          a.classList.toggle("is-line-end", !next || next.offsetTop > a.offsetTop);
+        });
+      });
+    });
+    update();
+    window.addEventListener("resize", update);
+    cleanup(() => window.removeEventListener("resize", update));
+  }, { strategy: 'document-ready' });
+
   return (
     <>
       {/* Login Modal */}
@@ -1081,20 +1102,20 @@ export default component$(() => {
           {loginType.value === "safety" && (
           <nav class="site-footer__links">
             <Link href="/">{t("nav.home", locale.value)}</Link>
-            <a href="/apparel/#fr" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Flame Resistant" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Flame Resistant", locale.value)}</a>
-            <a href="/apparel/#shirts" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Shirts" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Shirts", locale.value)}</a>
-            <a href="/apparel/#hats" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Hats" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Hats", locale.value)}</a>
+            <a href="/apparel/#fr" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Flame Resistant" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Flame Resistant", locale.value)}</a>
+            <a href="/apparel/#shirts" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Shirts" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Shirts", locale.value)}</a>
+            <a href="/apparel/#hats" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Hats" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Hats", locale.value)}</a>
             <Link class="site-footer__links-privacy" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>
           </nav>
           )}
           {(loginType.value !== "tech" && loginType.value !== "safety") && (
           <nav class="site-footer__links">
             <Link href="/">{t("nav.home", locale.value)}</Link>
-            <a href="/apparel/#shirts" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Shirts" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Shirts", locale.value)}</a>
-            <a href="/apparel/#jackets" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Jackets" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Jackets", locale.value)}</a>
-            <a href="/apparel/#hats" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Hats" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Hats", locale.value)}</a>
-            <a href="/apparel/#swag" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "SWAG" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.SWAG", locale.value)}</a>
-            <a href="/apparel/#new-hire-kit" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "New Hire Kit" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const grid = document.querySelector('.home-catalog .apparel-grid'); if (grid) { const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 8; window.scrollTo({ top, behavior: 'instant' }); } }}><span class="site-footer__officekit-short">{t("cat.New Hire Kit", locale.value)}</span><span class="site-footer__officekit-full">{t("nav.officewelcomekit", locale.value)}</span></a>
+            <a href="/apparel/#shirts" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Shirts" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Shirts", locale.value)}</a>
+            <a href="/apparel/#jackets" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Jackets" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Jackets", locale.value)}</a>
+            <a href="/apparel/#hats" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Hats" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Hats", locale.value)}</a>
+            <a href="/apparel/#swag" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "SWAG" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.SWAG", locale.value)}</a>
+            <a href="/apparel/#new-hire-kit" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "New Hire Kit" })); const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}><span class="site-footer__officekit-short">{t("cat.New Hire Kit", locale.value)}</span><span class="site-footer__officekit-full">{t("nav.officewelcomekit", locale.value)}</span></a>
             <Link class="site-footer__links-privacy" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>
           </nav>
           )}
