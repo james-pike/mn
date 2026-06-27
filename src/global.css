@@ -4038,6 +4038,7 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .pdp-breadcrumb {
   display: flex;
   align-items: stretch;
+  gap: 0.15rem;
   max-width: 1536px;
   margin: 0 auto 0.2rem;
   padding: 0;
@@ -4069,7 +4070,7 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .pdp-breadcrumb__arrow { flex-shrink: 0; }
 @media (min-width: 768px) and (max-width: 1024px) {
   /* Match the tab bar: square corners + a bit of x margin (not full-bleed). */
-  .pdp-breadcrumb { top: 60px; border-radius: 0; margin: 0 0.2rem 0.06rem; }
+  .pdp-breadcrumb { top: 60px; border-radius: 0; margin: 0 0.1rem 0.06rem; }
 }
 @media (max-width: 767px) {
   /* Match the catalog tab bar: 34px height, square corners, a bit of x margin;
@@ -6835,7 +6836,7 @@ details[open] > .cart-drawer__checkout-title::after {
      so the sticky breadcrumb runs flush with the viewport, the 0.25rem
      side inset moves onto the product image and details below. */
   .apparel-catalog:has(.product-detail) { padding: 0 0 0.35rem; }
-  .product-detail .product-image-row { padding-left: 0.25rem; padding-right: 0.25rem; }
+  .product-detail .product-image-row { padding-left: 0.15rem; padding-right: 0.15rem; }
   .product-detail { padding: 0; margin: 0; max-width: 600px; }
   .product-detail .product-modal__image { border-radius: 2px; padding: 0; }
   .product-detail .product-carousel { border-radius: 2px; aspect-ratio: 1/1; margin: 0; }
@@ -6849,7 +6850,7 @@ details[open] > .cart-drawer__checkout-title::after {
     pointer-events: none;
     z-index: 5;
   }
-  .product-detail .product-modal__details { position: relative; padding: 1.25rem 0.75rem 1.5rem; margin-left: 0.25rem; margin-right: 0.25rem; background: var(--ce-white); border-radius: 2px; }
+  .product-detail .product-modal__details { position: relative; padding: 1.25rem 0.75rem 1.5rem; margin-left: 0.15rem; margin-right: 0.15rem; background: var(--ce-white); border-radius: 2px; }
   .product-detail .product-modal__details::after {
     content: '';
     position: absolute;

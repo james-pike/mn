@@ -207,7 +207,9 @@ export default component$(() => {
   const pdf = (p as any).pdf as string | undefined;
   const catHash = p.category.toLowerCase().replace(/\s+/g, "-");
   const backLabel = loginType.value === "tech" ? t("cat.Work Wear", locale.value) : t("nav.apparel", locale.value);
-  const catLabel = p.category === "Jackets" ? t("cat.JacketsHoodies", locale.value) : categoryLabel(p.category, locale.value);
+  const catLabel = p.category === "Jackets" ? t("cat.JacketsHoodies", locale.value)
+    : p.category === "Hats" ? t("cat.CapsBeanies", locale.value)
+    : categoryLabel(p.category, locale.value);
 
   return (
     <div class="apparel-catalog" id="products">
