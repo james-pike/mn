@@ -4065,7 +4065,8 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
   .pdp-breadcrumb { top: 60px; }
 }
 @media (max-width: 767px) {
-  .pdp-breadcrumb { top: 49px; font-size: 0.8rem; }
+  /* Match the catalog tab bar height (34px) on phones. */
+  .pdp-breadcrumb { top: 49px; font-size: 0.8rem; height: 34px; padding: 0 0.75rem; }
 }
 
 .product-detail {
