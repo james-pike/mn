@@ -3750,6 +3750,10 @@ img { max-width: 100%; display: block; }
   align-items: center;
   gap: 6px;
 }
+/* When search opens from the top of the home page, the header is forced visible
+   synchronously (so the field can be focused within the tap for the keyboard).
+   Snap it in with no transition so it doesn't flash. */
+.mn-search-instant .site-header { transition: none !important; }
 .site-header__search > svg { flex-shrink: 0; color: var(--ce-gray-500); }
 .site-header__search-input {
   flex: 1;

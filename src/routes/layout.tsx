@@ -859,9 +859,21 @@ export default component$(() => {
                   window.addEventListener("touchmove", onTouchMove, { passive: true, once: true });
                 };
                 if (needsReposition) {
-                  // Act like a tab click first: pin the tabs, then open the search.
+                  // Reposition like a tab click, but open SYNCHRONOUSLY so iOS
+                  // raises the keyboard within this tap (a deferred focus is
+                  // ignored). To avoid the flash, suppress the header's slide so it
+                  // snaps in instantly: pin the catalog, force the header visible
+                  // now (no transition), then open + focus in the same tap.
+                  document.documentElement.classList.add("mn-search-instant");
                   window.scrollTo({ top: stickyPos, behavior: "instant" });
-                  requestAnimationFrame(() => requestAnimationFrame(open));
+                  headerScrolled.value = true;
+                  header?.classList.add("site-header--hero-visible");
+                  open();
+                  requestAnimationFrame(() =>
+                    requestAnimationFrame(() =>
+                      document.documentElement.classList.remove("mn-search-instant"),
+                    ),
+                  );
                 } else {
                   open();
                 }
