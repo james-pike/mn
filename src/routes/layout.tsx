@@ -805,54 +805,66 @@ export default component$(() => {
               <button class="site-header__search-btn" onClick$={() => {
                 // If the cart drawer is open, close it first.
                 cartOpen.value = false;
-                searchOpen.value = true;
                 const header = document.querySelector(".site-header") as (HTMLElement & { __pin?: (() => void) | null }) | null;
-                header?.classList.add("site-header--search-open");
-                // Scroll the catalog up so products sit under the tabs/search bar
-                // — on every route (home AND /apparel/) and width (phone + tablet),
-                // so the reposition is consistent.
-                {
-                  const catalog = document.querySelector(".home-catalog") as HTMLElement | null;
-                  if (catalog) {
-                    const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58);
+                const catalog = document.querySelector(".home-catalog") as HTMLElement | null;
+                const headerH = window.innerWidth < 768 ? 49 : (window.innerWidth <= 1024 ? 61 : 58);
+                const stickyPos = catalog ? catalog.getBoundingClientRect().top + window.scrollY - headerH + 2 : 0;
+                // FLASH FIX: on the home page, before the catalog tabs have scrolled
+                // into their sticky position, opening the search animates the hero
+                // header in at the same instant the catalog jumps — a visible flash.
+                // A category-tab click in that same state repositions cleanly, so we
+                // mirror it: scroll the catalog under the tabs FIRST (which lets the
+                // header settle via the scroll listener), THEN open the search once
+                // it's pinned. In every other state nothing repositions, so we open
+                // synchronously (keeps the mobile keyboard opening on the first tap).
+                const needsReposition = !!catalog && loc.url.pathname === "/" && window.scrollY < stickyPos - 1;
+                const open = () => {
+                  searchOpen.value = true;
+                  header?.classList.add("site-header--search-open");
+                  // Reposition here only when we didn't already do it above.
+                  if (!needsReposition && catalog) {
                     const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2;
                     window.scrollTo({ top, behavior: "instant" });
                   }
+                  window.dispatchEvent(new CustomEvent("apparel-search-open"));
+                  // preventScroll stops the browser from scroll-jumping the field
+                  // into view.
+                  const input = document.querySelector(".site-header__search-input") as HTMLInputElement | null;
+                  input?.focus({ preventScroll: true });
+                  // Keep the fixed header visible over the keyboard by pinning it to
+                  // the visual viewport (iOS reports the keyboard offset via the
+                  // viewport "scroll" event).
+                  const vvp = window.visualViewport;
+                  if (vvp && header && loc.url.pathname === "/") {
+                    header.__pin?.();
+                    // Self-tears down once the search closes (via any path), so we
+                    // don't leak the pin and move the header when typing elsewhere.
+                    const pin = () => {
+                      if (!searchOpen.value) { header.__pin?.(); return; }
+                      header.style.top = `${vvp.offsetTop}px`;
+                    };
+                    pin();
+                    vvp.addEventListener("resize", pin);
+                    vvp.addEventListener("scroll", pin);
+                    header.__pin = () => {
+                      vvp.removeEventListener("resize", pin);
+                      vvp.removeEventListener("scroll", pin);
+                      header.style.top = "";
+                      header.__pin = null;
+                    };
+                  }
+                  // Close the search on the first scroll/drag (any contact), tearing
+                  // down the pin so scrolling is smooth.
+                  const onTouchMove = () => { header?.__pin?.(); input?.blur(); searchOpen.value = false; };
+                  window.addEventListener("touchmove", onTouchMove, { passive: true, once: true });
+                };
+                if (needsReposition) {
+                  // Act like a tab click first: pin the tabs, then open the search.
+                  window.scrollTo({ top: stickyPos, behavior: "instant" });
+                  requestAnimationFrame(() => requestAnimationFrame(open));
+                } else {
+                  open();
                 }
-                window.dispatchEvent(new CustomEvent("apparel-search-open"));
-                // Reveal + focus the field synchronously within this tap so mobile
-                // opens the keyboard on the first click. preventScroll stops the
-                // browser from scroll-jumping the field into view.
-                const input = document.querySelector(".site-header__search-input") as HTMLInputElement | null;
-                input?.focus({ preventScroll: true });
-                // Keep the fixed header visible over the keyboard by pinning it to
-                // the visual viewport (iOS reports the keyboard offset via the
-                // viewport "scroll" event). This is done IMPERATIVELY here (no
-                // global useVisibleTask) and only on the mobile search button
-                // (unreachable on desktop), so it can't trigger the Chrome grey.
-                const vvp = window.visualViewport;
-                if (vvp && header && loc.url.pathname === "/") {
-                  header.__pin?.();
-                  // Self-tears down once the search closes (via any path), so we
-                  // don't leak the pin and move the header when typing elsewhere.
-                  const pin = () => {
-                    if (!searchOpen.value) { header.__pin?.(); return; }
-                    header.style.top = `${vvp.offsetTop}px`;
-                  };
-                  pin();
-                  vvp.addEventListener("resize", pin);
-                  vvp.addEventListener("scroll", pin);
-                  header.__pin = () => {
-                    vvp.removeEventListener("resize", pin);
-                    vvp.removeEventListener("scroll", pin);
-                    header.style.top = "";
-                    header.__pin = null;
-                  };
-                }
-                // Close the search on the first scroll/drag (any contact), tearing
-                // down the pin so scrolling is smooth.
-                const onTouchMove = () => { header?.__pin?.(); input?.blur(); searchOpen.value = false; };
-                window.addEventListener("touchmove", onTouchMove, { passive: true, once: true });
               }} aria-label="Search apparel">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
               </button>

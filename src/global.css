@@ -6553,14 +6553,15 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header .logout-btn svg { width: 20px; height: 20px; }
   /* Tablet: the open search field absolutely overlays the nav (pixel-perfect,
      zero shift) — buttons stay as visibility:hidden to hold the nav width. The
-     field is flush to the right margin with a 1px inset on top/bottom/left. */
+     negative left extends the field past the nav toward the logo (a moderate
+     amount) without reaching it; right inset matches the 1px top/bottom. */
   .site-header--search-open .site-header__nav > :not(.site-header__search) { visibility: hidden; }
   .site-header--search-open .site-header__search {
     position: absolute;
     top: 1px;
     bottom: 1px;
-    left: 1px;
-    right: 4px;
+    left: -90px;
+    right: 2px;
   }
   /* Cart button always gets the yellow recessed shade when the header is visible
      (apparel route always, home page on scroll) */
