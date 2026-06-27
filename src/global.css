@@ -1606,6 +1606,18 @@ img { max-width: 100%; display: block; }
   .nav-drawer { width: 340px; }
 }
 @keyframes slide-in-left { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+/* While the menu drawer is open, the scroll-lock makes <body> position:fixed,
+   which would shift the sticky header off-screen (it appears to vanish). Pin it
+   so it stays put and just reads as dimmed under the overlay scrim — no shift on
+   open/close. Stays at its own z-index (below the overlay) so it's darkened. */
+body:has(.nav-drawer-overlay) .site-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
 
 /* ===== Home Catalog Section ===== */
 /* Site Footer */
@@ -1888,7 +1900,7 @@ img { max-width: 100%; display: block; }
   .nav-drawer__cat-item-img { display: none; }
   .nav-drawer__cat-item { gap: 0; padding-left: 26px; }
   .home-catalog__hero-slot + .home-catalog__header { margin-top: 0; }
-  .home-catalog__header { padding: 0; height: 34px; top: 48px; border-radius: 0; margin-bottom: 0; margin-top: 0; }
+  .home-catalog__header { padding: 0; height: 34px; top: 48px; border-radius: 0; margin: 0 -0.15rem; }
   .home-catalog__title { display: none; }
   .home-catalog__search-desktop { display: none !important; }
   .home-catalog .apparel-titlebar__action--mobile-search { display: flex; }
@@ -1947,6 +1959,8 @@ img { max-width: 100%; display: block; }
 .apparel-titlebar__action.apparel-titlebar__action--tablet-cols { display: none; }
 @media (min-width: 768px) and (max-width: 1024px) {
   .apparel-titlebar__action.apparel-titlebar__action--tablet-cols { display: flex; }
+  /* Bigger view-toggle icon (all 3 variants) with less padding so it's clearer. */
+  .apparel-titlebar__action--tablet-cols svg { width: 22px; height: 22px; }
   /* Vertical divider between the column-toggle and the search icon */
   .apparel-titlebar__action--tablet-cols + .apparel-titlebar__action--mobile-search {
     border-left: 1px solid var(--ce-gray-200);
@@ -4079,7 +4093,7 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
 }
 @media (max-width: 600px) {
   /* Pixel-match the catalog tab bar: 34px tall, square corners, flush bottom. */
-  .pdp-breadcrumb { top: 48px; font-size: 0.8rem; height: 34px; padding: 0; overflow: hidden; border-radius: 0; margin: 0 0.15rem 0; }
+  .pdp-breadcrumb { top: 48px; font-size: 0.8rem; height: 34px; padding: 0; overflow: hidden; border-radius: 0; margin: 0; }
   .pdp-breadcrumb__link, .pdp-breadcrumb__sku { padding: 0 10px; }
 }
 
@@ -6296,10 +6310,10 @@ details[open] > .cart-drawer__checkout-title::after {
   .hero__content { padding: 0 16px; }
   .teaser-card-section { margin: 0 16px; }
   .hero { padding-bottom: 1rem; }
-  .product-detail { max-width: 100%; }
+  .product-detail { max-width: 100%; margin-top: -3px; }
   /* Single row now that the breadcrumb (former row 1) is removed —
      image + details sit at the top with no empty gap above. */
-  .product-modal__layout { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; column-gap: 0.2rem; row-gap: 0.1rem; }
+  .product-modal__layout { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; column-gap: 0.1rem; row-gap: 0.1rem; }
   .product-detail .product-modal__details { padding: 1.25rem 1rem 1rem; background: var(--ce-white); border-radius: 0; box-shadow: none; border: none; grid-column: 2; grid-row: 1; margin-right: 0.1rem; }
   .product-detail .product-modal__details::after { display: none; }
   .product-detail .product-modal__details::before { display: none; }
@@ -6649,7 +6663,7 @@ details[open] > .cart-drawer__checkout-title::after {
     stroke: var(--ce-gray-900) !important;
   }
   /* Match the cart/search button dimensions on tablet. */
-  .site-header .hamburger-btn { display: flex !important; height: 58px; padding: 0 14px; }
+  .site-header .hamburger-btn { display: flex !important; height: 58px; padding: 0 19px; }
   .site-header .hamburger-btn svg { width: 20px; height: 20px; }
   /* Show "All" tab on iPad/tablet apparel header (overrides mobile hide rule) */
   .apparel-titlebar__tab:first-child,
