@@ -209,6 +209,7 @@ export default component$(() => {
   const backLabel = loginType.value === "tech" ? t("cat.Work Wear", locale.value) : t("nav.apparel", locale.value);
   const catLabel = p.category === "Jackets" ? t("cat.JacketsHoodies", locale.value)
     : p.category === "Hats" ? t("cat.CapsBeanies", locale.value)
+    : p.category === "New Hire Kit" ? t("nav.officewelcomekit", locale.value)
     : categoryLabel(p.category, locale.value);
 
   return (
