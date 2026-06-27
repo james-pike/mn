@@ -217,6 +217,8 @@ export default component$(() => {
         </a>
         <span class="pdp-breadcrumb__sep" aria-hidden="true">/</span>
         <a href={`/apparel/#${catHash}`} class="pdp-breadcrumb__link pdp-breadcrumb__cat">{categoryLabel(p.category, locale.value)}</a>
+        <span class="pdp-breadcrumb__sep" aria-hidden="true">/</span>
+        <span class="pdp-breadcrumb__sku">{p.sku}</span>
       </nav>
       <div class="product-detail">
         <div class="product-modal__layout">
