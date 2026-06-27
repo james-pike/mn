@@ -4030,6 +4030,53 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .modal__close:hover { background: var(--ce-gray-200); }
 
 /* ===== Product Modal ===== */
+/* Product page breadcrumb — styled like the catalog tab strip (white bar,
+   rounded, bottom border, sticky under the header). */
+.pdp-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 1536px;
+  margin: 0 auto 0.2rem;
+  padding: 0.6rem 1rem;
+  background: var(--ce-white);
+  border-radius: var(--radius-sm);
+  border-bottom: 1px solid var(--ce-gray-200);
+  position: sticky;
+  top: 58px;
+  z-index: 50;
+  font-size: 0.85rem;
+}
+.pdp-breadcrumb__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--ce-gray-600);
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: color var(--transition-fast);
+}
+.pdp-breadcrumb__back { color: var(--ce-green); }
+.pdp-breadcrumb__link:hover { color: var(--ce-gold); }
+.pdp-breadcrumb__arrow { flex-shrink: 0; }
+.pdp-breadcrumb__sep { color: var(--ce-gray-300); flex-shrink: 0; }
+.pdp-breadcrumb__current {
+  color: var(--ce-gray-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .pdp-breadcrumb { top: 60px; }
+}
+@media (max-width: 767px) {
+  .pdp-breadcrumb { top: 49px; font-size: 0.8rem; }
+  /* Condense to just the back link + category on phones. */
+  .pdp-breadcrumb__sep--name, .pdp-breadcrumb__current { display: none; }
+}
+
 .product-detail {
   padding: 0;
   margin: 0;
