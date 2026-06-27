@@ -1897,7 +1897,7 @@ img { max-width: 100%; display: block; }
 @media (min-width: 601px) and (max-width: 1024px) {
   .home-catalog { padding: 0; }
   .home-catalog__inner { padding: 0; max-width: 100%; }
-  .home-catalog .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; min-height: 100vh; align-content: start; padding: 0 0.25rem; margin: 0; }
+  .home-catalog .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; column-gap: 0.25rem; min-height: 100vh; align-content: start; padding: 0 0.25rem; margin: 0; }
   .home-catalog .apparel-grid.apparel-grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
   /* List view: two columns of short, horizontal rows — small square thumbnail
      on the left, all the product details beside it. Shows many products at
@@ -4068,14 +4068,18 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .pdp-breadcrumb__link:hover { color: var(--ce-gold); background: rgba(0,0,0,0.02); }
 .pdp-breadcrumb__sku { color: var(--ce-gray-500); }
 .pdp-breadcrumb__arrow { flex-shrink: 0; }
-@media (min-width: 768px) and (max-width: 1024px) {
-  /* Match the tab bar: square corners + a bit of x margin (not full-bleed). */
-  .pdp-breadcrumb { top: 60px; border-radius: 0; margin: 0 0.1rem 0.06rem; }
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* Pixel-match the catalog tab bar (45px tall, full width, border-top, 0.2rem
+     bottom margin) so navigating catalog <-> product doesn't shift. The tab bar
+     switches to 45px at 601px, so the breadcrumb must too. */
+  .pdp-breadcrumb { top: 61px; border-radius: 0; height: 45px; margin: 0 0 0.2rem; border-top: 1px solid var(--ce-gray-200); }
 }
-@media (max-width: 767px) {
-  /* Match the catalog tab bar: 34px height, square corners, a bit of x margin;
-     tighter gap so the added SKU still fits. */
-  .pdp-breadcrumb { top: 49px; font-size: 0.8rem; height: 34px; padding: 0; overflow: hidden; border-radius: 0; margin: 0 0.15rem 0.06rem; }
+@media (min-width: 768px) and (max-width: 1024px) {
+  .pdp-breadcrumb { top: 60px; }
+}
+@media (max-width: 600px) {
+  /* Pixel-match the catalog tab bar: 34px tall, square corners, flush bottom. */
+  .pdp-breadcrumb { top: 48px; font-size: 0.8rem; height: 34px; padding: 0; overflow: hidden; border-radius: 0; margin: 0 0.15rem 0; }
   .pdp-breadcrumb__link, .pdp-breadcrumb__sku { padding: 0 10px; }
 }
 
@@ -6330,7 +6334,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .product-modal__name { font-size: 1.35rem; }
   .product-modal__price { font-size: 1.15rem; }
   .apparel-catalog:has(.product-detail) { padding: 0 2px 2rem; }
-  .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; }
+  .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; column-gap: 0.25rem; }
   .related-items__grid { grid-template-columns: repeat(3, 1fr); }
   .related-items__grid > :nth-child(4) { display: none; }
   .apparel-catalog { padding: 0.1rem 0.2rem 0.5rem; }
