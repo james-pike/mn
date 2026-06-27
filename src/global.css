@@ -3774,6 +3774,10 @@ img { max-width: 100%; display: block; }
 }
 @media (max-width: 1024px) {
   .site-header__search-btn { display: inline-flex; }
+  /* Search icon only shows once the catalog tab strip is stuck to the header
+     (always stuck on the apparel route); hidden until then so opening search
+     never needs a reposition (keyboard raises, no flash). */
+  .site-header:not(.site-header--tabs-stuck) .site-header__search-btn { display: none !important; }
   /* Suppress the in-strip desktop search on touch so search isn't duplicated. */
   .home-catalog__search-desktop { display: none !important; }
   /* When open, the search bar fills only the right side of the header — where

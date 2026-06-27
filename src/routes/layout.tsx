@@ -439,6 +439,11 @@ export default component$(() => {
     return `${t("cart.invoice.tax", locale.value)} (${empProvince.value} ${pct}%)`;
   });
   const headerScrolled = useSignal(false);
+  // True once the catalog tab strip is stuck to the header (always true on the
+  // apparel route). Gates the header search icon so it only appears when the
+  // tabs are pinned — opening search from there needs no reposition, so the
+  // keyboard raises with no flash.
+  const tabsStuck = useSignal(false);
 
   const toggleLocale = $(() => {
     locale.value = locale.value === "en" ? "fr" : "en";
@@ -589,12 +594,23 @@ export default component$(() => {
 
   // Sticky header on scroll (mobile landing page)
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ cleanup }) => {
+  useVisibleTask$(({ cleanup, track }) => {
+    track(() => loc.url.pathname);
+    const stickyTop = () => (window.innerWidth < 768 ? 49 : window.innerWidth <= 1024 ? 61 : 58);
     const onScroll = () => {
       headerScrolled.value = window.scrollY > 60;
       document.documentElement.classList.toggle("scrolled", window.scrollY > 60);
+      // Search icon appears only once the catalog tab strip is stuck; always
+      // available on the apparel route (tabs sticky from the top).
+      if (loc.url.pathname.startsWith("/apparel")) {
+        tabsStuck.value = true;
+      } else {
+        const strip = document.querySelector(".home-catalog__header");
+        tabsStuck.value = !!strip && strip.getBoundingClientRect().top <= stickyTop() + 1;
+      }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
     cleanup(() => window.removeEventListener("scroll", onScroll));
   }, { strategy: 'document-ready' });
 
@@ -777,7 +793,7 @@ export default component$(() => {
       )}
 
       {(auth.value.loggedIn || (loginAction.value && !loginAction.value.failed)) && <>
-      <header class={`site-header site-header--white ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value ? "site-header--cart-open" : ""} ${loc.url.pathname === "/" && !cartOpen.value ? `site-header--hero-hidden ${headerScrolled.value || searchOpen.value ? "site-header--hero-visible" : ""}` : ""}`}>
+      <header class={`site-header site-header--white ${tabsStuck.value ? "site-header--tabs-stuck" : ""} ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value ? "site-header--cart-open" : ""} ${loc.url.pathname === "/" && !cartOpen.value ? `site-header--hero-hidden ${headerScrolled.value || searchOpen.value ? "site-header--hero-visible" : ""}` : ""}`}>
         <div class="site-header__inner">
           <Link href="/" class="site-header__logo brand-cluster brand-cluster--small">
             <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
