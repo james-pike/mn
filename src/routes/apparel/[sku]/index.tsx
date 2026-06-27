@@ -207,6 +207,7 @@ export default component$(() => {
   const pdf = (p as any).pdf as string | undefined;
   const catHash = p.category.toLowerCase().replace(/\s+/g, "-");
   const backLabel = loginType.value === "tech" ? t("cat.Work Wear", locale.value) : t("nav.apparel", locale.value);
+  const catLabel = p.category === "Jackets" ? t("cat.JacketsHoodies", locale.value) : categoryLabel(p.category, locale.value);
 
   return (
     <div class="apparel-catalog" id="products">
@@ -215,7 +216,7 @@ export default component$(() => {
           <svg class="pdp-breadcrumb__arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
           <span>{backLabel}</span>
         </a>
-        <a href={`/apparel/#${catHash}`} class="pdp-breadcrumb__link pdp-breadcrumb__cat">{categoryLabel(p.category, locale.value)}</a>
+        <a href={`/apparel/#${catHash}`} class="pdp-breadcrumb__link pdp-breadcrumb__cat">{catLabel}</a>
         <span class="pdp-breadcrumb__sku">{p.sku}</span>
       </nav>
       <div class="product-detail">
