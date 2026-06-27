@@ -4,12 +4,19 @@ import { writeFileSync } from "fs";
 
 config();
 
-const db = createClient({
-  url: process.env.TURSO_URL || process.env.VITE_TURSO_URL || "",
-  authToken: process.env.TURSO_AUTH_TOKEN || process.env.VITE_TURSO_AUTH_TOKEN || undefined,
-});
+const url = process.env.TURSO_URL || process.env.VITE_TURSO_URL || "";
 
 async function fetchAndWrite() {
+  // No DB URL (e.g. a preview build without Turso env vars) — keep the committed
+  // products.ts rather than crashing the build on an empty URL.
+  if (!url) {
+    console.log("No TURSO_URL set — skipping product refresh, keeping committed products.ts");
+    return;
+  }
+  const db = createClient({
+    url,
+    authToken: process.env.TURSO_AUTH_TOKEN || process.env.VITE_TURSO_AUTH_TOKEN || undefined,
+  });
   try {
     const result = await db.execute(
       "SELECT * FROM products WHERE vendor = 'modernniagara' ORDER BY sort_order ASC"
