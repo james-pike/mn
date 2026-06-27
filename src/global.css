@@ -1583,7 +1583,9 @@ img { max-width: 100%; display: block; }
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.65);
-  z-index: 10000;
+  /* Above the sticky tab strips (z 10000, raised on tablet) so the full overlay
+     covers them — otherwise the tabs punch through the drawer on tablet. */
+  z-index: 10002;
   animation: fade-in 0.2s ease;
 }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
@@ -1599,6 +1601,9 @@ img { max-width: 100%; display: block; }
   display: flex;
   flex-direction: column;
   animation: slide-in-left 0.25s ease;
+}
+@media (min-width: 601px) {
+  .nav-drawer { width: 340px; }
 }
 @keyframes slide-in-left { from { transform: translateX(-100%); } to { transform: translateX(0); } }
 
@@ -6404,8 +6409,11 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header .brand-cluster__words .brand-cluster__word:first-child { margin-top: -0.16em; }
   .site-header .brand-cluster__words .brand-cluster__word:last-child { margin-bottom: -0.16em; }
   .site-header__nav { gap: 1px; margin-right: -4px; }
-  .site-header .locale-btn { margin-right: 0; }
-  .logout-form { display: inline-flex; }
+  /* Tablet: logout + language move into the menu drawer, so hide them in the
+     header (the hamburger opens the drawer that holds them). Home/Apparel links
+     are hidden further down where they were previously shown. */
+  .site-header .locale-btn { display: none !important; }
+  .site-header .logout-form { display: none !important; }
   .hero-card-header__btn--logout { display: inline-flex; }
   /* Tablet: logout shrinks to icon-only (the text "Logout" is dropped). */
   .hero-card-header__btn--logout .hero-card-header__btn-label { display: none !important; }
@@ -6531,13 +6539,13 @@ details[open] > .cart-drawer__checkout-title::after {
     border-radius: 2px !important;
     color: rgba(0,0,0,0.7) !important;
     box-shadow: inset 0 2px 6px rgba(0,0,0,0.12), inset 0 1px 2px rgba(0,0,0,0.08) !important;
-    height: 52px;
+    height: 56px;
     padding: 0 14px;
   }
   /* Search icon button is the same height as the cart/logout buttons; cart and
      logout get 1px more padding so their icons sit a touch more inset. All three
      share one icon size for consistency. */
-  .site-header__search-btn { height: 52px; padding: 0 14px; }
+  .site-header__search-btn { height: 56px; padding: 0 14px; }
   .site-header__search-btn svg { width: 20px; height: 20px; }
   .site-header .cart-btn,
   .site-header .logout-btn { padding: 0 15px; }
@@ -6581,7 +6589,9 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header.site-header--hero-visible .logout-btn svg {
     stroke: var(--ce-gray-900) !important;
   }
-  .site-header .hamburger-btn { display: none !important; }
+  /* Match the cart/search button dimensions on tablet. */
+  .site-header .hamburger-btn { display: flex !important; height: 56px; padding: 0 14px; }
+  .site-header .hamburger-btn svg { width: 20px; height: 20px; }
   /* Show "All" tab on iPad/tablet apparel header (overrides mobile hide rule) */
   .apparel-titlebar__tab:first-child,
   .home-catalog__tabs .apparel-titlebar__tab:first-child { display: inline-flex !important; }
@@ -6596,7 +6606,8 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header .locale-btn__full { display: none !important; }
   .site-header .locale-btn__short { display: inline !important; font-size: 0.85rem; font-weight: 600; }
   .site-header .cart-btn__label { display: inline !important; }
-  .site-header__categories { display: flex !important; align-items: center; gap: 0.5rem; margin-right: 0.5rem; align-self: center; }
+  /* Home/Apparel links live in the hamburger drawer on tablet — hidden here. */
+  .site-header__categories { display: none !important; }
   .site-header__categories a {
     display: inline-flex;
     align-items: center;
