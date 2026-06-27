@@ -1897,7 +1897,7 @@ img { max-width: 100%; display: block; }
 @media (min-width: 601px) and (max-width: 1024px) {
   .home-catalog { padding: 0; }
   .home-catalog__inner { padding: 0; max-width: 100%; }
-  .home-catalog .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.2rem; min-height: 100vh; align-content: start; padding: 0 0.25rem; margin: 0; }
+  .home-catalog .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.2rem; min-height: 100vh; align-content: start; padding: 0 0.25rem; margin: -3px 0 0; }
   .home-catalog .apparel-grid.apparel-grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
   /* List view: two columns of short, horizontal rows — small square thumbnail
      on the left, all the product details beside it. Shows many products at
@@ -6334,7 +6334,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .product-modal__name { font-size: 1.35rem; }
   .product-modal__price { font-size: 1.15rem; }
   .apparel-catalog:has(.product-detail) { padding: 0 2px 2rem; }
-  .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.2rem; }
+  .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.2rem; margin-top: -3px; }
   .related-items__grid { grid-template-columns: repeat(3, 1fr); }
   .related-items__grid > :nth-child(4) { display: none; }
   .apparel-catalog { padding: 0.1rem 0.2rem 0.5rem; }
