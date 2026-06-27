@@ -3851,7 +3851,7 @@ body:has(.nav-drawer-overlay) .site-header {
 /* Narrow phones (incl. iPhone SE, 375px): drop the logo gap so the field
    keeps its width. */
 @media (max-width: 380px) {
-  .site-header--search-open .site-header__logo { margin-right: 3px; }
+  .site-header--search-open .site-header__logo { margin-right: 7px; }
 }
 
 /* ===== Cart Button ===== */
