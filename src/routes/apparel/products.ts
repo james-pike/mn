@@ -5,7 +5,7 @@ import type { Locale } from "../../i18n";
 export const allProducts = [
   {
     "sku": "MN-7",
-    "name": "Winter Jacket - Navy",
+    "name": "Carhartt Winter Jacket - Navy",
     "category": "Jackets",
     "sizes": "S - 4XL",
     "badge": "",
@@ -23,7 +23,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-9",
-    "name": "Pullover Hoodie - Navy",
+    "name": "Carhartt Pullover Hoodie - Navy",
     "category": "Jackets",
     "sizes": "S - 4XL",
     "badge": "",
@@ -42,7 +42,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-10",
-    "name": "Full Zip Hoodie - Navy",
+    "name": "Carhartt Full Zip Hoodie - Navy",
     "category": "Jackets",
     "sizes": "S - 4XL",
     "badge": "",
@@ -117,7 +117,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-2",
-    "name": "Long Sleeve Shirt - Navy",
+    "name": "Carhartt Long Sleeve Shirt - Navy",
     "category": "Shirts",
     "sizes": "S - 4XL",
     "badge": "",
@@ -135,7 +135,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-15",
-    "name": "Men's UA Tech Polo",
+    "name": "Men's Under Armour Tech Polo",
     "category": "SWAG",
     "sizes": "S - 4XL",
     "badge": "",
@@ -158,7 +158,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-16",
-    "name": "Women's UA Tech Polo",
+    "name": "Women's Under Armour Tech Polo",
     "category": "SWAG",
     "sizes": "XS - 2XL",
     "badge": "",
@@ -218,7 +218,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-1",
-    "name": "Rigby Dungaree Pants - Navy",
+    "name": "Carhartt Rigby Dungaree Pants - Navy",
     "category": "Pants",
     "sizes": "S - 4XL",
     "badge": "",
@@ -235,7 +235,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-8",
-    "name": "Duck Insulated Bib Overall - Navy",
+    "name": "Carhartt Duck Insulated Bib Overall - Navy",
     "category": "Work Wear",
     "sizes": "S - 4XL",
     "badge": "",
@@ -270,7 +270,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-6",
-    "name": "Flip Toque - Navy",
+    "name": "Carhartt Flip Toque - Navy",
     "category": "Hats",
     "sizes": "One Size",
     "badge": "",
@@ -287,7 +287,7 @@ export const allProducts = [
   },
   {
     "sku": "MNFR-1",
-    "name": "FR Rigby Pants - Navy",
+    "name": "Carhartt FR Rigby Pants - Navy",
     "category": "Flame Resistant",
     "sizes": "S - 4XL",
     "badge": "",
@@ -321,7 +321,7 @@ export const allProducts = [
   },
   {
     "sku": "MNFR-2",
-    "name": "FR Long Sleeve Button-Up Shirt - Light Blue",
+    "name": "Carhartt FR Long Sleeve Button-Up Shirt - Light Blue",
     "category": "Flame Resistant",
     "sizes": "S - 4XL",
     "badge": "",
@@ -355,7 +355,7 @@ export const allProducts = [
   },
   {
     "sku": "MNFR-3",
-    "name": "FR Pullover Hoodie - Navy",
+    "name": "Carhartt FR Pullover Hoodie - Navy",
     "category": "Flame Resistant",
     "sizes": "S - 4XL",
     "badge": "",
@@ -389,7 +389,7 @@ export const allProducts = [
   },
   {
     "sku": "MNFR-4",
-    "name": "FR Full Zip Hoodie - Navy",
+    "name": "Carhartt FR Full Zip Hoodie - Navy",
     "category": "Flame Resistant",
     "sizes": "S - 4XL",
     "badge": "",
@@ -423,7 +423,7 @@ export const allProducts = [
   },
   {
     "sku": "MNFR-5",
-    "name": "FR Insulated Bib - Navy",
+    "name": "Carhartt FR Insulated Bib - Navy",
     "category": "Flame Resistant",
     "sizes": "S - 4XL",
     "badge": "",
@@ -455,7 +455,7 @@ export const allProducts = [
   },
   {
     "sku": "MNFR-6",
-    "name": "FR Insulated Jacket - Navy",
+    "name": "Carhartt FR Insulated Jacket - Navy",
     "category": "Flame Resistant",
     "sizes": "S - 4XL",
     "badge": "",
@@ -483,7 +483,7 @@ export const allProducts = [
       "/notebook.jpg",
       "/earphones.jpg"
     ],
-    "material": "Everything you need to get started, in Modern Niagara branding",
+    "material": "",
     "details": "Tranzip recycled computer tote, Eco spiral notebook with pen, 2 Buds Pro wireless ANC earbuds"
   },
   {

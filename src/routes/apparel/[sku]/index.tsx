@@ -206,7 +206,6 @@ export default component$(() => {
   const p = product.value;
   const pdf = (p as any).pdf as string | undefined;
   const catHash = p.category.toLowerCase().replace(/\s+/g, "-");
-  const cleanName = p.name.replace(/#\S+/g, "").replace(/\s*-\s*$/, "").trim();
   const backLabel = loginType.value === "tech" ? t("cat.Work Wear", locale.value) : t("nav.apparel", locale.value);
 
   return (
@@ -218,8 +217,6 @@ export default component$(() => {
         </a>
         <span class="pdp-breadcrumb__sep" aria-hidden="true">/</span>
         <a href={`/apparel/#${catHash}`} class="pdp-breadcrumb__link pdp-breadcrumb__cat">{categoryLabel(p.category, locale.value)}</a>
-        <span class="pdp-breadcrumb__sep pdp-breadcrumb__sep--name" aria-hidden="true">/</span>
-        <span class="pdp-breadcrumb__current">{cleanName}</span>
       </nav>
       <div class="product-detail">
         <div class="product-modal__layout">

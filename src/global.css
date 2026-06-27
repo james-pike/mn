@@ -4061,20 +4061,11 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .pdp-breadcrumb__link:hover { color: var(--ce-gold); }
 .pdp-breadcrumb__arrow { flex-shrink: 0; }
 .pdp-breadcrumb__sep { color: var(--ce-gray-300); flex-shrink: 0; }
-.pdp-breadcrumb__current {
-  color: var(--ce-gray-500);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 0;
-}
 @media (min-width: 768px) and (max-width: 1024px) {
   .pdp-breadcrumb { top: 60px; }
 }
 @media (max-width: 767px) {
   .pdp-breadcrumb { top: 49px; font-size: 0.8rem; }
-  /* Condense to just the back link + category on phones. */
-  .pdp-breadcrumb__sep--name, .pdp-breadcrumb__current { display: none; }
 }
 
 .product-detail {
