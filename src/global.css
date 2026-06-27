@@ -3843,8 +3843,9 @@ img { max-width: 100%; display: block; }
   .site-header--search-open .site-header__search > svg { width: 13px; height: 13px; }
   .site-header--search-open .site-header__search-close { padding: 4px 0 4px 2px; }
   .site-header--search-open .site-header__search-close svg { width: 13px; height: 13px; }
-  /* Hamburger keeps its size and stays pinned at the far right. */
-  .site-header--search-open .hamburger-btn { flex: 0 0 auto; }
+  /* Search field takes the hamburger's space too: hide it while search is open
+     so the flex field expands over it (the field's own X closes search). */
+  .site-header--search-open .hamburger-btn { display: none; }
 }
 /* Narrow phones (incl. iPhone SE, 375px): drop the logo gap so the field
    keeps its width. */
