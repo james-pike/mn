@@ -439,7 +439,7 @@ export default component$(() => {
         const related = inVisible
           ? allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && r.category === p.category).slice(0, 8)
           : allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && visible.includes(r.category)).slice(0, 8);
-        const headingSuffix = inVisible ? categoryLabel(p.category, locale.value) : t("nav.apparel", locale.value);
+        const headingSuffix = inVisible ? catLabel : t("nav.apparel", locale.value);
         return (
           <div class="related-items">
             <h3 class="related-items__title">{t("product.more", locale.value)} {headingSuffix}</h3>

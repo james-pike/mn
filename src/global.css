@@ -1970,6 +1970,12 @@ body:has(.nav-drawer-overlay) .site-header {
   .product-card__image { border-radius: 0; }
   .product-card__image::after { display: none; }
 }
+
+@media (min-width: 1025px) {
+  /* Desktop: product cards keep rounded corners (flat look stays on tablet). */
+  .product-card { border-radius: var(--radius-md); overflow: hidden; }
+  .product-card__image { border-radius: var(--radius-md) var(--radius-md) 0 0; }
+}
 .apparel-titlebar__action.apparel-titlebar__action--tablet-cols { display: none; }
 @media (min-width: 768px) and (max-width: 1024px) {
   .apparel-titlebar__action.apparel-titlebar__action--tablet-cols { display: flex; }
@@ -6344,7 +6350,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .product-detail { max-width: 100%; margin-top: -3px; }
   /* Single row now that the breadcrumb (former row 1) is removed —
      image + details sit at the top with no empty gap above. */
-  .product-modal__layout { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; column-gap: 0.1rem; row-gap: 0.1rem; }
+  .product-modal__layout { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; column-gap: 0; row-gap: 0.1rem; }
   .product-detail .product-modal__details { padding: 1.25rem 1rem 1rem; background: var(--ce-white); border-radius: 0; box-shadow: none; border: none; grid-column: 2; grid-row: 1; margin-right: 0.1rem; }
   .product-detail .product-modal__details::after { display: none; }
   .product-detail .product-modal__details::before { display: none; }
