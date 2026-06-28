@@ -31,8 +31,16 @@ const CATEGORY_ICONS: Record<string, string> = {
   "Polos": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2 12 5.5 8 2 3.62 3.46a2 2 0 00-1.34 1.93v15.12a2 2 0 001.34 1.93L8 24l4-3.5L16 24l4.38-1.46a2 2 0 001.34-1.93V5.39a2 2 0 00-1.34-1.93z"/></svg>',
   "Hats": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>',
   "SWAG": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>',
-  "New Hire Kit": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>',
+  "New Hire Kit": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>',
   "Flame Resistant": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>',
+};
+
+// Longer category names shown ONLY in the desktop sidebar column; mobile/tablet
+// tabs keep the short cat.* labels (see the --short/--full spans + CSS).
+const FULL_CAT_KEYS: Record<string, string> = {
+  "Jackets": "cat.JacketsHoodies",
+  "Hats": "cat.CapsBeanies",
+  "New Hire Kit": "nav.officewelcomekit",
 };
 
 // Return the category of the FIRST product that matches the search, so its tab
@@ -290,7 +298,12 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                 }}
               >
                 <span class="apparel-titlebar__tab-icon" dangerouslySetInnerHTML={CATEGORY_ICONS[cat]} />
-                {cat === "All" ? t("apparel.all", locale.value) : categoryLabel(cat, locale.value)}
+                {cat === "All" ? t("apparel.all", locale.value) : (
+                  <>
+                    <span class="apparel-titlebar__tab-short">{categoryLabel(cat, locale.value)}</span>
+                    <span class="apparel-titlebar__tab-full">{FULL_CAT_KEYS[cat] ? t(FULL_CAT_KEYS[cat] as any, locale.value) : categoryLabel(cat, locale.value)}</span>
+                  </>
+                )}
               </button>
             ))}
           </div>

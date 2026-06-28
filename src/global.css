@@ -5703,6 +5703,8 @@ details[open] > .cart-drawer__checkout-title::after {
 }
 
 /* ===== Desktop (1025px+) ===== */
+/* Tab labels: short cat name by default (mobile/tablet); desktop sidebar swaps in the longer label below. */
+.apparel-titlebar__tab-full { display: none; }
 @media (min-width: 1025px) {
   html { font-size: 18px; }
   .site-header .cart-btn,
@@ -6104,7 +6106,7 @@ details[open] > .cart-drawer__checkout-title::after {
     padding: 0 10px 10px;
     margin: 0 auto 2rem;
     display: grid;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 205px 1fr;
     grid-template-rows: auto auto 1fr;
     gap: 10px;
     box-shadow:
@@ -6136,6 +6138,10 @@ details[open] > .cart-drawer__checkout-title::after {
     top: 58px;
     align-self: start;
   }
+  /* Smaller category text in the desktop sidebar so it fits a narrower column. */
+  .home-catalog__header .apparel-titlebar__tab { font-size: 0.9rem !important; }
+  .apparel-titlebar__tab-short { display: none; }
+  .apparel-titlebar__tab-full { display: inline; }
   .home-catalog__title {
     font-size: 0;
     padding: 0.35rem 0;
