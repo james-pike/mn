@@ -4086,6 +4086,8 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
   z-index: 50;
   font-size: 0.92rem;
 }
+/* Desktop: pull the breadcrumb up so the gap above it matches the 0.2rem below. */
+@media (min-width: 1025px) { .pdp-breadcrumb { margin-top: -1.4rem; } }
 .pdp-breadcrumb__link,
 .pdp-breadcrumb__sku {
   display: inline-flex;
@@ -4413,6 +4415,7 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
   gap: 0.35rem;
   align-items: stretch;
 }
+
 .product-image-row {
   grid-column: 1;
   grid-row: 1 / -1;
