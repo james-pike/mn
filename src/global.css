@@ -2166,8 +2166,8 @@ body:has(.nav-drawer-overlay) .site-header {
 .nav-drawer__cat-content[hidden] { display: none !important; }
 @media (max-width: 600px) {
   /* Menu drawer was a bit thick — tighten rows and the frame around them. */
-  .nav-drawer__link, .nav-drawer__cat-trigger { padding: 5px 10px; }
-  .nav-drawer__cat-content .nav-drawer__cat-item { padding: 4px 6px 4px 14px; }
+  .nav-drawer__link, .nav-drawer__cat-trigger { padding: 9px 10px; }
+  .nav-drawer__cat-content .nav-drawer__cat-item { padding: 7px 6px 7px 14px; }
   .nav-drawer__links, .nav-drawer__footer { padding: 2px 3px; }
   .nav-drawer__header { margin: 0.1rem 3px 0; }
 }
@@ -4085,7 +4085,7 @@ body:has(.apparel-page) .site-header .cart-btn .cart-btn__label { color: #ffffff
   margin: 0 auto 0.2rem;
   padding: 0;
   background: var(--ce-white);
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   border-bottom: 1px solid var(--ce-gray-200);
   position: sticky;
   top: 58px;
@@ -6178,6 +6178,7 @@ details[open] > .cart-drawer__checkout-title::after {
     padding: 0.25rem;
   }
   .home-catalog__tabs .apparel-titlebar__tab {
+    white-space: normal; line-height: 1.25;
     text-align: left;
     padding: 8px 10px 8px 44px;
     border-right: none;
@@ -6350,7 +6351,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .product-detail { max-width: 100%; margin-top: -3px; }
   /* Single row now that the breadcrumb (former row 1) is removed —
      image + details sit at the top with no empty gap above. */
-  .product-modal__layout { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; column-gap: 0; row-gap: 0.1rem; }
+  .product-modal__layout { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; column-gap: 0.1rem; row-gap: 0.1rem; }
   .product-detail .product-modal__details { padding: 1.25rem 1rem 1rem; background: var(--ce-white); border-radius: 0; box-shadow: none; border: none; grid-column: 2; grid-row: 1; margin-right: 0.1rem; }
   .product-detail .product-modal__details::after { display: none; }
   .product-detail .product-modal__details::before { display: none; }
@@ -7833,3 +7834,27 @@ details[open] > .cart-drawer__checkout-title::after {
 }
 /* Nav drawer */
 .nav-drawer .brand-cluster__word { color: var(--ce-gray-900); }
+
+/* Desktop: drop the Home/Apparel header links — the breadcrumb covers nav. */
+@media (min-width: 1025px) { .site-header__categories { display: none; } }
+
+/* Desktop: white image panel so the gap between image and info is just the
+   hairline column-gap (not the gray contain-padding around a portrait photo). */
+@media (min-width: 1025px) {
+  .product-detail .product-image-row, .product-detail .product-carousel { background: var(--ce-white); }
+}
+
+/* Desktop: image fills its column (no empty gray to its right); only the
+   hairline column-gap separates it from the info. */
+@media (min-width: 1025px) {
+  .product-detail .product-image-row { width: 100%; align-self: start; }
+  .product-detail .product-carousel { width: 100%; }
+}
+
+/* Desktop: image and info sit flush with just a 1px hairline between them
+   (matches CM) — remove the column-gap width and the edge margins. */
+@media (min-width: 1025px) {
+  .product-modal__layout { column-gap: 1px; }
+  .product-detail .product-image-row { margin-left: 0; }
+  .product-detail .product-modal__details { margin-right: 0; }
+}
