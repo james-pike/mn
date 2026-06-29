@@ -191,20 +191,20 @@ export default component$(() => {
                 {isTech.value ? (<>
                   <a href="/apparel/" class="category-card category-card--tech-primary">
                     <picture>
-                      <source media="(max-width: 767px)" srcset="/carmichael-services/chiller-retrofit.jpeg" />
-                      <source media="(min-width: 768px) and (max-width: 1024px)" srcset="/carmichael-services/hvac-retrofit.jpeg" />
-                      <img src="/carmichael-services/boiler-technicians.jpeg" alt="Work Wear" width="400" height="300" loading="eager" decoding="sync" />
+                      <source media="(max-width: 767px)" srcset="/mn-services/chiller-retrofit.jpeg" />
+                      <source media="(min-width: 768px) and (max-width: 1024px)" srcset="/mn-services/hvac-retrofit.jpeg" />
+                      <img src="/mn-services/boiler-technicians.jpeg" alt="Work Wear" width="400" height="300" loading="eager" decoding="sync" />
                     </picture>
                     <span class="category-card__label">{t("teaser.workwear.title", locale.value)}</span>
                   </a>
                   <a href="/apparel/" class="category-card category-card--tech-extra category-card--tech-desktop">
-                    <img src="/carmichael-services/careers.jpeg" alt="" width="400" height="300" loading="eager" decoding="sync" />
+                    <img src="/mn-services/careers.jpeg" alt="" width="400" height="300" loading="eager" decoding="sync" />
                   </a>
                   <a href="/apparel/" class="category-card category-card--tech-extra category-card--tech-desktop">
-                    <img src="/carmichael-services/hvac-retrofit.jpeg" alt="" width="400" height="300" loading="eager" decoding="sync" />
+                    <img src="/mn-services/hvac-retrofit.jpeg" alt="" width="400" height="300" loading="eager" decoding="sync" />
                   </a>
                   <a href="/apparel/" class="category-card category-card--tech-extra category-card--tech-tablet">
-                    <img src="/carmichael-services/chiller-retrofit.jpeg" alt="" width="400" height="300" loading="eager" decoding="sync" />
+                    <img src="/mn-services/chiller-retrofit.jpeg" alt="" width="400" height="300" loading="eager" decoding="sync" />
                   </a>
                 </>) : isSafety.value ? (<>
                   {/* Safety uses plain .category-card on all four cards (no
