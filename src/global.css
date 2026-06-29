@@ -7858,3 +7858,10 @@ details[open] > .cart-drawer__checkout-title::after {
   .product-detail .product-image-row { margin-left: 0; }
   .product-detail .product-modal__details { margin-right: 0; }
 }
+
+/* Tablet + desktop: drop the Home/Apparel links from the hero card header. */
+@media (min-width: 601px) { .hero-card-header__nav { display: none; } }
+
+/* Tablet: the hamburger (menu modal) replaces the logout button in the header;
+   logout lives in the drawer. */
+@media (min-width: 768px) and (max-width: 1024px) { .logout-form { display: none !important; } }
