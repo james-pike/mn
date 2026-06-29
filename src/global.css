@@ -7865,3 +7865,11 @@ details[open] > .cart-drawer__checkout-title::after {
 /* Tablet: the hamburger (menu modal) replaces the logout button in the header;
    logout lives in the drawer. */
 @media (min-width: 768px) and (max-width: 1024px) { .logout-form { display: none !important; } }
+
+/* Desktop: block accidental selection of page text/content across the whole
+   site (hero, routes, product pages, cart + checkout). Form fields stay
+   editable/selectable so users can still type and edit. */
+@media (min-width: 1025px) {
+  body { -webkit-user-select: none; user-select: none; }
+  input, textarea, select, [contenteditable="true"] { -webkit-user-select: text; user-select: text; }
+}
