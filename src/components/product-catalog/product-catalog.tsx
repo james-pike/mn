@@ -170,7 +170,6 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
   const isTech = loginType.value === "tech";
   const eager = index < EAGER_CARDS;
 
-  const gender = genderOf(item);
   const allColors = item.colors || [];
   const shownColors = allColors.filter((c) => !CARD_HIDDEN_COLORS.has(c));
   const visibleColors = sortColorsWhiteLast(shownColors.length ? shownColors : allColors);

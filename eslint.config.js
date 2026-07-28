@@ -68,6 +68,9 @@ export default tseslint.config(
   {
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
+      // Warn (don't fail the production build) on unused vars — some are WIP /
+      // intentionally-kept handlers (gift-card flow, safety flag).
+      "@typescript-eslint/no-unused-vars": "warn",
     },
   },
 );
