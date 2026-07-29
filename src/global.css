@@ -7055,7 +7055,11 @@ details[open] > .cart-drawer__checkout-title::after {
     overflow-y: auto !important;
   }
   .cart-drawer__items { padding: 0.85rem 1rem; }
-  .cart-drawer__header { height: 45px; padding: 0 1rem; }
+  /* Drop the old "My Cart" title bar + the site-header replica (and the empty
+     white space they created) — the lighter-blue secondary bar is the only
+     header the cart/checkout need here, matching mobile. */
+  .cart-drawer__header { display: none !important; }
+  .cart-drawer__site-header { display: none !important; }
   .cart-drawer__footer { padding: 0.7rem 1rem; }
 
 }
@@ -12708,9 +12712,8 @@ body:has(.product-fullscreen) { overflow: hidden; }
    ones — so they always match.
    ============================================================ */
 @media (max-width: 1024px) {
-  /* Secondary bars run taller on tablet (was 40px, cramped against the larger
-     tablet tab/breadcrumb text). */
-  :root { --wt-bar2-h: 50px; }
+  /* Secondary bar height — mobile AND tablet share this block (40px). */
+  :root { --wt-bar2-h: 40px; }
   .home-catalog__header,
   .home-catalog__tabs,
   .pdp-breadcrumb,
@@ -12721,25 +12724,35 @@ body:has(.product-fullscreen) { overflow: hidden; }
   .cart-drawer__details-step,
   .cart-drawer__items,
   .apparel-page .apparel-catalog { padding-top: var(--wt-bar2-h) !important; }
-  /* Product page: the breadcrumb is a sticky in-flow first child, so the catalog
-     padding-top pushed it 40px below the header (a visible gap). Zero it on the
-     PDP so the breadcrumb sits flush under the header like the tab bar does. */
+  /* The 601-1024 breadcrumb rule leaves a 0.1rem bottom margin + a top border
+     that the tab bar doesn't carry here, so the breadcrumb read a hair shorter
+     with extra white below it. Clear both so all five bars are identical 40px
+     strips with just the single pinned header seam above them. */
+  .pdp-breadcrumb,
+  .home-catalog__header,
+  .home-catalog__tabs { margin-top: 0 !important; margin-bottom: 0 !important; border-top: none !important; }
+}
+
+/* TABLET ONLY (601-1024) — these were mistakenly living in the max-width:1024
+   block above (which includes mobile); scoped here so mobile is untouched. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* Taller secondary bars on tablet (40px was cramped against the larger text). */
+  :root { --wt-bar2-h: 50px; }
+  /* PDP breadcrumb sits flush under the header (not pushed down by the catalog
+     padding). */
   .apparel-page .apparel-catalog:has(.product-detail) { padding-top: 0 !important; }
-  /* Scale the breadcrumb text up to a readable, mobile-friendly size (it was a
-     small ~0.92rem while the tabs run much larger). */
+  /* Breadcrumb text scaled up to a readable tablet size. */
   .pdp-breadcrumb,
   .pdp-breadcrumb__back,
   .pdp-breadcrumb__back span,
   .pdp-breadcrumb__cat,
   .pdp-breadcrumb__sku { font-size: 1.35rem !important; }
-  /* Card meta: group the gender directly LEFT of the sizes (the row's
-     space-between was centring it), colours on the left — matching desktop. */
+  /* Card meta: gender grouped directly left of the sizes, colours on the left. */
   .product-card__color-size-row { justify-content: flex-start !important; }
   .product-card__sizes { text-align: right !important; }
   .product-card__gender { margin-left: auto !important; margin-right: 0.3rem !important; }
   .product-card__color-size-row:not(:has(.product-card__gender)) .product-card__sizes { margin-left: auto !important; }
-  /* View toggle blends into the blue tab bar (it was sitting on the header's
-     white area beside it). */
+  /* View toggle blends into the blue tab bar. */
   .apparel-titlebar__action--tablet-cols {
     background: #84acc7 !important;
     color: #fff !important;
@@ -12751,13 +12764,6 @@ body:has(.product-fullscreen) { overflow: hidden; }
     box-shadow: none !important;
   }
   .apparel-titlebar__action--tablet-cols svg { stroke: #fff !important; }
-  /* The 601-1024 breadcrumb rule leaves a 0.1rem bottom margin + a top border
-     that the tab bar doesn't carry here, so the breadcrumb read a hair shorter
-     with extra white below it. Clear both so all five bars are identical 40px
-     strips with just the single pinned header seam above them. */
-  .pdp-breadcrumb,
-  .home-catalog__header,
-  .home-catalog__tabs { margin-top: 0 !important; margin-bottom: 0 !important; border-top: none !important; }
 }
 
 /* The breadcrumb bar is the same 40px height as the tab bar, but its text was
