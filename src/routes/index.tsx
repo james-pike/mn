@@ -146,8 +146,7 @@ export default component$(() => {
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
               </button>
               <button class="hero-card-header__btn hero-card-header__btn--menu" onClick$={() => {
-                const btn = document.querySelector('.hamburger-btn') as HTMLElement;
-                btn?.click();
+                window.dispatchEvent(new CustomEvent("toggle-menu"));
               }} aria-label="Menu">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></svg>
               </button>

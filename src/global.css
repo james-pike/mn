@@ -1689,7 +1689,13 @@ body:has(.nav-drawer-overlay) .site-header {
      undimmed — the menu slides in over the tabs/content only, never the
      header (which is identical whether the menu is open or closed). */
   z-index: 10003 !important;
+  /* On the home hero the header is pointer-events:none (so the hero cover stays
+     interactive). While the menu is open the close (X) lives in this header, so
+     re-enable events — otherwise the X was visible but not tappable and the tap
+     fell through to the hero carousel, navigating away instead of closing. */
+  pointer-events: auto !important;
 }
+body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto !important; }
 /* ===== Menu takeover (mobile + tablet) =====
    The menu is a full-screen VIEW like the cart — it appears (no side-slide),
    covers the card and page content below the header, and reads as the same
@@ -3254,8 +3260,11 @@ body:has(.nav-drawer-overlay) .site-header {
   text-align: center;
   margin: 0;
   padding: 1.6rem 1.5rem 1.7rem;
+  /* Fine white dot texture (like the header/tab bar) tiled across the WHOLE blue
+     top — replaces the iron/rust texture, which only covered the upper band and
+     left the "login to access" line untextured. */
   background:
-    var(--wt-iron) left top / 100% auto no-repeat,
+    radial-gradient(circle, rgba(255, 255, 255, 0.11) 1px, transparent 1.6px) left top / 13px 13px repeat,
     linear-gradient(var(--wt-box), var(--wt-box)),
     var(--wt-orange);
   box-shadow:
@@ -12893,10 +12902,48 @@ body:has(.product-fullscreen) { overflow: hidden; }
   .site-header .logout-form { display: inline-flex !important; }
   /* `body` prefix so these beat the dark-icon logout rules that share the plain
      `.site-header .logout-btn` specificity — the icon reads white on the blue bar. */
-  body .site-header .logout-btn { display: inline-flex !important; height: 54px !important; min-height: 54px !important; padding: 0 19px !important; color: #fff !important; background: rgba(0,0,0,0.12) !important; border: none !important; box-shadow: none !important; }
+  body .site-header .logout-btn { display: inline-flex !important; height: 62px !important; min-height: 62px !important; padding: 0 19px !important; color: #fff !important; background: rgba(0,0,0,0.12) !important; border: none !important; box-shadow: none !important; }
   body .site-header .logout-btn svg { width: 22px !important; height: 22px !important; stroke: #fff !important; }
   .site-header .cart-btn,
-  .site-header .site-header__search-btn { height: 54px !important; min-height: 54px !important; }
+  .site-header .site-header__search-btn { height: 62px !important; min-height: 62px !important; }
+  /* My Cart in the tab-bar's lighter blue (matching the secondary bar), not the
+     darker header blue. Uses the :has(.home-catalog) specificity so it beats the
+     rule that dissolves the button to transparent on the catalog route. */
+  body .site-header .cart-btn,
+  body:has(.home-catalog) .site-header .cart-btn,
+  body:has(.home-catalog) .site-header .cart-btn.cart-btn--active { background: #84acc7 !important; border: none !important; color: #fff !important; box-shadow: none !important; }
+  body .site-header .cart-btn svg,
+  body:has(.home-catalog) .site-header .cart-btn svg { stroke: #fff !important; }
+  body .site-header .cart-btn .cart-btn__label,
+  body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !important; }
+  /* Tighter product gutters (was 0.2rem), matching the mobile 2px. */
+  .home-catalog .apparel-grid { gap: 2px !important; }
+  /* The header's blue inner extends 1px below the header element, so the white
+     bottom border (::after, pinned to the element's bottom) landed 1px high.
+     Drop it to the inner's true bottom edge so it sits at the very bottom. */
+  .site-header::after { bottom: -1px !important; }
+  /* Cart + checkout: the PRODUCT/TOTAL strip and the checkout bar sat 50px down
+     behind a blank strip — the items/details padding was reserving room for a
+     pinned bar that isn't pinned at tablet (the thead is static here). Drop it so
+     the secondary bar sits right under the header, no empty strip above it. */
+  .drawer.cart-drawer .cart-drawer__items,
+  .drawer.cart-drawer .cart-drawer__details-step { padding-top: 0 !important; }
+  /* The checkout "Back to Cart" bar is a secondary bar — span it the FULL width
+     (it was only as wide as its label, leaving the rest of the bar grey) and
+     paint it the same lighter blue (#84acc7) as the PRODUCT/TOTAL strip and tab
+     bar, so the whole bar reads blue like every other secondary bar. */
+  .cart-drawer__back-btn {
+    background: #84acc7 !important;
+    color: #fff !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    justify-content: flex-start !important;
+  }
+  .cart-drawer__back-btn svg { stroke: #fff !important; }
+  .cart-drawer__back-btn:hover { color: #fff !important; }
+  .cart-drawer__back-btn:hover svg { stroke: #fff !important; }
   /* PDP breadcrumb sits flush under the header (not pushed down by the catalog
      padding). */
   .apparel-page .apparel-catalog:has(.product-detail) { padding-top: 0 !important; }

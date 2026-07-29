@@ -805,6 +805,21 @@ export default component$(() => {
     cleanup(() => window.removeEventListener("open-cart", handler));
   }, { strategy: 'document-ready' });
 
+  // Toggle the mobile menu from child pages (the hero cover's menu button) via a
+  // custom event, rather than a programmatic click on the header hamburger. The
+  // proxy click was fragile — on the home hero the hamburger is display:none /
+  // pointer-events:none until the overlay exists, and a not-yet-hydrated first
+  // tap could fall through to the content behind it (navigating to a product).
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ cleanup }) => {
+    const handler = () => {
+      menuOpen.value = !menuOpen.value;
+      if (menuOpen.value) cartOpen.value = false;
+    };
+    window.addEventListener("toggle-menu", handler);
+    cleanup(() => window.removeEventListener("toggle-menu", handler));
+  }, { strategy: 'document-ready' });
+
   // Settle the header's scroll-dependent state before the new route renders.
   // Qwik commits the DOM and sets the scroll to the top in one synchronous
   // block (see viewTransition={false} in root.tsx), so the new route's first

@@ -13,6 +13,7 @@ const translations = {
   // Header nav
   "logo.apparel": { en: "Apparel", fr: "Vêtements" },
   "nav.home": { en: "Home", fr: "Accueil" },
+  "nav.back": { en: "Back", fr: "Retour" },
   "nav.menu": { en: "Menu", fr: "Menu" },
   "nav.apparel": { en: "Apparel", fr: "Vêtements" },
   "nav.shirts": { en: "Shirts", fr: "Chandails" },
