@@ -1835,7 +1835,7 @@ body:has(.nav-drawer-overlay) .site-header {
   }
 }
 @media (min-width: 601px) and (max-width: 1024px) {
-  .nav-drawer-overlay { top: 67px; }
+  .nav-drawer-overlay { top: 82px; }
 }
 
 /* ===== Home Catalog Section ===== */
@@ -7035,7 +7035,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .modal-overlay:has(.cart-drawer) {
     position: fixed;
     inset: 0;
-    top: 67px;
+    top: 82px;
     background: var(--ce-gray-200);
     backdrop-filter: none;
     z-index: 99;
@@ -7111,8 +7111,8 @@ details[open] > .cart-drawer__checkout-title::after {
   /* Sticky tab strips pin 1px earlier so they overlap the header's
      bottom edge — eliminates the thin gap visible on some viewport
      widths from sub-pixel rounding. */
-  .home-catalog__header { top: 67px; margin-top: 0; z-index: 10000; }
-  .apparel-titlebar { top: 67px; margin-top: 0; z-index: 10000; }
+  .home-catalog__header { top: 82px; margin-top: 0; z-index: 10000; }
+  .apparel-titlebar { top: 82px; margin-top: 0; z-index: 10000; }
 
   /* Transparent header over hero — logos hidden until scroll, like desktop */
   .site-header {
@@ -8668,7 +8668,7 @@ details[open] > .cart-drawer__checkout-title::after {
 /* 3px header padding + box-h + 2px seam = header height (65 / 53) — see the
    seam block. Split at 600/601 to match the header-height breakpoints (601-767
    uses the 65px tablet header, so it needs the tablet bar too). */
-@media (min-width: 601px) and (max-width: 1024px) { :root { --wt-box-h: 60px; --wt-box-my: 5px; } }
+@media (min-width: 601px) and (max-width: 1024px) { :root { --wt-box-h: 74px; --wt-box-my: 5px; } }
 @media (max-width: 600px) { :root { --wt-box-h: 58px; --wt-box-my: 6px; --wt-seam: 1px; }
 }
 
@@ -8849,7 +8849,7 @@ details[open] > .cart-drawer__checkout-title::after {
 /* The tablet strip paints above the header (z-index 10000), so pin it just below
    the divider instead of over it. Bar bottom: 4 + 60 + 3 = 67px. */
 @media (min-width: 768px) and (max-width: 1024px) {
-  .home-catalog__header { top: 67px; }
+  .home-catalog__header { top: 82px; }
 }
 /* 601–767px uses the 65px tablet-height header (the 601–900 rule wins over
    the ≤900 phone one), so every sticky strip pins at 65 here. */
@@ -9264,7 +9264,7 @@ details[open] > .cart-drawer__checkout-title::after {
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
-  .pdp-breadcrumb { top: 67px; }
+  .pdp-breadcrumb { top: 82px; }
 }
 .pdp-breadcrumb__link,
 .pdp-breadcrumb__sku {
