@@ -9020,11 +9020,11 @@ details[open] > .cart-drawer__checkout-title::after {
     box-shadow:
       /* Greige seam stuck below the bar, like the breadcrumb. */
       0 1px 0 0 var(--ce-greige),
-      -4px 0 6px -3px rgba(0,0,0,0.35),
-      4px 0 6px -3px rgba(0,0,0,0.35),
-      inset 0 -6px 8px -4px rgba(10, 25, 55, 0.5),
-      inset 5px 0 6px -4px rgba(10, 25, 55, 0.55),
-      inset -5px 0 6px -4px rgba(10, 25, 55, 0.55) !important;
+      /* Match the menu modal's milder single inset shadow — dropped the strong
+         0.5/0.55 side+bottom insets and outer side shadows that made this bar's
+         drop shadow read heavier than the others. */
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      inset 0 -7px 11px -6px rgba(0, 0, 0, 0.26) !important;
   }
 }
 /* Idle tabs: white label + icon (icons use currentColor so they follow). */
@@ -9985,7 +9985,10 @@ details[open] > .cart-drawer__checkout-title::after {
     box-shadow:
       /* Greige seam stuck to the bar's bottom edge, same as desktop. */
       0 1px 0 0 var(--ce-greige),
-      inset 0 -6px 8px -4px rgba(10, 25, 55, 0.5) !important;
+      /* Milder inset, matching the menu modal's secondary bar (was a stronger
+         0.5 blue-black inset that read as a heavier drop shadow than the menu). */
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      inset 0 -7px 11px -6px rgba(0, 0, 0, 0.26) !important;
     /* NOTE: dropped the left/right inset side vignettes — the tab bar scrolls
        horizontally, and the right-edge shadow was darkening/obscuring the
        category text as it scrolled under it. */
@@ -10191,10 +10194,10 @@ details[open] > .cart-drawer__checkout-title::after {
       -5px 0 0 0 var(--wt-ring-edge),
       5px 0 0 0 var(--wt-ring-edge),
       0 1px 0 0 var(--ce-greige),
-      inset 0 -2.2px 0 transparent,
-      inset 0 -6px 8px -4px rgba(10, 25, 55, 0.5),
-      inset 5px 0 6px -4px rgba(10, 25, 55, 0.55),
-      inset -5px 0 6px -4px rgba(10, 25, 55, 0.55);
+      /* Milder inset matching the menu modal / tab bar (was a stronger 0.5/0.55
+         inset stack that read as a heavier drop shadow). */
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      inset 0 -7px 11px -6px rgba(0, 0, 0, 0.26);
   }
 }
 .cart-table thead th {
@@ -12766,6 +12769,13 @@ body:has(.product-fullscreen) { overflow: hidden; }
    is removed and it fades in). */
 .site-header__logo { transition: opacity 0.25s ease; }
 .site-header--logo-hidden .site-header__logo { opacity: 0 !important; pointer-events: none !important; }
+/* But when the menu modal is open (e.g. on the home route where the header logo
+   is normally faded in hero mode), always show the logo in the menu's header. */
+body:has(.nav-drawer-overlay) .site-header--logo-hidden .site-header__logo,
+body:has(.nav-drawer-overlay) .site-header__logo {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
 
 /* Mobile: remove the pinwheel + wordmark lockup from the footer — the header
    already carries the brand. An earlier @media (max-width:600px) hide was being
