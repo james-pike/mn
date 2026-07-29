@@ -1852,9 +1852,15 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   color: rgba(255,255,255,0.7);
   padding: 2rem 1rem 1.5rem;
   flex-shrink: 0;
+  /* Centre the logo + info/policy vertically in the blue space (stays centred
+     even when a short page stretches the footer taller). */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .site-footer__inner {
   max-width: var(--site-max);
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -2204,9 +2210,12 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
      route's .apparel-catalog), so it covers the header's bottom border.
      It needs its own 1px top border to show the separator from the header. */
   .home-catalog__header { height: 50px; padding: 0; top: 61px; border-radius: 0; margin-bottom: 0.1rem; border-top: 1px solid var(--ce-gray-200); }
-  /* Match mobile tab behavior on tablet — equal-width fill + container-query font scaling */
-  .home-catalog__tabs { overflow-x: hidden; container-type: inline-size; }
-  .home-catalog__tabs .apparel-titlebar__tab { flex: 1; text-align: center; justify-content: center; font-size: clamp(1.05rem, 2.7cqi, 1.62rem) !important; padding: 4px 2px !important; }
+  /* Scrollable tabs like mobile — with 8 categories they no longer fit at a
+     readable size, so let them overflow-scroll horizontally (hidden scrollbar)
+     with natural-width tabs at a fixed larger size. */
+  .home-catalog__tabs { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .home-catalog__tabs::-webkit-scrollbar { display: none; }
+  .home-catalog__tabs .apparel-titlebar__tab { flex: 0 0 auto; text-align: center; justify-content: center; white-space: nowrap; font-size: 1.2rem !important; padding: 4px 14px !important; }
   .home-catalog__tabs .apparel-titlebar__tab:only-child { flex: 0 0 auto; margin-right: auto; text-align: left; justify-content: flex-start; padding-left: 0.75rem; }
   .home-catalog__title { display: none; }
   /* Tablet — flat, minimal roundedness on product cards. */
@@ -6962,7 +6971,9 @@ details[open] > .cart-drawer__checkout-title::after {
   .product-modal__breadcrumb .breadcrumb__link { font-size: 1.15rem; }
   .product-modal__breadcrumb .breadcrumb__sep { font-size: 1.15rem; }
   .product-modal__breadcrumb .breadcrumb__sku { font-size: 1.05rem; }
-  .product-image-row { flex-direction: column; gap: 0.2rem; grid-column: 1; grid-row: 1; margin-left: 0.1rem; }
+  /* Don't let the image stretch to match a taller info column — keep it at its
+     natural square height, pinned to the top of the cell. */
+  .product-image-row { flex-direction: column; gap: 0.2rem; grid-column: 1; grid-row: 1; margin-left: 0.1rem; align-self: start; }
   .product-thumbs--column { flex-direction: row; width: auto; }
   .product-thumbs__item { width: 64px; }
   .product-detail .product-carousel { aspect-ratio: 1/1; }
@@ -7302,7 +7313,7 @@ details[open] > .cart-drawer__checkout-title::after {
   }
   .site-header:not(.site-header--hero-hidden) .logout-btn,
   .site-header.site-header--hero-visible .logout-btn {
-    background: rgba(0,0,0,0.12) !important;
+    background: rgb(57, 98, 124) !important;
     border: none !important;
     color: #fff !important;
     box-shadow: none !important;
@@ -9250,6 +9261,10 @@ details[open] > .cart-drawer__checkout-title::after {
     /* Attached to the content column above — its ring's top edge forms the
        sign's usual white slot at the junction instead of a floating gap. */
     margin-top: 0;
+    /* Flush to the bottom of the page — no greige/white gutter below the footer. */
+    margin-bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
     box-shadow:
       0 0 0 1px rgba(0, 0, 0, 0.12),
       0 0 0 2px rgba(0, 0, 0, 0.04),
@@ -11173,9 +11188,8 @@ body:has(.product-fullscreen) { overflow: hidden; }
   }
   .site-header .cart-btn,
   .site-header .cart-btn.cart-btn--active { padding: 0 20px !important; }
-  /* Square logout: keep its height, widen it (aspect-ratio 1) so it reads as a
-     square button rather than a narrow upright pill. */
-  .site-header .logout-btn { padding: 0 !important; aspect-ratio: 1 !important; justify-content: center !important; }
+  /* Wider logout button (a bit wider than tall — not a narrow upright pill). */
+  .site-header .logout-btn { padding: 0 20px !important; aspect-ratio: auto !important; justify-content: center !important; }
   /* Ghost fill: the same dark overlay the logo box and search field use, so it
      reads as recessed into the bar rather than as a second orange action. */
   .site-header .logout-btn {
@@ -11827,10 +11841,10 @@ body:has(.product-fullscreen) { overflow: hidden; }
        than the category labels beside it). */
     font-size: 1.24rem !important;
     font-weight: 500 !important;
-    letter-spacing: 0.01em !important;
+    letter-spacing: -0.02em !important;
   }
   body .site-header .cart-btn .cart-btn__label,
-  body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { font-size: 1.24rem !important; font-weight: 500 !important; letter-spacing: 0.01em !important; }
+  body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { font-size: 1.24rem !important; font-weight: 500 !important; letter-spacing: -0.02em !important; }
   body .site-header .cart-btn:hover,
   body .site-header .cart-btn.cart-btn--active:hover,
   body:has(.home-catalog) .site-header .cart-btn:hover,
@@ -12916,7 +12930,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
   .site-header .logout-form { display: inline-flex !important; }
   /* `body` prefix so these beat the dark-icon logout rules that share the plain
      `.site-header .logout-btn` specificity — the icon reads white on the blue bar. */
-  body .site-header .logout-btn { display: inline-flex !important; height: 62px !important; min-height: 62px !important; aspect-ratio: 1 !important; padding: 0 !important; justify-content: center !important; color: #fff !important; background: rgba(0,0,0,0.12) !important; border: none !important; box-shadow: none !important; }
+  body .site-header .logout-btn { display: inline-flex !important; height: 62px !important; min-height: 62px !important; aspect-ratio: auto !important; padding: 0 22px !important; justify-content: center !important; color: #fff !important; background: rgb(57, 98, 124) !important; border: none !important; box-shadow: none !important; }
   body .site-header .logout-btn svg { width: 22px !important; height: 22px !important; stroke: #fff !important; }
   .site-header .cart-btn,
   .site-header .site-header__search-btn { height: 62px !important; min-height: 62px !important; }
@@ -12932,6 +12946,26 @@ body:has(.product-fullscreen) { overflow: hidden; }
   body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !important; }
   /* Tighter product gutters (was 0.2rem), matching the mobile 2px. */
   .home-catalog .apparel-grid { gap: 2px !important; }
+  /* EN/FR language toggle in the header (between search and cart) — un-hide it on
+     tablet (it's display:none <=1024 by default) and style it like the other
+     header controls: dark-overlay chip, white FR/EN + globe, full height. */
+  .site-header .locale-btn--header {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    height: 62px !important;
+    min-height: 62px !important;
+    padding: 0 14px !important;
+    color: #fff !important;
+    background: rgba(0,0,0,0.12) !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+  .locale-btn--header .locale-btn__full { display: none !important; }
+  .locale-btn--header .locale-btn__short { display: inline !important; font-weight: 600 !important; font-size: 1rem !important; }
+  .locale-btn--header .locale-btn__icon { display: inline-flex !important; }
+  .locale-btn--header .locale-btn__icon svg { width: 22px !important; height: 22px !important; stroke: #fff !important; }
   /* The header's blue inner extends 1px below the header element, so the white
      bottom border (::after, pinned to the element's bottom) landed 1px high.
      Drop it to the inner's true bottom edge so it sits at the very bottom. */
@@ -12966,12 +13000,12 @@ body:has(.product-fullscreen) { overflow: hidden; }
   .pdp-breadcrumb__back,
   .pdp-breadcrumb__back span,
   .pdp-breadcrumb__cat,
-  .pdp-breadcrumb__sku { font-size: 1.35rem !important; }
-  /* Card meta: gender grouped directly left of the sizes, colours on the left. */
+  .pdp-breadcrumb__sku { font-size: 1.2rem !important; }
+  /* Gender shown as a title prefix (like desktop), not in the sizes row. */
+  .product-card__name-gender { display: inline !important; }
   .product-card__color-size-row { justify-content: flex-start !important; }
-  .product-card__sizes { text-align: right !important; }
-  .product-card__gender { margin-left: auto !important; margin-right: 0.3rem !important; }
-  .product-card__color-size-row:not(:has(.product-card__gender)) .product-card__sizes { margin-left: auto !important; }
+  .product-card__sizes { text-align: right !important; margin-left: auto !important; }
+  .product-card__color-size-row .product-card__gender { display: none !important; }
   /* View toggle blends into the blue tab bar. */
   .apparel-titlebar__action--tablet-cols {
     background: #84acc7 !important;
@@ -13215,4 +13249,92 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
       1px 0 0 0 rgba(0, 0, 0, 0.14),
       -1px 0 0 0 rgba(0, 0, 0, 0.14) !important;
   }
+}
+
+/* Fixed cart-button width so it doesn't jump between "My Cart" and "Panier"
+   when the language toggles (measured EN width + a little slack). */
+@media (min-width: 1025px) { body .site-header .cart-btn { min-width: 146px !important; } }
+@media (min-width: 601px) and (max-width: 1024px) { body .site-header .cart-btn { min-width: 112px !important; } }
+
+/* Desktop: the EN/FR toggle reads as its own distinct pill button (not the plain
+   ghost treatment of the cart/logout), matching their height. */
+@media (min-width: 1025px) {
+  .site-header .locale-btn--header {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    height: 55px !important;
+    min-width: 0 !important;
+    padding: 0 15px !important;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.14) !important;
+    border: 1px solid rgba(255, 255, 255, 0.32) !important;
+    color: #fff !important;
+    box-shadow: none !important;
+  }
+  .site-header .locale-btn--header:hover { background: rgba(255, 255, 255, 0.22) !important; }
+  .locale-btn--header .locale-btn__full { display: none !important; }
+  .locale-btn--header .locale-btn__short { display: inline !important; font-weight: 600 !important; font-size: 1.05rem !important; }
+  .locale-btn--header .locale-btn__icon { display: inline-flex !important; }
+  .locale-btn--header .locale-btn__icon svg { width: 20px !important; height: 20px !important; stroke: #fff !important; }
+}
+
+/* Tablet tabs + breadcrumb: unify to one larger matching size, and make EVERY
+   tab display:flex-centered (the first "All" tab was flex while the rest were
+   block, so it sat raised above them). Appended last so it wins over the
+   overlapping 768-1024 / 601-1024 tab rules earlier in the file. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .home-catalog__tabs .apparel-titlebar__tab {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    font-size: 1.35rem !important;
+    padding: 4px 15px !important;
+  }
+  .pdp-breadcrumb,
+  .pdp-breadcrumb__back,
+  .pdp-breadcrumb__back span,
+  .pdp-breadcrumb__cat,
+  .pdp-breadcrumb__sku { font-size: 1.35rem !important; }
+}
+
+/* Tablet: the tab bar reads white at 1024 with the view toggle floating as a
+   small blue icon on white. Paint the whole bar the secondary blue, fill the
+   toggle's right cell with that blue at full height (just a centred white icon,
+   no white gap), and make the logout opaque so the bar's dot texture doesn't
+   show through it. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .home-catalog__header { background: #84acc7 !important; }
+  .home-catalog__right {
+    background: #84acc7 !important;
+    align-self: stretch !important;
+    height: auto !important;
+    display: flex !important;
+    align-items: stretch !important;
+    padding: 0 !important;
+  }
+  .apparel-titlebar__action.apparel-titlebar__action--tablet-cols {
+    background: #84acc7 !important;
+    align-self: stretch !important;
+    height: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    width: 50px !important;
+    flex: 0 0 50px !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+  /* Square cell (width = the 50px bar height) so the toggle reads as a square. */
+  .home-catalog__right { width: 50px !important; min-width: 50px !important; flex: 0 0 50px !important; }
+  /* Big, obvious white icon centered in the square blue toggle cell. */
+  .apparel-titlebar__action--tablet-cols svg { stroke: #fff !important; width: 30px !important; height: 30px !important; stroke-width: 2.2 !important; }
+  /* Scale the header logo up so it fills more of the tablet header height. */
+  .site-header .brand-cluster--small .brand-cluster__mark { width: 60px !important; height: 60px !important; }
+  .site-header .brand-cluster--small .brand-cluster__word { font-size: 1.42rem !important; }
 }

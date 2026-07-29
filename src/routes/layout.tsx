@@ -521,6 +521,12 @@ export default component$(() => {
   const savedLocale = useLocaleLoader();
   const locale = useSignal<Locale>(savedLocale.value);
 
+  // EN/FR language toggle (header on tablet+desktop, menu drawer on mobile).
+  const toggleLocale = $(() => {
+    locale.value = locale.value === "en" ? "fr" : "en";
+    document.cookie = `${LOCALE_COOKIE}=${locale.value};path=/;max-age=31536000`;
+  });
+
   // Mobile/tablet apparel search lives in the header (not the catalog tab
   // strip). It relays keystrokes to the catalog via an "apparel-search" event.
   const searchOpen = useSignal(false);
@@ -1245,6 +1251,13 @@ export default component$(() => {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
               </button>
             )}
+            {/* EN/FR toggle sits between search and cart (tablet + desktop; hidden
+                on phones, where it lives in the menu drawer instead). */}
+            <button class="locale-btn locale-btn--header" onClick$={toggleLocale} aria-label="Toggle language">
+              <span class="locale-btn__full">{locale.value === "en" ? "Français" : "English"}</span>
+              <span class="locale-btn__short">{locale.value === "en" ? "FR" : "EN"}</span>
+              <svg class="locale-btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+            </button>
             <button class={`cart-btn ${cart.items.length > 0 ? "cart-btn--active" : ""}`} onClick$={() => { cartOpen.value = !cartOpen.value; if (cartOpen.value) menuOpen.value = false; if (!cartOpen.value) checkoutStep.value = "cart"; }}>
               <span class="cart-btn__label">{t("cart.mycart", locale.value)}</span>
               {cartOpen.value ? (
@@ -1344,6 +1357,11 @@ export default component$(() => {
               </Form>
             </div>
             <div class="nav-drawer__links">
+              {/* Language toggle (phones — on tablet/desktop it's in the header). */}
+              <button type="button" class="nav-drawer__link nav-drawer__link--locale" onClick$={toggleLocale}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                {locale.value === "en" ? "Français" : "English"}
+              </button>
               {loginType.value === "tech" && (
                 <Link href="/apparel/" class={`nav-drawer__link ${loc.url.pathname.startsWith("/apparel") ? "active" : ""}`} onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "Work Wear" })); }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M4 6h16v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/><path d="M4 6l-2 4v2h4V8"/><path d="M20 6l2 4v2h-4V8"/></svg>
@@ -1365,6 +1383,7 @@ export default component$(() => {
                   { key: "cat.Jackets", cat: "Jackets", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>' },
                   { key: "cat.Sweaters", cat: "Sweaters", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 3 4 6 2 9.5 5 12v9h14v-9l3-2.5L20 6l-4.5-3-1.3 1.7a3.4 3.4 0 0 1-4.4 0z"/><path d="M9 4.2c.9 1.2 4.1 1.2 5 0"/></svg>' },
                   { key: "cat.Shirts",  cat: "Shirts",  icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>' },
+                  { key: "cat.Polos",   cat: "Polos",   icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2l-4 4-4-4-4.38 1.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/><path d="M12 6v5"/></svg>' },
                   { key: "cat.CapsBeanies", cat: "Hats", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>' },
                   { key: "cat.SWAG",    cat: "SWAG",    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>' },
                   ...(loginType.value !== "safety" ? [{ key: "nav.officewelcomekit" as TranslationKey, cat: "New Hire Kit", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>' }] : []),
@@ -1574,7 +1593,7 @@ export default component$(() => {
                     class="btn btn--primary cart-drawer__order-btn"
                     onClick$={() => { summaryOpen.value = cart.items.length <= 4; checkoutStep.value = "details"; }}
                   >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 100 100" aria-hidden="true"><g transform="rotate(45 50 50) scale(0.72)" transform-origin="50 50"><polygon points="50,50 50,0 100,0" fill="#ffe2a6"/><polygon points="50,50 100,0 100,50" fill="#ae1f2a"/><polygon points="50,50 100,50 100,100" fill="#d43950"/><polygon points="50,50 100,100 50,100" fill="#9ec069"/><polygon points="50,50 50,100 0,100" fill="#7fa244"/><polygon points="50,50 0,100 0,50" fill="#4689b3"/><polygon points="50,50 0,50 0,0" fill="#31759c"/><polygon points="50,50 0,0 50,0" fill="#ffd25b"/></g><path d="M35 51 L46 63 L67 38" fill="none" stroke="rgba(10,25,55,0.5)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 51 L46 63 L67 38" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     {t("cart.checkout", locale.value)}
                   </button>
                 </div>
@@ -1759,7 +1778,7 @@ export default component$(() => {
                     disabled={!canPlaceOrder.value}
                     onClick$={submitOrder}
                   >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 100 100" aria-hidden="true"><g transform="rotate(45 50 50) scale(0.72)" transform-origin="50 50"><polygon points="50,50 50,0 100,0" fill="#ffe2a6"/><polygon points="50,50 100,0 100,50" fill="#ae1f2a"/><polygon points="50,50 100,50 100,100" fill="#d43950"/><polygon points="50,50 100,100 50,100" fill="#9ec069"/><polygon points="50,50 50,100 0,100" fill="#7fa244"/><polygon points="50,50 0,100 0,50" fill="#4689b3"/><polygon points="50,50 0,50 0,0" fill="#31759c"/><polygon points="50,50 0,0 50,0" fill="#ffd25b"/></g><path d="M35 51 L46 63 L67 38" fill="none" stroke="rgba(10,25,55,0.5)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 51 L46 63 L67 38" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     {(payMethod.value === "card" || (payMethod.value === "giftcard_card" && giftRemaining.value > 0))
                       ? t("cart.continuepayment", locale.value)
                       : t("cart.createorder", locale.value)}
