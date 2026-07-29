@@ -32,6 +32,9 @@ export interface OrderEmailData {
     department?: string;
     provinceName: string;
     provinceCode: string;
+    address1?: string;
+    city?: string;
+    postal?: string;
     po?: string;
   };
   items: OrderItem[];
@@ -110,6 +113,7 @@ export function buildOrderEmailHtml(o: OrderEmailData): string {
         ${o.employee.phone ? `<p style="margin:0 0 4px"><strong>Phone:</strong> ${esc(o.employee.phone)}</p>` : ""}
         ${o.employee.department ? `<p style="margin:0 0 4px"><strong>Location:</strong> ${esc(o.employee.department)}</p>` : ""}
         <p style="margin:0 0 4px"><strong>Province:</strong> ${esc(o.employee.provinceName)}</p>
+        ${(o.employee.address1 || o.employee.city || o.employee.postal) ? `<p style="margin:0 0 4px"><strong>Ship to:</strong> ${esc([o.employee.address1, o.employee.city, o.employee.provinceName, o.employee.postal].filter(Boolean).join(", "))}</p>` : ""}
         ${o.employee.po ? `<p style="margin:0 0 4px"><strong>PO #:</strong> ${esc(o.employee.po)}</p>` : ""}
         <p style="margin:0 0 4px"><strong>Payment:</strong> ${esc(PAYMENT_LABEL[o.payment.method])}</p>
         <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0">

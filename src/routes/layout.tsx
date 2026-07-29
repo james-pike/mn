@@ -203,6 +203,9 @@ export const useSubmitOrder = routeAction$(
     if (!province || !PROVINCE_TAX[province]) {
       return fail(400, { message: "Please select a province before submitting the order." });
     }
+    if (!employee.address1?.trim() || !employee.city?.trim() || !employee.postal?.trim()) {
+      return fail(400, { message: "A full shipping address (street, city, postal code) is required." });
+    }
     if (paymentMethod === "po" && !employee.po) {
       return fail(400, { message: "A PO number is required for purchase-order checkout." });
     }
@@ -309,7 +312,8 @@ export const useSubmitOrder = routeAction$(
       orderNumber, date,
       employee: {
         name: employee.name, email: employee.email, phone: employee.phone,
-        department: employee.department, provinceName, provinceCode: province, po: employee.po,
+        department: employee.department, provinceName, provinceCode: province,
+        address1: employee.address1, city: employee.city, postal: employee.postal, po: employee.po,
       },
       items: items as any,
       subtotal, taxPct, tax, total,
@@ -375,6 +379,9 @@ export const useSubmitOrder = routeAction$(
             customer_phone: employee.phone || "",
             department: employee.department || "",
             po: employee.po || "",
+            address1: employee.address1 || "",
+            city: employee.city || "",
+            postal: employee.postal || "",
             province_code: province,
             province_name: provinceName,
             tax_pct: String(taxPct),
@@ -424,7 +431,8 @@ export const useSubmitOrder = routeAction$(
         orderNumber, date,
         employee: {
           name: employee.name, email: employee.email, phone: employee.phone,
-          department: employee.department, provinceName, provinceCode: province, po: employee.po,
+          department: employee.department, provinceName, provinceCode: province,
+          address1: employee.address1, city: employee.city, postal: employee.postal, po: employee.po,
         },
         items: items as any,
         subtotal, taxPct, tax, total,
@@ -447,6 +455,9 @@ export const useSubmitOrder = routeAction$(
       phone: z.string().max(40),
       department: z.string().max(120),
       province: z.string().length(2),
+      address1: z.string().min(1).max(200),
+      city: z.string().min(1).max(120),
+      postal: z.string().min(1).max(20),
       po: z.string().max(60).optional().default(""),
     }),
     items: z
@@ -555,6 +566,9 @@ export default component$(() => {
   const empPhone = useSignal("");
   const empDept = useSignal("");
   const empProvince = useSignal("");
+  const empAddress1 = useSignal("");
+  const empCity = useSignal("");
+  const empPostal = useSignal("");
   const empPO = useSignal("");
 
   // Payment: 'po' (invoice), 'giftcard', 'giftcard_card', 'card'.
@@ -612,6 +626,7 @@ export default component$(() => {
   const canPlaceOrder = useComputed$(() => {
     if (!empFirstName.value.trim() || !empLastName.value.trim() || !empEmail.value.trim()
         || !empPhone.value.trim() || !empProvince.value) return false;
+    if (!empAddress1.value.trim() || !empCity.value.trim() || !empPostal.value.trim()) return false;
     if (needsLocation(empProvince.value) && !empDept.value) return false;
     if (payMethod.value === "po" && !empPO.value.trim()) return false;
     if (usesGift.value && giftBalance.value == null) return false;           // card not applied yet
@@ -682,7 +697,7 @@ export default component$(() => {
     formTouched.value = true;
     const locationRequired = needsLocation(empProvince.value);
     const poRequired = payMethod.value === "po";
-    if (!empFirstName.value || !empLastName.value || !empEmail.value || !empPhone.value || !empProvince.value || (locationRequired && !empDept.value) || (poRequired && !empPO.value)) {
+    if (!empFirstName.value || !empLastName.value || !empAddress1.value || !empCity.value || !empPostal.value || !empEmail.value || !empPhone.value || !empProvince.value || (locationRequired && !empDept.value) || (poRequired && !empPO.value)) {
       formError.value = t("cart.error.required", locale.value);
       checkoutOpen.value = true;
       return;
@@ -721,7 +736,7 @@ export default component$(() => {
       paymentMethod: payMethod.value,
       device,
       ...(usesGift.value ? { giftCardCode: giftCode.value.trim() } : {}),
-      employee: { name: `${empFirstName.value} ${empLastName.value}`, email: empEmail.value, phone: empPhone.value, department: empDept.value, province: empProvince.value, po: empPO.value },
+      employee: { name: `${empFirstName.value} ${empLastName.value}`, email: empEmail.value, phone: empPhone.value, department: empDept.value, province: empProvince.value, address1: empAddress1.value, city: empCity.value, postal: empPostal.value, po: empPO.value },
       items: cart.items.map((i: any) => ({
         name: i.name || "",
         sku: i.sku || "",
@@ -1634,6 +1649,25 @@ export default component$(() => {
                         />
                       </div>
                     </div>
+                    {/* Full shipping address — all required. */}
+                    <div class={`checkout-modal__field ${formTouched.value && !empAddress1.value ? "checkout-modal__field--error" : ""}`}>
+                      <label>{t("cart.address", locale.value)}</label>
+                      <input
+                        type="text"
+                        autoComplete="street-address"
+                        value={empAddress1.value}
+                        onInput$={(_, el) => { empAddress1.value = el.value; formError.value = ""; }}
+                      />
+                    </div>
+                    <div class={`checkout-modal__field ${formTouched.value && !empCity.value ? "checkout-modal__field--error" : ""}`}>
+                      <label>{t("cart.city", locale.value)}</label>
+                      <input
+                        type="text"
+                        autoComplete="address-level2"
+                        value={empCity.value}
+                        onInput$={(_, el) => { empCity.value = el.value; formError.value = ""; }}
+                      />
+                    </div>
                     {/* Province sits directly under the name row so the
                         tax line in the cart total updates as soon as
                         possible — before the user fills in phone/email. */}
@@ -1675,6 +1709,15 @@ export default component$(() => {
                         />
                       </div>
                     )}
+                    <div class={`checkout-modal__field ${formTouched.value && !empPostal.value ? "checkout-modal__field--error" : ""}`}>
+                      <label>{t("cart.postal", locale.value)}</label>
+                      <input
+                        type="text"
+                        autoComplete="postal-code"
+                        value={empPostal.value}
+                        onInput$={(_, el) => { empPostal.value = el.value; formError.value = ""; }}
+                      />
+                    </div>
                     <div class={`checkout-modal__field ${formTouched.value && !empEmail.value ? "checkout-modal__field--error" : ""}`}>
                       <label>{t("cart.email", locale.value)}</label>
                       <input
