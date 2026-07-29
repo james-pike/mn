@@ -372,7 +372,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-17",
-    "name": "Insulated 18 Can Two Compartment Cooler - Black",
+    "name": "Insulated Two Compartment Cooler",
     "category": "SWAG",
     "sizes": "One Size",
     "badge": "",

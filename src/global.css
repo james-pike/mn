@@ -6804,7 +6804,12 @@ details[open] > .cart-drawer__checkout-title::after {
     background: var(--ce-gray-200);
     border-radius: 2px;
     padding: 0;
-    min-height: 100vh;
+    /* Dynamic fit: fill the viewport MINUS the pinned header+tab bar (~109px) and
+       the footer (~140px), so a thin category's tray ends exactly where the
+       footer begins and the footer lands flush at the viewport bottom on any
+       screen height. Longer lists grow past it and the footer follows the last
+       product. */
+    min-height: calc(100vh - 249px);
     align-content: start;
   }
   .cart-btn__label { display: inline; }
@@ -9752,9 +9757,8 @@ details[open] > .cart-drawer__checkout-title::after {
   }
   /* Gaps between cards read as the sidebar gray (was the greige card showing
      through) — no card borders, just the gray gutter. */
-  /* A touch cooler/darker than the off-white product cards, so the rows read as
-     cards on a tray without washing into the same tone. */
-  .home-catalog .apparel-grid { background: #dadee2; }
+  /* White tray behind the product rows. */
+  .home-catalog .apparel-grid { background: #ffffff; }
   .apparel-catalog:has(.product-detail) {
     background: var(--ce-greige);
     box-shadow:
@@ -10753,10 +10757,62 @@ details[open] > .cart-drawer__checkout-title::after {
     pointer-events: none;
     z-index: 3;
   }
-  /* Product title in Catalog (list) view nudged up just a hair from the 0.88rem
-     base; the gender prefix scales with it so "Men's/Women's" matches. */
+  /* Product title in Catalog (list) view; the gender prefix scales with it so
+     "Men's/Women's" matches. Kept just under the base so longer names fit on a
+     single line. */
   .apparel-grid--list .product-card__name-text,
-  .apparel-grid--list .product-card__name-gender { font-size: 0.92rem; }
+  .apparel-grid--list .product-card__name-gender { font-size: 0.86rem; }
+  /* Slick list card: the white product photo fills the full height of the row,
+     flush to the left, separated from the info by a single hairline — no inset
+     gap, no extra panel tone. */
+  .apparel-grid--list .product-card__image {
+    margin: 0;
+    align-self: stretch;
+    flex: 0 0 82px;
+    border: none;
+    border-right: 1px solid #d7dbdf;
+    border-radius: 0;
+    overflow: hidden;
+    background: #ffffff;
+    box-sizing: border-box;
+  }
+  .apparel-grid--list .product-card__image img { object-fit: contain !important; background: #ffffff; }
+  /* One card tone only: the info panel drops its separate grey and inherits the
+     card background, so the row reads as white photo + card background, nothing
+     else. */
+  .apparel-grid--list .product-card__info { background: transparent; }
+  /* Fill each cell so a shorter card matches the taller one beside it, the card
+     background covering the difference instead of a white tray strip. */
+  .apparel-grid--list .product-card { height: 100%; }
+  /* A gap above the first row equal to the 2px gutters between the products, so
+     the top edge isn't flush against the tab bar. */
+  .home-catalog .apparel-grid--list { padding-top: 2px !important; }
+  /* Colour names flow at the LEFT of the size row (left-aligned under the title)
+     rather than floating absolute, with the sizes pushed to the right. */
+  .apparel-grid--list .product-card__colors-text {
+    position: static !important;
+    left: auto !important;
+    bottom: auto !important;
+    max-width: 60% !important;
+    order: -1;
+    margin-right: auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* Colour info and size variants share one muted tone; sizes a touch smaller
+     than the colour names. Higher-specificity + !important so these win over the
+     scattered per-element font-size rules further down the file. */
+  .home-catalog .apparel-grid--list .product-card__color-name,
+  .home-catalog .apparel-grid--list .product-card__colors-text {
+    font-size: 0.78rem !important;
+    color: #6d6d66 !important;
+  }
+  .home-catalog .apparel-grid--list .product-card__sizes,
+  .home-catalog .apparel-grid--list .product-card__sizes-line {
+    font-size: 0.72rem !important;
+    color: #6d6d66 !important;
+  }
 }
 
 /* Desktop: the white band that paints the seam grows with it (2px -> 3px), so
@@ -11040,7 +11096,8 @@ body:has(.product-fullscreen) { overflow: hidden; }
     flex-direction: column;
     justify-content: center;
     gap: 3px;
-    padding: 8px 11px;
+    /* Tighter left padding gives the title more room to stay on one line. */
+    padding: 8px 11px 8px 8px;
   }
   /* Two lines then ellipsis: names vary a lot in length and a third line would
      push the row past the thumbnail, leaving the grid ragged. */
@@ -12935,10 +12992,12 @@ body:has(.product-fullscreen) { overflow: hidden; }
    taller (71px) bar instead of floating with slack padding above/below. */
 @media (min-width: 1025px) {
   .site-header .brand-cluster--small .brand-cluster__mark { width: 58px !important; height: 58px !important; }
-  /* 3 stacked lines must fit the 71px bar — ~1.2rem keeps them from spilling. */
+  /* 3 stacked lines fill the bar: slightly larger type with a tighter leading so
+     the gaps between the words shrink and they occupy more of the height —
+     without spilling into the padding above/below the cluster. */
   .site-header .brand-cluster--small .brand-cluster__word,
   .site-header .brand-cluster--small .brand-cluster__word--sub,
-  .site-header .brand-cluster--small .brand-cluster__word--muted { font-size: 1.2rem !important; line-height: 1.05 !important; }
+  .site-header .brand-cluster--small .brand-cluster__word--muted { font-size: 1.32rem !important; line-height: 0.92 !important; }
 }
 
 /* Home page at the top: the hero cover already shows the big brand lockup, so

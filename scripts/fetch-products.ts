@@ -30,6 +30,7 @@ async function fetchAndWrite() {
     "MN-12": { name: "Women's FootJoy Speckle Print Polo" },
     "MN-13": { sizes: "25 oz" },        // Yeti Rambler: only the 25oz size
     "MN-14": { sizes: "35L" },          // Yeti Tundra Cooler: only the 35L size
+    "MN-17": { name: "Insulated Two Compartment Cooler" },
   };
 
   try {

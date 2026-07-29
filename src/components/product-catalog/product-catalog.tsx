@@ -110,8 +110,8 @@ const BRAND_LIST = [
   // Clothing brands first...
   "Carhartt", "Cole Harbour", "Flexfit", "FootJoy", "Gildan",
   "Under Armour", "Wilson", "Yeti",
-  // ...then non-clothing brands (bags, golf, headwear), Cap America last.
-  "Nomad", "Srixon", "Tranzip", "Cap America",
+  // ...then non-clothing brands (bags, golf, towels, headwear), Cap America last.
+  "Nexgen", "Nomad", "Srixon", "Tranzip", "Cap America",
 ];
 // Brand overrides for products whose brand isn't in the display name (identified
 // from the product spec). Everything else is matched by name against BRAND_LIST.
@@ -121,6 +121,7 @@ const BRAND_BY_SKU: Record<string, string> = {
 
   "MN-11": "FootJoy", // Men's Speckle Print Polo
   "MN-12": "FootJoy", // Women's Speckle Print Polo
+  "MN-29": "Nexgen",  // Microfiber Waffle Towel
 };
 function brandOf(p: Product): string | null {
   if (BRAND_BY_SKU[p.sku]) return BRAND_BY_SKU[p.sku];
@@ -287,9 +288,16 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
               const shown = all.filter((c) => !CARD_HIDDEN_COLORS.has(c));
               const visible = sortColorsWhiteLast(shown.length ? shown : all);
               if (!visible.length) return null;
+              // List up to 4 colour names; if there are more, a ", +N" indicator
+              // stands in for the rest rather than a truncated run-on list.
+              const MAX_NAMES = 4;
+              const names = visible
+                .slice(0, MAX_NAMES)
+                .map((c) => (c.startsWith("#") ? colorName(c, locale.value) : c));
+              const extra = visible.length - MAX_NAMES;
               return (
                 <span class="product-card__colors-text">
-                  {visible.map((c) => (c.startsWith("#") ? colorName(c, locale.value) : c)).join(", ")}
+                  {names.join(", ")}{extra > 0 ? `, +${extra}` : ""}
                 </span>
               );
             })()}
@@ -527,7 +535,12 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
             class="home-catalog__viewmode"
             aria-label={`Show ${(tabletCols.value === "list" ? VIEW_MODES[0] : VIEW_MODES[1]).label.toLowerCase()} view`}
             title={`${(tabletCols.value === "list" ? VIEW_MODES[0] : VIEW_MODES[1]).label} view`}
-            onClick$={() => { tabletCols.value = tabletCols.value === "list" ? 3 : "list"; }}
+            onClick$={() => {
+              tabletCols.value = tabletCols.value === "list" ? 3 : "list";
+              // The card heights change between modes, so the old scroll offset
+              // lands mid-product — re-pin the grid to the top of the list.
+              requestAnimationFrame(() => requestAnimationFrame(() => scrollProductsBelowBar()));
+            }}
           >
             <span class="home-catalog__viewmode-icon" dangerouslySetInnerHTML={(tabletCols.value === "list" ? VIEW_MODES[0] : VIEW_MODES[1]).icon} />
             <span class="home-catalog__viewmode-label">{(tabletCols.value === "list" ? VIEW_MODES[0] : VIEW_MODES[1]).label}</span>
@@ -605,7 +618,10 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
             <button
               class="apparel-titlebar__action apparel-titlebar__action--tablet-cols"
               aria-label={tabletCols.value === 3 ? "Show list view" : "Show 3 per row"}
-              onClick$={() => { tabletCols.value = tabletCols.value === 3 ? "list" : 3; }}
+              onClick$={() => {
+                tabletCols.value = tabletCols.value === 3 ? "list" : 3;
+                requestAnimationFrame(() => requestAnimationFrame(() => scrollProductsBelowBar()));
+              }}
             >
               {tabletCols.value === 3 ? (
                 // next: list view — rows with a thumbnail + detail lines
