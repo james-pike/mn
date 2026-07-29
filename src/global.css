@@ -3260,18 +3260,30 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   text-align: center;
   margin: 0;
   padding: 1.6rem 1.5rem 1.7rem;
-  /* Fine white dot texture (like the header/tab bar) tiled across the WHOLE blue
-     top — replaces the iron/rust texture, which only covered the upper band and
-     left the "login to access" line untextured. */
+  position: relative;
+  overflow: hidden;
   background:
-    radial-gradient(circle, rgba(255, 255, 255, 0.11) 1px, transparent 1.6px) left top / 13px 13px repeat,
     linear-gradient(var(--wt-box), var(--wt-box)),
     var(--wt-orange);
+  /* Softer bottom seam between the blue header and the white body (was a heavy
+     -9px inset shadow). */
   box-shadow:
     inset 0 -3px 0 transparent,
-    inset 0 -9px 10px -6px rgba(10, 25, 55, 0.5),
+    inset 0 -5px 7px -6px rgba(10, 25, 55, 0.28),
     inset 0 0 18px rgba(10, 25, 55, 0.4);
 }
+/* Fine white dot texture across the whole blue top, FADED toward the centre —
+   noticeable at the sides, soft in the middle (mask). */
+.login-modal__header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.14) 1px, transparent 1.6px) 0 0 / 13px 13px;
+  -webkit-mask-image: linear-gradient(to right, #000 0%, rgba(0,0,0,0.12) 40%, transparent 50%, rgba(0,0,0,0.12) 60%, #000 100%);
+  mask-image: linear-gradient(to right, #000 0%, rgba(0,0,0,0.12) 40%, transparent 50%, rgba(0,0,0,0.12) 60%, #000 100%);
+  pointer-events: none;
+}
+.login-modal__header > * { position: relative; }
 .login-modal__logo { height: 42px; width: auto; margin: 0 auto; }
 .login-modal__title {
   font-size: 1.25rem; font-weight: 800;
@@ -3307,7 +3319,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   width: 100%; justify-content: center; margin-top: 0.4rem;
   padding: 13px 20px;
   background: linear-gradient(var(--wt-box), var(--wt-box)), var(--wt-orange);
-  color: #fff; border: 1px solid rgba(10, 25, 55, 0.45); border-radius: 8px;
+  color: #fff; border: 1px solid rgba(10, 25, 55, 0.45); border-radius: 3px;
   font-weight: 600; letter-spacing: 0.02em;
   text-shadow: 0 1px 1px rgba(10, 25, 55, 0.45);
   box-shadow:
@@ -7531,7 +7543,7 @@ details[open] > .cart-drawer__checkout-title::after {
      narrower than the image, floated in a too-wide white margin, and read as a
      separate block rather than the next panel in the sign. At 6px its side
      margins are the same 4px white strip everything else carries. */
-  .product-detail .product-modal__details { position: relative; padding: 1.25rem 1rem 1.5rem; margin-left: 0; margin-right: 0; background: #e0e3e6; border-radius: 0 0 2px 2px; }
+  .product-detail .product-modal__details { position: relative; padding: 1.25rem 1rem 1.5rem; margin-left: 0; margin-right: 0; background: var(--mn-panel); border-radius: 0 0 2px 2px; }
   /* The info panel's pressed top-edge shadow is dropped: it read as a border
      between the image and the info, and the two are one continuous greige
      surface now. */
@@ -9863,7 +9875,7 @@ details[open] > .cart-drawer__checkout-title::after {
        done in the background stack, so no mask touches the page content. */
     background-image:
       linear-gradient(to right, transparent 0, var(--ce-greige) 13%, var(--ce-greige) 87%, transparent 100%),
-      radial-gradient(circle, rgba(0, 0, 0, 0.10) 1.7px, transparent 1.7px),
+      radial-gradient(circle, rgba(0, 0, 0, 0.07) 1.7px, transparent 1.7px),
       var(--wt-surround);
     background-size: 100% 100%, 15px 15px, auto;
     background-position: 0 0, 0 0, center;
@@ -9887,7 +9899,7 @@ details[open] > .cart-drawer__checkout-title::after {
        (never under the logout/search controls). */
     background-image:
       linear-gradient(to right, transparent 0, var(--ce-greige) 13%, var(--ce-greige) 87%, transparent 100%),
-      radial-gradient(circle, rgba(0, 0, 0, 0.10) 1.7px, transparent 1.7px),
+      radial-gradient(circle, rgba(0, 0, 0, 0.07) 1.7px, transparent 1.7px),
       var(--wt-surround) !important;
     background-size: 100% 100%, 15px 15px, auto !important;
     background-position: 0 0, 0 0, center !important;
@@ -11161,7 +11173,9 @@ body:has(.product-fullscreen) { overflow: hidden; }
   }
   .site-header .cart-btn,
   .site-header .cart-btn.cart-btn--active { padding: 0 20px !important; }
-  .site-header .logout-btn { padding: 0 16px !important; }
+  /* Square logout: keep its height, widen it (aspect-ratio 1) so it reads as a
+     square button rather than a narrow upright pill. */
+  .site-header .logout-btn { padding: 0 !important; aspect-ratio: 1 !important; justify-content: center !important; }
   /* Ghost fill: the same dark overlay the logo box and search field use, so it
      reads as recessed into the bar rather than as a second orange action. */
   .site-header .logout-btn {
@@ -12902,7 +12916,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
   .site-header .logout-form { display: inline-flex !important; }
   /* `body` prefix so these beat the dark-icon logout rules that share the plain
      `.site-header .logout-btn` specificity — the icon reads white on the blue bar. */
-  body .site-header .logout-btn { display: inline-flex !important; height: 62px !important; min-height: 62px !important; padding: 0 19px !important; color: #fff !important; background: rgba(0,0,0,0.12) !important; border: none !important; box-shadow: none !important; }
+  body .site-header .logout-btn { display: inline-flex !important; height: 62px !important; min-height: 62px !important; aspect-ratio: 1 !important; padding: 0 !important; justify-content: center !important; color: #fff !important; background: rgba(0,0,0,0.12) !important; border: none !important; box-shadow: none !important; }
   body .site-header .logout-btn svg { width: 22px !important; height: 22px !important; stroke: #fff !important; }
   .site-header .cart-btn,
   .site-header .site-header__search-btn { height: 62px !important; min-height: 62px !important; }
@@ -13047,6 +13061,9 @@ body:has(.product-fullscreen) { overflow: hidden; }
   .site-header .brand-cluster--small .brand-cluster__word,
   .site-header .brand-cluster--small .brand-cluster__word--sub,
   .site-header .brand-cluster--small .brand-cluster__word--muted { font-size: 1.32rem !important; line-height: 0.92 !important; }
+  /* Slightly less bold on the main word (was 700) so the lockup reads a touch
+     lighter at this larger size. */
+  .site-header .brand-cluster--small .brand-cluster__word:not(.brand-cluster__word--sub):not(.brand-cluster__word--muted) { font-weight: 600 !important; }
 }
 
 /* Home page at the top: the hero cover already shows the big brand lockup, so

@@ -136,7 +136,7 @@ export const allProducts = [
   {
     "sku": "MN-15",
     "name": "Men's Under Armour Tech Polo",
-    "category": "SWAG",
+    "category": "Polos",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
@@ -159,7 +159,7 @@ export const allProducts = [
   {
     "sku": "MN-16",
     "name": "Women's Under Armour Tech Polo",
-    "category": "SWAG",
+    "category": "Polos",
     "sizes": "XS - 2XL",
     "badge": "",
     "colors": [
@@ -182,7 +182,7 @@ export const allProducts = [
   {
     "sku": "MN-11",
     "name": "Men's FootJoy Speckle Print Polo",
-    "category": "SWAG",
+    "category": "Polos",
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
@@ -201,7 +201,7 @@ export const allProducts = [
   {
     "sku": "MN-12",
     "name": "Women's FootJoy Speckle Print Polo",
-    "category": "SWAG",
+    "category": "Polos",
     "sizes": "XS - 2XL",
     "badge": "",
     "colors": [
@@ -237,7 +237,7 @@ export const allProducts = [
     "sku": "MN-8",
     "name": "Carhartt Duck Insulated Bib Overall - Navy",
     "category": "Work Wear",
-    "sizes": "S - 4XL",
+    "sizes": "S - 5XL / MS - 4XLS / MT - 4XLT",
     "badge": "",
     "colors": [
       "#2c3e50"

@@ -26,11 +26,15 @@ async function fetchAndWrite() {
     "MN-7": { name: "Men's Carhartt Winter Jacket - Navy" },
     "MN-9": { category: "Sweaters" },   // Pullover Hoodie: not a jacket
     "MN-10": { category: "Sweaters" },  // Full Zip Hoodie: not a jacket
-    "MN-11": { name: "Men's FootJoy Speckle Print Polo" },
-    "MN-12": { name: "Women's FootJoy Speckle Print Polo" },
+    "MN-11": { name: "Men's FootJoy Speckle Print Polo", category: "Polos" },
+    "MN-12": { name: "Women's FootJoy Speckle Print Polo", category: "Polos" },
+    "MN-15": { category: "Polos" },   // Men's Under Armour Tech Polo
+    "MN-16": { category: "Polos" },   // Women's Under Armour Tech Polo
     "MN-13": { sizes: "25 oz" },        // Yeti Rambler: only the 25oz size
     "MN-14": { sizes: "35L" },          // Yeti Tundra Cooler: only the 35L size
     "MN-17": { name: "Insulated Two Compartment Cooler" },
+    // Duck Bib: 3 fits — Regular S-5XL, Short (MS-4XLS), Tall (MT-4XLT).
+    "MN-8": { sizes: "S - 5XL / MS - 4XLS / MT - 4XLT" },
   };
 
   try {
