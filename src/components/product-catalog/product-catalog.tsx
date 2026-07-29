@@ -582,19 +582,16 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
             {/* Tablet column-count toggle. The mobile/tablet search input now
                 lives in the site header (see layout.tsx) so it no longer
                 crowds the category tab strip. */}
-            {/* Tablet view toggle cycles 3-per-row → list → 2-per-row → 3…
+            {/* Tablet view toggle: 3-per-row ↔ list (catalog) only — no 2-per-row.
                 The icon shown is the view you'll switch TO next. */}
             <button
               class="apparel-titlebar__action apparel-titlebar__action--tablet-cols"
-              aria-label={tabletCols.value === 3 ? "Show list view" : tabletCols.value === "list" ? "Show 2 per row" : "Show 3 per row"}
-              onClick$={() => { tabletCols.value = tabletCols.value === 3 ? "list" : tabletCols.value === "list" ? 2 : 3; }}
+              aria-label={tabletCols.value === 3 ? "Show list view" : "Show 3 per row"}
+              onClick$={() => { tabletCols.value = tabletCols.value === 3 ? "list" : 3; }}
             >
               {tabletCols.value === 3 ? (
                 // next: list view — rows with a thumbnail + detail lines
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="4" height="4"/><line x1="10" y1="6" x2="21" y2="6"/><rect x="3" y="10" width="4" height="4"/><line x1="10" y1="12" x2="21" y2="12"/><rect x="3" y="16" width="4" height="4"/><line x1="10" y1="18" x2="21" y2="18"/></svg>
-              ) : tabletCols.value === "list" ? (
-                // next: 2 per row
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="18"/><rect x="13" y="3" width="8" height="18"/></svg>
               ) : (
                 // next: 3 per row
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="18"/><rect x="9.5" y="3" width="5" height="18"/><rect x="16" y="3" width="5" height="18"/></svg>
