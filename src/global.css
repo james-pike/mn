@@ -22,9 +22,10 @@
      --ce-btn-radius unifies the header/hero button corners (was 2px vs 4px). */
   --ce-border: rgba(0, 0, 0, 0.08);
   --ce-btn-radius: 4px;
-  /* Shared content max-width (Tailwind max-w-8xl = 88rem): header bar, category
-     tab bar, catalog, product page and footer all align to this. */
-  --site-max: 1408px;
+  /* Shared content max-width (96rem / 1536px, matching the cm Carmichael site;
+     Tailwind's 2xl screen): header bar, category tab bar, catalog, product page
+     and footer all align to this. */
+  --site-max: 1536px;
   /* Desktop: thickness of the white ring around the sign card — slightly
      slimmer than the sign's internal vertical bands so the side strips read
      equal to the y strips above the header bar / below the footer.
@@ -1700,7 +1701,7 @@ body:has(.nav-drawer-overlay) .site-header {
        showed through beneath the short card, since --wt-surround is only defined
        on desktop and fell through to transparent here). Clicking it closes the
        menu (layout.tsx). */
-    background: #84acc7;
+    background: #e9eff4;
     animation: fade-in 0.15s ease;
   }
   .nav-drawer {
@@ -2297,7 +2298,7 @@ body:has(.nav-drawer-overlay) .site-header {
   align-items: center;
   gap: 28px;
   padding: 10px 14px;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 400;
   color: var(--ce-gray-700);
   text-transform: capitalize;
@@ -2347,7 +2348,7 @@ body:has(.nav-drawer-overlay) .site-header {
   justify-content: space-between;
   width: 100%;
   padding: 10px 14px;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 400;
   color: var(--ce-gray-700);
   background: #e0e3e6;
@@ -3082,9 +3083,9 @@ body:has(.nav-drawer-overlay) .site-header {
   font-weight: 600;
   letter-spacing: 0;
 }
-/* Mobile: drop the cents entirely (rounded down to the dollar) for max title room. */
+/* Mobile shows the cents too, in the same small raised style as desktop. */
 @media (max-width: 1024px) {
-  .product-card__price-cents { display: none; }
+  .product-card__price-cents { display: inline; }
 }
 .product-card__sku {
   font-size: 0.68rem;
@@ -8378,10 +8379,11 @@ details[open] > .cart-drawer__checkout-title::after {
     justify-content: center !important;
     text-align: left !important;
     gap: 8vw !important;
-    width: 97% !important;
-    padding-top: 2.25rem !important;
-    padding-left: 0.5rem !important;
-    padding-bottom: 2.75rem !important;
+    width: 92% !important;
+    padding-top: 2.6rem !important;
+    padding-right: 1.3rem !important;
+    padding-left: 1.3rem !important;
+    padding-bottom: 3.1rem !important;
   }
   .hero__upper .hero__text .hero__brandmark { width: 30vw !important; }
   .hero__upper .hero__text .hero__words { align-items: flex-start !important; gap: 0.2rem !important; }
@@ -8390,9 +8392,9 @@ details[open] > .cart-drawer__checkout-title::after {
      one font-size — set at 9.5vw, a half-step below the original 10vw so
      a visible x-padding gap remains between the text and the dark overlay
      panel's inner edge (10vw was too wide and reached the side padding). */
-  .hero__upper .hero__text .hero__title-word { font-size: 9.8vw !important; }
+  .hero__upper .hero__text .hero__title-word { font-size: 9.05vw !important; }
   .hero__upper .hero__text .hero__title-word--sub {
-    font-size: 9.8vw !important;
+    font-size: 9.05vw !important;
     /* BUILDING SERVICES is 16 chars vs MODERN NIAGARA's 14, so it needs a
        tighter letter-spacing to render at the same visual line length as
        the headline above. -0.18em compresses the longer line just enough
@@ -8402,7 +8404,7 @@ details[open] > .cart-drawer__checkout-title::after {
   /* MODERN NIAGARA on a single line — sized to fill the cluster width
      with minimal horizontal padding while still avoiding clipping. */
   .hero__upper .hero__text .hero__title-word:nth-child(1) {
-    font-size: 9.8vw !important;
+    font-size: 9.05vw !important;
     font-weight: 600 !important;
     line-height: 0.95 !important;
     letter-spacing: -0.09em !important;
@@ -9307,10 +9309,10 @@ details[open] > .cart-drawer__checkout-title::after {
    apparel/product routes; the orange MENU strip and off-white links card sit
    inside it. (This replaces the old orange side-drawer "sign" surface.) ---- */
 .nav-drawer {
-  /* The full height below the links reads the lighter tab-bar blue (the greige
+  /* The full height below the links reads a very off-white blue tint (the greige
      links container only covers the rows themselves; everything under it is
-     this blue). */
-  background: #84acc7 !important;
+     this tint). */
+  background: #e9eff4 !important;
   box-shadow: none !important;
 }
 /* Link + category rows read as white panels PRESSED into the orange sign —
@@ -10276,10 +10278,15 @@ details[open] > .cart-drawer__checkout-title::after {
    wins over the ≤900 base and the 0.86rem !important tab-font cap; scoped to
    ≤600 so tablets (601–900) keep their own sizing. */
 @media (max-width: 600px) {
-  /* Trim the header's left inset and nudge the whole logo cluster left, freeing
-     more room on the right for the three buttons on narrow phones. */
-  .site-header__inner { height: 58px; padding-left: 2px; padding-right: 2px; }
-  .site-header__logo { margin-left: -3px; }
+  /* Keep a small left gap beside the pinwheel on narrow phones (iPhone SE) so it
+     isn't clipped by the inner's overflow:hidden. A positive margin shifts the
+     whole cluster RIGHT toward the buttons; the logo's own margin-right:auto
+     absorbs the shift, so the buttons stay put. */
+  .site-header__inner { height: 58px; padding-left: 3px; padding-right: 2px; }
+  /* Larger phones (iPhone Pro Max etc.) have room, so the cluster sits close to
+     the edge here; iPhone SE gets a bigger gap in the max-width:384 block below
+     so its pinwheel isn't clipped. */
+  .site-header__logo { margin-left: 0; }
   /* The wordmark PNG (1448px source, so it stays crisp) scales up with the
      taller header too — it's the .site-header__logo-white class, separate from
      the logo-img/brand-cluster ones, so it needs its own bump. */
@@ -10322,9 +10329,8 @@ details[open] > .cart-drawer__checkout-title::after {
      step from 1.35x so the strip ends mid-label more often: a sliver of the
      next tab is the cue that the strip scrolls. */
   .home-catalog__tabs .apparel-titlebar__tab {
-    /* A touch smaller than before (1.25x/1.3rem) so a bit more of the next tab
-       peeks in as a scroll cue and the labels read slightly tighter. */
-    font-size: min(calc(var(--text-tab) * 0.95), 1rem) !important;
+    /* Scaled up to match the PDP breadcrumb text size (~1rem). */
+    font-size: min(calc(var(--text-tab) * 1.14), 1.02rem) !important;
     padding: 5px 9px !important;
     letter-spacing: -0.02em !important;
   }
@@ -10346,6 +10352,9 @@ details[open] > .cart-drawer__checkout-title::after {
    running off the right edge — the buttons pull in toward the logo rather than
    overflow. */
 @media (max-width: 384px) {
+  /* iPhone SE: keep a clear left gap beside the pinwheel so overflow:hidden
+     doesn't clip it; the cluster shifts right (margin-right:auto absorbs it). */
+  .site-header__logo { margin-left: 5px !important; }
   .site-header .cart-btn,
   .site-header .site-header__search-btn,
   .site-header .hamburger-btn {
@@ -11050,6 +11059,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
     border-radius: 0 !important;
     background: rgba(0, 0, 0, 0.12) !important;
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.16) !important;
+    padding: 0 11px !important;
   }
   .site-header .logout-btn { color: #fff !important; }
   .site-header .logout-btn svg { stroke: #fff !important; }
@@ -11059,7 +11069,8 @@ body:has(.product-fullscreen) { overflow: hidden; }
     height: calc(100% - 18px) !important;
     /* Match the cart↔logout gap (logout-form margin-left below) so both sides of
        the cart have equal spacing. */
-    margin-left: 10px !important;
+    margin-left: 7px !important;
+    padding: 0 15px !important;
     border: none !important;
     border-radius: 0 !important;
     background: #84acc7 !important;
@@ -11081,8 +11092,8 @@ body:has(.product-fullscreen) { overflow: hidden; }
   }
   .site-header .cart-btn:hover svg,
   .site-header .cart-btn.cart-btn--active:hover svg { stroke: #fff !important; }
-  .site-header .logout-form { margin-left: 10px !important; }
-  .site-header__inner { padding-right: 10px !important; }
+  .site-header .logout-form { margin-left: 7px !important; }
+  .site-header__inner { padding-right: 8px !important; }
   /* Kill the old white "sign-cell" divider pseudo-elements on all three controls
      — these are the white lines that flanked the cart. */
   .site-header .site-header__search::before,
@@ -12561,6 +12572,10 @@ body:has(.product-fullscreen) { overflow: hidden; }
    ============================================================ */
 @media (max-width: 1024px) {
   :root { --wt-frame: var(--ce-white); }
+  /* The header's own background shows as the thin top edge above the blue bar —
+     make it white (was greige, which read gray) so the top border matches the
+     other white seams. */
+  .site-header { background: #ffffff !important; }
   /* Thin white divider between the blue header and the blue tab bar, run FULL
      WIDTH (the original stroke was inset 13px each side, which let the greige
      header background poke out as a thin strip on scroll). At 1.6px it fully
