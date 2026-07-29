@@ -107,8 +107,11 @@ function sizesOf(p: Product): string[] {
 // Brands carried, in sidebar display order. A brand must be listed here to show
 // up as a filter (the facet list is BRAND_LIST ∩ brands-present).
 const BRAND_LIST = [
-  "Cap America", "Carhartt", "Cole Harbour", "Flexfit", "FootJoy", "Gildan",
-  "Nomad", "Srixon", "Tranzip", "Under Armour", "Wilson", "Yeti",
+  // Clothing brands first...
+  "Carhartt", "Cole Harbour", "Flexfit", "FootJoy", "Gildan",
+  "Under Armour", "Wilson", "Yeti",
+  // ...then non-clothing brands (bags, golf, headwear), Cap America last.
+  "Nomad", "Srixon", "Tranzip", "Cap America",
 ];
 // Brand overrides for products whose brand isn't in the display name (identified
 // from the product spec). Everything else is matched by name against BRAND_LIST.
@@ -200,6 +203,15 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
       <div class="product-card__info">
         <div class="product-card__name-row">
           <div class="product-card__name">
+            {(() => {
+              const g = genderOf(item);
+              // Desktop-only gender prefix on the title (CSS hides it below 1025
+              // and hides the sizes-row gender span above it). Mobile/tablet keep
+              // the gender in the sizes row exactly as before.
+              return g === "Men" || g === "Women" ? (
+                <span class="product-card__name-gender">{g}'s </span>
+              ) : null;
+            })()}
             <span class="product-card__name-text">{displayName}</span>
             <span class="product-card__name-code">{(item.name.match(/#\S+/) || [''])[0]}</span>
           </div>
@@ -470,8 +482,11 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     const shoeSizes = [...sizes]
       .filter((s) => !SIZE_ORDER.includes(s))
       .sort((x, y) => Number(x) - Number(y));
+    // Headwear (Hats) and the Office/New Hire Kit have no gendered fit, so the
+    // Fit facet is suppressed for those categories.
+    const NO_FIT_CATS = new Set(["Hats", "New Hire Kit"]);
     return {
-      genders: GENDER_ORDER.filter((g) => genders.has(g)),
+      genders: NO_FIT_CATS.has(activeCat.value) ? [] : GENDER_ORDER.filter((g) => genders.has(g)),
       sizes: [...SIZE_ORDER.filter((s) => sizes.has(s)), ...shoeSizes],
       brands: BRAND_LIST.filter((b) => brands.has(b)),
     };

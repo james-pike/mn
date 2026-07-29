@@ -21,13 +21,15 @@ async function fetchAndWrite() {
   // truth for most fields, but these title/category tweaks live here so they
   // survive every regeneration — editing products.ts directly does NOT persist
   // (this script overwrites it on every build). Update the DB to retire one.
-  const OVERRIDES: Record<string, Partial<{ name: string; category: string }>> = {
+  const OVERRIDES: Record<string, Partial<{ name: string; category: string; sizes: string }>> = {
     "MN-5": { name: "Flexfit Trucker Ball Cap - Navy" },
     "MN-7": { name: "Men's Carhartt Winter Jacket - Navy" },
     "MN-9": { category: "Sweaters" },   // Pullover Hoodie: not a jacket
     "MN-10": { category: "Sweaters" },  // Full Zip Hoodie: not a jacket
     "MN-11": { name: "Men's FootJoy Speckle Print Polo" },
     "MN-12": { name: "Women's FootJoy Speckle Print Polo" },
+    "MN-13": { sizes: "25 oz" },        // Yeti Rambler: only the 25oz size
+    "MN-14": { sizes: "35L" },          // Yeti Tundra Cooler: only the 35L size
   };
 
   try {

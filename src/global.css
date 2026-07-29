@@ -209,7 +209,8 @@ dialog:not([open]) {
 
 .apparel-page { overflow: clip; }
 .apparel-page.dot-pattern::before {
-  background-image: radial-gradient(circle, rgba(0,0,0,0.06) 1.2px, transparent 1.2px);
+  /* A touch lighter than before (was 0.06) so the margin dots read softer. */
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 1.2px, transparent 1.2px);
   z-index: 1;
 }
 
@@ -3174,6 +3175,10 @@ body:has(.nav-drawer-overlay) .site-header {
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
+/* Desktop-only gender prefix on the title. Hidden by default so mobile/tablet
+   keep the gender in the sizes row (unchanged); desktop turns it on and drops
+   the sizes-row span (see the 1025+ block). */
+.product-card__name-gender { display: none; }
 /* New Hire Kit bundle: the gray "sizes" slot lists the kit's contents, one
    item per line (inherits the .product-card__sizes size/colour). */
 .product-card__kit-items {
@@ -7843,7 +7848,27 @@ details[open] > .cart-drawer__checkout-title::after {
   z-index: auto !important;
   overflow: hidden !important;
 }
-.hero__upper .hero-carousel::after { display: none !important; }
+/* Edge depth so the carousel lifts off the flat background behind it: a thin
+   light shine line along the top (like the header's top bevel), a soft top glow,
+   and shadow hugging the sides + top corners. Sits above the slides (z1) but
+   below the hero text/dots, and never intercepts clicks. */
+.hero__upper .hero-carousel::after {
+  display: block !important;
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  border-radius: 0 !important;
+  /* A thin light shine line along the very top, plus soft side shadows for
+     depth. Kept gentle so the top corners don't build into a dark vignette that
+     reads as the corner being clipped. */
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.20),
+    inset 0 34px 46px -40px rgba(255, 255, 255, 0.12),
+    inset 7px 0 22px -16px rgba(0, 0, 0, 0.30),
+    inset -7px 0 22px -16px rgba(0, 0, 0, 0.30) !important;
+}
 /* qwik-ui inserts an unclassed wrapper between Root and Scroller — must be sized explicitly */
 .hero__upper .hero-carousel [data-qui-carousel-viewport] {
   width: 100% !important;
@@ -8000,7 +8025,9 @@ details[open] > .cart-drawer__checkout-title::after {
   color: #fff !important;
   /* Same dark overlay as willstransfer.com's hero content box (slider_text_container). */
   background: rgba(0, 0, 0, 0.4) !important;
-  clip-path: polygon(0 36px, 36px 0, 100% 0, 100% 100%, 0 100%) !important;
+  /* No corner chamfer on desktop — the top-left triangle cut is a mobile-only
+     treatment; here the dark overlay keeps its full square top-left corner. */
+  clip-path: none !important;
   padding-left: clamp(1rem, 2.5vw, 2rem) !important;
   padding-right: clamp(1rem, 2.5vw, 2rem) !important;
   text-shadow: 0 2px 8px rgba(0,0,0,0.45);
@@ -9725,7 +9752,9 @@ details[open] > .cart-drawer__checkout-title::after {
   }
   /* Gaps between cards read as the sidebar gray (was the greige card showing
      through) — no card borders, just the gray gutter. */
-  .home-catalog .apparel-grid { background: #e0e3e6; }
+  /* A touch cooler/darker than the off-white product cards, so the rows read as
+     cards on a tray without washing into the same tone. */
+  .home-catalog .apparel-grid { background: #dadee2; }
   .apparel-catalog:has(.product-detail) {
     background: var(--ce-greige);
     box-shadow:
@@ -9819,7 +9848,7 @@ details[open] > .cart-drawer__checkout-title::after {
        done in the background stack, so no mask touches the page content. */
     background-image:
       linear-gradient(to right, transparent 0, var(--ce-greige) 13%, var(--ce-greige) 87%, transparent 100%),
-      radial-gradient(circle, rgba(0, 0, 0, 0.13) 1.7px, transparent 1.7px),
+      radial-gradient(circle, rgba(0, 0, 0, 0.10) 1.7px, transparent 1.7px),
       var(--wt-surround);
     background-size: 100% 100%, 15px 15px, auto;
     background-position: 0 0, 0 0, center;
@@ -9835,7 +9864,20 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header--solid,
   .site-header--hero-hidden,
   .site-header--hero-hidden.site-header--hero-visible {
-    background: var(--wt-surround) !important;
+    /* Same fixed dotted surround as .apparel-page/.home-page, so the dot field
+       in the side margins runs continuously up behind the sticky header instead
+       of stopping at a blank greige band. background-attachment:fixed anchors
+       the dots to the viewport, so they line up seamlessly with the content's;
+       the greige fade layer + the opaque inner bar keep dots out of the centre
+       (never under the logout/search controls). */
+    background-image:
+      linear-gradient(to right, transparent 0, var(--ce-greige) 13%, var(--ce-greige) 87%, transparent 100%),
+      radial-gradient(circle, rgba(0, 0, 0, 0.10) 1.7px, transparent 1.7px),
+      var(--wt-surround) !important;
+    background-size: 100% 100%, 15px 15px, auto !important;
+    background-position: 0 0, 0 0, center !important;
+    background-repeat: no-repeat, repeat, no-repeat !important;
+    background-attachment: fixed, fixed, scroll !important;
   }
   /* The catalog's white radial-glow overlay would wash the greige back to
      white across the middle of the page (visibly under "More <category>"). */
@@ -10706,11 +10748,15 @@ details[open] > .cart-drawer__checkout-title::after {
     inset: 0;
     border-radius: inherit;
     box-shadow:
-      inset 0 0 0 1px rgba(0,0,0,0.14),
+      inset 0 0 0 1px rgba(0,0,0,0.07),
       inset 0 -1px 0 rgba(255,255,255,0.55);
     pointer-events: none;
     z-index: 3;
   }
+  /* Product title in Catalog (list) view nudged up just a hair from the 0.88rem
+     base; the gender prefix scales with it so "Men's/Women's" matches. */
+  .apparel-grid--list .product-card__name-text,
+  .apparel-grid--list .product-card__name-gender { font-size: 0.92rem; }
 }
 
 /* Desktop: the white band that paints the seam grows with it (2px -> 3px), so
@@ -11338,7 +11384,11 @@ body:has(.product-fullscreen) { overflow: hidden; }
      space-between spread), colours on the left — matching the mobile card. */
   .product-card__color-size-row { justify-content: flex-start; }
   .product-card__sizes { text-align: right; }
-  .product-card__gender { margin-left: auto; margin-right: 0.3rem; }
+  /* Gender is shown as a title prefix on desktop (.product-card__name-gender),
+     so drop the sizes-row gender span and keep the sizes anchored right. */
+  .product-card__name-gender { display: inline; }
+  .product-card__color-size-row .product-card__gender { display: none; }
+  .product-card__color-size-row .product-card__sizes { margin-left: auto; }
   /* Tall/extra size variants sit BESIDE the regular range on one line (a thin
      "/" separator between), rather than wrapping to a second line. */
   .product-card__sizes-line { display: inline !important; }
@@ -11439,14 +11489,16 @@ body:has(.product-fullscreen) { overflow: hidden; }
      step-up — the full-size run read heavier than the rest of the site, since
      desktop already serves these rem values off an 18px root. Row padding and
      the image/swatch/control sizes are unchanged; this is a type-only trim. */
-  .cart-drawer__items .cart-table { font-size: 0.95rem; }
-  .cart-drawer__items .cart-table tbody td { padding-top: 1.05rem; padding-bottom: 1.05rem; }
-  .cart-drawer__items .cart-table__product-row { gap: 1.1rem; }
-  .cart-drawer__items .cart-table__img { width: 76px; height: 76px; }
-  .cart-drawer__items .cart-table__name-link { font-size: 1.04rem; }
-  .cart-drawer__items .cart-table__meta { font-size: 0.86rem; margin-top: 0.35rem; }
-  .cart-drawer__items .cart-table__swatch { width: 14px; height: 14px; }
-  .cart-drawer__items .cart-table__qty-controls span { width: 36px; font-size: 1rem; }
+  /* Desktop cart items scaled down — image, text and row padding were all
+     oversized for the 460px drawer. */
+  .cart-drawer__items .cart-table { font-size: 0.85rem; }
+  .cart-drawer__items .cart-table tbody td { padding-top: 0.7rem; padding-bottom: 0.7rem; }
+  .cart-drawer__items .cart-table__product-row { gap: 0.8rem; }
+  .cart-drawer__items .cart-table__img { width: 58px; height: 58px; }
+  .cart-drawer__items .cart-table__name-link { font-size: 0.9rem; }
+  .cart-drawer__items .cart-table__meta { font-size: 0.76rem; margin-top: 0.25rem; }
+  .cart-drawer__items .cart-table__swatch { width: 12px; height: 12px; }
+  .cart-drawer__items .cart-table__qty-controls span { width: 32px; font-size: 0.9rem; }
   .cart-drawer__items .cart-table__qty-btn { width: 36px; height: 38px; font-size: 1.12rem; }
   .cart-drawer__items .cart-table__total,
   .cart-drawer__items .cart-table__subtotal-val { font-size: 1.04rem; }
@@ -11606,8 +11658,8 @@ body:has(.product-fullscreen) { overflow: hidden; }
 .cart-drawer__order-btn.btn.btn--primary {
   background: linear-gradient(var(--wt-box), var(--wt-box)), var(--wt-orange);
   color: #fff;
-  /* Softer than the header's square boxes, but still a sign-panel corner. */
-  border-radius: 6px;
+  /* Nearly square sign-panel corner (was 6px — user wanted it less rounded). */
+  border-radius: 2px;
   border: 1px solid rgba(10, 25, 55, 0.45);
   /* Depth: top bevel highlight, a rust-brown vignette hugging the border
      (same weathering as the header bar) and a cast shadow underneath. */
@@ -11640,6 +11692,18 @@ body:has(.product-fullscreen) { overflow: hidden; }
 .cart-drawer__order-btn.btn.btn--primary:focus-visible {
   outline: 2px solid var(--wt-orange-hi);
   outline-offset: 2px;
+}
+
+/* ============================================================
+   Remove the iron/rust texture from the cart + checkout bars on ALL devices.
+   Strips only the background-IMAGE layer (the weathered iron PNG), leaving each
+   bar's flat orange/blue fill and everything else (dividers, seams) intact.
+   Targets the cart title bar, the PRODUCT/TOTAL strip and the checkout
+   "Back to cart" bar. ============================================================ */
+.cart-drawer__header,
+.cart-table thead tr,
+.cart-drawer__back-btn {
+  background-image: none !important;
 }
 
 /* ============================================================
@@ -11676,7 +11740,15 @@ body:has(.product-fullscreen) { overflow: hidden; }
     border: none !important;
     color: #fff !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.20) !important;
+    /* Match the catalog tab / view-toggle text: same size (1.24rem) and the
+       same lighter weight (500 — the button base is 600, which read heavier
+       than the category labels beside it). */
+    font-size: 1.24rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.01em !important;
   }
+  body .site-header .cart-btn .cart-btn__label,
+  body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { font-size: 1.24rem !important; font-weight: 500 !important; letter-spacing: 0.01em !important; }
   body .site-header .cart-btn:hover,
   body .site-header .cart-btn.cart-btn--active:hover,
   body:has(.home-catalog) .site-header .cart-btn:hover,
@@ -11691,6 +11763,16 @@ body:has(.product-fullscreen) { overflow: hidden; }
   body:has(.home-catalog) .site-header .cart-btn:hover svg { stroke: #fff !important; }
   body .site-header .cart-btn .cart-btn__label,
   body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !important; }
+
+  /* The search field and logout button were translucent (rgba(0,0,0,0.12)), so
+     the header bar's white dot texture showed through them — reading as a dot
+     pattern INSIDE the controls. Give them the opaque equivalent of that wash
+     over the sign blue (~rgb(57,98,124)) so the look is unchanged but the dots
+     no longer bleed through. */
+  .site-header .site-header__search,
+  .site-header .logout-btn {
+    background: rgb(57, 98, 124) !important;
+  }
 }
 
 /* ============================================================

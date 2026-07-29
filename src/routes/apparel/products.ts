@@ -306,7 +306,7 @@ export const allProducts = [
     "sku": "MN-13",
     "name": "Yeti Rambler Straw Mug",
     "category": "SWAG",
-    "sizes": "25 oz / 35 oz / 42 oz",
+    "sizes": "25 oz",
     "badge": "",
     "colors": [
       "#2c3e50"
@@ -340,7 +340,7 @@ export const allProducts = [
     "sku": "MN-14",
     "name": "Yeti Tundra Cooler",
     "category": "SWAG",
-    "sizes": "35L / 45L",
+    "sizes": "35L",
     "badge": "",
     "colors": [
       "#2c3e50"
