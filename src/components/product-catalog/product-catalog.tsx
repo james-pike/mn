@@ -559,6 +559,9 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                 {cat === "All" ? t("apparel.all", locale.value) : (
                   <>
                     <span class="apparel-titlebar__tab-short">{categoryLabel(cat, locale.value)}</span>
+                    {/* Tablet-only label: shorter for "New Hire Kit" (Office Kit)
+                        so it fits the tablet tab row; same as short elsewhere. */}
+                    <span class="apparel-titlebar__tab-tablet">{cat === "New Hire Kit" ? t("cat.newhirekit.short", locale.value) : categoryLabel(cat, locale.value)}</span>
                     <span class="apparel-titlebar__tab-full">{FULL_CAT_KEYS[cat] ? t(FULL_CAT_KEYS[cat] as any, locale.value) : categoryLabel(cat, locale.value)}</span>
                   </>
                 )}
