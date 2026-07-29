@@ -17,6 +17,19 @@ async function fetchAndWrite() {
     url,
     authToken: process.env.TURSO_AUTH_TOKEN || process.env.VITE_TURSO_AUTH_TOKEN || undefined,
   });
+  // Display overrides applied on top of the DB rows. The DB is the source of
+  // truth for most fields, but these title/category tweaks live here so they
+  // survive every regeneration — editing products.ts directly does NOT persist
+  // (this script overwrites it on every build). Update the DB to retire one.
+  const OVERRIDES: Record<string, Partial<{ name: string; category: string }>> = {
+    "MN-5": { name: "Flexfit Trucker Ball Cap - Navy" },
+    "MN-7": { name: "Men's Carhartt Winter Jacket - Navy" },
+    "MN-9": { category: "Sweaters" },   // Pullover Hoodie: not a jacket
+    "MN-10": { category: "Sweaters" },  // Full Zip Hoodie: not a jacket
+    "MN-11": { name: "Men's FootJoy Speckle Print Polo" },
+    "MN-12": { name: "Women's FootJoy Speckle Print Polo" },
+  };
+
   try {
     const result = await db.execute(
       "SELECT * FROM products WHERE vendor = 'modernniagara' ORDER BY sort_order ASC"
@@ -35,7 +48,7 @@ async function fetchAndWrite() {
       material: row.material,
       details: row.details,
       pdf: row.pdf || undefined,
-    }));
+    })).map((p) => ({ ...p, ...OVERRIDES[p.sku] }));
 
     const output = `// AUTO-GENERATED — do not edit manually. Updated from database at build time.
 import { t } from "../../i18n";
