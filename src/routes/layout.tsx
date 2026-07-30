@@ -1358,8 +1358,8 @@ export default component$(() => {
               {/* Language toggle in the middle of the bar — an inline icon + FR/EN
                   styled like the logout (no button chrome), not a pill button. */}
               <button type="button" class="nav-drawer__header-logout nav-drawer__header-locale" onClick$={toggleLocale} aria-label="Toggle language">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
                 <span>{locale.value === "en" ? "FR" : "EN"}</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
               </button>
               {/* Logout rides the right end of the orange strip (moved out of a
                   separate footer). */}
