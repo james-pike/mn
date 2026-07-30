@@ -103,9 +103,9 @@ export function buildOrderEmailHtml(o: OrderEmailData): string {
           ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
               <td style="vertical-align:middle;padding-right:12px"><img src="${o.logoUrl}" width="46" height="46" alt="Modern Niagara" style="display:block;width:46px;height:46px;border:0" /></td>
               <td style="vertical-align:middle;font-family:sans-serif">
-                <div style="color:#fff;font-size:17px;font-weight:700;letter-spacing:0.03em;line-height:1.05">MODERN NIAGARA</div>
-                <div style="color:#fff;font-size:12px;font-weight:600;letter-spacing:0.07em;line-height:1.3">BUILDING SERVICES</div>
-                <div style="color:#cfe0ec;font-size:11px;font-weight:600;letter-spacing:0.12em;line-height:1.3">APPAREL</div>
+                <div style="color:#fff;font-size:15px;font-weight:700;letter-spacing:0.02em;line-height:1.15">MODERN NIAGARA</div>
+                <div style="color:#fff;font-size:15px;font-weight:600;letter-spacing:0.02em;line-height:1.15">BUILDING SERVICES</div>
+                <div style="color:#cfe0ec;font-size:15px;font-weight:500;letter-spacing:0.16em;line-height:1.15">APPAREL</div>
               </td>
             </tr></table>`
           : `<h1 style="color:#fff;margin:0;font-size:20px">Modern Niagara Business Services Apparel</h1>`}
