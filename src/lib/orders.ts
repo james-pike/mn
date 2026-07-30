@@ -25,6 +25,10 @@ export interface OrderItem {
 export interface OrderEmailData {
   orderNumber: string;
   date: string;
+  /** Absolute URL to the logo image shown in the email banner (e.g.
+   *  https://site/favicon-512.png). Emails can't render the header's inline
+   *  SVG, so we point at a hosted raster. Falls back to text if absent. */
+  logoUrl?: string;
   employee: {
     name: string;
     email?: string;
@@ -94,9 +98,18 @@ export function buildOrderEmailHtml(o: OrderEmailData): string {
 
   return `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-      <div style="background:#39627c;padding:20px 24px;border-radius:8px 8px 0 0">
-        <h1 style="color:#fff;margin:0;font-size:20px">Modern Niagara Business Services Apparel</h1>
-        ${o.orderNumber ? `<p style="color:#cfe0ec;margin:6px 0 0;font-size:13px;letter-spacing:0.04em">Order #${esc(o.orderNumber)}</p>` : ""}
+      <div style="background:#39627c;padding:18px 24px;border-radius:8px 8px 0 0">
+        ${o.logoUrl
+          ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+              <td style="vertical-align:middle;padding-right:12px"><img src="${o.logoUrl}" width="46" height="46" alt="Modern Niagara" style="display:block;width:46px;height:46px;border:0" /></td>
+              <td style="vertical-align:middle;font-family:sans-serif">
+                <div style="color:#fff;font-size:17px;font-weight:700;letter-spacing:0.03em;line-height:1.05">MODERN NIAGARA</div>
+                <div style="color:#fff;font-size:12px;font-weight:600;letter-spacing:0.07em;line-height:1.3">BUILDING SERVICES</div>
+                <div style="color:#cfe0ec;font-size:11px;font-weight:600;letter-spacing:0.12em;line-height:1.3">APPAREL</div>
+              </td>
+            </tr></table>`
+          : `<h1 style="color:#fff;margin:0;font-size:20px">Modern Niagara Business Services Apparel</h1>`}
+        ${o.orderNumber ? `<p style="color:#cfe0ec;margin:10px 0 0;font-size:13px;letter-spacing:0.04em">Order #${esc(o.orderNumber)}</p>` : ""}
       </div>
       <div style="padding:24px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px">
         <p style="margin:0 0 16px;font-size:16px">Thank you for your order!</p>
@@ -104,9 +117,10 @@ export function buildOrderEmailHtml(o: OrderEmailData): string {
         <p style="margin:0 0 4px"><strong>Name:</strong> ${esc(o.employee.name)}</p>
         ${o.employee.email ? `<p style="margin:0 0 4px"><strong>Email:</strong> <a href="mailto:${esc(o.employee.email)}">${esc(o.employee.email)}</a></p>` : ""}
         ${o.employee.phone ? `<p style="margin:0 0 4px"><strong>Phone:</strong> ${esc(o.employee.phone)}</p>` : ""}
-        ${o.employee.department ? `<p style="margin:0 0 4px"><strong>Location:</strong> ${esc(o.employee.department)}</p>` : ""}
+        ${o.employee.address1 ? `<p style="margin:0 0 4px"><strong>Street:</strong> ${esc(o.employee.address1)}</p>` : ""}
+        ${o.employee.city ? `<p style="margin:0 0 4px"><strong>City:</strong> ${esc(o.employee.city)}</p>` : ""}
         <p style="margin:0 0 4px"><strong>Province:</strong> ${esc(o.employee.provinceName)}</p>
-        ${(o.employee.address1 || o.employee.city || o.employee.postal) ? `<p style="margin:0 0 4px"><strong>Ship to:</strong> ${esc([o.employee.address1, o.employee.city, o.employee.provinceName, o.employee.postal].filter(Boolean).join(", "))}</p>` : ""}
+        ${o.employee.postal ? `<p style="margin:0 0 4px"><strong>Postal Code:</strong> ${esc(o.employee.postal)}</p>` : ""}
         ${o.employee.po ? `<p style="margin:0 0 4px"><strong>PO #:</strong> ${esc(o.employee.po)}</p>` : ""}
         <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0">
         <table style="width:100%;border-collapse:collapse;font-size:16px">

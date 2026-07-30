@@ -212,6 +212,7 @@ const translations = {
   "cart.error.required": { en: "Please complete required fields", fr: "Veuillez remplir les champs requis" },
   "cart.error.email": { en: "Please enter a valid email address", fr: "Veuillez entrer une adresse courriel valide" },
   "cart.error.phone": { en: "Please enter a valid phone number", fr: "Veuillez entrer un numéro de téléphone valide" },
+  "cart.error.postal": { en: "Please enter a valid postal code (e.g. A1A 1A1)", fr: "Veuillez entrer un code postal valide (p. ex. A1A 1A1)" },
   "cart.requiredfields": { en: "* required", fr: "* requis" },
 
   // Order confirmation

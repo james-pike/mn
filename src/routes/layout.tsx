@@ -43,9 +43,6 @@ const PROVINCE_NAMES: Record<string, string> = {
   QC: "Quebec", SK: "Saskatchewan",
 };
 const taxRateFor = (code: string): number | undefined => PROVINCE_TAX[code];
-// Provinces with a single branch — the Location field is unnecessary for these
-const SINGLE_BRANCH_PROVINCES = new Set(["AB", "BC"]);
-const needsLocation = (code: string): boolean => !!code && !SINGLE_BRANCH_PROVINCES.has(code);
 
 // The header's height drives every scroll offset in the app: the sticky strips
 // (catalog tabs, apparel titlebar, product breadcrumb) pin directly beneath it,
@@ -306,10 +303,20 @@ export const useSubmitOrder = routeAction$(
     const staffAddresses = (env.get("ORDER_NOTIFY_TO") || env.get("VITE_ORDER_NOTIFY_TO") || "cs@safetyhouse.ca")
       .split(",").map((a) => a.trim()).filter(Boolean);
 
+    // Absolute origin for the email logo (hosted raster, since email can't
+    // render the header's inline SVG). Prefer SITE_URL, fall back to request.
+    const emailLogoUrl = (() => {
+      let b = (env.get("SITE_URL") || url.origin || "").trim();
+      if (b && !/^https?:\/\//i.test(b)) b = "https://" + b;
+      let origin = url.origin;
+      try { origin = new URL(b).origin; } catch { origin = url.origin; }
+      return `${origin}/favicon-512.png`;
+    })();
+
     // Build the confirmation-email payload once (used by the no-card path and
     // the dev simulated-card path).
     const buildEmailData = (): OrderEmailData => ({
-      orderNumber, date,
+      orderNumber, date, logoUrl: emailLogoUrl,
       employee: {
         name: employee.name, email: employee.email, phone: employee.phone,
         department: employee.department, provinceName, provinceCode: province,
@@ -427,18 +434,7 @@ export const useSubmitOrder = routeAction$(
     }
 
     if (apiKey) {
-      const emailData: OrderEmailData = {
-        orderNumber, date,
-        employee: {
-          name: employee.name, email: employee.email, phone: employee.phone,
-          department: employee.department, provinceName, provinceCode: province,
-          address1: employee.address1, city: employee.city, postal: employee.postal, po: employee.po,
-        },
-        items: items as any,
-        subtotal, taxPct, tax, total,
-        payment: { method: paymentMethod, giftCardCode: giftCode || undefined, giftAmount, cardAmount },
-      };
-      await sendConfirmationEmail({ apiKey, from: fromAddress, staffAddresses }, emailData);
+      await sendConfirmationEmail({ apiKey, from: fromAddress, staffAddresses }, buildEmailData());
     } else {
       console.warn("RESEND_API_KEY not configured — order saved but email not sent");
     }
@@ -633,7 +629,6 @@ export default component$(() => {
     if (!empFirstName.value.trim() || !empLastName.value.trim() || !empEmail.value.trim()
         || !empPhone.value.trim() || !empProvince.value) return false;
     if (!empAddress1.value.trim() || !empCity.value.trim() || !empPostal.value.trim()) return false;
-    if (needsLocation(empProvince.value) && !empDept.value) return false;
     if (payMethod.value === "po" && !empPO.value.trim()) return false;
     if (usesGift.value && giftBalance.value == null) return false;           // card not applied yet
     if (payMethod.value === "giftcard" && giftRemaining.value > 0) return false; // gift doesn't cover it
@@ -701,9 +696,8 @@ export default component$(() => {
 
   const submitOrder = $(async () => {
     formTouched.value = true;
-    const locationRequired = needsLocation(empProvince.value);
     const poRequired = payMethod.value === "po";
-    if (!empFirstName.value || !empLastName.value || !empAddress1.value || !empCity.value || !empPostal.value || !empEmail.value || !empPhone.value || !empProvince.value || (locationRequired && !empDept.value) || (poRequired && !empPO.value)) {
+    if (!empFirstName.value || !empLastName.value || !empAddress1.value || !empCity.value || !empPostal.value || !empEmail.value || !empPhone.value || !empProvince.value || (poRequired && !empPO.value)) {
       formError.value = t("cart.error.required", locale.value);
       checkoutOpen.value = true;
       return;
@@ -726,10 +720,17 @@ export default component$(() => {
       checkoutOpen.value = true;
       return;
     }
-    // Phone format check — at least 7 digits, allow +, spaces, dashes, parens
+    // Phone format check — need a full number (10 digits NANP, up to 15 for
+    // an intl. dialing prefix), allowing +, spaces, dashes, parens, dots.
     const phoneDigits = empPhone.value.replace(/[^\d]/g, "");
-    if (phoneDigits.length < 7 || phoneDigits.length > 15 || !/^[\d\s+()\-.]+$/.test(empPhone.value.trim())) {
+    if (phoneDigits.length < 10 || phoneDigits.length > 15 || !/^[\d\s+()\-.]+$/.test(empPhone.value.trim())) {
       formError.value = t("cart.error.phone", locale.value);
+      checkoutOpen.value = true;
+      return;
+    }
+    // Canadian postal code check — A1A 1A1 (optional space/hyphen).
+    if (!/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(empPostal.value.trim())) {
+      formError.value = t("cart.error.postal", locale.value);
       checkoutOpen.value = true;
       return;
     }
@@ -1697,7 +1698,6 @@ export default component$(() => {
                         value={empProvince.value}
                         onChange$={(_, el) => {
                           empProvince.value = el.value;
-                          if (!needsLocation(el.value)) empDept.value = "";
                           formError.value = "";
                         }}
                       >
@@ -1714,20 +1714,6 @@ export default component$(() => {
                         <option value="SK">Saskatchewan</option>
                       </select>
                     </div>
-                    {/* Location renders only for multi-branch provinces
-                        (see needsLocation). Kept directly under Province so
-                        the conditional field appears next to the trigger
-                        that toggled it. */}
-                    {needsLocation(empProvince.value) && (
-                      <div class={`checkout-modal__field ${formTouched.value && !empDept.value ? "checkout-modal__field--error" : ""}`}>
-                        <label>{t("cart.location", locale.value)}</label>
-                        <input
-                          type="text"
-                          value={empDept.value}
-                          onInput$={(_, el) => (empDept.value = el.value)}
-                        />
-                      </div>
-                    )}
                     <div class={`checkout-modal__field ${formTouched.value && !empPostal.value ? "checkout-modal__field--error" : ""}`}>
                       <label>{t("cart.postal", locale.value)}</label>
                       <input
@@ -1796,7 +1782,11 @@ export default component$(() => {
           <div class="modal order-confirm">
             <h2 class="order-confirm__title">{t("order.title", locale.value)}</h2>
             <p class="order-confirm__text">{t("order.text", locale.value)}</p>
-            <Link href="/" class="btn btn--primary">{t("order.continue", locale.value)}</Link>
+            {/* Plain <a> (full page load), not <Link>: this modal lives in the
+                persistent layout, so an SPA nav would leave orderSubmitted=true
+                and the success modal stuck open. A real navigation re-mounts the
+                app and clears the flag. */}
+            <a href="/" class="btn btn--primary">{t("order.continue", locale.value)}</a>
           </div>
         </Modal.Panel>
       </Modal.Root>
