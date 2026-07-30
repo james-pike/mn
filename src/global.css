@@ -5870,6 +5870,26 @@ details[open] > .cart-drawer__checkout-title::after {
     width: auto !important;
   }
 }
+@media (max-width: 1024px) {
+  /* Mobile/tablet: stacked column with a single uniform 4px gap so the vertical
+     gaps between sections are tight and match the thin side gaps. */
+  .cart-drawer__details-step {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    padding: 4px !important;
+    box-sizing: border-box !important;
+  }
+  .cart-drawer__summary,
+  .checkout-modal__form,
+  .checkout-modal__pay {
+    margin: 0 !important;
+  }
+  .cart-drawer__details-step > .cart-drawer__back-btn {
+    margin: -4px -4px 0 !important;
+    width: auto !important;
+  }
+}
 .checkout-modal__form { padding: 0.9rem 0.95rem !important; }
 .checkout-modal__pay { padding: 0.9rem 0.95rem !important; }
 .cart-drawer__summary { padding: 0.4rem 0.85rem 0.65rem !important; }
