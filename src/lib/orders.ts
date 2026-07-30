@@ -67,13 +67,6 @@ export function esc(s: string | undefined | null): string {
     .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
-const PAYMENT_LABEL: Record<PaymentMethod, string> = {
-  po: "Purchase order / invoice",
-  giftcard: "Gift card",
-  giftcard_card: "Gift card + credit card",
-  card: "Credit card",
-};
-
 export function buildOrderEmailHtml(o: OrderEmailData): string {
   const itemRows = o.items.map((i) =>
     `<tr>
@@ -101,23 +94,22 @@ export function buildOrderEmailHtml(o: OrderEmailData): string {
 
   return `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-      <div style="background:#C97B0C;padding:20px 24px;border-radius:8px 8px 0 0">
-        <h1 style="color:#fff;margin:0;font-size:20px">Modern Niagara — Apparel Order</h1>
-        ${o.orderNumber ? `<p style="color:#ffe9c7;margin:6px 0 0;font-size:13px;letter-spacing:0.04em">Order ${esc(o.orderNumber)}</p>` : ""}
+      <div style="background:#39627c;padding:20px 24px;border-radius:8px 8px 0 0">
+        <h1 style="color:#fff;margin:0;font-size:20px">Modern Niagara Business Services Apparel</h1>
+        ${o.orderNumber ? `<p style="color:#cfe0ec;margin:6px 0 0;font-size:13px;letter-spacing:0.04em">Order #${esc(o.orderNumber)}</p>` : ""}
       </div>
       <div style="padding:24px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px">
-        ${o.orderNumber ? `<p style="margin:0 0 4px"><strong>Order #:</strong> ${esc(o.orderNumber)}</p>` : ""}
+        <p style="margin:0 0 16px;font-size:16px">Thank you for your order!</p>
         <p style="margin:0 0 4px"><strong>Date:</strong> ${esc(o.date)}</p>
-        <p style="margin:0 0 4px"><strong>Employee:</strong> ${esc(o.employee.name)}</p>
+        <p style="margin:0 0 4px"><strong>Name:</strong> ${esc(o.employee.name)}</p>
         ${o.employee.email ? `<p style="margin:0 0 4px"><strong>Email:</strong> <a href="mailto:${esc(o.employee.email)}">${esc(o.employee.email)}</a></p>` : ""}
         ${o.employee.phone ? `<p style="margin:0 0 4px"><strong>Phone:</strong> ${esc(o.employee.phone)}</p>` : ""}
         ${o.employee.department ? `<p style="margin:0 0 4px"><strong>Location:</strong> ${esc(o.employee.department)}</p>` : ""}
         <p style="margin:0 0 4px"><strong>Province:</strong> ${esc(o.employee.provinceName)}</p>
         ${(o.employee.address1 || o.employee.city || o.employee.postal) ? `<p style="margin:0 0 4px"><strong>Ship to:</strong> ${esc([o.employee.address1, o.employee.city, o.employee.provinceName, o.employee.postal].filter(Boolean).join(", "))}</p>` : ""}
         ${o.employee.po ? `<p style="margin:0 0 4px"><strong>PO #:</strong> ${esc(o.employee.po)}</p>` : ""}
-        <p style="margin:0 0 4px"><strong>Payment:</strong> ${esc(PAYMENT_LABEL[o.payment.method])}</p>
         <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0">
-        <table style="width:100%;border-collapse:collapse;font-size:14px">
+        <table style="width:100%;border-collapse:collapse;font-size:16px">
           <thead>
             <tr style="background:#f9fafb">
               <th style="padding:8px 12px;text-align:left">Product</th>
@@ -138,7 +130,7 @@ export function buildOrderEmailHtml(o: OrderEmailData): string {
             </tr>
             <tr>
               <td colspan="3" style="padding:10px 12px;text-align:right;font-weight:700">Total</td>
-              <td style="padding:10px 12px;text-align:right;font-weight:700;color:#F5A623">$${o.total.toFixed(2)}</td>
+              <td style="padding:10px 12px;text-align:right;font-weight:700;color:#39627c">$${o.total.toFixed(2)}</td>
             </tr>
             ${payRows.join("")}
           </tfoot>
@@ -169,7 +161,7 @@ export async function sendConfirmationEmail(cfg: SendEmailConfig, o: OrderEmailD
       from: cfg.from,
       to: toAddresses,
       ...(bccAddresses.length ? { bcc: bccAddresses } : {}),
-      subject: `${o.orderNumber ? `${o.orderNumber} — ` : ""}Apparel Order — ${o.employee.name} — ${o.date}`,
+      subject: `${o.orderNumber ? `#${o.orderNumber} — ` : ""}Apparel Order — ${o.employee.name} — ${o.date}`,
       html: buildOrderEmailHtml(o),
     });
   } catch (err) {

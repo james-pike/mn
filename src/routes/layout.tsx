@@ -186,7 +186,7 @@ export const useSubmitOrder = routeAction$(
       return fail(401, { message: "Not authenticated" });
     }
     const lt = getLoginType(cookie);
-    const vendor = lt === "tech" ? "wills-tech" : lt === "safety" ? "wills-safety" : "wills";
+    const vendor = lt === "tech" ? "modernniagara-tech" : lt === "safety" ? "modernniagara-safety" : "modernniagara";
     // Read from non-prefixed names first, fall back to VITE_* for backward compat.
     // Both are safe at runtime — env.get() reads server env, never bundles.
     const tursoUrl = env.get("TURSO_URL") || env.get("VITE_TURSO_URL");
@@ -290,11 +290,11 @@ export const useSubmitOrder = routeAction$(
       orderId = (result.lastInsertRowid as any) ?? null;
       if (orderId != null) {
         const seq = await db.execute({
-          sql: "SELECT COUNT(*) AS n FROM orders WHERE vendor LIKE 'wills%' AND id <= ?",
+          sql: "SELECT COUNT(*) AS n FROM orders WHERE vendor LIKE 'modernniagara%' AND id <= ?",
           args: [orderId as any],
         });
         const n = Number((seq.rows[0] as any)?.n) || Number(orderId);
-        orderNumber = `WT-${n}`;
+        orderNumber = `MN-${n}`;
       }
     } catch (err) {
       console.error("Failed to save order to database:", err);
