@@ -5843,8 +5843,10 @@ details[open] > .cart-drawer__checkout-title::after {
 .checkout-modal__pay {
   background: rgba(70, 137, 179, 0.10) !important;
   border: 1px solid rgba(70, 137, 179, 0.20) !important;
-  border-radius: 8px !important;
-  margin: 0.5rem 0.75rem !important;
+  /* Square corners, and a small UNIFORM gap on the top + sides of each panel
+     (4px between panels and 4px from the drawer edges). */
+  border-radius: 0 !important;
+  margin: 4px 4px 0 !important;
 }
 .checkout-modal__form { padding: 0.9rem 0.95rem !important; }
 .checkout-modal__pay { padding: 0.9rem 0.95rem !important; }
@@ -7237,8 +7239,11 @@ details[open] > .cart-drawer__checkout-title::after {
   /* Sticky tab strips pin 1px earlier so they overlap the header's
      bottom edge — eliminates the thin gap visible on some viewport
      widths from sub-pixel rounding. */
-  .home-catalog__header { top: 82px; margin-top: 0; z-index: 10000; }
-  .apparel-titlebar { top: 82px; margin-top: 0; z-index: 10000; }
+  /* Secondary bars sit BELOW the header (9999) so the header always covers them.
+     A higher z-index made the tab bar paint over/above the header and glitch on
+     page switches + when the cart's scroll-lock reflows the sticky elements. */
+  .home-catalog__header { top: 81px; margin-top: 0; z-index: 9990; }
+  .apparel-titlebar { top: 81px; margin-top: 0; z-index: 9990; }
 
   /* Transparent header over hero — logos hidden until scroll, like desktop */
   .site-header {
@@ -13469,4 +13474,15 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
     border-bottom-right-radius: 0 !important;
     box-shadow: 0 3px 0 0 #416f8d !important;
   }
+}
+
+/* When the cart drawer is open it overlays the page. The sticky secondary bars
+   (tab bar / titlebar / breadcrumb) live in their own stacking contexts, and the
+   cart's scroll-lock (body position:fixed) reflows them so they can paint ABOVE
+   the header/overlay — the tab bar "didn't disappear" and sometimes sat above
+   the header. Hide them while the cart is open so only the drawer shows. */
+body:has(.cart-drawer) .home-catalog__header,
+body:has(.cart-drawer) .apparel-titlebar,
+body:has(.cart-drawer) .pdp-breadcrumb {
+  visibility: hidden !important;
 }

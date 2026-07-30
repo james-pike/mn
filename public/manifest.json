@@ -4,13 +4,19 @@
   "short_name": "Modern Niagara",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#C97B0C",
-  "theme_color": "#C97B0C",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "description": "Internal apparel ordering for Modern Niagara staff.",
   "icons": [
     {
-      "src": "/wills-logo.png",
-      "sizes": "200x200",
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     }
