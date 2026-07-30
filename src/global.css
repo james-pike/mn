@@ -1757,7 +1757,9 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
        them sitting ~1px low). */
     padding: 0 0.75rem 2.2px;
     background:
-      var(--wt-iron) left calc(-1 * (var(--wt-box-h) + var(--wt-seam))) / 100% auto no-repeat,
+      /* Dot texture instead of the rust/iron sign texture, matching the other
+         secondary bars (tab bar / breadcrumb). */
+      radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px) 0 0 / 9px 9px,
       var(--wt-orange);
     box-shadow:
       /* Side white strips so the orange MENU bar carries the sign's white edge
@@ -7251,7 +7253,9 @@ details[open] > .cart-drawer__checkout-title::after {
     background: transparent !important;
     border-bottom: none !important;
     transition: opacity 0.3s ease, background 0.3s ease, border-bottom 0.3s ease;
-    margin-bottom: -58px;
+    /* Pull the hero flush to the very top: negate the full header height
+       (81px on tablet) so no white strip shows above the hero cover. */
+    margin-bottom: -81px;
   }
   .site-header--hero-hidden.site-header--hero-visible {
     opacity: 1;
@@ -13337,4 +13341,47 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
   /* Scale the header logo up so it fills more of the tablet header height. */
   .site-header .brand-cluster--small .brand-cluster__mark { width: 60px !important; height: 60px !important; }
   .site-header .brand-cluster--small .brand-cluster__word { font-size: 1.42rem !important; }
+}
+
+/* ================= Tablet: unify secondary bars, cards & footer ============= */
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* PDP breadcrumb full-bleed: cancel the 2px .apparel-catalog gutter so its
+     width matches the listing tab bar exactly — no horizontal shift on nav. */
+  .apparel-catalog > .pdp-breadcrumb { margin-left: -2px !important; margin-right: -2px !important; }
+
+  /* Vertically center the breadcrumb text within the bar, like the tabs.
+     Segments stay full-height (dividers span the bar); their text centers. */
+  .pdp-breadcrumb { align-items: stretch !important; }
+  .pdp-breadcrumb__link,
+  .pdp-breadcrumb__cat,
+  .pdp-breadcrumb__sku,
+  .pdp-breadcrumb__back {
+    display: inline-flex !important;
+    align-items: center !important;
+    height: 100% !important;
+    line-height: 1 !important;
+    /* The base segments carry lopsided padding (8px top / 2px bottom) which
+       shifts the text ~3px below centre; zero the vertical padding so the
+       flex centring lands the text on the true middle of the 50px bar. */
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* Scale up the catalog (list) product cards a touch — text + thumbnail. */
+  .apparel-grid--list .product-card__image { flex: 0 0 76px !important; width: 76px !important; height: 76px !important; }
+  .apparel-grid--list .product-card__name-text,
+  .apparel-grid--list .product-card__name-gender { font-size: 1.02rem !important; }
+  .apparel-grid--list .product-card__sizes,
+  .apparel-grid--list .product-card__sizes-line { font-size: 0.84rem !important; }
+  .apparel-grid--list .product-card__price { font-size: 1.02rem !important; }
+
+  /* Footer: solid blue all the way to the very bottom — kill any white seam,
+     border, or sub-pixel gap below it. */
+  .site-footer {
+    margin-bottom: 0 !important;
+    border-bottom: none !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    box-shadow: 0 3px 0 0 #416f8d !important;
+  }
 }
