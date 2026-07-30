@@ -1891,7 +1891,20 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
    pins to the viewport bottom under the short document card. */
 /* Fill the space between header and footer so the dot pattern covers the full
    view (not just the short policy card). */
-.privacy-page.apparel-page { min-height: 0; flex: 1 0 auto; }
+.privacy-page.apparel-page { min-height: 0; flex: 1 0 auto; display: flex; flex-direction: column; }
+/* Grow the greige content card to fill the whole space between header and footer
+   — full width (capped at --site-max, like the footer) AND full height down to
+   the footer, so the card + its secondary bar span the page and connect to the
+   footer. Only the reading panel (.doc-panel) stays narrow, centred inside it.
+   width:100% is needed because a flex item with auto side margins otherwise
+   shrinks to its content (the 820px panel) instead of filling. */
+.privacy-page.apparel-page > .apparel-catalog {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: var(--site-max);
+  margin-left: auto;
+  margin-right: auto;
+}
 /* The off-white reading card inside the shared content card — same treatment
    as the product-detail panel. */
 .doc-panel {
@@ -10270,7 +10283,11 @@ details[open] > .cart-drawer__checkout-title::after {
    The button rides the category bar left of the search box (dark-box style,
    like the header buttons). List mode reuses the tablet extra mode: two
    columns of short thumbnail + details rows, fitting far more per view. */
-.home-catalog__viewmode { display: none; }
+/* Buttons don't inherit font-family — without this the view-mode toggle fell
+   back to the UA font (Arial) while everything around it (the tabs, the My Cart
+   button) is Montserrat, so at the same px size its label read smaller/narrower.
+   Pin it to the app sans so it matches the cart button and category tabs. */
+.home-catalog__viewmode { display: none; font-family: var(--font-sans); }
 @media (min-width: 1025px) {
   .home-catalog__viewmode {
     display: flex;
@@ -11975,15 +11992,16 @@ body:has(.product-fullscreen) { overflow: hidden; }
     border: none !important;
     color: #fff !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.20) !important;
-    /* Match the catalog tab / view-toggle text: same size (1.24rem) and the
-       same lighter weight (500 — the button base is 600, which read heavier
-       than the category labels beside it). */
-    font-size: 1.24rem !important;
+    /* Catalog tab / view-toggle text is 1.24rem, but this button is white bold
+       text on a filled blue CTA with a drop shadow, so it reads visually heavier
+       than the recessed labels beside it. Nudge it down slightly (1.16rem) so it
+       reads as the same size as the catalog text rather than a touch bigger. */
+    font-size: 1.16rem !important;
     font-weight: 500 !important;
     letter-spacing: -0.02em !important;
   }
   body .site-header .cart-btn .cart-btn__label,
-  body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { font-size: 1.24rem !important; font-weight: 500 !important; letter-spacing: -0.02em !important; }
+  body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { font-size: 1.16rem !important; font-weight: 500 !important; letter-spacing: -0.02em !important; }
   body .site-header .cart-btn:hover,
   body .site-header .cart-btn.cart-btn--active:hover,
   body:has(.home-catalog) .site-header .cart-btn:hover,
@@ -13596,4 +13614,16 @@ body:has(.cart-drawer) .pdp-breadcrumb {
 .cart-drawer__back-btn,
 .cart-table thead tr {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+/* The view-mode toggle and the tab-bar search fill themselves with a
+   semi-transparent overlay (--wt-box-strong) over the tab bar, so the page's
+   dot-pattern layer bled THROUGH them and showed dots inside the boxes (visible
+   on the desktop "Catalog" button and the tablet search field). Composite the
+   same overlay over an OPAQUE copy of the bar colour (--wt-orange resolves to
+   the brand blue #84acc7 in this scope) — identical appearance, but now opaque
+   so no dots leak through. */
+.home-catalog__viewmode,
+.home-catalog__sidebar-search {
+  background: linear-gradient(var(--wt-box-strong), var(--wt-box-strong)), var(--wt-orange) !important;
 }
