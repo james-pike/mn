@@ -558,6 +558,7 @@ export default component$(() => {
   const cartOpen = useSignal(false);
   const orderSubmitted = useSignal(false);
   const orderNum = useSignal("");
+  const submitting = useSignal(false);
   const checkoutOpen = useSignal(false);
   const checkoutStep = useSignal<"cart" | "details">("cart");
   const summaryOpen = useSignal(true);
@@ -756,17 +757,21 @@ export default component$(() => {
       date: new Date().toLocaleDateString("en-CA"),
     };
 
-    // Send order via server action
+    // Send order via server action. Show a spinner while the server saves the
+    // order to the DB — success is only shown after that write confirms.
+    submitting.value = true;
     let result: any;
     try {
       result = await orderAction.submit(orderData);
     } catch (err) {
       console.error("Order submit threw:", err);
       formError.value = (err as Error)?.message || "Network error placing order";
+      submitting.value = false;
       return;
     }
     const v = result?.value as any;
     if (v?.failed) {
+      submitting.value = false;
       // Surface zod field errors, top-level form errors, or generic message
       let msg = v.message;
       if (!msg && v.fieldErrors) {
@@ -810,6 +815,7 @@ export default component$(() => {
     giftBalance.value = null;
     giftError.value = "";
     formTouched.value = false;
+    submitting.value = false;
   });
 
 
@@ -1590,7 +1596,7 @@ export default component$(() => {
                   </span>
                   <button
                     class="btn btn--primary cart-drawer__order-btn"
-                    onClick$={() => { summaryOpen.value = cart.items.length <= 4; checkoutStep.value = "details"; }}
+                    onClick$={() => { summaryOpen.value = window.innerWidth > 600 && cart.items.length <= 4; checkoutStep.value = "details"; }}
                   >
                     <svg width="18" height="18" viewBox="0 0 100 100" aria-hidden="true"><g transform="rotate(45 50 50) scale(0.72)" transform-origin="50 50"><polygon points="50,50 50,0 100,0" fill="#ffe2a6"/><polygon points="50,50 100,0 100,50" fill="#ae1f2a"/><polygon points="50,50 100,50 100,100" fill="#d43950"/><polygon points="50,50 100,100 50,100" fill="#9ec069"/><polygon points="50,50 50,100 0,100" fill="#7fa244"/><polygon points="50,50 0,100 0,50" fill="#4689b3"/><polygon points="50,50 0,50 0,0" fill="#31759c"/><polygon points="50,50 0,0 50,0" fill="#ffd25b"/></g><path d="M35 51 L46 63 L67 38" fill="none" stroke="rgba(10,25,55,0.5)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 51 L46 63 L67 38" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     {t("cart.checkout", locale.value)}
@@ -1759,13 +1765,22 @@ export default component$(() => {
                   </span>
                   <button
                     class={`btn btn--primary cart-drawer__order-btn ${!canPlaceOrder.value ? "cart-drawer__order-btn--disabled" : ""}`}
-                    disabled={!canPlaceOrder.value}
+                    disabled={!canPlaceOrder.value || submitting.value}
                     onClick$={submitOrder}
                   >
+                    {submitting.value ? (
+                      <>
+                        <span class="btn-spinner" aria-hidden="true" />
+                        {t("cart.placing", locale.value)}
+                      </>
+                    ) : (
+                      <>
                     <svg width="18" height="18" viewBox="0 0 100 100" aria-hidden="true"><g transform="rotate(45 50 50) scale(0.72)" transform-origin="50 50"><polygon points="50,50 50,0 100,0" fill="#ffe2a6"/><polygon points="50,50 100,0 100,50" fill="#ae1f2a"/><polygon points="50,50 100,50 100,100" fill="#d43950"/><polygon points="50,50 100,100 50,100" fill="#9ec069"/><polygon points="50,50 50,100 0,100" fill="#7fa244"/><polygon points="50,50 0,100 0,50" fill="#4689b3"/><polygon points="50,50 0,50 0,0" fill="#31759c"/><polygon points="50,50 0,0 50,0" fill="#ffd25b"/></g><path d="M35 51 L46 63 L67 38" fill="none" stroke="rgba(10,25,55,0.5)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 51 L46 63 L67 38" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     {(payMethod.value === "card" || (payMethod.value === "giftcard_card" && giftRemaining.value > 0))
                       ? t("cart.continuepayment", locale.value)
                       : t("cart.createorder", locale.value)}
+                      </>
+                    )}
                   </button>
                 </div>
               </>

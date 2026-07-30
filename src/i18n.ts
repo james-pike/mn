@@ -181,6 +181,7 @@ const translations = {
   "cart.postal": { en: "Postal Code *", fr: "Code postal *" },
   "cart.po": { en: "PO # *", fr: "N° de bon de commande *" },
   "cart.createorder": { en: "Place Order", fr: "Commander" },
+  "cart.placing": { en: "Placing order…", fr: "Traitement…" },
   "cart.continuepayment": { en: "Continue to Payment", fr: "Passer au paiement" },
   // Payment method
   "pay.title": { en: "Payment", fr: "Paiement" },
