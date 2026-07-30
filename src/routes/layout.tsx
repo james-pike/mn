@@ -697,6 +697,9 @@ export default component$(() => {
   });
 
   const submitOrder = $(async () => {
+    // Fail-safe: the button is disabled while greyed out, but never act on a
+    // click that somehow gets through when the order can't be placed / is sending.
+    if (!canPlaceOrder.value || submitting.value) return;
     formTouched.value = true;
     const poRequired = payMethod.value === "po";
     if (!empFirstName.value || !empLastName.value || !empAddress1.value || !empCity.value || !empPostal.value || !empEmail.value || !empPhone.value || !empProvince.value || (poRequired && !empPO.value)) {

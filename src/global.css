@@ -5842,7 +5842,7 @@ details[open] > .cart-drawer__checkout-title::after {
 .checkout-modal__form,
 .checkout-modal__pay {
   background: #eef0f2 !important;
-  border: 1px solid rgba(0, 0, 0, 0.07) !important;
+  border: none !important;
   border-radius: 0 !important;
   margin: 4px 4px 0 !important;
 }
@@ -5850,26 +5850,27 @@ details[open] > .cart-drawer__checkout-title::after {
   .cart-drawer__summary,
   .checkout-modal__form,
   .checkout-modal__pay {
-    /* Darker/stronger than the info panel so the containers read clearly on the
-       white drawer (they were lighter than the product info area, which sits
-       over greige). */
-    background: rgba(70, 137, 179, 0.22) !important;
-    border: 1px solid rgba(70, 137, 179, 0.34) !important;
+    /* Match the product info panel's exact rendered shade. The info panel is
+       --mn-panel over greige (= rgb(223,230,232)); the checkout sits on a white
+       drawer, so use that effective colour as a solid to match it. */
+    background: rgb(223, 230, 232) !important;
+    border: none !important;
     /* Desktop lays these out in a 2-col grid; drop the per-panel margins and
        let a single uniform grid gap + step padding space them, so the gap
        between the form/payment columns matches the thin edge gaps (was 14px). */
     margin: 0 !important;
   }
+  /* Gaps BETWEEN the panels (4px) for separation, but no outer padding so the
+     panels sit flush to the drawer edges — no white margin around the group. */
   .cart-drawer__details-step {
     gap: 4px !important;
-    padding: 4px !important;
+    padding: 0 !important;
     box-sizing: border-box !important;
   }
-  /* The back-to-cart bar spans the full step and must stay flush — break it out
-     of the step padding so the 4px gap only appears around the content panels
-     below it, not above/beside the bar. */
   .cart-drawer__details-step > .cart-drawer__back-btn {
-    margin: -4px -4px 0 !important;
+    /* Leave just a 1px white strip under the bar (like the breadcrumb's white
+       seam) instead of the full 4px gap — cancel all but 1px of the grid gap. */
+    margin: 0 0 -3px !important;
     width: auto !important;
   }
 }
@@ -5889,6 +5890,10 @@ details[open] > .cart-drawer__checkout-title::after {
   .checkout-modal__form,
   .checkout-modal__pay {
     margin: 0 4px !important;
+  }
+  /* Leave a 1px white strip under the back-to-cart bar (like the other bars). */
+  .cart-drawer__details-step > .cart-drawer__back-btn {
+    margin-bottom: -3px !important;
   }
 }
 .checkout-modal__form { padding: 0.9rem 0.95rem !important; }
@@ -7096,12 +7101,12 @@ details[open] > .cart-drawer__checkout-title::after {
   .product-modal__breadcrumb .breadcrumb__link { font-size: 1.15rem; }
   .product-modal__breadcrumb .breadcrumb__sep { font-size: 1.15rem; }
   .product-modal__breadcrumb .breadcrumb__sku { font-size: 1.05rem; }
-  /* Don't let the image stretch to match a taller info column — keep it at its
-     natural square height, pinned to the top of the cell. */
+  /* Let the image grow taller than square (4:3 portrait) so it fills more of
+     the taller info column beside it. */
   .product-image-row { flex-direction: column; gap: 0.2rem; grid-column: 1; grid-row: 1; margin-left: 0.1rem; align-self: start; }
   .product-thumbs--column { flex-direction: row; width: auto; }
   .product-thumbs__item { width: 64px; }
-  .product-detail .product-carousel { aspect-ratio: 1/1; }
+  .product-detail .product-carousel { aspect-ratio: 3/4; }
   .product-modal__name { font-size: 1.35rem; }
   .product-modal__price { font-size: 1.15rem; }
   .apparel-catalog:has(.product-detail) { padding: 0 2px 2rem; }
@@ -7221,7 +7226,9 @@ details[open] > .cart-drawer__checkout-title::after {
     box-shadow: none !important;
     overflow-y: auto !important;
   }
-  .cart-drawer__items { padding: 0.85rem 1rem; }
+  /* No top padding so the secondary bar (table head) sits flush under the
+     header like every other page — the 0.85rem top read as a big gap. */
+  .cart-drawer__items { padding: 0 1rem 0.85rem; }
   /* Drop the old "My Cart" title bar + the site-header replica (and the empty
      white space they created) — the lighter-blue secondary bar is the only
      header the cart/checkout need here, matching mobile. */
@@ -12805,6 +12812,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
   opacity: 0.5;
   cursor: not-allowed;
   filter: grayscale(0.35);
+  pointer-events: none;
 }
 
 /* ============================================================
@@ -13360,6 +13368,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
 .pdp-breadcrumb,
 .nav-drawer__header,
 .cart-table thead,
+.cart-table thead tr,
 .cart-drawer__back-btn {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
@@ -13549,11 +13558,9 @@ body:has(.cart-drawer) .pdp-breadcrumb {
    steps match — the cart view was plain white against the checkout's blue/gray. */
 .cart-drawer__items {
   background: #eef0f2 !important;
-  border: 1px solid rgba(0, 0, 0, 0.07) !important;
 }
 @media (min-width: 1025px) {
   .cart-drawer__items {
-    background: rgba(70, 137, 179, 0.22) !important;
-    border: 1px solid rgba(70, 137, 179, 0.34) !important;
+    background: rgb(223, 230, 232) !important;
   }
 }
