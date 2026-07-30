@@ -5850,8 +5850,11 @@ details[open] > .cart-drawer__checkout-title::after {
   .cart-drawer__summary,
   .checkout-modal__form,
   .checkout-modal__pay {
-    background: rgba(70, 137, 179, 0.10) !important;
-    border: 1px solid rgba(70, 137, 179, 0.20) !important;
+    /* Darker/stronger than the info panel so the containers read clearly on the
+       white drawer (they were lighter than the product info area, which sits
+       over greige). */
+    background: rgba(70, 137, 179, 0.22) !important;
+    border: 1px solid rgba(70, 137, 179, 0.34) !important;
     /* Desktop lays these out in a 2-col grid; drop the per-panel margins and
        let a single uniform grid gap + step padding space them, so the gap
        between the form/payment columns matches the thin edge gaps (was 14px). */
