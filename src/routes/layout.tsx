@@ -1355,6 +1355,12 @@ export default component$(() => {
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 {t("nav.home", locale.value)}
               </Link>
+              {/* Language toggle in the middle of the bar — an inline icon + FR/EN
+                  styled like the logout (no button chrome), not a pill button. */}
+              <button type="button" class="nav-drawer__header-logout nav-drawer__header-locale" onClick$={toggleLocale} aria-label="Toggle language">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                <span>{locale.value === "en" ? "FR" : "EN"}</span>
+              </button>
               {/* Logout rides the right end of the orange strip (moved out of a
                   separate footer). */}
               <Form action={logoutAction} reloadDocument class="nav-drawer__header-logout-form">
@@ -1594,7 +1600,7 @@ export default component$(() => {
                   </span>
                   <button
                     class="btn btn--primary cart-drawer__order-btn"
-                    onClick$={() => { summaryOpen.value = window.innerWidth > 600 && cart.items.length <= 4; checkoutStep.value = "details"; }}
+                    onClick$={() => { summaryOpen.value = window.innerWidth > 1024 && cart.items.length <= 4; checkoutStep.value = "details"; }}
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
                     {t("cart.checkout", locale.value)}

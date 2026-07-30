@@ -36,7 +36,7 @@ const translations = {
   "login.submit": { en: "Login", fr: "Se connecter" },
   "login.submitting": { en: "Signing in...", fr: "Connexion..." },
   "login.error": { en: "Invalid username or password", fr: "Nom d'utilisateur ou mot de passe invalide" },
-  "login.logout": { en: "Log out", fr: "Déconnexion" },
+  "login.logout": { en: "Logout", fr: "Déconnexion" },
 
   // Hero
   "hero.badge": { en: "Employee Exclusive", fr: "Exclusif employés" },

@@ -13564,3 +13564,19 @@ body:has(.cart-drawer) .pdp-breadcrumb {
     background: rgb(223, 230, 232) !important;
   }
 }
+
+/* Tablet: lay the checkout details fields 2-per-row to save vertical height. The
+   section title and the first/last-name row stay full width; the remaining
+   fields (address, city, province, postal, email, phone) pair up. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .checkout-modal__form {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.55rem 0.6rem;
+    align-content: start;
+  }
+  .checkout-modal__form > .checkout-modal__form-title,
+  .checkout-modal__form > .checkout-modal__row {
+    grid-column: 1 / -1;
+  }
+}
