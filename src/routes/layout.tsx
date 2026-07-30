@@ -557,6 +557,7 @@ export default component$(() => {
   const cartHydrated = useSignal(false);
   const cartOpen = useSignal(false);
   const orderSubmitted = useSignal(false);
+  const orderNum = useSignal("");
   const checkoutOpen = useSignal(false);
   const checkoutStep = useSignal<"cart" | "details">("cart");
   const summaryOpen = useSignal(true);
@@ -713,24 +714,20 @@ export default component$(() => {
       checkoutOpen.value = true;
       return;
     }
-    // Email format check (basic RFC-ish — anything@anything.tld)
+    // Field-format checks — collect ALL failures so every invalid field is
+    // reported together in one submit, not one at a time.
+    const fmtErrors: string[] = [];
+    // Email (basic RFC-ish — anything@anything.tld)
     const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRe.test(empEmail.value.trim())) {
-      formError.value = t("cart.error.email", locale.value);
-      checkoutOpen.value = true;
-      return;
-    }
-    // Phone format check — need a full number (10 digits NANP, up to 15 for
-    // an intl. dialing prefix), allowing +, spaces, dashes, parens, dots.
+    if (!emailRe.test(empEmail.value.trim())) fmtErrors.push(t("cart.error.email", locale.value));
+    // Phone — full number (10 digits NANP, up to 15 for an intl. dialing
+    // prefix), allowing +, spaces, dashes, parens, dots.
     const phoneDigits = empPhone.value.replace(/[^\d]/g, "");
-    if (phoneDigits.length < 10 || phoneDigits.length > 15 || !/^[\d\s+()\-.]+$/.test(empPhone.value.trim())) {
-      formError.value = t("cart.error.phone", locale.value);
-      checkoutOpen.value = true;
-      return;
-    }
-    // Canadian postal code check — A1A 1A1 (optional space/hyphen).
-    if (!/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(empPostal.value.trim())) {
-      formError.value = t("cart.error.postal", locale.value);
+    if (phoneDigits.length < 10 || phoneDigits.length > 15 || !/^[\d\s+()\-.]+$/.test(empPhone.value.trim())) fmtErrors.push(t("cart.error.phone", locale.value));
+    // Canadian postal code — A1A 1A1 (optional space/hyphen).
+    if (!/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(empPostal.value.trim())) fmtErrors.push(t("cart.error.postal", locale.value));
+    if (fmtErrors.length) {
+      formError.value = fmtErrors.join("\n");
       checkoutOpen.value = true;
       return;
     }
@@ -795,6 +792,7 @@ export default component$(() => {
       return;
     }
 
+    orderNum.value = v?.orderNumber || "";
     cart.items = [];
     await saveCart();
     window.dispatchEvent(new CustomEvent("cart-updated"));
@@ -1780,13 +1778,19 @@ export default component$(() => {
       <Modal.Root bind:show={orderSubmitted} closeOnBackdropClick={true}>
         <Modal.Panel class="modal-overlay">
           <div class="modal order-confirm">
+            <div class="order-confirm__badge" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
             <h2 class="order-confirm__title">{t("order.title", locale.value)}</h2>
+            {orderNum.value && (
+              <p class="order-confirm__order">{locale.value === "fr" ? "Commande" : "Order"} #{orderNum.value}</p>
+            )}
             <p class="order-confirm__text">{t("order.text", locale.value)}</p>
             {/* Plain <a> (full page load), not <Link>: this modal lives in the
                 persistent layout, so an SPA nav would leave orderSubmitted=true
                 and the success modal stuck open. A real navigation re-mounts the
                 app and clears the flag. */}
-            <a href="/" class="btn btn--primary">{t("order.continue", locale.value)}</a>
+            <a href="/" class="btn btn--primary order-confirm__btn">{t("order.continue", locale.value)}</a>
           </div>
         </Modal.Panel>
       </Modal.Root>

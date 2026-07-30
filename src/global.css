@@ -4487,9 +4487,9 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
      block) so the two strips read as the same bar across routes. */
   /* font-size a touch smaller (was 1.05rem) — the same slight reduction applied
      to the catalog tab labels, so the two strips stay in step. */
-  .pdp-breadcrumb { top: 48px; font-size: 0.97rem; height: 44px; padding: 0; overflow: hidden; border-radius: 0; margin: 0; }
+  .pdp-breadcrumb { top: 48px; font-size: 1.02rem; height: 44px; padding: 0; overflow: hidden; border-radius: 0; margin: 0; }
   /* A touch more breathing room between the crumb labels — 10px read crammed. */
-  .pdp-breadcrumb__link, .pdp-breadcrumb__sku { padding: 0 15px; }
+  .pdp-breadcrumb__link, .pdp-breadcrumb__sku { padding: 0 15px; font-size: 1.02rem; }
 }
 
 .product-detail {
@@ -5614,6 +5614,9 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
   border-radius: 0;
   font-size: 0.78rem;
   font-weight: 500;
+  /* Multiple validation messages are joined with newlines — render each on
+     its own line so "phone AND postal" both show. */
+  white-space: pre-line;
 }
 .cart-drawer__required-label {
   color: var(--ce-gray-400);
@@ -6066,19 +6069,46 @@ details[open] > .cart-drawer__checkout-title::after {
 .order-confirm {
   text-align: center;
   max-width: 400px;
-  padding: 3rem 2rem;
+  padding: 2.75rem 2.25rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+/* Success badge — blue ring with a white check on a filled blue disc. */
+.order-confirm__badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--ce-green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 1.25rem;
+  box-shadow: 0 0 0 6px rgba(65, 111, 141, 0.14);
+}
+.order-confirm__badge svg { width: 32px; height: 32px; }
 .order-confirm__title {
-  font-size: 1.3rem;
+  font-size: 1.35rem;
   font-weight: 700;
+  color: var(--ce-gray-900);
+  margin: 0 0 0.35rem;
+}
+.order-confirm__order {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   color: var(--ce-green);
   margin: 0 0 0.75rem;
 }
 .order-confirm__text {
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   color: var(--ce-gray-600);
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.75rem;
   line-height: 1.5;
+}
+.order-confirm__btn {
+  min-width: 160px;
 }
 
 /* ===== Login Button ===== */
@@ -10418,7 +10448,7 @@ details[open] > .cart-drawer__checkout-title::after {
   /* Larger phones (iPhone Pro Max etc.) have room, so the cluster sits close to
      the edge here; iPhone SE gets a bigger gap in the max-width:384 block below
      so its pinwheel isn't clipped. */
-  .site-header__logo { margin-left: 0; }
+  .site-header__logo { margin-left: -3px; }
   /* The wordmark PNG (1448px source, so it stays crisp) scales up with the
      taller header too — it's the .site-header__logo-white class, separate from
      the logo-img/brand-cluster ones, so it needs its own bump. */
