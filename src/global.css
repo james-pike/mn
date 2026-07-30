@@ -5835,18 +5835,40 @@ details[open] > .cart-drawer__checkout-title::after {
 }
 .checkout-modal__pay .checkout-modal__form-title { margin-bottom: 0.6rem; }
 
-/* Checkout: give the three stacked areas (order summary / order details /
-   payment) the same light-blue panel background on ALL devices, with a border
-   + rounding + gap so they read as separate cards instead of one flat column. */
+/* Checkout: three stacked areas (order summary / order details / payment) as
+   distinct panels. Neutral light-gray on mobile/tablet; light-blue on desktop.
+   Square corners + a small UNIFORM gap (4px between panels and 4px on the sides). */
 .cart-drawer__summary,
 .checkout-modal__form,
 .checkout-modal__pay {
-  background: rgba(70, 137, 179, 0.10) !important;
-  border: 1px solid rgba(70, 137, 179, 0.20) !important;
-  /* Square corners, and a small UNIFORM gap on the top + sides of each panel
-     (4px between panels and 4px from the drawer edges). */
+  background: #eef0f2 !important;
+  border: 1px solid rgba(0, 0, 0, 0.07) !important;
   border-radius: 0 !important;
   margin: 4px 4px 0 !important;
+}
+@media (min-width: 1025px) {
+  .cart-drawer__summary,
+  .checkout-modal__form,
+  .checkout-modal__pay {
+    background: rgba(70, 137, 179, 0.10) !important;
+    border: 1px solid rgba(70, 137, 179, 0.20) !important;
+    /* Desktop lays these out in a 2-col grid; drop the per-panel margins and
+       let a single uniform grid gap + step padding space them, so the gap
+       between the form/payment columns matches the thin edge gaps (was 14px). */
+    margin: 0 !important;
+  }
+  .cart-drawer__details-step {
+    gap: 4px !important;
+    padding: 4px !important;
+    box-sizing: border-box !important;
+  }
+  /* The back-to-cart bar spans the full step and must stay flush — break it out
+     of the step padding so the 4px gap only appears around the content panels
+     below it, not above/beside the bar. */
+  .cart-drawer__details-step > .cart-drawer__back-btn {
+    margin: -4px -4px 0 !important;
+    width: auto !important;
+  }
 }
 .checkout-modal__form { padding: 0.9rem 0.95rem !important; }
 .checkout-modal__pay { padding: 0.9rem 0.95rem !important; }
