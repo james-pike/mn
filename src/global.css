@@ -6112,7 +6112,7 @@ details[open] > .cart-drawer__checkout-title::after {
 .checkout-modal__field select {
   width: 100%;
   padding: 10px 14px;
-  border: 1.5px solid var(--ce-gray-200);
+  border: 1.5px solid var(--ce-gray-300);
   border-radius: var(--radius-sm);
   font-size: 0.88rem;
   font-family: var(--font-sans);
@@ -13543,4 +13543,17 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   /* A bit more breathing room above the "More {category}" heading so it isn't
      crowding the images above it. */
   .related-items { margin-top: 1.4rem !important; }
+}
+
+/* Cart page (item list) shares the checkout page's panel background so the two
+   steps match — the cart view was plain white against the checkout's blue/gray. */
+.cart-drawer__items {
+  background: #eef0f2 !important;
+  border: 1px solid rgba(0, 0, 0, 0.07) !important;
+}
+@media (min-width: 1025px) {
+  .cart-drawer__items {
+    background: rgba(70, 137, 179, 0.22) !important;
+    border: 1px solid rgba(70, 137, 179, 0.34) !important;
+  }
 }
