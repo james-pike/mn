@@ -219,7 +219,7 @@ export const allProducts = [
   {
     "sku": "MN-1",
     "name": "Carhartt Rigby Dungaree Pants - Navy",
-    "category": "Pants",
+    "category": "Work Wear",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [

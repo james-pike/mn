@@ -28,7 +28,7 @@ const seeds: Seed[] = [
   { sku: "MNFR-5", name: "FR Insulated Bib", category: "Flame Resistant", sizes: "S - 4XL", colors: [NAVY], price: 380.00, details: "Fire-resistant, #101626" },
   { sku: "MNFR-6", name: "FR Insulated Jacket", category: "Flame Resistant", sizes: "S - 4XL", colors: [NAVY], price: 290.00, details: "Fire-resistant, #101618" },
   // Regular MN apparel
-  { sku: "MN-1",  name: "Pants",                       category: "Pants",     sizes: "S - 4XL",  colors: [NAVY], price: 69.99,  details: "#102291" },
+  { sku: "MN-1",  name: "Pants",                       category: "Work Wear", sizes: "S - 4XL",  colors: [NAVY], price: 69.99,  details: "#102291" },
   { sku: "MN-2",  name: "Long Sleeve Shirt",           category: "Shirts",    sizes: "S - 4XL",  colors: [NAVY], price: 59.99,  details: "#K126" },
   { sku: "MN-3",  name: "Short Sleeve T-Shirt",        category: "T-Shirts",  sizes: "S - 4XL / LT - 4XLT", colors: [NAVY], price: 13.50,  details: "#2000 / #2000T" },
   { sku: "MN-5",  name: "Ball Cap",                    category: "Caps",      sizes: "One Size", colors: [NAVY], price: 23.50,  details: "#i8502" },

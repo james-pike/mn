@@ -126,6 +126,12 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     track(() => selectedVariant.value);
+    const p = product.value;
+    // Waist/length SKUs carry a "W/L" placeholder in selectedSize (there is no
+    // S–4XL size list for them); it's intentionally NOT in sizeOptions, so skip
+    // them here — otherwise this clears the placeholder on the client and the
+    // Add button stays disabled forever even after waist + length are picked.
+    if (p && waistLengthSkus.has(p.sku)) return;
     if (!selectedSize.value) return;
     if (!sizeOptions.value.includes(selectedSize.value)) {
       selectedSize.value = "";
@@ -502,8 +508,13 @@ export default component$(() => {
         // Apparel" pulled from every visible category, instead of a
         // single-category list with a "cat.Pants" / "cat.Work Wear"
         // un-translated heading.
+        // Must mirror the catalog's category tabs (product-catalog.tsx:
+        // CLOTHING_CATEGORIES / SAFETY_CATEGORIES, minus "All"). When a product's
+        // category isn't listed here it's treated as "not a tab" and the carousel
+        // falls back to broad "More Apparel" — which is why Polos / Sweaters / the
+        // Office kit were reverting to Apparel instead of showing their own run.
         const visibleByLogin: Record<string, string[]> = {
-          clothing: ["Shirts", "Jackets", "Hats", "SWAG"],
+          clothing: ["Jackets", "Sweaters", "Shirts", "Polos", "Hats", "SWAG", "New Hire Kit"],
           tech: ["Work Wear"],
           safety: ["Flame Resistant", "Shirts", "Hats"],
         };
