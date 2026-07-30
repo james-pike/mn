@@ -765,7 +765,7 @@ export default component$(() => {
       result = await orderAction.submit(orderData);
     } catch (err) {
       console.error("Order submit threw:", err);
-      formError.value = (err as Error)?.message || "Network error placing order";
+      formError.value = (err as Error)?.message || t("cart.error.network", locale.value);
       submitting.value = false;
       return;
     }
@@ -784,7 +784,7 @@ export default component$(() => {
         msg = flat.join(", ");
       }
       if (!msg && v.formErrors?.length) msg = v.formErrors.join(", ");
-      formError.value = msg || "Failed to place order. Please try again.";
+      formError.value = msg || t("cart.error.failed", locale.value);
       console.error("Order submission failed:", v);
       return;
     }
@@ -1135,8 +1135,8 @@ export default component$(() => {
       {/* Tablet widths aren't finished — CSS shows this over everything between
           601px and 1024px, so only mobile and desktop render the site. */}
       <div class="tablet-notice" aria-live="polite">
-        <span class="tablet-notice__title">Tablet coming soon</span>
-        <span class="tablet-notice__sub">Please visit on mobile or desktop.</span>
+        <span class="tablet-notice__title">{t("tablet.title", locale.value)}</span>
+        <span class="tablet-notice__sub">{t("tablet.sub", locale.value)}</span>
       </div>
 
       {(auth.value.loggedIn || (loginAction.value && !loginAction.value.failed) || isPaymentReturn.value) && <>
@@ -1362,11 +1362,6 @@ export default component$(() => {
               </Form>
             </div>
             <div class="nav-drawer__links">
-              {/* Language toggle (phones — on tablet/desktop it's in the header). */}
-              <button type="button" class="nav-drawer__link nav-drawer__link--locale" onClick$={toggleLocale}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-                {locale.value === "en" ? "Français" : "English"}
-              </button>
               {loginType.value === "tech" && (
                 <Link href="/apparel/" class={`nav-drawer__link ${loc.url.pathname.startsWith("/apparel") ? "active" : ""}`} onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "Work Wear" })); }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M4 6h16v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/><path d="M4 6l-2 4v2h4V8"/><path d="M20 6l2 4v2h-4V8"/></svg>
@@ -1598,7 +1593,7 @@ export default component$(() => {
                     class="btn btn--primary cart-drawer__order-btn"
                     onClick$={() => { summaryOpen.value = window.innerWidth > 600 && cart.items.length <= 4; checkoutStep.value = "details"; }}
                   >
-                    <svg width="18" height="18" viewBox="0 0 100 100" aria-hidden="true"><g transform="rotate(45 50 50) scale(0.72)" transform-origin="50 50"><polygon points="50,50 50,0 100,0" fill="#ffe2a6"/><polygon points="50,50 100,0 100,50" fill="#ae1f2a"/><polygon points="50,50 100,50 100,100" fill="#d43950"/><polygon points="50,50 100,100 50,100" fill="#9ec069"/><polygon points="50,50 50,100 0,100" fill="#7fa244"/><polygon points="50,50 0,100 0,50" fill="#4689b3"/><polygon points="50,50 0,50 0,0" fill="#31759c"/><polygon points="50,50 0,0 50,0" fill="#ffd25b"/></g><path d="M35 51 L46 63 L67 38" fill="none" stroke="rgba(10,25,55,0.5)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 51 L46 63 L67 38" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
                     {t("cart.checkout", locale.value)}
                   </button>
                 </div>
@@ -1706,16 +1701,16 @@ export default component$(() => {
                         }}
                       >
                         <option value="" disabled hidden>{locale.value === "fr" ? "Sélectionner…" : "Select…"}</option>
-                        <option value="AB">Alberta</option>
-                        <option value="BC">British Columbia</option>
-                        <option value="MB">Manitoba</option>
-                        <option value="NB">New Brunswick</option>
-                        <option value="NL">Newfoundland and Labrador</option>
-                        <option value="NS">Nova Scotia</option>
-                        <option value="ON">Ontario</option>
-                        <option value="PE">Prince Edward Island</option>
-                        <option value="QC">Quebec</option>
-                        <option value="SK">Saskatchewan</option>
+                        <option value="AB">{t("prov.AB", locale.value)}</option>
+                        <option value="BC">{t("prov.BC", locale.value)}</option>
+                        <option value="MB">{t("prov.MB", locale.value)}</option>
+                        <option value="NB">{t("prov.NB", locale.value)}</option>
+                        <option value="NL">{t("prov.NL", locale.value)}</option>
+                        <option value="NS">{t("prov.NS", locale.value)}</option>
+                        <option value="ON">{t("prov.ON", locale.value)}</option>
+                        <option value="PE">{t("prov.PE", locale.value)}</option>
+                        <option value="QC">{t("prov.QC", locale.value)}</option>
+                        <option value="SK">{t("prov.SK", locale.value)}</option>
                       </select>
                     </div>
                     <div class={`checkout-modal__field ${formTouched.value && !empPostal.value ? "checkout-modal__field--error" : ""}`}>
@@ -1775,7 +1770,7 @@ export default component$(() => {
                       </>
                     ) : (
                       <>
-                    <svg width="18" height="18" viewBox="0 0 100 100" aria-hidden="true"><g transform="rotate(45 50 50) scale(0.72)" transform-origin="50 50"><polygon points="50,50 50,0 100,0" fill="#ffe2a6"/><polygon points="50,50 100,0 100,50" fill="#ae1f2a"/><polygon points="50,50 100,50 100,100" fill="#d43950"/><polygon points="50,50 100,100 50,100" fill="#9ec069"/><polygon points="50,50 50,100 0,100" fill="#7fa244"/><polygon points="50,50 0,100 0,50" fill="#4689b3"/><polygon points="50,50 0,50 0,0" fill="#31759c"/><polygon points="50,50 0,0 50,0" fill="#ffd25b"/></g><path d="M35 51 L46 63 L67 38" fill="none" stroke="rgba(10,25,55,0.5)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 51 L46 63 L67 38" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
                     {(payMethod.value === "card" || (payMethod.value === "giftcard_card" && giftRemaining.value > 0))
                       ? t("cart.continuepayment", locale.value)
                       : t("cart.createorder", locale.value)}

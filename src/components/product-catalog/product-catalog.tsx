@@ -211,7 +211,7 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
               // and hides the sizes-row gender span above it). Mobile/tablet keep
               // the gender in the sizes row exactly as before.
               return g === "Men" || g === "Women" ? (
-                <span class="product-card__name-gender">{g}'s </span>
+                <span class="product-card__name-gender">{t(g === "Men" ? "gender.mens" : "gender.womens", locale.value)} </span>
               ) : null;
             })()}
             <span class="product-card__name-text">{displayName}</span>
@@ -272,7 +272,7 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
             })()}
             {(() => {
               const g = genderOf(item);
-              return g === "Men" || g === "Women" ? <span class="product-card__gender">{g}'s</span> : null;
+              return g === "Men" || g === "Women" ? <span class="product-card__gender">{t(g === "Men" ? "gender.mens" : "gender.womens", locale.value)}</span> : null;
             })()}
             {/* One line per fit, so a product stocked in regular AND tall shows
                 both instead of a single run-on list (see sizeGroups). */}
@@ -544,7 +544,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
             }}
           >
             <span class="home-catalog__viewmode-icon" dangerouslySetInnerHTML={(tabletCols.value === "list" ? VIEW_MODES[0] : VIEW_MODES[1]).icon} />
-            <span class="home-catalog__viewmode-label">{(tabletCols.value === "list" ? VIEW_MODES[0] : VIEW_MODES[1]).label}</span>
+            <span class="home-catalog__viewmode-label">{tabletCols.value === "list" ? t("viewmode.gallery", locale.value) : t("viewmode.catalog", locale.value)}</span>
           </button>
           <div class="home-catalog__sidebar-search">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
@@ -664,7 +664,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
         <aside class="home-catalog__filters" aria-label="Filter products">
           {facetOptions.value.genders.length >= 1 && (
             <div class="home-catalog__filter-group">
-              <div class="home-catalog__filter-title">Fit</div>
+              <div class="home-catalog__filter-title">{t("filter.fit", locale.value)}</div>
               {facetOptions.value.genders.map((g) => (
                 <button
                   key={g}
@@ -679,14 +679,14 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                   }}
                 >
                   <span class="home-catalog__filter-check" />
-                  {g}
+                  {t(`fit.${g.toLowerCase()}` as any, locale.value)}
                 </button>
               ))}
             </div>
           )}
           {facetOptions.value.brands.length >= 1 && (
             <div class="home-catalog__filter-group">
-              <div class="home-catalog__filter-title">Brand</div>
+              <div class="home-catalog__filter-title">{t("filter.brand", locale.value)}</div>
               {facetOptions.value.brands.map((b) => (
                 <button
                   key={b}
@@ -708,7 +708,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
           )}
           {facetOptions.value.sizes.length >= 1 && (
             <div class="home-catalog__filter-group">
-              <div class="home-catalog__filter-title">Size</div>
+              <div class="home-catalog__filter-title">{t("filter.size", locale.value)}</div>
               <div class="home-catalog__filter-sizes">
                 {facetOptions.value.sizes.map((s) => (
                   <button
@@ -737,7 +737,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                 scrollProductsBelowBar();
               }}
             >
-              Clear filters
+              {t("filter.clear", locale.value)}
             </button>
           )}
         </aside>

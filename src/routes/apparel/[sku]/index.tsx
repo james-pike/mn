@@ -381,7 +381,7 @@ export default component$(() => {
             )}
             {!waistLengthSkus.has(p.sku) && (
             <div class="product-modal__field">
-              <label class="product-modal__label">{t("modal.size", locale.value)}{variantSkus.has(p.sku) && selectedVariant.value && <span class="product-modal__color-inline"> — {selectedVariant.value}</span>}</label>
+              <label class="product-modal__label">{t("modal.size", locale.value)}{variantSkus.has(p.sku) && selectedVariant.value && <span class="product-modal__color-inline"> — {t(`variant.${selectedVariant.value}` as any, locale.value)}</span>}</label>
               <div class="product-modal__options">
                 {sizeOptions.value.map((size) => (
                   <button
@@ -405,7 +405,7 @@ export default component$(() => {
                       class={`product-modal__option ${selectedVariant.value === v ? "active" : ""}`}
                       onClick$={() => (selectedVariant.value = v)}
                     >
-                      {v}
+                      {t(`variant.${v}` as any, locale.value)}
                     </button>
                   ))}
                 </div>
