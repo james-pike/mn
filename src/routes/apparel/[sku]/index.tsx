@@ -543,9 +543,13 @@ export default component$(() => {
             {/* Mobile carousel */}
             <Carousel.Root class="related-carousel" slidesPerView={relatedPerView.value} gap={0.4} align="start" sensitivity={{ touch: 1.5, mouse: 1.5 }} rewind>
               <div class="related-carousel__wrapper">
+                {/* Only show the scroll arrows when there are more items than
+                    fit in one view — nothing to scroll → no arrows. */}
+                {related.length > relatedPerView.value && (
                 <Carousel.Previous class="related-carousel__arrow related-carousel__arrow--prev">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                 </Carousel.Previous>
+                )}
                 <Carousel.Scroller class="related-carousel__scroller">
                   {related.map((item) => (
                     <Carousel.Slide key={item.sku} class="related-carousel__slide">
@@ -570,9 +574,11 @@ export default component$(() => {
                     </Carousel.Slide>
                   ))}
                 </Carousel.Scroller>
+                {related.length > relatedPerView.value && (
                 <Carousel.Next class="related-carousel__arrow related-carousel__arrow--next">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                 </Carousel.Next>
+                )}
               </div>
             </Carousel.Root>
           </div>
