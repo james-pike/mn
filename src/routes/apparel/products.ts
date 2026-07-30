@@ -535,7 +535,7 @@ export const allProducts = [
       "/earphones.jpg"
     ],
     "material": "Recycled ABS plastic (rABS)",
-    "details": "Active noise cancellation, Wireless charging case, Charging cable included, Handstands, #70300"
+    "details": "Active noise cancellation, Wireless charging case, Charging cable included, 2 Buds, #70300"
   },
   {
     "sku": "MN-26",

@@ -111,7 +111,7 @@ const BRAND_LIST = [
   "Carhartt", "Cole Harbour", "Flexfit", "FootJoy", "Gildan",
   "Under Armour", "Wilson", "Yeti",
   // ...then non-clothing brands (bags, golf, towels, tech, headwear), Cap America last.
-  "Handstands", "Nexgen", "Nomad", "Srixon", "Tranzip", "Cap America",
+  "2 Buds", "Nexgen", "Nomad", "Srixon", "Tranzip", "Cap America",
 ];
 // Brand overrides for products whose brand isn't in the display name (identified
 // from the product spec). Everything else is matched by name against BRAND_LIST.
@@ -122,7 +122,7 @@ const BRAND_BY_SKU: Record<string, string> = {
   "MN-11": "FootJoy", // Men's Speckle Print Polo
   "MN-12": "FootJoy", // Women's Speckle Print Polo
   "MN-29": "Nexgen",  // Microfiber Waffle Towel
-  "MN-24": "Handstands", // 2 Buds Pro Wireless ANC Earbuds (ANC = feature, not brand)
+  "MN-24": "2 Buds", // 2 Buds Pro Wireless ANC Earbuds (ANC = feature, not brand)
 };
 function brandOf(p: Product): string | null {
   if (BRAND_BY_SKU[p.sku]) return BRAND_BY_SKU[p.sku];
