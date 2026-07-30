@@ -5871,23 +5871,21 @@ details[open] > .cart-drawer__checkout-title::after {
   }
 }
 @media (max-width: 1024px) {
-  /* Mobile/tablet: stacked column with a single uniform 4px gap so the vertical
-     gaps between sections are tight and match the thin side gaps. */
+  /* Mobile/tablet: stacked column with a uniform 4px gap so the vertical gaps
+     between sections are tight and match the thin side gaps. The back-to-cart
+     bar stays a FULL-WIDTH bar (flush sides, like the other secondary bars);
+     only the content panels below it are inset 4px. */
   .cart-drawer__details-step {
     display: flex !important;
     flex-direction: column !important;
     gap: 4px !important;
-    padding: 4px !important;
+    padding: 0 0 4px !important;
     box-sizing: border-box !important;
   }
   .cart-drawer__summary,
   .checkout-modal__form,
   .checkout-modal__pay {
-    margin: 0 !important;
-  }
-  .cart-drawer__details-step > .cart-drawer__back-btn {
-    margin: -4px -4px 0 !important;
-    width: auto !important;
+    margin: 0 4px !important;
   }
 }
 .checkout-modal__form { padding: 0.9rem 0.95rem !important; }
@@ -13527,4 +13525,19 @@ body:has(.cart-drawer) .home-catalog__header,
 body:has(.cart-drawer) .apparel-titlebar,
 body:has(.cart-drawer) .pdp-breadcrumb {
   visibility: hidden !important;
+}
+
+@media (min-width: 1025px) {
+  /* PDP alt-image (thumbnail) row matches the info panel's blue. The info panel
+     uses semi-transparent --mn-panel over greige; the thumbs sit over white, so
+     the same var would read lighter. Use the info's effective solid colour. */
+  .product-thumbs {
+    background: rgb(223, 230, 232);
+    padding: 8px;
+    border-radius: var(--radius-sm);
+    box-sizing: border-box;
+  }
+  /* A bit more breathing room above the "More {category}" heading so it isn't
+     crowding the images above it. */
+  .related-items { margin-top: 1.4rem !important; }
 }
