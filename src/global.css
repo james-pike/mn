@@ -5868,9 +5868,10 @@ details[open] > .cart-drawer__checkout-title::after {
     box-sizing: border-box !important;
   }
   .cart-drawer__details-step > .cart-drawer__back-btn {
-    /* Leave just a 1px white strip under the bar (like the breadcrumb's white
-       seam) instead of the full 4px gap — cancel all but 1px of the grid gap. */
-    margin: 0 0 -3px !important;
+    /* Flush against the panels below — the crisp white bottom strip now comes
+       from the bar's own inset box-shadow (see the shared rule below), matching
+       the breadcrumb/header seam. */
+    margin: 0 0 -4px !important;
     width: auto !important;
   }
 }
@@ -5891,9 +5892,10 @@ details[open] > .cart-drawer__checkout-title::after {
   .checkout-modal__pay {
     margin: 0 4px !important;
   }
-  /* Leave a 1px white strip under the back-to-cart bar (like the other bars). */
+  /* Flush against the panels below — the white bottom strip comes from the bar's
+     own inset box-shadow (shared rule below), matching the other secondary bars. */
   .cart-drawer__details-step > .cart-drawer__back-btn {
-    margin-bottom: -3px !important;
+    margin-bottom: -4px !important;
   }
 }
 .checkout-modal__form { padding: 0.9rem 0.95rem !important; }
@@ -12677,14 +12679,16 @@ body:has(.product-fullscreen) { overflow: hidden; }
 @media (min-width: 1025px) {
   .cart-drawer__details-step {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: var(--wt-box-my);
+    grid-template-columns: 1.5fr 1fr;
+    gap: 4px !important;
     align-content: start;
   }
-  .cart-drawer__details-step > .cart-drawer__back-btn,
-  .cart-drawer__details-step > .cart-drawer__summary { grid-column: 1 / -1; }
-  .cart-drawer__details-step > .checkout-modal__form { grid-column: 1; margin-right: 0; }
-  .cart-drawer__details-step > .checkout-modal__pay { grid-column: 2; margin-left: 0; }
+  /* Back-to-cart bar spans the top. Below it: LEFT column holds order details +
+     payment (stacked), RIGHT column holds the order summary alongside them. */
+  .cart-drawer__details-step > .cart-drawer__back-btn { grid-column: 1 / -1; grid-row: 1; }
+  .cart-drawer__details-step > .checkout-modal__form { grid-column: 1; grid-row: 2; margin: 0 !important; }
+  .cart-drawer__details-step > .checkout-modal__pay { grid-column: 1; grid-row: 3; margin: 0 !important; }
+  .cart-drawer__details-step > .cart-drawer__summary { grid-column: 2; grid-row: 2 / 4; align-self: start; margin: 0 !important; }
 }
 
 /* ============================================================
@@ -13565,10 +13569,10 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   }
 }
 
-/* Tablet: lay the checkout details fields 2-per-row to save vertical height. The
-   section title and the first/last-name row stay full width; the remaining
-   fields (address, city, province, postal, email, phone) pair up. */
-@media (min-width: 601px) and (max-width: 1024px) {
+/* Tablet + desktop: lay the checkout details fields 2-per-row to condense the
+   form's vertical height; the section title and the first/last-name row stay
+   full width. Also cap the PO number field so it isn't a full-width bar. */
+@media (min-width: 601px) {
   .checkout-modal__form {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
@@ -13579,4 +13583,17 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   .checkout-modal__form > .checkout-modal__row {
     grid-column: 1 / -1;
   }
+  .checkout-modal__pay .checkout-modal__field input {
+    max-width: 340px;
+  }
+}
+
+/* The cart + checkout secondary bars sit over LIGHT panels, so the shared inner
+   depth shadow (inset 0 -7px 11px -6px) read as a visible dark band at their
+   bottom edge — unlike the breadcrumb / tab bar, whose identical shadow is
+   invisible over the dark header. Drop the depth band on these two so they read
+   flat like the other secondary bars; keep only the faint top highlight. */
+.cart-drawer__back-btn,
+.cart-table thead tr {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
 }
