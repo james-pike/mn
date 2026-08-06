@@ -100,14 +100,14 @@ export const allProducts = [
   },
   {
     "sku": "MN-3",
-    "name": "Short Sleeve T-Shirt - Navy",
+    "name": "Gildan Short Sleeve T-Shirt - Navy",
     "category": "Shirts",
     "sizes": "S - 4XL / LT - 4XLT",
     "badge": "",
     "colors": [
       "#2c3e50"
     ],
-    "price": 13.5,
+    "price": 9.5,
     "img": "/sku/tshirt.png",
     "imgs": [
       "/sku/tshirt.png"
@@ -155,6 +155,23 @@ export const allProducts = [
     ],
     "material": "5.3 oz/yd² (US), 8.8 oz/L yd (CA), 100% polyester",
     "details": "Moisture-management properties, Anti-odor technology, Textured fabric that's soft, light and breathable, Self-fabric collar, Three-button placket, #1370399"
+  },
+  {
+    "sku": "MN-31",
+    "name": "Gildan Long Sleeve T-Shirt - Navy",
+    "category": "Shirts",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 19.5,
+    "img": "/2400.jpg",
+    "imgs": [
+      "/2400.jpg"
+    ],
+    "material": "6 oz/yd² (US) 10.1 oz/L yd (CA), 100% U.S. cotton, 18 singles",
+    "details": "Classic fit, Classic width rib collar, Taped neck and shoulders, Rib cuffs, Tear away label, #2400"
   },
   {
     "sku": "MN-16",
@@ -219,7 +236,7 @@ export const allProducts = [
   {
     "sku": "MN-1",
     "name": "Carhartt Rigby Dungaree Pants - Navy",
-    "category": "Work Wear",
+    "category": "Pants",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
@@ -475,7 +492,7 @@ export const allProducts = [
     "sizes": "One Size",
     "badge": "",
     "colors": [],
-    "price": 90,
+    "price": 85,
     "img": "/sku/new-hire-kit.jpg",
     "imgs": [
       "/sku/new-hire-kit.jpg",
@@ -529,13 +546,13 @@ export const allProducts = [
     "colors": [
       "#ffffff"
     ],
-    "price": 35,
+    "price": 40,
     "img": "/earphones.jpg",
     "imgs": [
       "/earphones.jpg"
     ],
     "material": "Recycled ABS plastic (rABS)",
-    "details": "Active noise cancellation, Wireless charging case, Charging cable included, 2 Buds, #70300"
+    "details": "Active noise cancellation, Wireless charging case, Charging cable included, Handstands, #70300"
   },
   {
     "sku": "MN-26",
