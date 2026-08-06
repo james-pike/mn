@@ -112,8 +112,25 @@ export const allProducts = [
     "imgs": [
       "/sku/tshirt.png"
     ],
-    "material": "6 oz/yd² 100% US cotton, 18 singles",
+    "material": "100% US cotton, 18 singles, 6 oz/yd² ",
     "details": "Classic fit, rib collar, taped neck and shoulders, tear-away label, no optical brighteners for consistent dye adherence, #2000 / #2000T"
+  },
+  {
+    "sku": "MN-31",
+    "name": "Gildan Long Sleeve T-Shirt - Navy",
+    "category": "Shirts",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 19.5,
+    "img": "/2400.jpg",
+    "imgs": [
+      "/2400.jpg"
+    ],
+    "material": "100% U.S. cotton, 18 singles, 10.1 oz/L yd (CA)",
+    "details": "Classic fit, Classic width rib collar, Taped neck and shoulders, Rib cuffs, Tear away label, #2400"
   },
   {
     "sku": "MN-2",
@@ -155,23 +172,6 @@ export const allProducts = [
     ],
     "material": "5.3 oz/yd² (US), 8.8 oz/L yd (CA), 100% polyester",
     "details": "Moisture-management properties, Anti-odor technology, Textured fabric that's soft, light and breathable, Self-fabric collar, Three-button placket, #1370399"
-  },
-  {
-    "sku": "MN-31",
-    "name": "Gildan Long Sleeve T-Shirt - Navy",
-    "category": "Shirts",
-    "sizes": "S - 5XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 19.5,
-    "img": "/2400.jpg",
-    "imgs": [
-      "/2400.jpg"
-    ],
-    "material": "6 oz/yd² (US) 10.1 oz/L yd (CA), 100% U.S. cotton, 18 singles",
-    "details": "Classic fit, Classic width rib collar, Taped neck and shoulders, Rib cuffs, Tear away label, #2400"
   },
   {
     "sku": "MN-16",
