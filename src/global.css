@@ -273,7 +273,16 @@ img { max-width: 100%; display: block; }
   pointer-events: auto;
   /* Slightly off-white (like the cm project) so the header reads distinct from
      the white tab bar and page content below it. */
-  background: var(--ce-off-white);
+  /* iOS/iPadOS Safari (15–26) colours its top toolbar ("forehead") by sampling
+     the background-COLOR of the fixed/sticky element at the top of the page —
+     this header — and now ignores <meta name="theme-color"> entirely. That made
+     the browser chrome match the header and read as a doubled-height header on
+     iPad. Safari never samples background-IMAGE, so every header rule paints its
+     fill as a gradient and keeps background-color transparent: Safari then falls
+     back to the body's white and the browser bar stays neutral. Visually
+     identical to a solid `background:` everywhere else. */
+  background-color: transparent;
+  background-image: linear-gradient(var(--ce-off-white), var(--ce-off-white));
   border-bottom: none;
   height: 58px;
   margin-bottom: -1px;
@@ -324,7 +333,9 @@ img { max-width: 100%; display: block; }
 /* Landing page header — white */
 
 .site-header--white {
-  background: var(--ce-off-white);
+  /* background-color transparent + gradient fill — see .site-header note. */
+  background-color: transparent;
+  background-image: linear-gradient(var(--ce-off-white), var(--ce-off-white));
   border-bottom: 1px solid var(--ce-gray-200);
 }
 .site-header--white .site-header__categories a {
@@ -3550,6 +3561,18 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   background: var(--ce-white);
   position: relative;
 }
+/* Desktop: the catalog grid already fills the space down to the footer via
+   `.home-catalog .apparel-grid { min-height: calc(100vh - 249px) }` (the 249px
+   is header + titlebar + footer). The frame's own `min-height: 100vh` then
+   stacked a SECOND full viewport on top of the header and footer, so short
+   (1–2 row) categories overflowed by ~215px and dropped the footer a screenful
+   below the products with a dead dotted band in between. Let the grid drive the
+   height so the footer connects right under the products. Tall categories are
+   naturally taller than the grid minimum, so they are unaffected. Scoped to
+   desktop; mobile/tablet keep their own full-height frame + footer handling. */
+@media (min-width: 1025px) {
+  .apparel-page { min-height: 0; }
+}
 
 .apparel-catalog {
   max-width: var(--site-max);
@@ -6344,7 +6367,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .stats-row__card:last-child { border-radius: 0 0 var(--radius-lg) 0; }
   .site-header--cart-open { position: fixed; top: 0; left: 0; right: 0; z-index: 100; }
   .site-header__categories { display: none; }
-  .site-header { height: 64px; top: 0; background: var(--ce-off-white); }
+  .site-header { height: 64px; top: 0; background-color: transparent; background-image: linear-gradient(var(--ce-off-white), var(--ce-off-white)); }
   .site-header__inner { padding: 0 0.1rem 0 0.38rem; height: 49px; overflow: hidden; }
   .site-header__logo { margin-left: -1px; gap: 0; }
   /* Logo-img shrunk so the cluster gains 2px of breathing room above and
@@ -7326,7 +7349,8 @@ details[open] > .cart-drawer__checkout-title::after {
     transform: translateY(-100%);
     opacity: 0;
     pointer-events: none;
-    background: var(--ce-off-white) !important;
+    background-color: transparent !important;
+    background-image: linear-gradient(var(--ce-off-white), var(--ce-off-white)) !important;
     border-bottom: none !important;
     transition: transform 0.3s ease, opacity 0.3s ease;
   }
@@ -9003,7 +9027,7 @@ details[open] > .cart-drawer__checkout-title::after {
 @media (max-width: 1024px) {
   /* Just a thin white line above the bar (matching the bottom seam), nothing
      else — was a 4px greige strip. */
-  .site-header { padding-top: 1.6px !important; background: #ffffff !important; }
+  .site-header { padding-top: 1.6px !important; background-color: transparent !important; background-image: linear-gradient(#ffffff, #ffffff) !important; }
   .site-header__inner {
     margin-top: 0 !important;
     margin-bottom: var(--wt-seam) !important;
@@ -10236,7 +10260,7 @@ details[open] > .cart-drawer__checkout-title::after {
      strip at the screen's top edge. */
   .site-header,
   .site-header--white,
-  .site-header--solid { background: var(--ce-greige) !important; }
+  .site-header--solid { background-color: transparent !important; background-image: linear-gradient(var(--ce-greige), var(--ce-greige)) !important; }
   .site-header::before {
     content: '';
     position: absolute;
@@ -12959,7 +12983,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
   /* The header's own background shows as the thin top edge above the blue bar —
      make it white (was greige, which read gray) so the top border matches the
      other white seams. */
-  .site-header { background: #ffffff !important; }
+  .site-header { background-color: transparent !important; background-image: linear-gradient(#ffffff, #ffffff) !important; }
   /* Thin white divider between the blue header and the blue tab bar, run FULL
      WIDTH (the original stroke was inset 13px each side, which let the greige
      header background poke out as a thin strip on scroll). At 1.6px it fully
