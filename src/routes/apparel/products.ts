@@ -628,20 +628,21 @@ export const allProducts = [
   },
   {
     "sku": "MN-30",
-    "name": "Wilson Ultra Distance Golf Balls (12)",
+    "name": "Titleist Pro V1 Golf Balls (12)",
     "category": "SWAG",
     "sizes": "Pack of 12",
     "badge": "",
     "colors": [
       "#ffffff"
     ],
-    "price": 36,
-    "img": "/wilson.jpeg",
+    "price": 75,
+    "img": "/Titleist-Pro-V1-Golf-Balls-2025-Model-White.webp",
     "imgs": [
-      "/wilson.jpeg"
+      "/Titleist-Pro-V1-Golf-Balls-2025-Model-White.webp",
+      "/Titleist-Pro-V1-Golf-Balls-2025.webp"
     ],
     "material": "",
-    "details": "High-energy core for maximum initial velocity, Guaranteed cutproof cover for ultimate playability, Engineered for maximum allowable distance, #WG2006301"
+    "details": "New faster high-gradient core, Soft cast urethane elastomer cover, Spherically-tiled 388 tetrahedral dimple design, Speed-amplifying high-flex casing layer, Soft 87 compression rating"
   }
 ];
 

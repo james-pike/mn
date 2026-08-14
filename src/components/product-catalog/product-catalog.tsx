@@ -109,9 +109,9 @@ function sizesOf(p: Product): string[] {
 const BRAND_LIST = [
   // Clothing brands first...
   "Carhartt", "Cole Harbour", "Flexfit", "FootJoy", "Gildan",
-  "Under Armour", "Wilson", "Yeti",
+  "Under Armour", "Yeti",
   // ...then non-clothing brands (bags, golf, towels, tech, headwear), Cap America last.
-  "2 Buds", "Nexgen", "Nomad", "Srixon", "Tranzip", "Cap America",
+  "2 Buds", "Nexgen", "Nomad", "Srixon", "Titleist", "Tranzip", "Cap America",
 ];
 // Brand overrides for products whose brand isn't in the display name (identified
 // from the product spec). Everything else is matched by name against BRAND_LIST.
