@@ -5135,7 +5135,9 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .product-modal__actions {
   display: flex;
   gap: 0.5rem;
-  margin-top: 1rem;
+  /* Nudge the Add-to-Cart button down a few px on desktop so the gap above it
+     visually matches the airier gap under the small colour swatch. */
+  margin-top: 1.25rem;
 }
 .product-modal__add {
   display: inline-flex;
