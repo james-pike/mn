@@ -30,6 +30,7 @@ async function fetchAndWrite() {
     "MN-12": { name: "Women's FootJoy Speckle Print Polo", category: "Polos" },
     "MN-15": { category: "Polos" },   // Men's Under Armour Tech Polo
     "MN-16": { category: "Polos" },   // Women's Under Armour Tech Polo
+    "MN-32": { category: "Polos" },   // Men's Travis Mathew Heater Polo
     "MN-13": { sizes: "25 oz" },        // Yeti Rambler: only the 25oz size
     "MN-14": { sizes: "35L" },          // Yeti Tundra Cooler: only the 35L size
     "MN-17": { name: "Insulated Two Compartment Cooler" },
@@ -82,6 +83,7 @@ const colorNames: Record<string, Record<string, string>> = {
   "#94a3b8": { en: "Silver", fr: "Argent" },
   "#4a4a4a": { en: "Charcoal", fr: "Charbon" },
   "#6b8bb0": { en: "Solace Blue", fr: "Bleu Solace" },
+  "#517fa4": { en: "Copen Blue", fr: "Bleu Copen" }, // Travis Mathew Heater Polo (MN-32)
   "#7dd3fc": { en: "Light Blue", fr: "Bleu clair" },
   "#b8b8b8": { en: "Grey Heather", fr: "Gris chiné" },
   "#6b3fa0": { en: "Purple", fr: "Violet" },

@@ -234,6 +234,26 @@ export const allProducts = [
     "details": "Moisture-wicking, anti-microbial, double-stitched seams, lock-stitched hem, extended back shirt tail, machine washable, FootJoy, #96324"
   },
   {
+    "sku": "MN-32",
+    "name": "Men's Travis Mathew Heater Polo",
+    "category": "Polos",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#ffffff",
+      "#2c3e50",
+      "#517fa4"
+    ],
+    "price": 110,
+    "img": "/heater.webp",
+    "imgs": [
+      "/heater.webp"
+    ],
+    "material": "67% Polyester / 23% Cotton / 7% Elastane / 3% Polyester Blend",
+    "details": "4-Way Stretch, Breathable, Easy Wash & Wear, Modern Fit, Versatile Performance Fabric, Signature Double-Needle Collar"
+  },
+  {
     "sku": "MN-1",
     "name": "Carhartt Rigby Dungaree Pants - Navy",
     "category": "Pants",
@@ -665,6 +685,7 @@ const colorNames: Record<string, Record<string, string>> = {
   "#94a3b8": { en: "Silver", fr: "Argent" },
   "#4a4a4a": { en: "Charcoal", fr: "Charbon" },
   "#6b8bb0": { en: "Solace Blue", fr: "Bleu Solace" },
+  "#517fa4": { en: "Copen Blue", fr: "Bleu Copen" }, // Travis Mathew Heater Polo (MN-32)
   "#7dd3fc": { en: "Light Blue", fr: "Bleu clair" },
   "#b8b8b8": { en: "Grey Heather", fr: "Gris chiné" },
   "#6b3fa0": { en: "Purple", fr: "Violet" },
