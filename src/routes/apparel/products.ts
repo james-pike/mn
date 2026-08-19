@@ -254,6 +254,25 @@ export const allProducts = [
     "details": "4-Way Stretch, Breathable, Easy Wash & Wear, Modern Fit, Versatile Performance Fabric, Signature Double-Needle Collar"
   },
   {
+    "sku": "MN-33",
+    "name": "Men's Travis Mathew Heater Jersey Polo",
+    "category": "Polos",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#c0392b",
+      "#ffffff"
+    ],
+    "price": 110,
+    "img": "/heater-jersey.webp",
+    "imgs": [
+      "/heater-jersey.webp"
+    ],
+    "material": "63% Polyester / 34% Cotton / 3% Elastane, Imported",
+    "details": "Signature double-needle collar, Contrast interior collar, Printed logo on the back yoke, Fold over placket"
+  },
+  {
     "sku": "MN-1",
     "name": "Carhartt Rigby Dungaree Pants - Navy",
     "category": "Pants",
