@@ -3585,6 +3585,46 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   font-size: 0.82rem; font-weight: 600; text-align: center;
 }
 
+/* ═══ Zoom-stable sign-in pane (desktop) ═════════════════════════════════════
+   The split pane is viewport-locked (its size follows 100vh @ 16:9), so it holds
+   the SAME fraction of the window at any browser-zoom level. The base lockup/form
+   rules above size their contents in vw bounded by px/rem clamp()s — and those
+   px/rem floors/ceilings drift against the viewport-locked pane as you zoom, so
+   the logo, wordmark, and fields end up too big or too small relative to the pane.
+
+   Here the pane is made a container and every child is sized in cqw (% of the
+   pane's own width) with NO px/rem anchors — so the mark, the three wordmark
+   lines, the hint, and the whole form stay a fixed proportion of the pane at
+   every zoom level. Desktop-only: the cqw units resolve against this container,
+   which only exists at >=1025px (tablet/mobile keep their own sizing). */
+@media (min-width: 1025px) {
+  .login-modal--split .login-modal__form-pane { container-type: inline-size; }
+
+  /* Card edge inset in cqw too, so the content column stays pinned to the pane. */
+  .login-modal--split .login-card { padding: 4.4cqw 4.4cqw; }
+
+  .login-modal--split .login-card__brand.brand-cluster {
+    gap: 9cqw !important;
+    margin: 0 auto 5.4cqw;
+  }
+  .login-modal--split .login-card__brand .brand-cluster__mark { width: 34cqw; height: 34cqw; }
+  .login-modal--split .login-card__brand .brand-cluster__words { gap: 0.8cqw; }
+  .login-modal--split .login-card__brand .brand-cluster__word { font-size: 8cqw; }
+
+  .login-modal--split .login-card__hint {
+    padding-inline: 2.8cqw;
+    margin-bottom: 0.75cqw;
+    font-size: 2.7cqw;
+  }
+
+  .login-modal--split .login-modal__form { gap: 2.9cqw; padding: 4.4cqw 2.8cqw 0; }
+  .login-modal--split .login-modal__field { gap: 1.5cqw; }
+  .login-modal--split .login-modal__field label { font-size: 1.94cqw; }
+  .login-modal--split .login-modal__field input { padding: 2.9cqw 3.1cqw; font-size: 2.94cqw; }
+  .login-modal--split .login-modal__submit.btn { padding: 2.9cqw 4cqw; margin-top: 1.6cqw; font-size: 2.9cqw; }
+  .login-modal--split .login-modal__error { padding: 1.85cqw 2.6cqw; font-size: 2.4cqw; }
+}
+
 
 /* ===== CTA Section ===== */
 .cta-section {
