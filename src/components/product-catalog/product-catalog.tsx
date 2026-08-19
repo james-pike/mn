@@ -32,6 +32,11 @@ const isSafetyProduct = (sku: string) =>
 
 // Colors hidden from catalog-card swatches (still visible on product detail page).
 const CARD_HIDDEN_COLORS = new Set(["#c0392b", "#1e40af", "#6b3fa0"]);
+// SKUs exempt from CARD_HIDDEN_COLORS: products where a normally-decluttered
+// accent colour (e.g. red) is a first-class option and must show on the card.
+// MN-33 offers Black / Red / White, so its red swatch stays.
+const CARD_SHOW_ALL_COLORS = new Set(["MN-33"]);
+const EMPTY_COLOR_SET = new Set<string>();
 
 const CATEGORY_ICONS: Record<string, string> = {
   "All": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
@@ -175,8 +180,12 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
   const isTech = loginType.value === "tech";
   const eager = index < EAGER_CARDS;
 
+  // Effective hidden-colour set for THIS product — empty when the SKU is exempt
+  // (so all its colours render), otherwise the global declutter set.
+  const hiddenColors = CARD_SHOW_ALL_COLORS.has(sku) ? EMPTY_COLOR_SET : CARD_HIDDEN_COLORS;
+
   const allColors = item.colors || [];
-  const shownColors = allColors.filter((c) => !CARD_HIDDEN_COLORS.has(c));
+  const shownColors = allColors.filter((c) => !hiddenColors.has(c));
   const visibleColors = sortColorsWhiteLast(shownColors.length ? shownColors : allColors);
   const singleColorName =
     visibleColors.length === 1
@@ -242,7 +251,7 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
           <div class="product-card__color-size-row">
             {(() => {
               const all = item.colors || [];
-              const shown = all.filter((c) => !CARD_HIDDEN_COLORS.has(c));
+              const shown = all.filter((c) => !hiddenColors.has(c));
               // If every colour got hidden (e.g. a single-colour product whose one
               // colour is in the declutter list, like the Royal-blue notebook),
               // fall back to the product's own colours so its swatch still shows.
@@ -286,7 +295,7 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
                 empty and swatches would be lost against the small thumbnail. */}
             {(() => {
               const all = item.colors || [];
-              const shown = all.filter((c) => !CARD_HIDDEN_COLORS.has(c));
+              const shown = all.filter((c) => !hiddenColors.has(c));
               const visible = sortColorsWhiteLast(shown.length ? shown : all);
               if (!visible.length) return null;
               // List up to 4 colour names; if there are more, a ", +N" indicator
