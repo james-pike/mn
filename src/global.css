@@ -2,12 +2,12 @@
 :root {
   /* Accent blue = the header sign blue (was a brighter #2563eb). All blue accents
      — prices, links, active states, selected borders — track the header now. */
-  --ce-green: #416f8d;
-  --ce-green-dark: #32556c;
-  --ce-green-light: #5f8ca8;
+  --ce-green: #647d8b;
+  --ce-green-dark: #4c626d;
+  --ce-green-light: #86a0ac;
   --ce-orange: #E6570C;
   --ce-orange-light: #F27D13;
-  --ce-gold: #31759c;
+  --ce-gold: #557488;
 
   --ce-white: #ffffff;
   /* Product image panel. Images multiply onto this, so their baked-in white
@@ -16,6 +16,14 @@
   /* Shared light blue-gray panel tint — the sidebar shade, reused on the card
      info strips, product info panel, cart, checkout and menu drawers. */
   --mn-panel: rgba(70, 137, 179, 0.1);
+  /* The single control for every SECONDARY bar (category tab strip, breadcrumb,
+     cart table head, cart back bar, menu-drawer header). Set to the sidebar /
+     product-card panel colour so the bars read as the same light blue-gray. */
+  --mn-bar-bg: #e0e3e6;
+  /* A touch darker than --mn-bar-bg: the subtle "highlight" fill for selected /
+     control chips on the light secondary bars (active tab, breadcrumb category,
+     Catalog toggle) — a gentle gray highlight, NOT the dark silver-blue. */
+  --mn-bar-hi: #cfd5d9;
   /* Single hairline-border token for card/panel/input edges — replaces the
      scattered rgba(0,0,0,0.08)/0.12/0.15 + 1px/1.5px mix so every thin edge
      reads identically. (The card DROP-SHADOW ring uses 0.14 and stays separate.)
@@ -319,8 +327,8 @@ img { max-width: 100%; display: block; }
 }
 .site-header--hero-visible .cart-btn,
 .site-header--hero-visible .cart-btn.cart-btn--active {
-  background: #31759c !important;
-  border-color: #31759c !important;
+  background: #557488 !important;
+  border-color: #557488 !important;
   color: #ffffff !important;
   border-radius: 4px !important;
   box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important;
@@ -2750,7 +2758,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 
 /* Teaser card color rotation: green, gold, orange */
-.teaser-card { --tc-bg: rgba(255,255,255,0.1); --tc-text: #fff; --tc-tag-bg: rgba(49,117,156,0.15); --tc-tag-border: rgba(49,117,156,0.3); --tc-tag-color: #31759c; --tc-btn-bg: #31759c; --tc-btn-color: #fff; --tc-dot-color: rgba(255,255,255,0.4); --tc-glow: #31759c; }
+.teaser-card { --tc-bg: rgba(255,255,255,0.1); --tc-text: #fff; --tc-tag-bg: rgba(49,117,156,0.15); --tc-tag-border: rgba(49,117,156,0.3); --tc-tag-color: #557488; --tc-btn-bg: #557488; --tc-btn-color: #fff; --tc-dot-color: rgba(255,255,255,0.4); --tc-glow: #557488; }
 
 .teaser-card {
   background: var(--tc-bg);
@@ -3272,12 +3280,34 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 /* ===== Login Modal ===== */
 .login-overlay {
   position: fixed; inset: 0; z-index: 200;
-  background: rgba(26,26,24,0.85);
-  backdrop-filter: blur(20px);
+  /* Light greige backdrop (not black) so the margins around the site-width login
+     frame match the site's own light surround and the hand-off on login stays
+     seamless rather than a harsh black-to-white flash. */
+  background: rgba(240, 240, 238, 0.96);
+  backdrop-filter: blur(8px);
   display: flex; align-items: center; justify-content: center;
-  padding: 1rem;
+  padding: clamp(12px, 4vh, 40px) 0;
   animation: fadeIn 0.2s ease;
   transition: opacity 0.8s ease, backdrop-filter 0.8s ease;
+}
+/* Faint dot texture in the surround around the login frame — densest at the
+   viewport edges, masked to fade toward the centre so it reads only as texture. */
+.login-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.06) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+  -webkit-mask-image:
+    linear-gradient(to right, #000 0%, rgba(0,0,0,0.25) 7%, transparent 16%, transparent 84%, rgba(0,0,0,0.25) 93%, #000 100%),
+    linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.25) 9%, transparent 20%, transparent 80%, rgba(0,0,0,0.25) 91%, #000 100%);
+  -webkit-mask-composite: source-over;
+  mask-image:
+    linear-gradient(to right, #000 0%, rgba(0,0,0,0.25) 7%, transparent 16%, transparent 84%, rgba(0,0,0,0.25) 93%, #000 100%),
+    linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.25) 9%, transparent 20%, transparent 80%, rgba(0,0,0,0.25) 91%, #000 100%);
+  mask-composite: add;
 }
 .login-overlay--fading {
   opacity: 0;
@@ -3290,121 +3320,269 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(24px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-/* The login window reads as the same weathered sign as the rest of the site:
-   an orange iron-textured header bar (the header/tab-bar surface) over a greige
-   card body, wrapped in the white sign-edge ring. */
-.login-modal {
-  background: var(--ce-greige);
-  border-radius: 14px;
-  padding: 0;
-  overflow: hidden;
-  width: 100%; max-width: 384px;
+/* ═══ Split login (matches the sg project) ══════════════════════════════════
+   Sign-in on the LEFT third over a dark steel pane; a cross-fading carousel of
+   the two Modern Niagara hero slides fills the RIGHT two-thirds. Capped to the
+   site's max-width and framed in a white sign-edge ring; fills the viewport at a
+   true 16:9 on desktop. Tablet/mobile drops to a full-bleed photo with the
+   sign-in floating over a scrim. */
+.login-modal.login-modal--split {
   position: relative;
-  animation: slideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow:
-    0 0 0 4px transparent,
-    0 0 0 5px var(--wt-ring-edge),
-    0 24px 64px rgba(0, 0, 0, 0.4);
+  z-index: 1;                     /* above the .login-overlay::before dot texture */
+  margin: 0 auto;
+  width: 100%;
+  max-width: var(--site-max);
+  height: min(90vh, 880px);
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  border: 4px solid #fff;
+  border-radius: 0;
+  background: #0c1922;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* Desktop: fill the viewport height at a true 16:9 (width follows), capped to
+   100vw so it never overflows on tall/narrow monitors. */
+@media (min-width: 1025px) {
+  .login-overlay { padding: 0; }
+  .login-modal.login-modal--split {
+    width: auto;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    aspect-ratio: 16 / 9;
+  }
+}
+.login-modal--split .login-modal__form-pane {
+  flex: 0 0 34%;
+  max-width: 34%;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  background: linear-gradient(180deg, #12232e 0%, #0b161e 100%);
+}
+/* Subtle dot texture over the steel pane (the tm login treatment) — a fine white
+   dot grid, masked to fade toward the centre so it reads only as faint texture at
+   the edges. Sits under the sign-in content (which is lifted to z-index 1). */
+.login-modal--split .login-modal__form-pane::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1.5px);
+  background-size: 14px 14px;
+  -webkit-mask-image:
+    linear-gradient(to right, #000 0%, rgba(0,0,0,0.35) 14%, transparent 42%, transparent 58%, rgba(0,0,0,0.35) 86%, #000 100%),
+    linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.35) 12%, transparent 40%, transparent 60%, rgba(0,0,0,0.35) 88%, #000 100%);
+  -webkit-mask-composite: source-over;
+  mask-image:
+    linear-gradient(to right, #000 0%, rgba(0,0,0,0.35) 14%, transparent 42%, transparent 58%, rgba(0,0,0,0.35) 86%, #000 100%),
+    linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.35) 12%, transparent 40%, transparent 60%, rgba(0,0,0,0.35) 88%, #000 100%);
+  mask-composite: add;
+}
+.login-modal--split .login-card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;   /* above the pane's dot texture */
+  display: flex;
+  flex-direction: column;
+  /* Centre the brand + hint + form as one connected group in the full-height pane. */
+  justify-content: center;
+  padding: clamp(1.5rem, 4vh, 2.75rem) clamp(1rem, 1.75vw, 1.5rem);
+  color: #eef4f8;
+}
+/* Carousel pane — the two MN hero photos cross-fading on the right. */
+.login-modal__carousel {
+  flex: 1 1 66%;
+  position: relative;
+  overflow: hidden;
+  background: #0c1922;
+  cursor: default;   /* clickable to advance, but keep the normal cursor */
+}
+.login-modal__slide {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.login-modal__slide.is-active { opacity: 1; }
+.login-modal__dots {
+  position: absolute; bottom: clamp(1.25rem, 3.2vh, 2rem); right: clamp(1.35rem, 2.3vw, 2.1rem); left: auto;
+  display: flex; justify-content: flex-end; gap: 9px; z-index: 2;
+}
+/* Squares by default; the SELECTED one rotates to a diamond — echoing the
+   angular MN pinwheel mark. Rendered as reset <button>s so each dot jumps
+   straight to its slide. */
+.login-modal__dot {
+  width: 11px; height: 11px; padding: 0; border: none; border-radius: 1px;
+  background: rgba(255, 255, 255, 0.32);
+  cursor: pointer;
+  transform: rotate(0deg);
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.login-modal__dot:hover { background: rgba(255, 255, 255, 0.6); }
+.login-modal__dot.is-active { background: #fff; transform: rotate(45deg) scale(1.15); }
+
+/* ═══ Tablet + mobile (<=1024): STACKED ═══════════════════════════════════════
+   The desktop side-by-side split restacks vertically — the hero carousel becomes
+   a band across the TOP, the steel sign-in pane fills the rest below — so it
+   carries the same design language (steel pane, dot texture, diamond dots, the
+   stacked MN lockup). Tablet keeps a centred, framed card; mobile goes full-bleed. */
+/* ═══ Tablet + mobile (<=1024): SOLID STEEL, NO CAROUSEL ══════════════════════
+   Full-screen steel sign-in (no photo) on both tablet and mobile — the lockup
+   over the steel pane, the form below, everything in the first 100dvh, no scroll.
+   Tablet keeps a centred content column; mobile fills the full viewport width. */
+@media (max-width: 1024px) {
+  .login-overlay { padding: 0; }
+  .login-overlay::before { display: none; }
+  .login-modal.login-modal--split {
+    flex-direction: column;
+    aspect-ratio: auto;                 /* the 16:9 lock is desktop-only */
+    width: 100%; max-width: none;
+    height: 100dvh; max-height: none;
+    margin: 0; border: none; box-shadow: none;
+    overflow: hidden;
+  }
+  .login-modal__carousel { display: none; }   /* no carousel on tablet or mobile */
+  .login-modal__dots { display: none; }
+  .login-modal--split .login-modal__form-pane {
+    flex: 1 1 auto;
+    width: 100%; max-width: 100%;
+  }
+  .login-modal--split .login-card {
+    justify-content: center;
+    /* Centred content column so the lockup + fields share one tidy width on the
+       wide tablet pane. Inert on mobile (viewport already narrower than the cap). */
+    max-width: 620px;
+    margin-inline: auto;
+    padding: clamp(1.3rem, 4.5vw, 2.2rem) clamp(1.3rem, 5vw, 2.3rem);
+  }
+  /* Lockup fills the centred content column (matching the fields), inset to the
+     same edge as the form. The .login-modal--split prefix boosts specificity so
+     these beat the desktop base rules declared LATER in this file. (Mobile
+     overrides the sizing again for its own full-bleed vw fill.) */
+  .login-modal--split .login-card__brand.brand-cluster { gap: clamp(1.7rem, 4vw, 3rem) !important; margin-bottom: 2.3rem; padding-inline: clamp(0.55rem, 1vw, 0.95rem); }
+  .login-modal--split .login-card__brand .brand-cluster__mark { width: 148px; height: 148px; }
+  /* Fixed — the content column is capped at 620px on tablet, so a fixed size
+     fills it consistently (a vw would drift while the column stays put). */
+  .login-modal--split .login-card__brand .brand-cluster__word { font-size: 2.9rem; }
+  .login-modal--split .login-card__hint { font-size: 0.86rem; margin-bottom: 0.15rem; }
+  .login-modal--split .login-modal__form { padding-top: 1rem; gap: 0.75rem; }
+  .login-modal--split .login-modal__field input { padding: 13px 15px; }
+  .login-modal--split .login-modal__submit.btn { padding: 14px 20px; }
+}
+
+/* Mobile: the lockup fills the full viewport width (matching the mobile hero
+   cover sizing); everything still fits the first 100dvh, no scroll. */
+@media (max-width: 600px) {
+  .login-modal--split .login-card__brand.brand-cluster { gap: 9.5vw !important; margin-bottom: 2.5rem; padding-inline: clamp(0.55rem, 1vw, 0.95rem); }
+  .login-modal--split .login-card__brand .brand-cluster__mark { width: 30vw; height: 30vw; }
+  .login-modal--split .login-card__brand .brand-cluster__words { gap: 0.2rem; }
+  .login-modal--split .login-card__brand .brand-cluster__word { font-size: 8.25vw; }
+  .login-modal--split .login-card__brand .brand-cluster__word--sub { letter-spacing: -0.02em; }
 }
 
 .login-modal__close {
   position: absolute; top: 0.85rem; right: 0.85rem; z-index: 3;
   width: 30px; height: 30px;
   display: flex; align-items: center; justify-content: center;
-  border: none; background: rgba(255, 255, 255, 0.16); border-radius: 50%;
+  border: none; background: rgba(255, 255, 255, 0.16); border-radius: 2px;
   font-size: 1.15rem; color: #fff;
   cursor: pointer; transition: background var(--transition-fast);
 }
 .login-modal__close:hover { background: rgba(255, 255, 255, 0.3); color: #fff; }
 
-/* Orange textured sign bar across the top, with the wordmark + subtitle in
-   white and the pressed-edge shading + white divider the other bars carry. */
-.login-modal__header {
-  text-align: center;
-  margin: 0;
-  padding: 1.6rem 1.5rem 1.7rem;
-  position: relative;
-  overflow: hidden;
-  background:
-    linear-gradient(var(--wt-box), var(--wt-box)),
-    var(--wt-orange);
-  /* Softer bottom seam between the blue header and the white body (was a heavy
-     -9px inset shadow). */
-  box-shadow:
-    inset 0 -3px 0 transparent,
-    inset 0 -5px 7px -6px rgba(10, 25, 55, 0.28),
-    inset 0 0 18px rgba(10, 25, 55, 0.4);
+/* MN brand lockup at the top of the sign-in pane — lifted onto the dark pane
+   with light word colors (the default gray-700 is invisible here). */
+/* Two-class selector (.login-card__brand.brand-cluster) so it out-specifies the
+   base .brand-cluster row lockup defined later in the file. */
+.login-card__brand.brand-cluster {
+  /* Stack the mark ABOVE the wordmark and centre the whole lockup in the pane.
+     Sized in vw so it scales with the column (~full width) across desktop sizes. */
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start;
+  gap: clamp(1.75rem, 3.45vw, 3.1rem) !important;
+  margin: 0 auto 1.85rem;
+  animation: fadeIn 0.45s ease;
 }
-/* Fine white dot texture across the whole blue top, FADED toward the centre —
-   noticeable at the sides, soft in the middle (mask). */
-.login-modal__header::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.14) 1px, transparent 1.6px) 0 0 / 13px 13px;
-  -webkit-mask-image: linear-gradient(to right, #000 0%, rgba(0,0,0,0.12) 40%, transparent 50%, rgba(0,0,0,0.12) 60%, #000 100%);
-  mask-image: linear-gradient(to right, #000 0%, rgba(0,0,0,0.12) 40%, transparent 50%, rgba(0,0,0,0.12) 60%, #000 100%);
-  pointer-events: none;
+.login-card__brand .brand-cluster__mark { width: clamp(120px, 11.5vw, 185px); height: clamp(120px, 11.5vw, 185px); }
+/* Text lines share a common LEFT edge (MODERN / BUILDING / APPAREL all flush
+   left, as in the original lockup); the words block as a whole is still centred
+   in the column by the parent's align-items: center. */
+.login-card__brand .brand-cluster__words { align-items: flex-start; text-align: left; gap: 4px; }
+/* All three lines share ONE font-size (sized so the longest line, BUILDING
+   SERVICES, still fits the pane); the base weights (700 / 600 / 500) keep the
+   visual hierarchy without changing height. */
+.login-card__brand .brand-cluster__word {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: clamp(1.6rem, 2.82vw, 2.72rem);
+  white-space: nowrap;
 }
-.login-modal__header > * { position: relative; }
-.login-modal__logo { height: 42px; width: auto; margin: 0 auto; }
-.login-modal__title {
-  font-size: 1.25rem; font-weight: 800;
-  color: #fff; letter-spacing: -0.02em; margin-bottom: 0.3rem;
-}
-.login-modal__subtitle {
-  font-size: 0.82rem; color: rgba(255, 255, 255, 0.9);
-  padding-top: 0.7rem; margin: 0; letter-spacing: 0.02em;
-  text-shadow: 0 1px 1px rgba(10, 25, 55, 0.4);
+.login-card__brand .brand-cluster__word--sub { color: rgba(224, 236, 244, 0.62); letter-spacing: -0.01em; }
+.login-card__brand .brand-cluster__word--muted { color: rgba(255, 255, 255, 0.92); opacity: 1; }
+.login-card__hint {
+  margin: 0 0 0.4rem;
+  /* Small horizontal inset so the hint + form line up under the centred wordmark
+     block (which sits slightly in from the card edges). Shared with the form. */
+  padding-inline: clamp(0.55rem, 1vw, 0.95rem);
+  max-width: 34ch;
+  font-size: 0.92rem; line-height: 1.5;
+  color: rgba(224, 236, 244, 0.72);
 }
 
-.login-modal__form { display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem 1.75rem 1.85rem; }
-.login-modal__field { display: flex; flex-direction: column; gap: var(--wt-gap); }
+/* Sits beneath the brand + hint; the whole group is centred by the card. */
+.login-modal__form { display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem clamp(0.55rem, 1vw, 0.95rem) 0; }
+.login-modal__field { display: flex; flex-direction: column; gap: 0.5rem; }
 .login-modal__field label {
-  font-size: 0.7rem; font-weight: 700; color: var(--ce-gray-700);
-  text-transform: uppercase; letter-spacing: 0.05em;
+  font-size: 0.66rem; font-weight: 800; color: rgba(224, 236, 244, 0.82);
+  text-transform: uppercase; letter-spacing: 0.14em;
 }
 .login-modal__field input {
-  padding: 12px 14px; border-radius: 8px;
-  border: 1.5px solid var(--ce-gray-200); font-size: 16px;
-  font-family: var(--font-sans); color: var(--ce-gray-900);
-  transition: all var(--transition-fast); outline: none; background: var(--ce-white);
+  padding: 16px 17px; border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.22); font-size: 16px;
+  font-family: var(--font-sans); color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+  outline: none;
 }
 .login-modal__field input:focus {
-  border-color: var(--wt-orange);
-  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
-  background: var(--ce-white);
+  border-color: var(--ce-green);
+  background: rgba(255, 255, 255, 0.13);
+  box-shadow: 0 0 0 3px rgba(65, 111, 141, 0.32);
 }
-.login-modal__field input::placeholder { color: var(--ce-gray-300); }
+.login-modal__field input::placeholder { color: rgba(224, 236, 244, 0.45); }
 
-/* Submit: the orange textured sign button (same treatment as Place Order). */
+/* Submit — the Modern Niagara steel-blue CTA. */
 .login-modal__submit.btn {
-  width: 100%; justify-content: center; margin-top: 0.4rem;
-  padding: 13px 20px;
-  background: linear-gradient(var(--wt-box), var(--wt-box)), var(--wt-orange);
-  color: #fff; border: 1px solid rgba(10, 25, 55, 0.45); border-radius: 3px;
-  font-weight: 600; letter-spacing: 0.02em;
-  text-shadow: 0 1px 1px rgba(10, 25, 55, 0.45);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.30),
-    inset 0 -1px 0 rgba(10, 25, 55, 0.35),
-    inset 0 0 10px rgba(10, 25, 55, 0.30),
-    0 2px 3px rgba(0, 0, 0, 0.28);
+  width: 100%; justify-content: center; margin-top: 0.55rem;
+  padding: 16px 22px; border: none; border-radius: 2px;
+  background: var(--ce-green); color: #fff;
+  font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.98rem;
+  text-shadow: none;
+  box-shadow: 0 8px 22px rgba(50, 85, 108, 0.35);
   transition: background var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
 }
 .login-modal__submit.btn:hover {
-  background: var(--wt-orange); color: #fff;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.40),
-    inset 0 0 10px rgba(10, 25, 55, 0.18),
-    0 2px 5px rgba(0, 0, 0, 0.30);
+  background: var(--ce-green-light); color: #fff;
+  box-shadow: 0 10px 28px rgba(50, 85, 108, 0.5);
 }
 .login-modal__submit.btn:active { transform: translateY(1px); }
+.login-modal__submit.btn:disabled {
+  background: rgba(255, 255, 255, 0.16); color: rgba(255, 255, 255, 0.5);
+  box-shadow: none; cursor: not-allowed;
+}
 
 .login-modal__error {
-  background: #eff6ff; border: 1px solid var(--wt-orange); color: #1e40af;
-  padding: 10px 14px; border-radius: 8px;
-  font-size: 0.82rem; font-weight: 500; text-align: center;
+  background: rgba(220, 76, 70, 0.16); border: 1px solid rgba(240, 120, 110, 0.55); color: #ffdbd6;
+  padding: 10px 14px; border-radius: 2px;
+  font-size: 0.82rem; font-weight: 600; text-align: center;
 }
 
 
@@ -4137,7 +4315,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   background: #4689b3 !important;
   color: #ffffff !important;
 }
-.hero-card-header__btn--to-fr:hover { background: #31759c !important; color: #ffffff !important; }
+.hero-card-header__btn--to-fr:hover { background: #557488 !important; color: #ffffff !important; }
 .hero-card-header__btn--to-en {
   background: #d43950 !important;
   color: #ffffff !important;
@@ -4322,8 +4500,8 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 @media (hover: hover) { .cart-btn:hover { border-color: var(--ce-gold); background: #eaf3fa; color: #1e4a66; } .cart-btn:hover svg { stroke: #1e4a66; } }
 .cart-btn svg { stroke: var(--ce-gray-700); width: 17px; height: 17px; }
 .cart-btn--active {
-  border-color: #31759c;
-  background: #31759c;
+  border-color: #557488;
+  background: #557488;
   color: #ffffff;
   box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08);
 }
@@ -5315,10 +5493,10 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 }
 
 /* Add to Cart — filled in the lighter secondary-bar blue (#84acc7). Hover/tap
-   only nudges a touch deeper (not the old dark #31759c theme, which read "too
+   only nudges a touch deeper (not the old dark #557488 theme, which read "too
    blue" when the :hover state stuck on a mobile tap). */
 .product-modal__add.btn--primary {
-  background: #416f8d;
+  background: #647d8b;
   color: var(--ce-white);
   border: none;
   box-shadow: 0 6px 22px rgba(65,111,141,0.34);
@@ -5342,11 +5520,11 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
   color: var(--ce-white);
 }
 /* Order Now — ghost button edged in the logo's darker-blue triangle
-   colour (#31759c). Fills with the warm gold triangle on hover so the
+   colour (#557488). Fills with the warm gold triangle on hover so the
    two buttons echo opposite corners of the pinwheel. */
 .product-modal__add.btn--secondary {
   background: var(--ce-white);
-  border: 1.5px solid #31759c;
+  border: 1.5px solid #557488;
   color: #1e4a66;
   box-shadow: 0 4px 16px rgba(49,117,156,0.14);
 }
@@ -6392,7 +6570,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .logout-form { display: none; }
   .hero-card-header__btn--logout { display: none; }
   .cart-btn svg { width: 22px; height: 22px; }
-  .cart-btn--active { background: #31759c !important; border-color: #31759c !important; color: #ffffff !important; box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important; }
+  .cart-btn--active { background: #557488 !important; border-color: #557488 !important; color: #ffffff !important; box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important; }
   .cart-btn--active svg { stroke: #ffffff !important; }
   .cart-btn--active .cart-btn__label { color: #ffffff !important; }
   .site-header__nav a { font-size: 0.75rem; }
@@ -6580,7 +6758,7 @@ details[open] > .cart-drawer__checkout-title::after {
     text-decoration: none;
     padding: 4px 8px;
   }
-  .hero-card-header__nav-link:hover { color: #31759c; }
+  .hero-card-header__nav-link:hover { color: #557488; }
   .hero-card-header__nav-link.active { color: #4689b3; }
   .hero-card-header__brand { display: none !important; }
   .hero-card-header__actions .hero-card-header__btn:last-child { display: none !important; }
@@ -6814,11 +6992,11 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header--hero-hidden.site-header--hero-visible .site-header__logo-apparel { color: var(--ce-gray-400); }
   .site-header--hero-hidden.site-header--hero-visible .locale-btn { color: var(--ce-gray-700); background: rgba(0,0,0,0.03); border: 1px solid var(--ce-gray-200); border-radius: var(--ce-btn-radius); }
   .site-header--hero-hidden.site-header--hero-visible .locale-btn:hover { color: var(--ce-gray-700); background: rgba(0,0,0,0.03); border-color: var(--ce-gray-200); }
-  .site-header--hero-hidden.site-header--hero-visible .cart-btn { background: #31759c; border: 1px solid #31759c; border-radius: var(--ce-btn-radius); color: #ffffff; }
+  .site-header--hero-hidden.site-header--hero-visible .cart-btn { background: #557488; border: 1px solid #557488; border-radius: var(--ce-btn-radius); color: #ffffff; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn:hover { color: #ffffff; background: #265f80; border-color: #265f80; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn svg { stroke: #ffffff; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn:hover svg { stroke: #ffffff; }
-  .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active { background: #31759c; border-color: #31759c; color: #ffffff; }
+  .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active { background: #557488; border-color: #557488; color: #ffffff; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active:hover { background: #265f80; border-color: #265f80; color: #ffffff; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active svg { stroke: #ffffff; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active:hover svg { stroke: #ffffff; }
@@ -7204,7 +7382,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .hero-card-header__nav { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; margin-right: 0.5rem; }
   .hero-card-header__nav-link { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; color: rgba(255,255,255,0.7); text-decoration: none; padding: 4px 8px; }
   .hero-card-header__nav-link:hover { color: #4689b3; }
-  .hero-card-header__nav-link.active { color: #31759c; }
+  .hero-card-header__nav-link.active { color: #557488; }
   .hero-card-header__actions .hero-card-header__btn:last-child { display: none; }
 
   /* Hero carousel — shorter on tablet so it doesn't dominate */
@@ -7479,8 +7657,8 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header.site-header--hero-visible .cart-btn,
   .site-header:not(.site-header--hero-hidden) .cart-btn.cart-btn--active,
   .site-header.site-header--hero-visible .cart-btn.cart-btn--active {
-    background: #31759c !important;
-    border-color: #31759c !important;
+    background: #557488 !important;
+    border-color: #557488 !important;
     color: #ffffff !important;
     border-radius: 0 !important;
     box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important;
@@ -8202,8 +8380,8 @@ details[open] > .cart-drawer__checkout-title::after {
     box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important;
   }
   .hero__upper .hero-card-header__btn--cart:hover {
-    background: #31759c !important;
-    border-color: #31759c !important;
+    background: #557488 !important;
+    border-color: #557488 !important;
     color: #ffffff !important;
   }
   .hero__upper .hero-card-header__btn--cart svg { stroke: #ffffff !important; }
@@ -8875,7 +9053,7 @@ details[open] > .cart-drawer__checkout-title::after {
      ratio (÷1.618) → #3b6581, so the header sits a φ step below the tab bar just
      like the 64/40 height ratio between them. Both blues were lightened + softened
      a step (from #2b556f / #4689b3) so they read gentler against the pale page. */
-  --wt-orange: #416f8d;
+  --wt-orange: #647d8b;
   --wt-orange-dark: #32556c;
   --wt-orange-hi: #dbeafe;
   /* Darker-orange overlay box behind the logo + buttons (willstransfer.com
@@ -11113,7 +11291,7 @@ details[open] > .cart-drawer__checkout-title::after {
    Keeps the Modern Niagara button wholesale: the mark chip, the staggered
    fade-in of the triangles, the square->diamond rotate, the travelling sheen,
    the cart->check crossfade. Only the COLOUR changes.
-   Was: a #31759c -> #4689b3 gradient (brown into MN blue) with the triangles
+   Was: a #557488 -> #4689b3 gradient (brown into MN blue) with the triangles
    staggering through MN's brand reds, greens, blue and yellow — none of which
    appear anywhere else in this app.
    Now: the sign palette. The ramp is one warm family (cream -> orange ->
@@ -11165,7 +11343,7 @@ details[open] > .cart-drawer__checkout-title::after {
    from the same orange rather than the old blue one. Deeper on hover so the
    press still reads on a warm background. */
 .product-modal__add.btn--primary {
-  background: #416f8d;
+  background: #647d8b;
   color: var(--ce-white);
   border: none;
   box-shadow: 0 6px 22px rgba(65, 111, 141, 0.34);
@@ -13251,7 +13429,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
    than the lighter tab-bar blue, so the active tab reads as the header colour.
    Scoped --wt-orange resolves inside the active tab's background gradient (and
    its ::before, which inherits the variable). */
-.home-catalog__tabs .apparel-titlebar__tab.active { --wt-orange: #416f8d; }
+.home-catalog__tabs .apparel-titlebar__tab.active { --wt-orange: #647d8b; }
 
 /* ============================================================
    Desktop: header a golden step TALLER than the secondary bars.
@@ -13370,7 +13548,7 @@ body:has(.nav-drawer-overlay) .site-header__logo {
 /* Header: the darker blue sign (a φ-step below the lighter tab-bar blue) with the
    iron texture + restored pressed/raised depth. Deep bg → white content (below). */
 .site-header__inner {
-  --wt-orange: #416f8d;
+  --wt-orange: #647d8b;
   /* Dots fade toward the centre (a solid-blue overlay peaks at 50% and eases to
      transparent at both ends), so the dot texture reads strongest at the left/
      right edges and clears through the middle. */
@@ -13572,7 +13750,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
     border-bottom: none !important;
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
-    box-shadow: 0 3px 0 0 #416f8d !important;
+    box-shadow: 0 3px 0 0 #647d8b !important;
   }
 }
 
@@ -13653,3 +13831,155 @@ body:has(.cart-drawer) .pdp-breadcrumb {
 .home-catalog__sidebar-search {
   background: linear-gradient(var(--wt-box-strong), var(--wt-box-strong)), var(--wt-orange) !important;
 }
+
+/* ═══ Secondary bars — light blue-gray, dark text ════════════════════════════
+   The five page/chrome secondary bars (category tab strip, product breadcrumb,
+   cart table head, cart back bar, menu-drawer header) drop the silver-blue sign
+   treatment for a light blue-gray (matching the --mn-panel menu-modal panels, a
+   hint of blue) with DARK text. The silver-blue PRIMARY colour is kept only as
+   the active-tab pill. Appended last so it wins the many breakpoint rules above. */
+.home-catalog__header,
+.home-catalog__tabs,
+.pdp-breadcrumb,
+.nav-drawer__header,
+.cart-table thead,
+.cart-table thead tr,
+.cart-drawer__back-btn {
+  background: var(--mn-bar-bg) !important;  /* shorthand also clears the iron texture */
+  box-shadow: none !important;              /* no white seam line under the header */
+  color: var(--ce-gray-700) !important;
+  border-color: var(--ce-gray-200) !important;
+  border-top: none !important;
+}
+/* The breadcrumb's current-category pill matches the active-tab pill: silver-blue
+   (primary) with white text, instead of the old light-blue --wt-orange fill. */
+.pdp-breadcrumb__cat { color: var(--ce-gray-900) !important; }
+.pdp-breadcrumb__cat::before { background: var(--mn-bar-hi) !important; }
+/* Dark labels / icons across all five bars. */
+.home-catalog__tabs .apparel-titlebar__tab,
+.pdp-breadcrumb__back,
+.pdp-breadcrumb__link,
+.pdp-breadcrumb__sku,
+.nav-drawer__header,
+.nav-drawer__header *,
+.cart-table thead th,
+.cart-drawer__back-btn,
+.cart-drawer__back-btn * { color: var(--ce-gray-700) !important; }
+.pdp-breadcrumb svg,
+.nav-drawer__header svg,
+.cart-drawer__back-btn svg { stroke: var(--ce-gray-700) !important; }
+.home-catalog__tabs .apparel-titlebar__tab:hover { background: rgba(0, 0, 0, 0.05) !important; color: var(--ce-gray-900) !important; }
+/* Active tab = a gentle gray HIGHLIGHT with the dark tab text kept (bolded) —
+   not white text, not the dark silver-blue. */
+.home-catalog__tabs .apparel-titlebar__tab.active { color: var(--ce-gray-900) !important; }
+.home-catalog__tabs .apparel-titlebar__tab.active,
+.home-catalog__tabs .apparel-titlebar__tab.active::before {
+  background: var(--mn-bar-hi) !important;
+}
+/* The Catalog / view-mode toggle and the tab-bar search: a touch darker gray than
+   the bar with dark text (a subtle control, not a bold blue chip). */
+.home-catalog__viewmode,
+.home-catalog__sidebar-search {
+  background: var(--mn-bar-hi) !important;
+  color: var(--ce-gray-900) !important;
+  border: 1px solid var(--ce-gray-200) !important;
+  box-shadow: none !important;
+}
+.home-catalog__viewmode svg,
+.home-catalog__sidebar-search svg { stroke: var(--ce-gray-700) !important; color: var(--ce-gray-700) !important; }
+.home-catalog__sidebar-search .apparel-titlebar__search-input { color: var(--ce-gray-900) !important; }
+.home-catalog__sidebar-search .apparel-titlebar__search-input::placeholder { color: var(--ce-gray-500) !important; }
+/* My Cart button follows the SECONDARY-bar colour (light blue-gray, dark text).
+   Uses the :has(.home-catalog) variants + this later position to beat the
+   #84acc7 CTA rule (0,3,1) that would otherwise win. */
+body .site-header .cart-btn,
+body .site-header .cart-btn.cart-btn--active,
+body:has(.home-catalog) .site-header .cart-btn,
+body:has(.home-catalog) .site-header .cart-btn.cart-btn--active {
+  background: #39627c !important;      /* match the FR / logout header buttons */
+  border: none !important;
+  color: #fff !important;
+  /* the same recessed inset ring the FR / logout / search controls carry (My
+     Cart was flat, so its edge read as a faint outline). */
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.16) !important;
+}
+/* All header controls share one hover highlight (like the logout button). */
+body .site-header .locale-btn:hover,
+body .site-header .logout-btn:hover,
+body .site-header .cart-btn:hover,
+body:has(.home-catalog) .site-header .cart-btn:hover,
+body .site-header .site-header__search:hover,
+body .site-header .site-header__search:focus-within {
+  background: #47708c !important;
+  color: #fff !important;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.16) !important;
+}
+body .site-header .locale-btn:hover svg,
+body .site-header .logout-btn:hover svg,
+body .site-header .cart-btn:hover svg,
+body:has(.home-catalog) .site-header .cart-btn:hover svg { stroke: #fff !important; }
+body .site-header .cart-btn svg,
+body:has(.home-catalog) .site-header .cart-btn svg { stroke: #fff !important; }
+body .site-header .cart-btn .cart-btn__label,
+body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !important; }
+body .site-header .cart-btn:hover,
+body:has(.home-catalog) .site-header .cart-btn:hover { background: #47708c !important; color: #fff !important; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.16) !important; }
+body:has(.home-catalog) .site-header .cart-btn:hover svg { stroke: #fff !important; }
+/* My Cart: no white outline (clean fill like a solid header control). */
+body .site-header .cart-btn,
+body:has(.home-catalog) .site-header .cart-btn { border: none !important; }
+
+/* Header search: larger icon + text, and a brighter (whiter) placeholder so it
+   reads clearly on the dark search field. */
+.site-header__search > svg { color: rgba(255, 255, 255, 0.85) !important; width: 20px !important; height: 20px !important; }
+.site-header__search-input { font-size: 1.18rem !important; color: #fff !important; }
+.site-header__search-input::placeholder { color: rgba(255, 255, 255, 0.72) !important; }
+
+/* Breadcrumb links keep DARK text (+ dark icon) on hover — the bar is light now. */
+.pdp-breadcrumb__link:hover,
+.pdp-breadcrumb__back:hover,
+.pdp-breadcrumb__link:hover *,
+.pdp-breadcrumb__back:hover * { color: var(--ce-gray-900) !important; }
+.pdp-breadcrumb__link:hover svg,
+.pdp-breadcrumb__back:hover svg { stroke: var(--ce-gray-900) !important; }
+
+/* The menu / cart-drawer close ("cart") button: no background, like the search + X. */
+.cart-drawer__site-header .cart-btn {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--ce-gray-900) !important;
+}
+.cart-drawer__site-header .cart-btn svg { stroke: var(--ce-gray-900) !important; }
+
+/* Catalog / view-mode toggle: the gray HIGHLIGHT fill + DARK icon on every
+   breakpoint (tablet had kept a light-blue fill with a white icon — it lives on
+   .home-catalog__right / .apparel-titlebar__action--tablet-cols there). */
+body .home-catalog__viewmode,
+body .home-catalog__right,
+body .apparel-titlebar__action--tablet-cols { background: var(--mn-bar-hi) !important; color: var(--ce-gray-900) !important; }
+body .home-catalog__viewmode svg,
+body .home-catalog__right svg,
+body .apparel-titlebar__action--tablet-cols svg { color: var(--ce-gray-700) !important; stroke: var(--ce-gray-700) !important; }
+
+/* Add-to-Cart pinwheel: reveal the triangles ONLY on click (:active / --added),
+   never on hover. */
+@media (hover: hover) {
+  .product-modal__add--branded:hover:not(:active):not(.product-modal__add--added) .product-modal__add-pinwheel polygon { fill: transparent !important; }
+  .product-modal__add--branded:hover:not(:active):not(.product-modal__add--added)::before { opacity: 0 !important; }
+}
+
+/* Remove the thin white seam line under the header (the ::after divider) — it was
+   there to separate the dark blue bars; the light secondary bars don't need it. */
+body:has(.home-catalog__header, .apparel-titlebar, .pdp-breadcrumb) .site-header::after { display: none !important; }
+
+/* Straight top edge on the header (was a 6px rounded top on .site-header__inner). */
+body .site-header__inner { border-top-left-radius: 0 !important; border-top-right-radius: 0 !important; }
+
+/* Remove the white seam STRIPS that framed the bars (top ::before / bottom
+   ::after white lines) — they were for the dark blue bars; the light bars don't
+   need them, and the top strip was the "white line under the header". */
+.home-catalog__header::before,
+.home-catalog__header::after,
+.pdp-breadcrumb::before,
+.pdp-breadcrumb::after { display: none !important; }

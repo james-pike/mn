@@ -513,6 +513,11 @@ export default component$(() => {
 
   const showLogin = useSignal(false);
   const overlayFading = useSignal(false);
+  // Login modal background carousel: cross-fade the two hero slides on the right
+  // pane while the login modal is open (autoplay wired up in a visible task).
+  // Autoplay runs every 6s and only pauses while the sign-in form is focused.
+  const loginHeroIndex = useSignal(0);
+  const loginCarouselPaused = useSignal(false);
   const menuOpen = useSignal(false);
   const savedLocale = useLocaleLoader();
   const locale = useSignal<Locale>(savedLocale.value);
@@ -1026,6 +1031,18 @@ export default component$(() => {
     }
   }, { strategy: 'document-ready' });
 
+  // Login carousel autoplay: cross-fade the two hero slides every 6s while the
+  // login modal is open. Stops (and is torn down) once the modal closes.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track, cleanup }) => {
+    if (!track(() => showLogin.value)) return;
+    const id = setInterval(() => {
+      if (loginCarouselPaused.value) return;
+      loginHeroIndex.value = (loginHeroIndex.value + 1) % 2;
+    }, 6000);
+    cleanup(() => clearInterval(id));
+  });
+
   // Close modal and unlock scroll on successful login
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track, cleanup }) => {
@@ -1069,7 +1086,11 @@ export default component$(() => {
       {/* Login Modal */}
       {showLogin.value && !isPaymentReturn.value && (
         <div class={`login-overlay ${overlayFading.value ? "login-overlay--fading" : ""}`} onClick$={() => { if (auth.value.loggedIn) showLogin.value = false; }}>
-          <div class="login-modal" onClick$={(e) => e.stopPropagation()}>
+          {/* Split login (matches the sg project): sign-in on the left third,
+              a cross-fading carousel of the two MN hero slides on the right.
+              Fills the viewport at a 16:9 frame on desktop; the carousel goes
+              full-bleed behind the sign-in on tablet/mobile. */}
+          <div class="login-modal login-modal--split" onClick$={(e) => e.stopPropagation()}>
             {auth.value.loggedIn && (
               <button
                 class="login-modal__close"
@@ -1079,58 +1100,91 @@ export default component$(() => {
                 &times;
               </button>
             )}
-            <div class="login-modal__header">
-              <div class="login-modal__brand brand-cluster">
-                <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
-                  <polygon points="50,50 100,0 100,50" fill="#ae1f2a" />
-                  <polygon points="50,50 100,50 100,100" fill="#d43950" />
-                  <polygon points="50,50 100,100 50,100" fill="#9ec069" />
-                  <polygon points="50,50 50,100 0,100" fill="#7fa244" />
-                  <polygon points="50,50 0,100 0,50" fill="#4689b3" />
-                  <polygon points="50,50 0,50 0,0" fill="#31759c" />
-                  <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
-                </svg>
-                <div class="brand-cluster__words">
-                  <span class="brand-cluster__word">MODERN NIAGARA</span>
-                  <span class="brand-cluster__word brand-cluster__word--sub">BUILDING SERVICES</span>
-                  <span class="brand-cluster__word brand-cluster__word--muted">{t("logo.apparel", locale.value).toUpperCase()}</span>
+            <div class="login-modal__form-pane">
+              <div class="login-card">
+                <div class="login-card__brand brand-cluster">
+                  <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
+                    <polygon points="50,50 100,0 100,50" fill="#ae1f2a" />
+                    <polygon points="50,50 100,50 100,100" fill="#d43950" />
+                    <polygon points="50,50 100,100 50,100" fill="#9ec069" />
+                    <polygon points="50,50 50,100 0,100" fill="#7fa244" />
+                    <polygon points="50,50 0,100 0,50" fill="#4689b3" />
+                    <polygon points="50,50 0,50 0,0" fill="#31759c" />
+                    <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
+                  </svg>
+                  <div class="brand-cluster__words">
+                    <span class="brand-cluster__word">MODERN NIAGARA</span>
+                    <span class="brand-cluster__word brand-cluster__word--sub">BUILDING SERVICES</span>
+                    <span class="brand-cluster__word brand-cluster__word--muted">{t("logo.apparel", locale.value).toUpperCase()}</span>
+                  </div>
                 </div>
+                <p class="login-card__hint">
+                  {t("login.subtitle", locale.value)}
+                </p>
+                <Form
+                  action={loginAction}
+                  reloadDocument
+                  class="login-modal__form"
+                  onFocusIn$={() => { loginCarouselPaused.value = true; }}
+                  onFocusOut$={() => { loginCarouselPaused.value = false; }}
+                >
+                  {loginAction.value?.failed && (
+                    <div class="login-modal__error">{loginAction.value.message}</div>
+                  )}
+                  <div class="login-modal__field">
+                    <label for="username">{t("login.username", locale.value)}</label>
+                    <input
+                      id="username"
+                      name="username"
+                      type="text"
+                      autoComplete="username"
+                      required
+                      placeholder={t("login.username.placeholder", locale.value)}
+                    />
+                  </div>
+                  <div class="login-modal__field">
+                    <label for="password">{t("login.password", locale.value)}</label>
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      autoComplete="current-password"
+                      required
+                      placeholder={t("login.password.placeholder", locale.value)}
+                    />
+                  </div>
+                  <button type="submit" class="btn login-modal__submit">
+                    {loginAction.isRunning ? t("login.submitting", locale.value) : t("login.submit", locale.value)}
+                  </button>
+                </Form>
               </div>
-              <p class="login-modal__subtitle">
-                {t("login.subtitle", locale.value)}
-              </p>
+              <div class="login-modal__dots">
+                <button
+                  type="button"
+                  class={`login-modal__dot ${loginHeroIndex.value === 0 ? "is-active" : ""}`}
+                  aria-label="Show slide 1"
+                  onClick$={() => { loginHeroIndex.value = 0; }}
+                />
+                <button
+                  type="button"
+                  class={`login-modal__dot ${loginHeroIndex.value === 1 ? "is-active" : ""}`}
+                  aria-label="Show slide 2"
+                  onClick$={() => { loginHeroIndex.value = 1; }}
+                />
+              </div>
             </div>
-            <Form action={loginAction} reloadDocument class="login-modal__form">
-              {loginAction.value?.failed && (
-                <div class="login-modal__error">{loginAction.value.message}</div>
-              )}
-              <div class="login-modal__field">
-                <label for="username">{t("login.username", locale.value)}</label>
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  autoComplete="username"
-                  required
-                  placeholder={t("login.username.placeholder", locale.value)}
-                />
-              </div>
-              <div class="login-modal__field">
-                <label for="password">{t("login.password", locale.value)}</label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  placeholder={t("login.password.placeholder", locale.value)}
-                />
-              </div>
-              <button type="submit" class="btn btn--green login-modal__submit">
-                {loginAction.isRunning ? t("login.submitting", locale.value) : t("login.submit", locale.value)}
-              </button>
-            </Form>
+            <div
+              class="login-modal__carousel"
+              onClick$={() => { loginHeroIndex.value = (loginHeroIndex.value + 1) % 2; }}
+            >
+              <img src="/hero.jpg" alt="" width="1600" height="900"
+                   loading="eager" decoding="sync"
+                   class={`login-modal__slide ${loginHeroIndex.value === 0 ? "is-active" : ""}`} />
+              <img src="/hero-edmonton-van.jpg" alt="" width="1600" height="900"
+                   loading="eager" decoding="sync"
+                   class={`login-modal__slide ${loginHeroIndex.value === 1 ? "is-active" : ""}`} />
+            </div>
           </div>
         </div>
       )}
