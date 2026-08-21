@@ -1940,7 +1940,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
     0 0 0 1px rgba(0, 0, 0, 0.12),
     0 0 0 var(--wt-ring) transparent,
     0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-    0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+    0 0 11px var(--wt-ring) rgba(0, 0, 0, 0.12);
 }
 .doc-panel .privacy-page__body { max-width: 68ch; }
 .privacy-page__title {
@@ -6268,7 +6268,7 @@ details[open] > .cart-drawer__checkout-title::after {
       0 0 0 2px rgba(0, 0, 0, 0.04),
       0 0 0 var(--wt-ring) transparent,
       0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.08),
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+      0 0 11px var(--wt-ring) rgba(0, 0, 0, 0.12);
   }
 }
 /* Continue button: the header's orange sign face with white text — was the
@@ -8177,7 +8177,7 @@ details[open] > .cart-drawer__checkout-title::after {
     0 0 0 1px rgba(0, 0, 0, 0.12),
     0 0 0 var(--wt-ring) transparent,
     0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-    0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+    0 0 11px var(--wt-ring) rgba(0, 0, 0, 0.12);
 }
 .not-found-page__code {
   font-size: 5rem;
@@ -9667,7 +9667,7 @@ details[open] > .cart-drawer__checkout-title::after {
       0 0 0 var(--wt-ring) transparent,
       /* Outer rim at the same weight as the bars' outline above. */
       0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22),
+      0 0 11px var(--wt-ring) rgba(0, 0, 0, 0.12),
       inset 0 6px 8px -4px rgba(10, 25, 55, 0.5),
       inset 0 -6px 8px -4px rgba(10, 25, 55, 0.5),
       inset 5px 0 6px -4px rgba(10, 25, 55, 0.55),
@@ -10187,7 +10187,7 @@ details[open] > .cart-drawer__checkout-title::after {
       0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.08),
       /* Spread pushes the cast out past the ring's outer edge, so the white
          strip itself throws the depth onto the greige. */
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+      0 0 11px var(--wt-ring) rgba(0, 0, 0, 0.12);
   }
   /* Gaps between cards read as the sidebar gray (was the greige card showing
      through) — no card borders, just the gray gutter. */
@@ -10204,7 +10204,7 @@ details[open] > .cart-drawer__checkout-title::after {
       0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.08),
       /* Spread pushes the cast out past the ring's outer edge, so the white
          strip itself throws the depth onto the greige. */
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+      0 0 11px var(--wt-ring) rgba(0, 0, 0, 0.12);
   }
   /* The header's inner bar loses its own outer casts (the ring carries the
      depth now); only the weathered inset vignette stays. */
@@ -10384,12 +10384,9 @@ details[open] > .cart-drawer__checkout-title::after {
      ::after pseudo was pinched ("capped") at the rounded corners because the
      carousel's overflow:hidden rounds off the pseudo's corner tip. */
   .product-detail .product-carousel {
-    border: 1px solid var(--ce-gray-200);
-    /* No TOP keyline: it stacked on the 2px greige seam below the breadcrumb and
-       made the line read ~twice as thick above the image as above the info
-       (which has no top border). The seam itself now separates the image's top
-       edge from the bar, matching the info side. */
-    border-top: none;
+    /* No keyline border — it sat on the card's left edge and doubled the single
+       card ring. The card's own edge is the only outline now. */
+    border: none;
   }
   .product-detail .product-carousel::after { display: none; }
 }
@@ -11821,11 +11818,11 @@ body:has(.product-fullscreen) { overflow: hidden; }
        dark layers used to sit on top of the ring's inner 2px and cut the strip
        to 1px, the desktop version of the grey x-border removed on mobile. Now
        the full 3px white shows with the grey rim outside it. */
+    /* Single thin grey edge (one ring, no inner line) + a soft even shadow, so
+       the card reads as one slick outline instead of a doubled border. */
     box-shadow:
-      inset 0 0 0 1px rgba(0, 0, 0, 0.12),
-      0 0 0 var(--wt-ring) transparent,
-      0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+      0 0 0 1px rgba(0, 0, 0, 0.14),
+      0 0 10px var(--wt-ring) rgba(0, 0, 0, 0.11);
   }
   /* The panel floats above the header (z 10001) so it stays interactive, but
      that also lifted the ring's TOP edge over the header's bottom seam — a
@@ -12513,7 +12510,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
       0 0 0 var(--wt-ring) transparent,
       /* Was 0.08 — matched to the footer's outer rim. */
       0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+      0 0 11px var(--wt-ring) rgba(0, 0, 0, 0.12);
   }
   .site-header::before {
     box-shadow:
@@ -12591,14 +12588,11 @@ body:has(.product-fullscreen) { overflow: hidden; }
 @media (min-width: 1025px) {
   .home-catalog__inner,
   .apparel-catalog:has(.product-detail) {
+    /* One thin grey edge (no inner line) + a soft even shadow, matching the
+       cart — a single slick outline rather than a doubled border. */
     box-shadow:
-      /* The card's own edge, inside its box so it doesn't eat the white. */
-      inset 0 0 0 1px rgba(0, 0, 0, 0.12),
-      0 0 0 var(--wt-ring) transparent,
       0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-      /* Depth shadow down the card's sides (the header caps the top, the footer
-         the bottom — this is the middle section of one continuous card outline). */
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+      0 0 11px var(--wt-ring) rgba(0, 0, 0, 0.12);
     /* Sides only — no line across the header/content or content/footer joints. */
     clip-path: inset(0 -24px 0 -24px);
   }
@@ -12607,7 +12601,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
       inset 0 0 0 1px rgba(0, 0, 0, 0.12),
       0 0 0 var(--wt-ring) transparent,
       0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22),
+      0 0 11px var(--wt-ring) rgba(0, 0, 0, 0.12),
       inset 0 6px 8px -4px rgba(10, 25, 55, 0.5),
       inset 0 -6px 8px -4px rgba(10, 25, 55, 0.5),
       inset 5px 0 6px -4px rgba(10, 25, 55, 0.55),
@@ -13571,7 +13565,7 @@ body:has(.nav-drawer-overlay) .site-header__logo {
       inset 0 0 0 1px rgba(0, 0, 0, 0.12),
       0 0 0 var(--wt-ring) transparent,
       0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22) !important;
+      0 0 11px var(--wt-ring) rgba(0, 0, 0, 0.12) !important;
   }
 }
 
@@ -13605,7 +13599,7 @@ body:has(.nav-drawer-overlay) .site-header__logo {
        ring + depth wrap the top and both sides (the bottom joins the content). */
     0 0 0 1px rgba(0, 0, 0, 0.12),
     0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-    0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22) !important;
+    0 0 11px var(--wt-ring) rgba(0, 0, 0, 0.12) !important;
   /* Show ring/depth on top + sides, clip the bottom so it meets the content flush. */
   clip-path: inset(-24px -24px 0 -24px);
 }
@@ -13888,8 +13882,7 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   background: var(--mn-bar-bg) !important;  /* shorthand also clears the iron texture */
   box-shadow: none !important;              /* no white seam line under the header */
   color: var(--ce-gray-700) !important;
-  border-color: var(--ce-gray-200) !important;
-  border-top: none !important;
+  border: none !important;                  /* no top OR bottom border on the bars */
 }
 /* The breadcrumb's current-category pill matches the active-tab pill: silver-blue
    (primary) with white text, instead of the old light-blue --wt-orange fill. */
