@@ -30,8 +30,7 @@ async function fetchAndWrite() {
     "MN-12": { name: "Women's FootJoy Speckle Print Polo", category: "Polos" },
     "MN-15": { category: "Polos" },   // Men's Under Armour Tech Polo
     "MN-16": { category: "Polos" },   // Women's Under Armour Tech Polo
-    "MN-32": { category: "Polos" },   // Men's Travis Mathew Heater Polo
-    "MN-33": { category: "Polos" },   // Men's Travis Mathew Heater Jersey Polo
+    // MN-32 / MN-33 (Travis Mathew Heater polos) moved to SWAG — category comes from the DB now.
     "MN-13": { sizes: "25 oz" },        // Yeti Rambler: only the 25oz size
     "MN-14": { sizes: "35L" },          // Yeti Tundra Cooler: only the 35L size
     "MN-17": { name: "Insulated Two Compartment Cooler" },

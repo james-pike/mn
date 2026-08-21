@@ -236,7 +236,7 @@ export const allProducts = [
   {
     "sku": "MN-32",
     "name": "Men's Travis Mathew Heater Polo",
-    "category": "Polos",
+    "category": "SWAG",
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
@@ -256,7 +256,7 @@ export const allProducts = [
   {
     "sku": "MN-33",
     "name": "Men's Travis Mathew Heater Jersey Polo",
-    "category": "Polos",
+    "category": "SWAG",
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
@@ -368,9 +368,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 48,
-    "img": "/sku/yeti.png",
+    "img": "/yeti.webp",
     "imgs": [
-      "/sku/yeti.png"
+      "/yeti.webp"
     ],
     "material": "18/8 stainless steel, double-wall vacuum insulation, DuraCoat™ color finish",
     "details": "Comfort grip handle, cupholder-compatible base, Straw Lid with molded-in stopper, dishwasher safe, YETI Rambler®"
@@ -499,12 +499,12 @@ export const allProducts = [
     "sizes": "One Size",
     "badge": "",
     "colors": [
-      "#00b5e2"
+      "#2c3e50"
     ],
     "price": 1,
-    "img": "/sku/pen-bg.png",
+    "img": "/pen-blank-navy-white.jpg",
     "imgs": [
-      "/sku/pen-bg.png"
+      "/pen-blank-navy-white.jpg"
     ],
     "material": "Plastic, push-retractable ballpoint, ultra-smooth cartridge, rubber grip",
     "details": "Glossy black barrel with vivid neon trim, blue ink, 5 2/5\" L × 2/5\" Dia, #416"
