@@ -7680,15 +7680,16 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header .cart-btn svg,
   .site-header .logout-btn svg { width: 20px; height: 20px; }
   /* Tablet: the open search field absolutely overlays the nav (pixel-perfect,
-     zero shift) — buttons stay as visibility:hidden to hold the nav width. The
-     negative left extends the field past the nav toward the logo (a moderate
-     amount) without reaching it; right inset matches the 1px top/bottom. */
+     zero shift) — buttons stay as visibility:hidden to hold the nav width. It
+     stays WITHIN the nav (left inset, not a negative pull toward the logo): the
+     tablet logo is scaled up here, so the old left:-90px extended the field over
+     it. A small positive left keeps a clear gap between the logo and the field. */
   .site-header--search-open .site-header__nav > :not(.site-header__search) { visibility: hidden; }
   .site-header--search-open .site-header__search {
     position: absolute;
     top: 1px;
     bottom: 1px;
-    left: -90px;
+    left: 10px;
     right: 2px;
   }
   /* Cart button always gets the yellow recessed shade when the header is visible
@@ -10021,11 +10022,12 @@ details[open] > .cart-drawer__checkout-title::after {
        above where the bar now sits — so the filters scrolled ~8px under the bar
        before catching, which read as not sticking until a few px of scroll. */
     top: calc(var(--wt-header-pin) + 44px - 1px);
-    /* Medium light-gray sidebar surface, a touch deeper than the tab bar /
-       product panels (--mn-bar-bg #e0e3e6) so the filter column reads as a
-       distinct recessed block instead of matching the bar it sits under 100%. */
-    background: #d8dce0;
-    box-shadow: none;
+    /* Same light-gray as the tab bar / product panels (--mn-bar-bg #e0e3e6);
+       instead of a colour difference, a thin white line at the top separates
+       the filter column from the tab bar directly above it — mirroring the
+       white seam the tab bar carries between itself and the header. */
+    background: var(--mn-bar-bg);
+    box-shadow: inset 0 1px 0 0 #ffffff;
     border-radius: 2px;
     padding: 0.35rem 0 0.85rem;
   }
@@ -13731,7 +13733,11 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
     padding: 0 !important;
   }
   .apparel-titlebar__action.apparel-titlebar__action--tablet-cols {
-    background: #84acc7 !important;
+    /* Selected-tab highlight (--mn-bar-hi), not the light-blue #84acc7 — the
+       toggle reads as a subtle grey control on the grey bar, matching the
+       desktop Catalog button and the active tab, with a dark icon (see the
+       every-breakpoint svg rule near end of file). */
+    background: var(--mn-bar-hi) !important;
     align-self: stretch !important;
     height: auto !important;
     display: flex !important;
@@ -13745,8 +13751,10 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
     border-radius: 0 !important;
     box-shadow: none !important;
   }
-  /* Square cell (width = the 50px bar height) so the toggle reads as a square. */
-  .home-catalog__right { width: 50px !important; min-width: 50px !important; flex: 0 0 50px !important; }
+  /* Square cell (width = the 50px bar height) so the toggle reads as a square.
+     Drop the base .home-catalog__right margin-right (0.35rem) so the toggle
+     sits flush to the bar's right edge, aligned with the rest of the tab bar. */
+  .home-catalog__right { width: 50px !important; min-width: 50px !important; flex: 0 0 50px !important; margin-right: 0 !important; }
   /* Big, obvious white icon centered in the square blue toggle cell. */
   .apparel-titlebar__action--tablet-cols svg { stroke: #fff !important; width: 30px !important; height: 30px !important; stroke-width: 2.2 !important; }
   /* Scale the header logo up so it fills more of the tablet header height. */
@@ -13815,7 +13823,8 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   .product-thumbs {
     background: rgb(223, 230, 232);
     padding: 8px;
-    border-radius: var(--radius-sm);
+    /* Square strip, matching the squared image panels and cards on the PDP. */
+    border-radius: 0;
     box-sizing: border-box;
   }
   /* A bit more breathing room above the "More {category}" heading so it isn't
@@ -14025,3 +14034,42 @@ body .site-header__inner { border-top-left-radius: 0 !important; border-top-righ
 .home-catalog__header::after,
 .pdp-breadcrumb::before,
 .pdp-breadcrumb::after { display: none !important; }
+
+/* ── Tablet header: unify the FR/EN locale toggle with the cart + logout buttons
+   ─────────────────────────────────────────────────────────────────────────────
+   The locale toggle kept the recessed translucent gradient while cart and logout
+   resolve to the solid sign-blue (rgb(57,98,124)); give it the same solid fill,
+   no border/shadow, so the three read as one row. Square the logout corners to
+   match the (already square) cart, and nudge the "My Cart" label up a touch. */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .site-header .locale-btn--header {
+    background: rgb(57, 98, 124) !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    color: #fff !important;
+  }
+  .site-header .locale-btn--header:hover { background: rgb(57, 98, 124) !important; }
+  .site-header .locale-btn--header svg { stroke: #fff !important; }
+  .site-header .logout-btn { border-radius: 0 !important; }
+  .site-header .cart-btn__label { font-size: 15px !important; }
+}
+
+/* ── Mobile header: cart reads as a bare icon, like search + logout ───────────
+   On phones the cart button kept a darker-blue filled box (from the
+   :has(.home-catalog) cart rules) while the search and logout/menu controls
+   beside it are plain white icons on the blue header bar. Flatten the cart to
+   match — no fill, border or shadow — so all three read as bare icons. The
+   label is already hidden at this width, and the item-count dot still shows. */
+@media (max-width: 600px) {
+  body:has(.home-catalog) .site-header .cart-btn,
+  body:has(.home-catalog) .site-header .cart-btn.cart-btn--active,
+  body .site-header .cart-btn,
+  body .site-header .cart-btn.cart-btn--active {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    min-width: 0 !important;
+    padding: 0 8px !important;
+  }
+}

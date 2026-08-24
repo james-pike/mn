@@ -344,7 +344,15 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     ? {}
     : isSafety.value
       ? { "shirts": "Shirts", "hats": "Hats", "fr": "Flame Resistant" }
-      : { "new-hire-kit": "New Hire Kit", "shirts": "Shirts", "jackets": "Jackets", "hats": "Hats", "swag": "SWAG" };
+      // Derive from the tab list so EVERY clothing category (Polos, Sweaters, …)
+      // is reachable by hash — the old hardcoded map omitted Polos/Sweaters, so
+      // the breadcrumb crumb (#polos) found no match and fell back to All. Keyed
+      // exactly the way the crumb builds its hash: lower-case, spaces → hyphens.
+      : Object.fromEntries(
+          CLOTHING_CATEGORIES
+            .filter((c) => c !== "All")
+            .map((c) => [c.toLowerCase().replace(/\s+/g, "-"), c])
+        );
 
   const baseProducts = useComputed$(() => {
     if (isTech.value) return allProducts.filter((p) => p.category === "Work Wear");
