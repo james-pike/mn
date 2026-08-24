@@ -10021,9 +10021,10 @@ details[open] > .cart-drawer__checkout-title::after {
        above where the bar now sits — so the filters scrolled ~8px under the bar
        before catching, which read as not sticking until a few px of scroll. */
     top: calc(var(--wt-header-pin) + 44px - 1px);
-    /* Medium light-gray sidebar surface — darker than the page/product panels so
-       the filter column reads as a distinct block beside the product list. */
-    background: #e0e3e6;
+    /* Medium light-gray sidebar surface, a touch deeper than the tab bar /
+       product panels (--mn-bar-bg #e0e3e6) so the filter column reads as a
+       distinct recessed block instead of matching the bar it sits under 100%. */
+    background: #d8dce0;
     box-shadow: none;
     border-radius: 2px;
     padding: 0.35rem 0 0.85rem;
@@ -11099,7 +11100,15 @@ details[open] > .cart-drawer__checkout-title::after {
 .site-header--hero-hidden { height: var(--wt-header-h) !important; }
 .home-catalog__header,
 .apparel-titlebar,
-.pdp-breadcrumb { top: var(--wt-header-pin) !important; }
+.pdp-breadcrumb {
+  /* Pin 1px UNDER the header's bottom edge rather than flush against it.
+     Flush (top: --wt-header-pin) leaves a shared seam line where, at
+     fractional scroll offsets, the header and this strip round to positions
+     1px apart and the scrolling content behind flashes through. Overlapping
+     the header by 1px means one of the two opaque bars always covers that
+     row, so nothing peeks through. */
+  top: calc(var(--wt-header-pin) - 1px) !important;
+}
 /* The apparel route pins these as `fixed` rather than sticky on phones — same
    offset, same source. */
 @media (max-width: 600px) {
