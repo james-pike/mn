@@ -13,9 +13,10 @@
   /* Product image panel. Images multiply onto this, so their baked-in white
      backgrounds pick up the greige without any per-image editing. */
   --ce-greige: #f0f0ee;
-  /* Shared light blue-gray panel tint — the sidebar shade, reused on the card
-     info strips, product info panel, cart, checkout and menu drawers. */
-  --mn-panel: rgba(70, 137, 179, 0.1);
+  /* Shared panel tint — reused on the card info strips, product info panel,
+     cart, checkout and menu drawers. Neutral (was a blue rgba(70,137,179,0.1)
+     that read distinctly light-blue); now a faint neutral grey close to white. */
+  --mn-panel: rgba(0, 0, 0, 0.05);
   /* The single control for every SECONDARY bar (category tab strip, breadcrumb,
      cart table head, cart back bar, menu-drawer header). Set to the sidebar /
      product-card panel colour so the bars read as the same light blue-gray. */
@@ -6097,7 +6098,7 @@ details[open] > .cart-drawer__checkout-title::after {
 .cart-drawer__summary,
 .checkout-modal__form,
 .checkout-modal__pay {
-  background: #eef0f2 !important;
+  background: #f2f2f1 !important;
   border: none !important;
   border-radius: 0 !important;
   margin: 4px 4px 0 !important;
@@ -6109,7 +6110,7 @@ details[open] > .cart-drawer__checkout-title::after {
     /* Match the product info panel's exact rendered shade. The info panel is
        --mn-panel over greige (= rgb(223,230,232)); the checkout sits on a white
        drawer, so use that effective colour as a solid to match it. */
-    background: rgb(223, 230, 232) !important;
+    background: rgb(233, 233, 232) !important;
     border: none !important;
     /* Desktop lays these out in a 2-col grid; drop the per-panel margins and
        let a single uniform grid gap + step padding space them, so the gap
@@ -13821,7 +13822,7 @@ body:has(.cart-drawer) .pdp-breadcrumb {
      uses semi-transparent --mn-panel over greige; the thumbs sit over white, so
      the same var would read lighter. Use the info's effective solid colour. */
   .product-thumbs {
-    background: rgb(223, 230, 232);
+    background: rgb(233, 233, 232);
     padding: 8px;
     /* Square strip, matching the squared image panels and cards on the PDP. */
     border-radius: 0;
@@ -13835,11 +13836,11 @@ body:has(.cart-drawer) .pdp-breadcrumb {
 /* Cart page (item list) shares the checkout page's panel background so the two
    steps match — the cart view was plain white against the checkout's blue/gray. */
 .cart-drawer__items {
-  background: #eef0f2 !important;
+  background: #f2f2f1 !important;
 }
 @media (min-width: 1025px) {
   .cart-drawer__items {
-    background: rgb(223, 230, 232) !important;
+    background: rgb(233, 233, 232) !important;
   }
 }
 
