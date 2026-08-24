@@ -13,10 +13,12 @@
   /* Product image panel. Images multiply onto this, so their baked-in white
      backgrounds pick up the greige without any per-image editing. */
   --ce-greige: #f0f0ee;
-  /* Shared panel tint — reused on the card info strips, product info panel,
-     cart, checkout and menu drawers. Neutral (was a blue rgba(70,137,179,0.1)
-     that read distinctly light-blue); now a faint neutral grey close to white. */
-  --mn-panel: rgba(0, 0, 0, 0.05);
+  /* Shared panel colour — the PDP info panel, cart drawer and checkout form.
+     Was a blue rgba(70,137,179,0.1); then a neutral rgba(0,0,0,0.05) which,
+     being semi-transparent, rendered ~rgb(228) over the greige page — a touch
+     dark. Now the same solid neutral as the PDP thumbnail strip so all these
+     panels read identically, and never darken over a tinted backdrop. */
+  --mn-panel: rgb(233, 233, 232);
   /* The single control for every SECONDARY bar (category tab strip, breadcrumb,
      cart table head, cart back bar, menu-drawer header). Set to the sidebar /
      product-card panel colour so the bars read as the same light blue-gray. */
@@ -3003,10 +3005,10 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 
 @media (min-width: 1025px) {
-  /* Match the card fill to the info panel (#e0e3e6) so a short single-line-title
-     card doesn't show a lighter near-white strip below its info — the lower area
-     stays the same blue-grey off-white. */
-  .apparel-grid .product-card { background: #e0e3e6; }
+  /* Match the card fill to the info panel so a short single-line-title card
+     doesn't show a mismatched strip below its info — both the neutral panel
+     colour used on the PDP / checkout / sidebar. */
+  .apparel-grid .product-card { background: #f2f2f2; }
 }
 .product-card:hover .product-card__image {
   background: var(--ce-gray-200);
@@ -3119,7 +3121,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   color: var(--ce-orange-light);
 }
 
-.product-card__info { padding: 0.42rem 0.42rem 0.42rem 0.42rem; background: #e0e3e6; }
+.product-card__info { padding: 0.42rem 0.42rem 0.42rem 0.42rem; background: #f2f2f2; }
 
 .product-card__category {
   font-size: 0.66rem;
@@ -10023,11 +10025,10 @@ details[open] > .cart-drawer__checkout-title::after {
        above where the bar now sits — so the filters scrolled ~8px under the bar
        before catching, which read as not sticking until a few px of scroll. */
     top: calc(var(--wt-header-pin) + 44px - 1px);
-    /* Same light-gray as the tab bar / product panels (--mn-bar-bg #e0e3e6);
-       instead of a colour difference, a thin white line at the top separates
-       the filter column from the tab bar directly above it — mirroring the
-       white seam the tab bar carries between itself and the header. */
-    background: var(--mn-bar-bg);
+    /* Neutral near-white panel matching the PDP / checkout panels (the
+       neutralized --mn-panel reads ~#f2f2f2 over white), with a thin white line
+       at the top separating the filter column from the tab bar above it. */
+    background: #f2f2f2;
     box-shadow: inset 0 1px 0 0 #ffffff;
     border-radius: 2px;
     padding: 0.35rem 0 0.85rem;
@@ -13441,9 +13442,9 @@ body:has(.product-fullscreen) { overflow: hidden; }
    Modern Niagara mobile — content x-padding + card info tint
    ============================================================ */
 @media (max-width: 1024px) {
-  /* Product card info strip (under the image): faint blue tint like the sidebar,
-     so it's not stark white. */
-  .product-card__info { background: #e0e3e6 !important; }
+  /* Product card info strip (under the image): the neutral panel colour like the
+     sidebar / PDP / checkout, so it's not stark white. */
+  .product-card__info { background: #f2f2f2 !important; }
   /* Remove the extra x-margin on the product detail so its content aligns to the
      edges like the bars. */
   .product-detail { margin-left: 0 !important; margin-right: 0 !important; }
