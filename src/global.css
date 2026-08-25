@@ -178,40 +178,35 @@ dialog:not([open]) {
   pointer-events: none;
   background-image: radial-gradient(circle, rgba(37, 99, 235,0.55) 1.5px, transparent 1.5px);
   background-size: 20px 20px;
+  /* Dots hug the outer screen edge and fade to nothing before the content
+     margin begins — a monotonic edge->inward fade, no mid-band that would
+     "pop" over the content. */
   -webkit-mask-image:
     linear-gradient(to right,
-      rgba(0,0,0,0.5) 0%,
-      rgba(0,0,0,0.2) 10%,
-      transparent 22%,
-      transparent 78%,
-      rgba(0,0,0,0.2) 90%,
-      rgba(0,0,0,0.5) 100%
+      rgba(0,0,0,0.18) 0%,
+      transparent 6%,
+      transparent 94%,
+      rgba(0,0,0,0.18) 100%
     ),
     linear-gradient(to bottom,
-      rgba(0,0,0,0.5) 0%,
-      rgba(0,0,0,0.2) 10%,
-      transparent 20%,
-      transparent 80%,
-      rgba(0,0,0,0.2) 90%,
-      rgba(0,0,0,0.5) 100%
+      rgba(0,0,0,0.18) 0%,
+      transparent 6%,
+      transparent 94%,
+      rgba(0,0,0,0.18) 100%
     );
   -webkit-mask-composite: source-over;
   mask-image:
     linear-gradient(to right,
-      rgba(0,0,0,0.5) 0%,
-      rgba(0,0,0,0.2) 10%,
-      transparent 22%,
-      transparent 78%,
-      rgba(0,0,0,0.2) 90%,
-      rgba(0,0,0,0.5) 100%
+      rgba(0,0,0,0.18) 0%,
+      transparent 6%,
+      transparent 94%,
+      rgba(0,0,0,0.18) 100%
     ),
     linear-gradient(to bottom,
-      rgba(0,0,0,0.5) 0%,
-      rgba(0,0,0,0.2) 10%,
-      transparent 20%,
-      transparent 80%,
-      rgba(0,0,0,0.2) 90%,
-      rgba(0,0,0,0.5) 100%
+      rgba(0,0,0,0.18) 0%,
+      transparent 6%,
+      transparent 94%,
+      rgba(0,0,0,0.18) 100%
     );
   mask-composite: add;
 }
@@ -222,8 +217,8 @@ dialog:not([open]) {
 
 .apparel-page { overflow: clip; }
 .apparel-page.dot-pattern::before {
-  /* A touch lighter than before (was 0.06) so the margin dots read softer. */
-  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 1.2px, transparent 1.2px);
+  /* Softer still (0.06 -> 0.05 -> 0.035 -> 0.022 -> 0.013) so the exterior margin dots read subtler. */
+  background-image: radial-gradient(circle, rgba(0,0,0,0.013) 1.2px, transparent 1.2px);
   z-index: 1;
 }
 
@@ -3293,25 +3288,8 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   animation: fadeIn 0.2s ease;
   transition: opacity 0.8s ease, backdrop-filter 0.8s ease;
 }
-/* Faint dot texture in the surround around the login frame — densest at the
-   viewport edges, masked to fade toward the centre so it reads only as texture. */
-.login-overlay::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.06) 1.2px, transparent 1.2px);
-  background-size: 22px 22px;
-  -webkit-mask-image:
-    linear-gradient(to right, #000 0%, rgba(0,0,0,0.25) 7%, transparent 16%, transparent 84%, rgba(0,0,0,0.25) 93%, #000 100%),
-    linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.25) 9%, transparent 20%, transparent 80%, rgba(0,0,0,0.25) 91%, #000 100%);
-  -webkit-mask-composite: source-over;
-  mask-image:
-    linear-gradient(to right, #000 0%, rgba(0,0,0,0.25) 7%, transparent 16%, transparent 84%, rgba(0,0,0,0.25) 93%, #000 100%),
-    linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.25) 9%, transparent 20%, transparent 80%, rgba(0,0,0,0.25) 91%, #000 100%);
-  mask-composite: add;
-}
+/* The login surround is plain — no dot texture. (The dotted logo panel inside
+   the frame already carries the pattern, so the background stays clean.) */
 .login-overlay--fading {
   opacity: 0;
   backdrop-filter: blur(0px);
@@ -6718,27 +6696,27 @@ details[open] > .cart-drawer__checkout-title::after {
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background-image: radial-gradient(circle, rgba(255,255,255,0.4) 1.5px, transparent 1.5px);
+    background-image: radial-gradient(circle, rgba(255,255,255,0.28) 1.5px, transparent 1.5px);
     background-size: 40px 40px;
     -webkit-mask-image:
       linear-gradient(to right,
-        rgba(0,0,0,0.4) 0%,
-        rgba(0,0,0,0.1) 5%,
+        rgba(0,0,0,0.28) 0%,
+        rgba(0,0,0,0.08) 5%,
         transparent 10%,
         transparent 90%,
-        rgba(0,0,0,0.1) 95%,
-        rgba(0,0,0,0.4) 100%
+        rgba(0,0,0,0.08) 95%,
+        rgba(0,0,0,0.28) 100%
       );
     mask-image:
       linear-gradient(to right,
-        rgba(0,0,0,0.4) 0%,
-        rgba(0,0,0,0.1) 5%,
+        rgba(0,0,0,0.28) 0%,
+        rgba(0,0,0,0.08) 5%,
         transparent 10%,
         transparent 90%,
-        rgba(0,0,0,0.1) 95%,
-        rgba(0,0,0,0.4) 100%
+        rgba(0,0,0,0.08) 95%,
+        rgba(0,0,0,0.28) 100%
       );
-    opacity: 0.3;
+    opacity: 0.15;
   }
   .hero__content {
     grid-template-columns: 1fr;
@@ -10291,7 +10269,7 @@ details[open] > .cart-drawer__checkout-title::after {
        done in the background stack, so no mask touches the page content. */
     background-image:
       linear-gradient(to right, transparent 0, var(--ce-greige) 13%, var(--ce-greige) 87%, transparent 100%),
-      radial-gradient(circle, rgba(0, 0, 0, 0.07) 1.7px, transparent 1.7px),
+      radial-gradient(circle, rgba(0, 0, 0, 0.035) 1.5px, transparent 1.5px),
       var(--wt-surround);
     background-size: 100% 100%, 15px 15px, auto;
     background-position: 0 0, 0 0, center;
@@ -10315,7 +10293,7 @@ details[open] > .cart-drawer__checkout-title::after {
        (never under the logout/search controls). */
     background-image:
       linear-gradient(to right, transparent 0, var(--ce-greige) 13%, var(--ce-greige) 87%, transparent 100%),
-      radial-gradient(circle, rgba(0, 0, 0, 0.07) 1.7px, transparent 1.7px),
+      radial-gradient(circle, rgba(0, 0, 0, 0.035) 1.5px, transparent 1.5px),
       var(--wt-surround) !important;
     background-size: 100% 100%, 15px 15px, auto !important;
     background-position: 0 0, 0 0, center !important;

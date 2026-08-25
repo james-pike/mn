@@ -114,9 +114,11 @@ function sizesOf(p: Product): string[] {
 const BRAND_LIST = [
   // Clothing brands first...
   "Carhartt", "Cole Harbour", "Flexfit", "FootJoy", "Gildan",
-  "Travis Mathew", "Under Armour", "Yeti",
-  // ...then non-clothing brands (bags, golf, towels, tech, headwear), Cap America last.
-  "2 Buds", "Nexgen", "Nomad", "Srixon", "Titleist", "Tranzip", "Cap America",
+  "Travis Mathew", "Under Armour",
+  // ...then non-clothing brands (bags, golf, towels, tech, headwear).
+  "Nexgen", "Nomad", "Srixon", "Titleist", "Tranzip", "Cap America",
+  // Yeti (drinkware/coolers) and 2 Buds (earbuds) pinned last per request.
+  "Yeti", "2 Buds",
 ];
 // Brand overrides for products whose brand isn't in the display name (identified
 // from the product spec). Everything else is matched by name against BRAND_LIST.
@@ -150,11 +152,16 @@ function scrollProductsBelowBar() {
     // more than once. A stale constant here doesn't fail loudly — it just
     // parks the grid a few px under the tab bar, which reads as the bar
     // getting shorter on every tab switch.
-    // stickyTop() is the header's pinned BOTTOM edge, so the tab bar's height
-    // is all that's left to add. (offsetHeight on the header would miss the
-    // 4px the header is pinned down by on desktop.)
+    // Pin the grid to the tab bar's REAL pinned bottom = its own resolved `top`
+    // plus its height. The bar pins at var(--wt-header-pin) - 1px on the home
+    // route (a 1px seam overlap with the header), which is 1px ABOVE stickyTop()
+    // (the header's bottom edge). Reconstructing barsBottom from stickyTop()
+    // overshot by that 1px, landing the scroll a hair short of the pin — so the
+    // bar un-stuck a fraction on every tab click (the visible desktop shift).
+    // Reading the bar's own top absorbs the seam no matter how it's set.
     const bar = document.querySelector('.home-catalog__header') as HTMLElement | null;
-    const barsBottom = headerH + (bar?.offsetHeight ?? 50);
+    const barPin = bar ? (parseFloat(getComputedStyle(bar).top) || headerH) : headerH;
+    const barsBottom = barPin + (bar?.offsetHeight ?? 50);
     const gridTop = grid ? grid.getBoundingClientRect().top + window.scrollY - barsBottom : 0;
     const needsScrollUp = gridTop < window.scrollY;
     window.scrollTo({ top: gridTop, behavior: needsScrollUp ? 'instant' : 'smooth' });
