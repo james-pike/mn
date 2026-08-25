@@ -251,7 +251,7 @@ export const allProducts = [
       "/heater.webp"
     ],
     "material": "67% Polyester / 23% Cotton / 7% Elastane / 3% Polyester Blend",
-    "details": "4-Way Stretch, Breathable, Easy Wash & Wear, Modern Fit, Versatile Performance Fabric, Signature Double-Needle Collar, MNBS logo on sleeve (tone on tone)"
+    "details": "4-Way Stretch, Breathable, Easy Wash & Wear, Modern Fit, Versatile Performance Fabric, Signature Double-Needle Collar, Modern logo on sleeve (tone on tone)"
   },
   {
     "sku": "MN-33",
@@ -270,7 +270,7 @@ export const allProducts = [
       "/heater-jersey.webp"
     ],
     "material": "63% Polyester / 34% Cotton / 3% Elastane, Imported",
-    "details": "Signature double-needle collar, Contrast interior collar, Printed logo on the back yoke, Fold over placket, MNBS logo on sleeve (tone on tone)"
+    "details": "Signature double-needle collar, Contrast interior collar, Printed logo on the back yoke, Fold over placket, Modern logo on sleeve (tone on tone)"
   },
   {
     "sku": "MN-34",
@@ -289,7 +289,7 @@ export const allProducts = [
       "/final-drive-view-polo.webp"
     ],
     "material": "",
-    "details": "4-Way Stretch, Breathable, Modern Fit, Signature self-fabric collar, MNBS logo on sleeve (tone on tone)"
+    "details": "4-Way Stretch, Breathable, Modern Fit, Signature self-fabric collar, Modern logo on sleeve (tone on tone)"
   },
   {
     "sku": "MN-35",
@@ -307,7 +307,7 @@ export const allProducts = [
       "/tour-ready-quarter-zip.webp"
     ],
     "material": "",
-    "details": "Quarter-zip pullover, Performance stretch fabric, Ribbed cuffs and hem, MNBS logo on sleeve (tone on tone)"
+    "details": "Quarter-zip pullover, Performance stretch fabric, Ribbed cuffs and hem, Modern logo on sleeve (tone on tone)"
   },
   {
     "sku": "MN-1",

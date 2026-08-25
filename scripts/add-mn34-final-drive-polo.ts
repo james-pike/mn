@@ -23,7 +23,7 @@ const product = {
   imgs: ["/final-drive-view-polo.webp"],
   material: "",
   details:
-    "4-Way Stretch, Breathable, Modern Fit, Signature self-fabric collar, MNBS logo on sleeve (tone on tone)",
+    "4-Way Stretch, Breathable, Modern Fit, Signature self-fabric collar, Modern logo on sleeve (tone on tone)",
   sort_order: 18, // right after the Heater Jersey Polo (MN-33, sort_order 17)
 };
 

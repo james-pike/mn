@@ -22,7 +22,7 @@ const product = {
   imgs: ["/tour-ready-quarter-zip.webp"],
   material: "",
   details:
-    "Quarter-zip pullover, Performance stretch fabric, Ribbed cuffs and hem, MNBS logo on sleeve (tone on tone)",
+    "Quarter-zip pullover, Performance stretch fabric, Ribbed cuffs and hem, Modern logo on sleeve (tone on tone)",
   sort_order: 19, // right after the Final Drive View Polo (MN-34, sort_order 18)
 };
 

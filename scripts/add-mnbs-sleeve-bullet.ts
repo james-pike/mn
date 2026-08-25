@@ -4,9 +4,9 @@ import { config } from "dotenv";
 config({ path: new URL("../.env", import.meta.url).pathname });
 
 const VENDOR = "modernniagara";
-const BULLET = "MNBS logo on sleeve (tone on tone)";
+const BULLET = "Modern logo on sleeve (tone on tone)";
 
-// Every Travis Mathew garment carries the tone-on-tone MNBS sleeve logo, so the
+// Every Travis Mathew garment carries the tone-on-tone Modern sleeve logo, so the
 // bullet belongs on all of them. MN-34/MN-35 already ship with it baked into
 // their insert; this patches the pre-existing Heater polos. Idempotent — skips
 // any row that already lists the bullet. `details` renders as comma-split
