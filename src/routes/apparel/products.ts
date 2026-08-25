@@ -284,8 +284,9 @@ export const allProducts = [
       "#ffffff"
     ],
     "price": 120,
-    "img": "/final-drive-view-polo.webp",
+    "img": "/final-drive-view-polo-green.webp",
     "imgs": [
+      "/final-drive-view-polo-green.webp",
       "/final-drive-view-polo.webp"
     ],
     "material": "",

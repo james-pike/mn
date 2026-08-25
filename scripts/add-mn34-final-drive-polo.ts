@@ -19,8 +19,8 @@ const product = {
   sizes: "S - 3XL",
   colors: [HEATHER_BLACK, GREEN_BAY, WHITE],
   price: 120.0,
-  img: "/final-drive-view-polo.webp",
-  imgs: ["/final-drive-view-polo.webp"],
+  img: "/final-drive-view-polo-green.webp", // Green Bay colorway — primary
+  imgs: ["/final-drive-view-polo-green.webp", "/final-drive-view-polo.webp"],
   material: "",
   details:
     "4-Way Stretch, Breathable, Modern Fit, Signature self-fabric collar, Modern logo on sleeve (tone on tone)",
