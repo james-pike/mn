@@ -32,6 +32,8 @@ async function fetchAndWrite() {
     "MN-16": { category: "Polos" },   // Women's Under Armour Tech Polo
     "MN-32": { category: "Polos" },   // Men's Travis Mathew Heater Polo
     "MN-33": { category: "Polos" },   // Men's Travis Mathew Heater Jersey Polo
+    "MN-34": { category: "Polos" },     // Men's Travis Mathew Final Drive View Polo
+    "MN-35": { category: "Sweaters" },  // Men's Travis Mathew Tour Ready Stripe 1/4 Zip (mid-layer)
     "MN-13": { sizes: "25 oz" },        // Yeti Rambler: only the 25oz size
     "MN-14": { sizes: "35L" },          // Yeti Tundra Cooler: only the 35L size
     "MN-17": { name: "Insulated Two Compartment Cooler" },

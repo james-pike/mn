@@ -251,7 +251,7 @@ export const allProducts = [
       "/heater.webp"
     ],
     "material": "67% Polyester / 23% Cotton / 7% Elastane / 3% Polyester Blend",
-    "details": "4-Way Stretch, Breathable, Easy Wash & Wear, Modern Fit, Versatile Performance Fabric, Signature Double-Needle Collar"
+    "details": "4-Way Stretch, Breathable, Easy Wash & Wear, Modern Fit, Versatile Performance Fabric, Signature Double-Needle Collar, MNBS logo on sleeve (tone on tone)"
   },
   {
     "sku": "MN-33",
@@ -270,7 +270,44 @@ export const allProducts = [
       "/heater-jersey.webp"
     ],
     "material": "63% Polyester / 34% Cotton / 3% Elastane, Imported",
-    "details": "Signature double-needle collar, Contrast interior collar, Printed logo on the back yoke, Fold over placket"
+    "details": "Signature double-needle collar, Contrast interior collar, Printed logo on the back yoke, Fold over placket, MNBS logo on sleeve (tone on tone)"
+  },
+  {
+    "sku": "MN-34",
+    "name": "Travis Mathew Final Drive View Polo",
+    "category": "Polos",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#9caf88",
+      "#ffffff"
+    ],
+    "price": 120,
+    "img": "/final-drive-view-polo.webp",
+    "imgs": [
+      "/final-drive-view-polo.webp"
+    ],
+    "material": "",
+    "details": "4-Way Stretch, Breathable, Modern Fit, Signature self-fabric collar, MNBS logo on sleeve (tone on tone)"
+  },
+  {
+    "sku": "MN-35",
+    "name": "Travis Mathew Tour Ready Stripe 1/4 Zip",
+    "category": "Sweaters",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#3b4657"
+    ],
+    "price": 110,
+    "img": "/tour-ready-quarter-zip.webp",
+    "imgs": [
+      "/tour-ready-quarter-zip.webp"
+    ],
+    "material": "",
+    "details": "Quarter-zip pullover, Performance stretch fabric, Ribbed cuffs and hem, MNBS logo on sleeve (tone on tone)"
   },
   {
     "sku": "MN-1",
@@ -506,8 +543,8 @@ export const allProducts = [
     "imgs": [
       "/pen-blank-navy-white.jpg"
     ],
-    "material": "Plastic, push-retractable ballpoint, ultra-smooth cartridge, rubber grip",
-    "details": "Glossy black barrel with vivid neon trim, blue ink, 5 2/5\" L × 2/5\" Dia, #416"
+    "material": "",
+    "details": "Glossy black barrel with vivid neon trim, Push retractable ballpoint, Ultra-smooth cartridge, Rubber grip, Navy blue ink"
   },
   {
     "sku": "MNFR-6",
