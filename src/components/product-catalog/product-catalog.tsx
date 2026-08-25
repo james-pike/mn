@@ -114,7 +114,7 @@ function sizesOf(p: Product): string[] {
 const BRAND_LIST = [
   // Clothing brands first...
   "Carhartt", "Cole Harbour", "Flexfit", "FootJoy", "Gildan",
-  "Under Armour", "Yeti",
+  "Travis Mathew", "Under Armour", "Yeti",
   // ...then non-clothing brands (bags, golf, towels, tech, headwear), Cap America last.
   "2 Buds", "Nexgen", "Nomad", "Srixon", "Titleist", "Tranzip", "Cap America",
 ];

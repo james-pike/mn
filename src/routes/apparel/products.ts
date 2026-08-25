@@ -236,7 +236,7 @@ export const allProducts = [
   {
     "sku": "MN-32",
     "name": "Men's Travis Mathew Heater Polo",
-    "category": "SWAG",
+    "category": "Polos",
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
@@ -256,7 +256,7 @@ export const allProducts = [
   {
     "sku": "MN-33",
     "name": "Men's Travis Mathew Heater Jersey Polo",
-    "category": "SWAG",
+    "category": "Polos",
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
