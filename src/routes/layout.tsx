@@ -541,7 +541,11 @@ export default component$(() => {
 
   useContextProvider(LocaleContext, locale);
 
-  const loginType = useSignal(auth.value.loginType);
+  // Typed as string (not the "service" | "electrical" union): several views still
+  // compare against legacy portal values ("tech" / "safety"), and this also
+  // matches LoginTypeContext's Signal<string>. Keeps the type-check (part of the
+  // production build) from failing on those otherwise-narrowed comparisons.
+  const loginType = useSignal<string>(auth.value.loginType);
   useContextProvider(LoginTypeContext, loginType);
 
   // Cart state
