@@ -2,12 +2,12 @@
 :root {
   /* Accent blue = the header sign blue (was a brighter #2563eb). All blue accents
      — prices, links, active states, selected borders — track the header now. */
-  --ce-green: #647d8b;
+  --ce-green: #2E698E;
   --ce-green-dark: #4c626d;
   --ce-green-light: #86a0ac;
   --ce-orange: #E6570C;
   --ce-orange-light: #F27D13;
-  --ce-gold: #557488;
+  --ce-gold: #2E698E;
 
   --ce-white: #ffffff;
   /* Product image panel. Images multiply onto this, so their baked-in white
@@ -36,7 +36,11 @@
   /* Shared content max-width (96rem / 1536px, matching the cm Carmichael site;
      Tailwind's 2xl screen): header bar, category tab bar, catalog, product page
      and footer all align to this. */
-  --site-max: 1536px;
+  /* Edge-to-edge: the whole page (header, tab bar, catalog, product page,
+     footer) spans the full viewport width. `html` sets overflow-x: hidden so
+     100vw never opens a horizontal scrollbar; the (100vw - --site-max)/2
+     surround/centering calcs all resolve to 0, collapsing the greige frame. */
+  --site-max: 100vw;
   /* Desktop: thickness of the white ring around the sign card — slightly
      slimmer than the sign's internal vertical bands so the side strips read
      equal to the y strips above the header bar / below the footer.
@@ -325,8 +329,8 @@ img { max-width: 100%; display: block; }
 }
 .site-header--hero-visible .cart-btn,
 .site-header--hero-visible .cart-btn.cart-btn--active {
-  background: #557488 !important;
-  border-color: #557488 !important;
+  background: #2E698E !important;
+  border-color: #2E698E !important;
   color: #ffffff !important;
   border-radius: 4px !important;
   box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important;
@@ -441,6 +445,8 @@ img { max-width: 100%; display: block; }
   contain: layout style paint;
 }
 .hero::after { display: none; }
+/* Blue-pane pagination dots are desktop-only (mobile keeps the carousel's own). */
+.hero__dots { display: none; }
 .hero__upper {
   position: relative;
   width: 100%;
@@ -1925,6 +1931,9 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 /* The off-white reading card inside the shared content card — same treatment
    as the product-detail panel. */
 .doc-panel {
+  /* A plain white reading section — no ring/shadow. It sits inside the page's
+     content card (which already carries the surround + border), so the nested
+     panel's own border was a redundant card-in-a-card; only the white stays. */
   background: var(--ce-off-white);
   border-radius: 0;
   /* Centre the narrow policy column on the page (was left-aligned/full-width). */
@@ -1932,13 +1941,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   margin-left: auto;
   margin-right: auto;
   padding: 1.75rem 1.75rem 2.25rem;
-  /* Same white ring + drop shadow the cart / catalog / product cards carry, so
-     the panel floats on the greige surround instead of sitting flat. */
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.12),
-    0 0 0 var(--wt-ring) transparent,
-    0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-    0 0 11px var(--wt-ring) rgba(0, 0, 0, 0.12);
+  box-shadow: none;
 }
 .doc-panel .privacy-page__body { max-width: 68ch; }
 .privacy-page__title {
@@ -1985,6 +1988,24 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   color: rgba(255,255,255,0.95);
   text-decoration: underline;
 }
+/* EN/FR toggle relocated from the header — a plain text+globe button that reads
+   like the other footer links (dark-on-light override lives in the finishing
+   pass with the privacy link). */
+.site-footer__locale {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.6);
+  transition: color var(--transition-fast);
+}
+.site-footer__locale svg { display: block; }
+.site-footer__locale:hover { color: rgba(255,255,255,0.95); }
 .site-footer__brand {
   display: flex;
   align-items: center;
@@ -2756,7 +2777,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 
 /* Teaser card color rotation: green, gold, orange */
-.teaser-card { --tc-bg: rgba(255,255,255,0.1); --tc-text: #fff; --tc-tag-bg: rgba(49,117,156,0.15); --tc-tag-border: rgba(49,117,156,0.3); --tc-tag-color: #557488; --tc-btn-bg: #557488; --tc-btn-color: #fff; --tc-dot-color: rgba(255,255,255,0.4); --tc-glow: #557488; }
+.teaser-card { --tc-bg: rgba(255,255,255,0.1); --tc-text: #fff; --tc-tag-bg: rgba(49,117,156,0.15); --tc-tag-border: rgba(49,117,156,0.3); --tc-tag-color: #2E698E; --tc-btn-bg: #2E698E; --tc-btn-color: #fff; --tc-dot-color: rgba(255,255,255,0.4); --tc-glow: #2E698E; }
 
 .teaser-card {
   background: var(--tc-bg);
@@ -2996,7 +3017,9 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 
 .product-card:hover {
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  /* Gentle lift — the old 0 8px 24px / 0.1 read as a heavy drop that popped the
+     card off the grid. Softer and tighter so the hover is a subtle cue. */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 @media (min-width: 1025px) {
@@ -3328,11 +3351,11 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 @media (min-width: 1025px) {
   .login-overlay { padding: 0; }
   .login-modal.login-modal--split {
-    width: auto;
+    box-sizing: border-box;
+    width: 100vw;
     max-width: 100vw;
     height: 100vh;
     max-height: 100vh;
-    aspect-ratio: 16 / 9;
   }
 }
 .login-modal--split .login-modal__form-pane {
@@ -3391,6 +3414,10 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   opacity: 0;
   transition: opacity 0.8s ease;
 }
+/* The wide building-services photo (1920×776) fills the tall pane with `cover`
+   (full height, like the other slide); the crop is centred so the van logo and
+   a worker stay in frame. */
+.login-modal__slide--wide { object-fit: cover; object-position: center center; }
 .login-modal__slide.is-active { opacity: 1; }
 .login-modal__dots {
   position: absolute; bottom: clamp(1.25rem, 3.2vh, 2rem); right: clamp(1.35rem, 2.3vw, 2.1rem); left: auto;
@@ -3540,6 +3567,36 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 .login-modal__field input::placeholder { color: rgba(224, 236, 244, 0.45); }
 
+/* Portal picker — two bubbles instead of a username field. */
+.login-portals { display: flex; gap: 0.6rem; }
+.login-portal {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 15px 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+.login-portal:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.4); }
+.login-portal.is-selected {
+  background: var(--ce-green);
+  border-color: var(--ce-green);
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(65, 111, 141, 0.32);
+}
+
 /* Submit — the Modern Niagara steel-blue CTA. */
 .login-modal__submit.btn {
   width: 100%; justify-content: center; margin-top: 0.55rem;
@@ -3565,6 +3622,13 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   padding: 10px 14px; border-radius: 2px;
   font-size: 0.82rem; font-weight: 600; text-align: center;
 }
+/* Informational (not an error) — e.g. the "Service coming soon" notice. Blue
+   shade instead of the red error tone. */
+.login-modal__error--info {
+  background: rgba(46, 105, 142, 0.18);
+  border-color: rgba(91, 147, 184, 0.6);
+  color: #d3e6f3;
+}
 
 /* ═══ Zoom-stable sign-in pane (desktop) ═════════════════════════════════════
    The split pane is viewport-locked (its size follows 100vh @ 16:9), so it holds
@@ -3584,22 +3648,25 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   /* Card edge inset in cqw too, so the content column stays pinned to the pane. */
   .login-modal--split .login-card { padding: 4.4cqw 4.4cqw; }
 
+  /* Uniform vertical rhythm: every major object (mark, wordmark, Login field,
+     Password field, submit) is separated by the SAME gap (--login-gap); each
+     label sits tight to its control (--login-label-gap). The mark is scaled a
+     touch smaller than the wordmark's width. */
+  .login-modal--split .login-card { --login-gap: 4.5cqw; --login-label-gap: 1.5cqw; }
   .login-modal--split .login-card__brand.brand-cluster {
-    gap: 9cqw !important;
-    margin: 0 auto 5.4cqw;
+    /* The three areas — mark, wordmark, form — get more breathing room than the
+       form internals; the mark↔wordmark gap is a touch larger still. */
+    gap: calc(var(--login-gap) + 6cqw) !important;
+    margin: 0 auto calc(var(--login-gap) + 2cqw);
   }
-  .login-modal--split .login-card__brand .brand-cluster__mark { width: 34cqw; height: 34cqw; }
+  .login-modal--split .login-card__brand .brand-cluster__mark { width: 27cqw; height: 27cqw; }
   .login-modal--split .login-card__brand .brand-cluster__words { gap: 0.8cqw; }
   .login-modal--split .login-card__brand .brand-cluster__word { font-size: 8cqw; }
 
-  .login-modal--split .login-card__hint {
-    padding-inline: 2.8cqw;
-    margin-bottom: 0.75cqw;
-    font-size: 2.7cqw;
-  }
-
-  .login-modal--split .login-modal__form { gap: 2.9cqw; padding: 4.4cqw 2.8cqw 0; }
-  .login-modal--split .login-modal__field { gap: 1.5cqw; }
+  .login-modal--split .login-modal__form { gap: var(--login-gap); padding: 0 2.8cqw 0; }
+  .login-modal--split .login-modal__field { gap: var(--login-label-gap); }
+  .login-modal--split .login-portal { font-size: 2.9cqw; padding: 3.1cqw 12px; }
+  .login-modal--split .login-modal__submit.btn { margin-top: 0; }
   .login-modal--split .login-modal__field label { font-size: 1.94cqw; }
   .login-modal--split .login-modal__field input { padding: 2.9cqw 3.1cqw; font-size: 2.94cqw; }
   .login-modal--split .login-modal__submit.btn { padding: 2.9cqw 4cqw; margin-top: 1.6cqw; font-size: 2.9cqw; }
@@ -4336,7 +4403,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   background: #4689b3 !important;
   color: #ffffff !important;
 }
-.hero-card-header__btn--to-fr:hover { background: #557488 !important; color: #ffffff !important; }
+.hero-card-header__btn--to-fr:hover { background: #2E698E !important; color: #ffffff !important; }
 .hero-card-header__btn--to-en {
   background: #d43950 !important;
   color: #ffffff !important;
@@ -4521,14 +4588,14 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 @media (hover: hover) { .cart-btn:hover { border-color: var(--ce-gold); background: #eaf3fa; color: #1e4a66; } .cart-btn:hover svg { stroke: #1e4a66; } }
 .cart-btn svg { stroke: var(--ce-gray-700); width: 17px; height: 17px; }
 .cart-btn--active {
-  border-color: #557488;
-  background: #557488;
+  border-color: #2E698E;
+  background: #2E698E;
   color: #ffffff;
   box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08);
 }
 .cart-btn--active svg { stroke: #ffffff; }
 .cart-btn--active .cart-btn__label { color: #ffffff; }
-@media (hover: hover) { .cart-btn--active:hover { border-color: var(--ce-gold); background: #265f80; color: #ffffff; } .cart-btn--active:hover svg { stroke: #ffffff; } }
+@media (hover: hover) { .cart-btn--active:hover { border-color: var(--ce-gold); background: #245471; color: #ffffff; } .cart-btn--active:hover svg { stroke: #ffffff; } }
 /* Wherever the catalog header shows (home + apparel routes), the cart reads as
    an actual button in the bright tab-bar orange on the darker textured header,
    instead of the old brown / transparent outline that blended in. !important
@@ -4545,7 +4612,7 @@ body:has(.home-catalog) .site-header .cart-btn {
 body:has(.home-catalog) .site-header .cart-btn svg { stroke: #ffffff !important; }
 body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff !important; }
 @media (hover: hover) {
-  body:has(.home-catalog) .site-header .cart-btn:hover { border-color: var(--ce-gold) !important; background: #265f80 !important; color: #ffffff !important; }
+  body:has(.home-catalog) .site-header .cart-btn:hover { border-color: var(--ce-gold) !important; background: #245471 !important; color: #ffffff !important; }
   body:has(.home-catalog) .site-header .cart-btn:hover svg { stroke: #ffffff !important; }
 }
 /* Logout button in site-header gets a subtle green tint to match the other accented buttons */
@@ -5252,6 +5319,10 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
   flex-wrap: wrap;
   gap: var(--wt-gap-tight);
 }
+/* Tall sizes sit on their own row, just below the regular sizes. */
+.product-modal__options--tall {
+  margin-top: var(--wt-gap-tight);
+}
 .product-modal__option {
   padding: 7px 14px;
   border-radius: var(--radius-sm);
@@ -5513,11 +5584,11 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
   }
 }
 
-/* Add to Cart — filled in the lighter secondary-bar blue (#84acc7). Hover/tap
-   only nudges a touch deeper (not the old dark #557488 theme, which read "too
+/* Add to Cart — filled in the lighter secondary-bar blue (#5b93b8). Hover/tap
+   only nudges a touch deeper (not the old dark #2E698E theme, which read "too
    blue" when the :hover state stuck on a mobile tap). */
 .product-modal__add.btn--primary {
-  background: #647d8b;
+  background: #2E698E;
   color: var(--ce-white);
   border: none;
   box-shadow: 0 6px 22px rgba(65,111,141,0.34);
@@ -5541,11 +5612,11 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
   color: var(--ce-white);
 }
 /* Order Now — ghost button edged in the logo's darker-blue triangle
-   colour (#557488). Fills with the warm gold triangle on hover so the
+   colour (#2E698E). Fills with the warm gold triangle on hover so the
    two buttons echo opposite corners of the pinwheel. */
 .product-modal__add.btn--secondary {
   background: var(--ce-white);
-  border: 1.5px solid #557488;
+  border: 1.5px solid #2E698E;
   color: #1e4a66;
   box-shadow: 0 4px 16px rgba(49,117,156,0.14);
 }
@@ -6591,7 +6662,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .logout-form { display: none; }
   .hero-card-header__btn--logout { display: none; }
   .cart-btn svg { width: 22px; height: 22px; }
-  .cart-btn--active { background: #557488 !important; border-color: #557488 !important; color: #ffffff !important; box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important; }
+  .cart-btn--active { background: #2E698E !important; border-color: #2E698E !important; color: #ffffff !important; box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important; }
   .cart-btn--active svg { stroke: #ffffff !important; }
   .cart-btn--active .cart-btn__label { color: #ffffff !important; }
   .site-header__nav a { font-size: 0.75rem; }
@@ -6779,7 +6850,7 @@ details[open] > .cart-drawer__checkout-title::after {
     text-decoration: none;
     padding: 4px 8px;
   }
-  .hero-card-header__nav-link:hover { color: #557488; }
+  .hero-card-header__nav-link:hover { color: #2E698E; }
   .hero-card-header__nav-link.active { color: #4689b3; }
   .hero-card-header__brand { display: none !important; }
   .hero-card-header__actions .hero-card-header__btn:last-child { display: none !important; }
@@ -7013,12 +7084,12 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header--hero-hidden.site-header--hero-visible .site-header__logo-apparel { color: var(--ce-gray-400); }
   .site-header--hero-hidden.site-header--hero-visible .locale-btn { color: var(--ce-gray-700); background: rgba(0,0,0,0.03); border: 1px solid var(--ce-gray-200); border-radius: var(--ce-btn-radius); }
   .site-header--hero-hidden.site-header--hero-visible .locale-btn:hover { color: var(--ce-gray-700); background: rgba(0,0,0,0.03); border-color: var(--ce-gray-200); }
-  .site-header--hero-hidden.site-header--hero-visible .cart-btn { background: #557488; border: 1px solid #557488; border-radius: var(--ce-btn-radius); color: #ffffff; }
-  .site-header--hero-hidden.site-header--hero-visible .cart-btn:hover { color: #ffffff; background: #265f80; border-color: #265f80; }
+  .site-header--hero-hidden.site-header--hero-visible .cart-btn { background: #2E698E; border: 1px solid #2E698E; border-radius: var(--ce-btn-radius); color: #ffffff; }
+  .site-header--hero-hidden.site-header--hero-visible .cart-btn:hover { color: #ffffff; background: #245471; border-color: #245471; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn svg { stroke: #ffffff; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn:hover svg { stroke: #ffffff; }
-  .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active { background: #557488; border-color: #557488; color: #ffffff; }
-  .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active:hover { background: #265f80; border-color: #265f80; color: #ffffff; }
+  .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active { background: #2E698E; border-color: #2E698E; color: #ffffff; }
+  .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active:hover { background: #245471; border-color: #245471; color: #ffffff; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active svg { stroke: #ffffff; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active:hover svg { stroke: #ffffff; }
   .site-header--hero-hidden.site-header--hero-visible .logout-btn { background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.12); border-radius: var(--ce-btn-radius); color: var(--ce-gray-900); box-shadow: inset 0 1px 4px rgba(0,0,0,0.06), inset 0 0 6px rgba(0,0,0,0.03); }
@@ -7038,7 +7109,9 @@ details[open] > .cart-drawer__checkout-title::after {
     display: grid;
     /* Categories are a horizontal bar spanning row 2 (styled like the PDP
        breadcrumb bar); the left column below it holds the filter sidebar. */
-    grid-template-columns: 205px 1fr;
+    /* Sidebar column === one product column: the row is 6 equal parts (1 sidebar
+       + 5 products), so the sidebar matches a 5-up product card's width. */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 5fr);
     grid-template-rows: auto auto 1fr;
     /* Row gap 0: the grid gap would otherwise open white space between the
        (zero-height) hero row and the tab bar, holding the bar ~10px below
@@ -7194,11 +7267,19 @@ details[open] > .cart-drawer__checkout-title::after {
     font-weight: 400;
     color: var(--ce-gray-600);
   }
+  /* Shared shell: the product detail occupies the same main column the grid
+     does, so the sidebar stays put across the catalog ↔ PDP navigation. */
+  .home-catalog .home-catalog__pdp-main {
+    grid-column: 2;
+    grid-row: 3;
+    align-self: start;
+    min-width: 0;
+  }
   .home-catalog .apparel-grid {
     grid-column: 2;
     grid-row: 3;
     align-self: start;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: var(--wt-gap-tight);
     background: var(--ce-gray-200);
     border-radius: 2px;
@@ -7230,7 +7311,7 @@ details[open] > .cart-drawer__checkout-title::after {
     margin-bottom: 0;
   }
   .home-catalog .apparel-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: var(--wt-gap-tight);
   }
   .product-carousel {
@@ -7403,7 +7484,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .hero-card-header__nav { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; margin-right: 0.5rem; }
   .hero-card-header__nav-link { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; color: rgba(255,255,255,0.7); text-decoration: none; padding: 4px 8px; }
   .hero-card-header__nav-link:hover { color: #4689b3; }
-  .hero-card-header__nav-link.active { color: #557488; }
+  .hero-card-header__nav-link.active { color: #2E698E; }
   .hero-card-header__actions .hero-card-header__btn:last-child { display: none; }
 
   /* Hero carousel — shorter on tablet so it doesn't dominate */
@@ -7679,8 +7760,8 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header.site-header--hero-visible .cart-btn,
   .site-header:not(.site-header--hero-hidden) .cart-btn.cart-btn--active,
   .site-header.site-header--hero-visible .cart-btn.cart-btn--active {
-    background: #557488 !important;
-    border-color: #557488 !important;
+    background: #2E698E !important;
+    border-color: #2E698E !important;
     color: #ffffff !important;
     border-radius: 0 !important;
     box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important;
@@ -8402,8 +8483,8 @@ details[open] > .cart-drawer__checkout-title::after {
     box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important;
   }
   .hero__upper .hero-card-header__btn--cart:hover {
-    background: #557488 !important;
-    border-color: #557488 !important;
+    background: #2E698E !important;
+    border-color: #2E698E !important;
     color: #ffffff !important;
   }
   .hero__upper .hero-card-header__btn--cart svg { stroke: #ffffff !important; }
@@ -9075,8 +9156,10 @@ details[open] > .cart-drawer__checkout-title::after {
      ratio (÷1.618) → #3b6581, so the header sits a φ step below the tab bar just
      like the 64/40 height ratio between them. Both blues were lightened + softened
      a step (from #2b556f / #4689b3) so they read gentler against the pale page. */
-  --wt-orange: #647d8b;
-  --wt-orange-dark: #32556c;
+  /* Header/footer/bar colour — a silvery slate grey (was the mnbs blue #2E698E),
+     kept dark enough that the white logo + labels stay legible. */
+  --wt-orange: #dfe2e6;
+  --wt-orange-dark: #c9cdd1;
   --wt-orange-hi: #dbeafe;
   /* Darker-orange overlay box behind the logo + buttons (willstransfer.com
      mobile/tablet look): ~30% black over the orange bar → ~#14285f. */
@@ -9449,34 +9532,46 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header .site-header__search {
     display: flex;
     order: -1; /* sit to the LEFT of the cart button in the nav */
-    /* Inset from the bar top/bottom (was full-height stretch) so the field reads
-       as a floating control with breathing room, not edge-to-edge. */
-    align-self: center;
-    height: calc(100% - 16px) !important;
+    /* Full-height cell: fills the bar top to bottom and butts against the cart
+       cell — reads as a cell cut into the header, not a floating inset control
+       (mirrors the tm project's header). */
+    align-self: stretch;
+    height: auto !important;
     /* Roughly a third of the header, capped so it never crowds the cart button
        on narrower desktops. */
     width: min(32vw, 440px);
     box-sizing: border-box;
     margin: 0 !important;
     padding: 0 14px;
-    border-radius: var(--wt-box-radius) !important;
+    border-radius: 0 !important;
   }
   .site-header .site-header__search-input { flex: 1; min-width: 0; font-size: 0.9rem; }
   /* Permanent field — no close button (it never opens/closes here). */
   .site-header .site-header__search-close { display: none; }
   /* Search now lives in the header; drop the one on the catalog tab bar. */
   .home-catalog__sidebar-search { display: none !important; }
-  /* Cart / logout / menu buttons inset from the bar top/bottom too, so the whole
-     right cluster reads as floating controls with breathing room (was full-height). */
+  /* Cart / logout / menu buttons run the FULL height of the bar as squared
+     cells — no top/bottom inset, no rounded pill, no margin — so the whole
+     right cluster reads as cells cut into the header (mirrors the tm project). */
   .site-header .cart-btn,
   .site-header .cart-btn.cart-btn--active,
   .site-header .logout-btn,
   .site-header .hamburger-btn,
   .site-header .site-header__search-btn,
   .site-header .locale-btn {
-    align-self: center !important;
-    height: calc(100% - 16px) !important;
+    align-self: stretch !important;
+    height: auto !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
   }
+  /* No gaps between the cells, and the last cell runs out to the bar's right
+     edge. Vertical padding is gone (they fill the bar); horizontal padding
+     stays so labels/icons keep breathing room. */
+  .site-header__nav { gap: 0 !important; }
+  .site-header__inner { padding-right: 0 !important; }
+  .site-header .cart-btn,
+  .site-header .cart-btn.cart-btn--active { padding: 0 20px !important; }
+  .site-header .logout-btn { padding: 0 18px !important; }
 }
 
 /* ---- Catalog tabs tie into the orange header ---- */
@@ -9996,29 +10091,31 @@ details[open] > .cart-drawer__checkout-title::after {
     display: block;
     grid-column: 1;
     grid-row: 3;
+    /* Not sticky — aligned to the top of the column so the Standard/Catalog
+       toggle always sits at the very top with no gap above it. */
     align-self: start;
-    position: sticky;
-    /* Stick right under the tab bar: the header pin + the 50px tab bar, less the
-       1px lap. It was a hardcoded 113px (a stale 4+64 header + 42px bar), 8px
-       above where the bar now sits — so the filters scrolled ~8px under the bar
-       before catching, which read as not sticking until a few px of scroll. */
-    top: calc(var(--wt-header-pin) + 44px - 1px);
+    position: static;
     /* Neutral near-white panel matching the PDP / checkout panels (the
        neutralized --mn-panel reads ~#f2f2f2 over white), with a thin white line
        at the top separating the filter column from the tab bar above it. */
     background: #f2f2f2;
     box-shadow: inset 0 1px 0 0 #ffffff;
     border-radius: 2px;
+    /* Symmetric horizontal padding (0) so the selected-item highlight sits an
+       equal 12px (its own inset) from both sidebar edges, not indented left. */
     padding: 0.35rem 0 0.85rem;
   }
-  .home-catalog__filter-group { padding-bottom: 0.35rem; }
+  .home-catalog__filter-group { padding-bottom: 0.2rem; }
   .home-catalog__filter-group + .home-catalog__filter-group { border-top: 1px solid rgba(0, 0, 0, 0.07); }
+  /* Tighter group heading — the base rule sets a roomy 0.75rem top pad; trim it
+     so each filter section stacks closer together. */
+  .home-catalog__filter-title { padding: 0.3rem 12px 0.15rem; }
   .home-catalog__filter-opt {
     display: flex;
     align-items: center;
     gap: 8px;
     width: 100%;
-    padding: 5px 12px;
+    padding: 4px 12px;
     border: none;
     background: none;
     cursor: pointer;
@@ -10083,6 +10180,157 @@ details[open] > .cart-drawer__checkout-title::after {
     text-underline-offset: 3px;
   }
   .home-catalog__filter-clear:hover { color: var(--ce-orange); }
+
+  /* Collections heading row: label on the left, the icon-only grid-density
+     toggle inline on the right. */
+  .home-catalog__catnav-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-right: 10px;
+  }
+  .home-catalog__catnav-head .home-catalog__catnav-title { padding-bottom: 0; }
+  /* Inline (compact, icon-only) grid-density toggle. */
+  .home-catalog__density--inline {
+    margin: 0;
+    padding: 2px;
+    gap: 2px;
+    border-radius: 5px;
+    flex: 0 0 auto;
+  }
+  .home-catalog__density--inline .home-catalog__density-btn {
+    flex: 0 0 auto;
+    padding: 3px 5px;
+  }
+  .home-catalog__density--inline .home-catalog__density-btn svg { width: 14px; height: 14px; }
+
+  /* ---- Desktop category nav (sm-style vertical list in the sidebar) ----
+     The collection titles live here as a vertical list with count pills; the
+     horizontal tab strip is hidden on desktop (kept for mobile/tablet). */
+  .home-catalog__tabs { display: none; }
+  /* The whole secondary bar is now empty on desktop (categories moved to the
+     sidebar), so drop it entirely — the site header carries search. */
+  .home-catalog__header { display: none !important; }
+  /* Breadcrumb bar removed on desktop too (to be relocated elsewhere). */
+  .pdp-breadcrumb { display: none !important; }
+
+  /* ---- Sidebar grid-density toggle (Standard 5-up / Catalog 8-up) ---- */
+  .home-catalog__density {
+    display: flex;
+    gap: 3px;
+    margin: 0 0 0.3rem;
+    padding: 3px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+  }
+  .home-catalog__density-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 8px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ce-gray-500);
+    border-radius: 4px;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+  .home-catalog__density-btn:hover { color: var(--ce-gray-800); }
+  .home-catalog__density-btn.active {
+    background: #fff;
+    color: var(--ce-green);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  }
+  .home-catalog__density-btn svg { flex-shrink: 0; }
+
+  /* Solid blue header — no white sign-frame band below the bar. The header
+     background is a light off-white "sign frame" and the blue __inner bar sat
+     1px short of the header's bottom edge, so that 1px of off-white read as a
+     white border below the header. Fill the header with the mnbs blue, drop the
+     white ring cap (::before), and zero the inner's top/bottom margins so the
+     blue bar reaches the header edges. */
+  .site-header.site-header--white,
+  .site-header.site-header--hero-visible,
+  .site-header.site-header--solid {
+    background-color: #dfe2e6 !important;
+    background-image: none !important;
+  }
+  .site-header::before { display: none !important; }
+  .site-header__inner { margin-top: 0 !important; margin-bottom: 0 !important; }
+  .home-catalog__catnav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0.15rem 0 0.25rem;
+    margin-bottom: 0.2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  }
+  .home-catalog__catnav-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ce-gray-400);
+    padding: 0.15rem 12px 0.25rem;
+    margin: 0;
+  }
+  .home-catalog__catnav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 7px 12px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 1.02rem;
+    color: var(--ce-gray-700);
+    border-radius: 4px;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+  .home-catalog__catnav-item:hover { background: rgba(0, 0, 0, 0.04); color: var(--ce-gray-900); }
+  .home-catalog__catnav-item.active { background: var(--ce-green); color: #fff; font-weight: 600; }
+  .home-catalog__catnav-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.65;
+  }
+  .home-catalog__catnav-icon svg { width: 18px; height: 18px; }
+  .home-catalog__catnav-item.active .home-catalog__catnav-icon { opacity: 1; }
+  .home-catalog__catnav-label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .home-catalog__catnav-count {
+    flex-shrink: 0;
+    min-width: 22px;
+    height: 20px;
+    padding: 0 7px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.74rem;
+    font-weight: 700;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.08);
+    color: var(--ce-gray-500);
+  }
+  .home-catalog__catnav-item.active .home-catalog__catnav-count {
+    background: rgba(255, 255, 255, 0.22);
+    color: #fff;
+  }
 }
 
 /* ---- Desktop: unified sign column ---- */
@@ -10901,7 +11149,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header .cart-btn.cart-btn--active,
   .site-header--hero-hidden .cart-btn,
   .site-header--hero-hidden.site-header--hero-visible .cart-btn {
-    background: #84acc7 !important;
+    background: #5b93b8 !important;
     border: 1px solid rgba(0,0,0,0.18) !important;
     border-radius: var(--wt-box-radius) !important;
     color: #fff !important;
@@ -11149,7 +11397,10 @@ details[open] > .cart-drawer__checkout-title::after {
    with the bar above it; the bottom gap drops to the same 2px as the gutter. */
 @media (min-width: 1025px) {
   .home-catalog__filters { margin-left: 0; }
-  .home-catalog__inner { padding-bottom: 2px; }
+  /* No greige strip under the grid — the product field runs flush to the card's
+     bottom edge (the footer/border), instead of a thin greige band showing
+     between the last row and the footer. */
+  .home-catalog__inner { padding-bottom: 0; }
 }
 
 /* Desktop: the gaps between product cards come down to the same 2px as the
@@ -11158,6 +11409,23 @@ details[open] > .cart-drawer__checkout-title::after {
    grid's gray-200 background is what shows through these gaps. */
 @media (min-width: 1025px) {
   .home-catalog .apparel-grid { gap: 2px; }
+}
+
+/* Narrower desktops / small laptops keep 4 products per row so the cards don't
+   shrink too far; the default 5-up grid is reserved for wide monitors (≥1600px). */
+@media (min-width: 1025px) and (max-width: 1599px) {
+  .home-catalog .apparel-grid { grid-template-columns: repeat(4, 1fr) !important; }
+}
+
+/* Catalog (dense) view — the sidebar toggle: 8 products per row on wide monitors,
+   scaled to 6 on narrower desktops. The .--dense class out-specifies the
+   defaults above, so it wins in both ranges (the 6-up rule is placed last so it
+   wins over 8-up within the narrow range). */
+@media (min-width: 1025px) {
+  .home-catalog .apparel-grid.apparel-grid--dense { grid-template-columns: repeat(8, 1fr) !important; }
+}
+@media (min-width: 1025px) and (max-width: 1599px) {
+  .home-catalog .apparel-grid.apparel-grid--dense { grid-template-columns: repeat(6, 1fr) !important; }
 }
 
 /* Desktop: ONE outline around the whole product card, not just its image.
@@ -11172,17 +11440,9 @@ details[open] > .cart-drawer__checkout-title::after {
   .product-card__image::after {
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
   }
-  .product-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    box-shadow:
-      inset 0 0 0 1px rgba(0,0,0,0.07),
-      inset 0 -1px 0 rgba(255,255,255,0.55);
-    pointer-events: none;
-    z-index: 3;
-  }
+  /* Borderless product cards — the 1px outline ring is removed; cards read as a
+     clean field separated only by the gutter between them. */
+  .product-card::after { display: none; }
   /* Product title in Catalog (list) view; the gender prefix scales with it so
      "Men's/Women's" matches. Kept just under the base so longer names fit on a
      single line. */
@@ -11319,7 +11579,7 @@ details[open] > .cart-drawer__checkout-title::after {
    Keeps the Modern Niagara button wholesale: the mark chip, the staggered
    fade-in of the triangles, the square->diamond rotate, the travelling sheen,
    the cart->check crossfade. Only the COLOUR changes.
-   Was: a #557488 -> #4689b3 gradient (brown into MN blue) with the triangles
+   Was: a #2E698E -> #4689b3 gradient (brown into MN blue) with the triangles
    staggering through MN's brand reds, greens, blue and yellow — none of which
    appear anywhere else in this app.
    Now: the sign palette. The ramp is one warm family (cream -> orange ->
@@ -11371,7 +11631,7 @@ details[open] > .cart-drawer__checkout-title::after {
    from the same orange rather than the old blue one. Deeper on hover so the
    press still reads on a warm background. */
 .product-modal__add.btn--primary {
-  background: #647d8b;
+  background: #2E698E;
   color: var(--ce-white);
   border: none;
   box-shadow: 0 6px 22px rgba(65, 111, 141, 0.34);
@@ -11393,16 +11653,20 @@ details[open] > .cart-drawer__checkout-title::after {
    so full-viewport IS inside the site. */
 @media (min-width: 1025px) {
   .product-fullscreen {
-    /* Top of the CARD, not below the header: the header carries z-index 9999
-       against the viewer's 200, so it punched through the black wash and sat
-       lit on top of it. Covering it — and outranking it — means the whole card
-       goes dark as one surface. */
+    /* Cover the PRODUCT COLUMN only, not the catalog sidebar. The PDP is a
+       6-part grid (1fr sidebar + 5fr product + one --wt-gap-tight gap) capped at
+       --site-max and centred in the viewport. Inset the black wash from the
+       card's left edge by that sidebar column + the gap, and hold its right edge
+       at the card's right gutter — so the wash lands exactly on the product area
+       and the sidebar stays lit. (Was the whole card width, which darkened the
+       sidebar too.) Full height still (top 0 / bottom 0) so the product column
+       goes dark as one surface, header strip included. */
     top: 0;
     bottom: 0;
-    left: 50%;
-    right: auto;
-    width: min(var(--site-max), 100%);
-    transform: translateX(-50%);
+    left: calc((100vw - var(--site-max)) / 2 + (var(--site-max) - var(--wt-gap-tight)) / 6 + var(--wt-gap-tight));
+    right: calc((100vw - var(--site-max)) / 2);
+    width: auto;
+    transform: none;
     z-index: 10000;
   }
   /* Sized off the panel now, not the viewport — 90vw inside a 1408px panel on
@@ -11627,27 +11891,41 @@ body:has(.product-fullscreen) { overflow: hidden; }
 @media (min-width: 1025px) {
   .site-header .site-header__search,
   .site-header .logout-btn {
-    align-self: center !important;
-    height: calc(100% - 18px) !important;
+    /* Full-height cells cut into the bar (was inset floating controls) — fill
+       the bar top to bottom, no rounded pill, and butt against their neighbour
+       with no gap. Mirrors the tm project's header. */
+    align-self: stretch !important;
+    height: auto !important;
     border: none !important;
     border-radius: 0 !important;
     background: rgba(0, 0, 0, 0.12) !important;
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.16) !important;
-    padding: 0 11px !important;
+    padding: 0 14px !important;
   }
   .site-header .logout-btn { color: #fff !important; }
   .site-header .logout-btn svg { stroke: #fff !important; }
+  /* Logout is a SQUARE cell — its width follows the full header height
+     (aspect-ratio 1) instead of hugging the narrow icon, so it reads as a
+     square rather than a tall sliver beside the cart. */
+  .site-header .logout-form { flex: 0 0 auto !important; }
+  .site-header .logout-btn {
+    aspect-ratio: 1 / 1 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    justify-content: center !important;
+  }
   .site-header .cart-btn,
   .site-header .cart-btn.cart-btn--active {
-    align-self: center !important;
-    height: calc(100% - 18px) !important;
-    /* Match the cart↔logout gap (logout-form margin-left below) so both sides of
-       the cart have equal spacing. */
-    margin-left: 7px !important;
-    padding: 0 15px !important;
+    align-self: stretch !important;
+    height: auto !important;
+    /* No gaps between the cells — they butt directly together. */
+    margin-left: 0 !important;
+    padding: 0 20px !important;
     border: none !important;
     border-radius: 0 !important;
-    background: #84acc7 !important;
+    background: #5b93b8 !important;
     color: #fff !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.20) !important;
   }
@@ -11666,8 +11944,9 @@ body:has(.product-fullscreen) { overflow: hidden; }
   }
   .site-header .cart-btn:hover svg,
   .site-header .cart-btn.cart-btn--active:hover svg { stroke: #fff !important; }
-  .site-header .logout-form { margin-left: 7px !important; }
-  .site-header__inner { padding-right: 8px !important; }
+  .site-header .logout-form { margin-left: 0 !important; align-self: stretch !important; }
+  /* Last cell runs out to the bar's right edge — no trailing gap. */
+  .site-header__inner { padding-right: 0 !important; }
   /* Kill the old white "sign-cell" divider pseudo-elements on all three controls
      — these are the white lines that flanked the cart. */
   .site-header .site-header__search::before,
@@ -12220,7 +12499,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
   body:has(.home-catalog) .site-header .cart-btn.cart-btn--active {
     /* The inviting CTA: the lighter tab-bar blue, no white/dark seam border —
        just a soft drop shadow so it lifts off the darker header bar. */
-    background: #84acc7 !important;
+    background: #5b93b8 !important;
     border: none !important;
     color: #fff !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.20) !important;
@@ -12394,11 +12673,14 @@ body:has(.product-fullscreen) { overflow: hidden; }
   }
 }
 
-/* One line per fit. Single-range products (nearly all of them) are unchanged —
-   one block box reads exactly as the bare text did. A product stocked in both
-   regular and tall gets its two groups on their own lines instead of running
-   them together. */
-.product-card__sizes-line { display: block; }
+/* Fits sit BESIDE each other on one line — a product stocked in both regular
+   and tall shows "S - 4XL / LT - 4XLT" with a thin "/" between, rather than
+   wrapping to a second line. Single-range products read exactly as before. */
+.product-card__sizes-line { display: inline; }
+.product-card__sizes-line + .product-card__sizes-line::before {
+  content: " / ";
+  color: var(--ce-gray-400);
+}
 
 /* ============================================================
    Phones: no hairline around the catalog cards.
@@ -12579,11 +12861,13 @@ body:has(.product-fullscreen) { overflow: hidden; }
 @media (min-width: 1025px) {
   .home-catalog__inner,
   .apparel-catalog:has(.product-detail) {
-    /* One thin grey edge (no inner line) + a soft even shadow, matching the
-       cart — a single slick outline rather than a doubled border. */
+    /* One thin grey edge (no inner line) + a soft even shadow. Matched to the
+       header (.site-header__inner) and footer exactly — 0.12 rim + 0.10 glow —
+       so the body's side borders read as the same subtle line, not the heavier
+       0.14/0.12 they used to carry. */
     box-shadow:
-      0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-      0 0 11px var(--wt-ring) rgba(0, 0, 0, 0.12);
+      0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.12),
+      0 0 11px var(--wt-ring) rgba(0, 0, 0, 0.10);
     /* Sides only — no line across the header/content or content/footer joints. */
     clip-path: inset(0 -24px 0 -24px);
   }
@@ -13083,7 +13367,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
 .pdp-breadcrumb,
 .nav-drawer__header,
 .cart-table thead,
-.cart-drawer__back-btn { --wt-orange: #84acc7; }
+.cart-drawer__back-btn { --wt-orange: #5b93b8; }
 
 /* Brand-cluster wordmark reads white on the deep-blue sign bars. */
 .site-header__inner .brand-cluster__word,
@@ -13099,68 +13383,116 @@ body:has(.product-fullscreen) { overflow: hidden; }
    down to match the shorter cover — otherwise BUILDING SERVICES / APPAREL clip
    under the tab bar. */
 @media (min-width: 1025px) {
-  .hero { height: 70vh !important; min-height: 440px !important; }
-  /* .hero__upper renders taller than the 58vh .hero section (the carousel
-     image height leaks into it), so the absolutely-centred .hero__text ends up
-     below the VISIBLE centre. Pin the upper region to the section height so
-     top:50% lands on the centre of what the user actually sees. */
+  /* Full-width login-style split hero: a solid steel-blue brand pane on the LEFT
+     and the photo carousel on the RIGHT (the same layout as the login window),
+     sized to ~82vh like the mnbs.ca banner so the catalog peeks in just below. */
+  .hero { height: 82vh !important; min-height: 480px !important; }
   .hero__upper {
     height: 100% !important;
     max-height: 100% !important;
     min-height: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
   }
-  /* Centre the brand lockup and lay it out HORIZONTALLY — pinwheel left, the
-     stacked wordmark right, like the header — sized up to fill the cover width.
-     Drop the 1:1 square + fixed 560px width (they forced a tall stacked box) and
-     size straight off the viewport instead of a scale() transform. */
-  /* Vertical lockup anchored to the LEFT of the cover (like the mn hero): the
-     pinwheel stacks ABOVE the wordmark, and the dark box hugs the cluster on the
-     left third rather than sitting as a centred square. */
+  /* LEFT pane — the solid blue brand panel (login form-pane treatment): a dark
+     steel gradient carrying the centred pinwheel + wordmark lockup. A flex item
+     now, not an absolute overlay, so the photo never sits behind it. */
   .hero__upper .hero__text {
-    top: 50% !important;
-    /* Halfway between flush-left (0) and right-edge-at-centre (50% − golden
-       width): the midpoint is 25% − half the golden width. */
-    left: calc(25% - var(--site-max) / 5.236) !important;
+    order: 0 !important;
+    position: relative !important;
+    inset: auto !important;
+    top: auto !important;
+    left: auto !important;
     right: auto !important;
-    transform: translateY(-50%) !important;
+    bottom: auto !important;
+    transform: none !important;
+    flex: 0 0 33.333% !important;
+    width: 33.333% !important;
+    max-width: 33.333% !important;
+    height: 100% !important;
     display: flex !important;
     flex-direction: column !important;
+    /* Lockup aligned like the login window: mark centred above a flush-LEFT
+       wordmark block. */
     align-items: center !important;
     justify-content: center !important;
-    text-align: center !important;
+    text-align: left !important;
     aspect-ratio: auto !important;
-    /* Golden ratio, overlay = the SMALLER portion: overlay ≈38.2%, clear area to
-       the right ≈61.8% (clear ÷ overlay = φ). */
-    width: calc(var(--site-max) / 2.618) !important;
-    max-width: 46vw !important;
-    /* Make this box a query container so the pinwheel + type below size off the
-       BOX width (cqw), not the viewport — the lockup then always fits the panel
-       at any browser zoom or window width. */
     container-type: inline-size !important;
-    /* Roomy vertical rhythm: big gap between pinwheel and wordmark, generous top
-       pad above the pinwheel, a bit more below the wordmark. rem keeps these
-       stable (they scale with zoom); only the type/pinwheel use cqw so they
-       track the box width and never overflow it. */
-    gap: 3rem !important;
-    /* Trimmed the side padding a touch (2.5rem → 1.75rem) to give the enlarged
-       type room to grow while still fitting inside the golden overlay. */
-    padding: 5.5rem 1.35rem 4rem !important;
+    gap: 2.6cqw !important;
+    padding: 6% 8% !important;
+    background: linear-gradient(180deg, #12232e 0%, #0b161e 100%) !important;
+    z-index: 4 !important;
   }
+  /* Fine dot texture on the blue pane, faded toward the centre (login treatment). */
+  .hero__upper .hero__text::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1.5px) !important;
+    background-size: 14px 14px !important;
+    -webkit-mask-image:
+      linear-gradient(to right, #000 0%, rgba(0,0,0,0.35) 14%, transparent 42%, transparent 58%, rgba(0,0,0,0.35) 86%, #000 100%),
+      linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.35) 12%, transparent 40%, transparent 60%, rgba(0,0,0,0.35) 88%, #000 100%) !important;
+    -webkit-mask-composite: source-over !important;
+    mask-image:
+      linear-gradient(to right, #000 0%, rgba(0,0,0,0.35) 14%, transparent 42%, transparent 58%, rgba(0,0,0,0.35) 86%, #000 100%),
+      linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.35) 12%, transparent 40%, transparent 60%, rgba(0,0,0,0.35) 88%, #000 100%) !important;
+    mask-composite: add !important;
+  }
+  .hero__upper .hero__text > * { position: relative !important; z-index: 1 !important; }
   .hero__upper .hero__text .hero__brandmark {
-    width: 34cqw !important;
+    width: 40cqw !important;
     flex: 0 0 auto !important;
+    margin: 0 !important;
   }
-  .hero__upper .hero__text .hero__words { flex: 0 1 auto !important; align-items: flex-start !important; }
-  /* All three lines share ONE size so APPAREL never renders larger than
-     MODERN NIAGARA / BUILDING SERVICES. Scaled up to fill the golden-width panel. */
+  .hero__upper .hero__text .hero__words { flex: 0 1 auto !important; align-items: flex-start !important; text-align: left !important; }
   .hero__upper .hero__text .hero__title-word,
   .hero__upper .hero__text .hero__title-word.hero__title-word--sub,
   .hero__upper .hero__text .hero__title-word:nth-child(1),
   .hero__upper .hero__text .hero__title-word.hero__title-word--letters {
-    font-size: 11.8cqw !important;
+    font-size: 12.5cqw !important;
     line-height: 1.12 !important;
-    letter-spacing: -0.09em !important;
+    letter-spacing: -0.06em !important;
   }
+  /* RIGHT — the photo carousel as a static column (was a full-bleed backdrop). */
+  .hero__upper .hero-carousel {
+    order: 1 !important;
+    position: relative !important;
+    inset: auto !important;
+    top: auto !important;
+    left: auto !important;
+    flex: 1 1 66.667% !important;
+    width: auto !important;
+    height: 100% !important;
+  }
+  /* Pagination dots moved INTO the blue pane (bottom-right), like the login
+     window; the carousel's own dots are hidden on desktop. */
+  .hero-carousel__dots { display: none !important; }
+  .hero__upper .hero__text .hero__dots {
+    display: flex !important;
+    position: absolute !important;
+    bottom: clamp(1.25rem, 3.2vh, 2rem) !important;
+    right: clamp(1.35rem, 2vw, 2.1rem) !important;
+    gap: 9px !important;
+    z-index: 5 !important;
+  }
+  .hero__upper .hero__text .hero__dot {
+    width: 11px !important;
+    height: 11px !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 1px !important;
+    background: rgba(255, 255, 255, 0.32) !important;
+    cursor: pointer !important;
+    transform: rotate(0deg);
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  .hero__upper .hero__text .hero__dot:hover { background: rgba(255, 255, 255, 0.6) !important; }
+  .hero__upper .hero__text .hero__dot.is-active { background: #fff !important; transform: rotate(45deg) scale(1.15); }
 }
 
 /* Hero slide-in mode is back on (SHOW_HERO_HEADER=true): at the top of the home
@@ -13323,16 +13655,19 @@ body:has(.product-fullscreen) { overflow: hidden; }
   body .site-header .logout-btn svg { width: 22px !important; height: 22px !important; stroke: #fff !important; }
   .site-header .cart-btn,
   .site-header .site-header__search-btn { height: 62px !important; min-height: 62px !important; }
-  /* My Cart in the tab-bar's lighter blue (matching the secondary bar), not the
-     darker header blue. Uses the :has(.home-catalog) specificity so it beats the
+  /* My Cart button — Modern Niagara blue (#2E698E) with white text, the site's
+     primary CTA colour. Uses the :has(.home-catalog) specificity so it beats the
      rule that dissolves the button to transparent on the catalog route. */
   body .site-header .cart-btn,
   body:has(.home-catalog) .site-header .cart-btn,
-  body:has(.home-catalog) .site-header .cart-btn.cart-btn--active { background: #84acc7 !important; border: none !important; color: #fff !important; box-shadow: none !important; }
+  body:has(.home-catalog) .site-header .cart-btn.cart-btn--active { background: #2E698E !important; border: none !important; color: #ffffff !important; box-shadow: none !important; }
+  body .site-header .cart-btn:hover,
+  body:has(.home-catalog) .site-header .cart-btn:hover,
+  body:has(.home-catalog) .site-header .cart-btn.cart-btn--active:hover { background: #245471 !important; color: #ffffff !important; }
   body .site-header .cart-btn svg,
-  body:has(.home-catalog) .site-header .cart-btn svg { stroke: #fff !important; }
+  body:has(.home-catalog) .site-header .cart-btn svg { stroke: #ffffff !important; }
   body .site-header .cart-btn .cart-btn__label,
-  body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !important; }
+  body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff !important; }
   /* Tighter product gutters (was 0.2rem), matching the mobile 2px. */
   .home-catalog .apparel-grid { gap: 2px !important; }
   /* EN/FR language toggle in the header (between search and cart) — un-hide it on
@@ -13367,10 +13702,10 @@ body:has(.product-fullscreen) { overflow: hidden; }
   .drawer.cart-drawer .cart-drawer__details-step { padding-top: 0 !important; }
   /* The checkout "Back to Cart" bar is a secondary bar — span it the FULL width
      (it was only as wide as its label, leaving the rest of the bar grey) and
-     paint it the same lighter blue (#84acc7) as the PRODUCT/TOTAL strip and tab
+     paint it the same lighter blue (#5b93b8) as the PRODUCT/TOTAL strip and tab
      bar, so the whole bar reads blue like every other secondary bar. */
   .cart-drawer__back-btn {
-    background: #84acc7 !important;
+    background: #5b93b8 !important;
     color: #fff !important;
     width: 100% !important;
     box-sizing: border-box !important;
@@ -13397,7 +13732,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
   .product-card__color-size-row .product-card__gender { display: none !important; }
   /* View toggle blends into the blue tab bar. */
   .apparel-titlebar__action--tablet-cols {
-    background: #84acc7 !important;
+    background: #5b93b8 !important;
     color: #fff !important;
     align-self: stretch !important;
     height: auto !important;
@@ -13454,7 +13789,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
    than the lighter tab-bar blue, so the active tab reads as the header colour.
    Scoped --wt-orange resolves inside the active tab's background gradient (and
    its ::before, which inherits the variable). */
-.home-catalog__tabs .apparel-titlebar__tab.active { --wt-orange: #647d8b; }
+.home-catalog__tabs .apparel-titlebar__tab.active { --wt-orange: #dfe2e6; }
 
 /* ============================================================
    Desktop: header a golden step TALLER than the secondary bars.
@@ -13573,7 +13908,7 @@ body:has(.nav-drawer-overlay) .site-header__logo {
 /* Header: the darker blue sign (a φ-step below the lighter tab-bar blue) with the
    iron texture + restored pressed/raised depth. Deep bg → white content (below). */
 .site-header__inner {
-  --wt-orange: #647d8b;
+  --wt-orange: #dfe2e6;
   /* Dots fade toward the centre (a solid-blue overlay peaks at 50% and eases to
      transparent at both ends), so the dot texture reads strongest at the left/
      right edges and clears through the middle. */
@@ -13611,6 +13946,12 @@ body:has(.nav-drawer-overlay) .site-header__logo {
 body:has(.home-catalog) .site-header .cart-btn svg { stroke: #fff !important; }
 .site-header .cart-btn__label,
 body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !important; }
+/* Cart button is Modern Niagara blue (mnbs CTA), so its icon + label stay white
+   for contrast — matches the white-icon rule above (logout/hamburger too). */
+.site-header .cart-btn svg,
+body:has(.home-catalog) .site-header .cart-btn svg { stroke: #ffffff !important; }
+.site-header .cart-btn__label,
+body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff !important; }
 
 /* Secondary bars: restore the pressed-sign depth (top sheen + inner bottom
    shadow) like the header, so they don't read flat against the lighter theme. */
@@ -13703,9 +14044,9 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
    no white gap), and make the logout opaque so the bar's dot texture doesn't
    show through it. */
 @media (min-width: 601px) and (max-width: 1024px) {
-  .home-catalog__header { background: #84acc7 !important; }
+  .home-catalog__header { background: #5b93b8 !important; }
   .home-catalog__right {
-    background: #84acc7 !important;
+    background: #5b93b8 !important;
     align-self: stretch !important;
     height: auto !important;
     display: flex !important;
@@ -13713,7 +14054,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
     padding: 0 !important;
   }
   .apparel-titlebar__action.apparel-titlebar__action--tablet-cols {
-    /* Selected-tab highlight (--mn-bar-hi), not the light-blue #84acc7 — the
+    /* Selected-tab highlight (--mn-bar-hi), not the light-blue #5b93b8 — the
        toggle reads as a subtle grey control on the grey bar, matching the
        desktop Catalog button and the active tab, with a dark icon (see the
        every-breakpoint svg rule near end of file). */
@@ -13781,7 +14122,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
     border-bottom: none !important;
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
-    box-shadow: 0 3px 0 0 #647d8b !important;
+    box-shadow: 0 3px 0 0 #2E698E !important;
   }
 }
 
@@ -13857,7 +14198,7 @@ body:has(.cart-drawer) .pdp-breadcrumb {
    dot-pattern layer bled THROUGH them and showed dots inside the boxes (visible
    on the desktop "Catalog" button and the tablet search field). Composite the
    same overlay over an OPAQUE copy of the bar colour (--wt-orange resolves to
-   the brand blue #84acc7 in this scope) — identical appearance, but now opaque
+   the brand blue #5b93b8 in this scope) — identical appearance, but now opaque
    so no dots leak through. */
 .home-catalog__viewmode,
 .home-catalog__sidebar-search {
@@ -13922,7 +14263,7 @@ body:has(.cart-drawer) .pdp-breadcrumb {
 .home-catalog__sidebar-search .apparel-titlebar__search-input::placeholder { color: var(--ce-gray-500) !important; }
 /* My Cart button follows the SECONDARY-bar colour (light blue-gray, dark text).
    Uses the :has(.home-catalog) variants + this later position to beat the
-   #84acc7 CTA rule (0,3,1) that would otherwise win. */
+   #5b93b8 CTA rule (0,3,1) that would otherwise win. */
 body .site-header .cart-btn,
 body .site-header .cart-btn.cart-btn--active,
 body:has(.home-catalog) .site-header .cart-btn,
@@ -13941,7 +14282,7 @@ body .site-header .cart-btn:hover,
 body:has(.home-catalog) .site-header .cart-btn:hover,
 body .site-header .site-header__search:hover,
 body .site-header .site-header__search:focus-within {
-  background: #47708c !important;
+  background: #245471 !important;
   color: #fff !important;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.16) !important;
 }
@@ -13954,7 +14295,7 @@ body:has(.home-catalog) .site-header .cart-btn svg { stroke: #fff !important; }
 body .site-header .cart-btn .cart-btn__label,
 body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !important; }
 body .site-header .cart-btn:hover,
-body:has(.home-catalog) .site-header .cart-btn:hover { background: #47708c !important; color: #fff !important; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.16) !important; }
+body:has(.home-catalog) .site-header .cart-btn:hover { background: #245471 !important; color: #fff !important; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.16) !important; }
 body:has(.home-catalog) .site-header .cart-btn:hover svg { stroke: #fff !important; }
 /* My Cart: no white outline (clean fill like a solid header control). */
 body .site-header .cart-btn,
@@ -14051,5 +14392,443 @@ body .site-header__inner { border-top-left-radius: 0 !important; border-top-righ
     box-shadow: none !important;
     min-width: 0 !important;
     padding: 0 8px !important;
+  }
+}
+
+/* ═══ Desktop: mnbs theme finishing pass ═══════════════════════════════════════
+   (Placed last so it wins over the earlier per-state header/cart rules.) */
+@media (min-width: 1025px) {
+  /* My Cart — the Modern Niagara blue CTA (#2E698E) with white icon + label. */
+  body .site-header .cart-btn,
+  body:has(.home-catalog) .site-header .cart-btn,
+  body .site-header--hero-visible .cart-btn,
+  body .site-header .cart-btn.cart-btn--active,
+  body:has(.home-catalog) .site-header .cart-btn.cart-btn--active {
+    background: #2E698E !important;
+    border-color: #2E698E !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+  }
+  body .site-header .cart-btn:hover,
+  body:has(.home-catalog) .site-header .cart-btn:hover,
+  body .site-header .cart-btn.cart-btn--active:hover { background: #245471 !important; color: #ffffff !important; }
+  body .site-header .cart-btn svg,
+  body:has(.home-catalog) .site-header .cart-btn svg { stroke: #ffffff !important; }
+  body .site-header .cart-btn .cart-btn__label,
+  body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff !important; }
+
+  /* Logo keeps its left content inset; the right cluster runs its last cell out
+     to the bar's edge (no trailing gap), so the action cells read as built into
+     the header. */
+  .site-header,
+  .site-header--white,
+  .site-header--solid { padding-left: 0 !important; padding-right: 0 !important; }
+  .site-header__inner { margin-left: 0 !important; margin-right: 0 !important; padding-left: 16px !important; padding-right: 0 !important; }
+
+  /* The crisp white viewport frame (4px, square edges) belongs ONLY to the login
+     window — it framed the whole site before, which read as a stray white border
+     around the content. The login overlay is only in the DOM while signed out,
+     so :has() keeps the frame on the login screen and drops it once you're in. */
+  body:has(.login-overlay)::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    border: 4px solid #ffffff;
+    pointer-events: none;
+    z-index: 10001;
+  }
+}
+
+
+/* ═══ Option B: catalog sidebar on the product-detail route ════════════════════
+   The /apparel/[sku]/ route lays out the persistent CatalogSidebar (col 1) beside
+   the product panel (col 2), matching the home catalog's full-width sidebar+grid.
+   Desktop only — mobile keeps the full-width product page with no sidebar. */
+.pdp-sidebar { display: none; }
+@media (min-width: 1025px) {
+  .pdp-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 5fr);
+    column-gap: var(--wt-gap-tight);
+    align-items: start;
+    width: 100%;
+    max-width: var(--site-max);
+    margin-inline: auto;
+    /* Greige column so the sidebar reads as part of one unified column instead
+       of a floating, bordered card on the dot-pattern page. No ring here — the
+       ring drew a dark hairline down the sidebar/content seam on this route. */
+    background: var(--ce-greige);
+  }
+  .pdp-shell__main { grid-column: 2; min-width: 0; }
+  .pdp-sidebar {
+    display: block;
+    grid-column: 1;
+    /* Not sticky — top-aligned, matching the catalog sidebar so the toggle +
+       COLLECTIONS list land in the same place across the catalog↔PDP nav. */
+    align-self: start;
+    position: static;
+    background: #f2f2f2;
+    box-shadow: inset 0 1px 0 0 #ffffff;
+    border-radius: 2px;
+    /* Match the catalog sidebar exactly: left padding 6px + each item's 12px
+       inset lands content at 18px; margin-left 0 tucks the panel to the column
+       edge (top margin keeps the greige gap above it). */
+    padding: 0.35rem 0 0.85rem 6px;
+    margin: var(--wt-gap-tight) 0 0 0;
+  }
+  .pdp-sidebar .home-catalog__catnav { border-bottom: none; margin-bottom: 0; }
+  .pdp-sidebar .home-catalog__catnav-item { text-decoration: none; }
+}
+
+/* ═══ Light silvery-grey header + footer → dark, subtle content ════════════════
+   The header/footer bar colour is now a light silvery grey (--wt-orange), so the
+   content (formerly white on a dark bar) flips to dark, the control chips go to a
+   faint neutral, and the heavy weathered dark-navy edge shadows are removed so
+   the bars read light and unobtrusive. */
+/* Header wordmark + tag */
+.site-header .brand-cluster__word { color: #2b2f34 !important; }
+.site-header .brand-cluster__word--sub,
+.site-header .brand-cluster__word--muted { color: rgba(43, 47, 52, 0.58) !important; }
+.site-header__logo-apparel { color: rgba(43, 47, 52, 0.5) !important; }
+/* Search box → faint neutral fill, dark text */
+.site-header .site-header__search { background: rgba(0, 0, 0, 0.05) !important; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.10) !important; }
+.site-header .site-header__search > svg { color: rgba(0, 0, 0, 0.45) !important; }
+.site-header .site-header__search-input { color: #2b2f34 !important; }
+.site-header .site-header__search-input::placeholder { color: rgba(0, 0, 0, 0.4) !important; }
+/* FR / logout / hamburger → faint neutral chips, dark glyphs */
+.site-header .locale-btn--header,
+.site-header .logout-btn { background: rgba(0, 0, 0, 0.05) !important; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.10) !important; color: #2b2f34 !important; }
+.site-header .locale-btn--header:hover,
+.site-header .logout-btn:hover { background: rgba(0, 0, 0, 0.09) !important; }
+.site-header .locale-btn--header .locale-btn__short { color: #2b2f34 !important; }
+.site-header .locale-btn--header svg,
+.site-header .logout-btn svg,
+.site-header .hamburger-btn svg { stroke: #2b2f34 !important; color: #2b2f34 !important; }
+/* Cart stays Modern Niagara blue (white text/icon set in its own rules). */
+/* Header bar: drop the heavy weathered dark edge shadows for a clean light bar. */
+.site-header__inner {
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.10) !important;
+}
+
+/* Footer → dark content, light bar */
+.site-footer { color: rgba(30, 34, 38, 0.72) !important; }
+.site-footer .brand-cluster__word { color: #2b2f34 !important; }
+.site-footer .brand-cluster__word--sub,
+.site-footer .brand-cluster__word--muted { color: rgba(43, 47, 52, 0.58) !important; }
+.site-footer__privacy-link,
+.site-footer__contact-block,
+.site-footer__contact-block a,
+.site-footer__locale { color: rgba(30, 34, 38, 0.72) !important; }
+.site-footer__privacy-link:hover,
+.site-footer__locale:hover { color: #2b2f34 !important; }
+.site-footer__logo-white { filter: brightness(0) !important; opacity: 0.82; }
+.site-footer { border-top: 1px solid rgba(0, 0, 0, 0.10) !important; }
+@media (min-width: 1025px) {
+  /* Light footer: neutral thin edge instead of the dark weathered inset ring. */
+  .site-footer {
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.12),
+      0 0 11px var(--wt-ring) rgba(0, 0, 0, 0.10) !important;
+  }
+}
+
+/* Wide screens: never truly edge-to-edge. Past ~max-w-8xl the shared content
+   column (header, tab bar, catalog, product page, footer — everything keyed to
+   --site-max) is pulled in a touch, and hard-capped on ultra-wide displays. The
+   login portal is a separate full-screen overlay and is unaffected. */
+@media (min-width: 90rem) {
+  :root { --site-max: min(calc(100vw - 8rem), 122rem); }
+  /* Bring the sticky header bar in to the same width as the content column. */
+  .site-header { max-width: var(--site-max); margin-inline: auto; }
+}
+
+@media (min-width: 1025px) {
+  /* Fill the viewport so the footer sits flush at the bottom with no page
+     background showing below it on short catalogs (e.g. the Electrical shop). */
+  .apparel-page:not(.privacy-page) { min-height: calc(100dvh - 58px); }
+}
+
+/* Electrical shop: only a handful of products (never a 2nd row), so drop the
+   viewport-fill min-height that pushes the footer below the fold on other
+   pages. The short catalog then lets the footer sit within the first viewport
+   without a scroll. Scoped to the electrical catalog only (PDP scrolls as
+   normal); does NOT touch body/header/footer layout, so their widths are
+   unaffected. */
+body:has(.home-catalog--electrical) .apparel-page:not(.privacy-page) { min-height: 0 !important; }
+
+/* Electrical shop: only 4 SKUs, so cap the grid at 4 per row on wide monitors
+   too (the shared default is 5-up at >=1600px). Narrower desktops are already
+   4-up. */
+@media (min-width: 1025px) {
+  .home-catalog--electrical .apparel-grid { grid-template-columns: repeat(4, 1fr) !important; }
+}
+
+/* Header = footer, everywhere. The header carried a white "sign-card" panel
+   (.site-header::before) that read as a white strip above and beside the bar and
+   clipped its top edge. Drop that panel on every page, zero the bar's inner
+   margins, and give the bar the footer's exact fill (greige + dot grain) plus
+   the footer's soft rim + outer glow — so the header and footer are one identical
+   light, defined panel top and bottom, with no white strip anywhere. Global (not
+   scoped to the catalog) so the PDP, checkout and every other view match too. */
+.site-header::before,
+.site-header::after { display: none !important; }
+.site-header__inner { margin: 0 !important; }
+.site-header,
+.site-header__inner {
+  background:
+    linear-gradient(to right, transparent, var(--wt-orange) 50%, transparent),
+    radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px) 0 0 / 9px 9px,
+    var(--wt-orange) !important;
+}
+.site-header__inner {
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.12),
+    0 0 11px 0 rgba(0, 0, 0, 0.10) !important;
+}
+
+/* Footer mail icon: match the (dark) email text, not white. The icon strokes
+   with currentColor, so set the icon's colour to the same dark tone. */
+.site-footer__contact-icon { color: rgba(30, 34, 38, 0.72) !important; }
+
+/* Footer attaches directly under the gallery (no grey gap above it), the same
+   way it sits under the product detail. It is NOT pinned to the viewport bottom
+   — a short catalog simply ends where its content ends. To avoid a contrasting
+   site-background band showing below the footer on a short page, the document
+   background is set to the footer's own tone, so anything below the footer reads
+   as an extension of it rather than a strip. (The x-margin frame is a separate
+   dot-pattern layer and is unaffected.) */
+html { background: rgb(223, 226, 230) !important; }
+
+/* ============================================================
+   ONE border around each route page — no doubled/darker lines.
+
+   The page card (.home-catalog__inner) already carries the single outer ring
+   (left + right edge, header cap on top, footer on bottom). On the PRODUCT route
+   the product panel (.apparel-catalog:has(.product-detail)) is nested INSIDE
+   that card and its right edge coincides with the card's right edge, so both
+   rings landed on the exact same line and composited into a darker, doubled
+   border — and the panel's LEFT ring drew a stray inner divider between the
+   sidebar and the product. Drop the product panel's own ring so only the page
+   card's border shows; the sidebar and product are separated by the greige
+   gutter alone, the way sg builds it (one consistent border around the route).
+
+   Scoped to the SHOP product route only (the panel nested inside
+   .home-catalog__inner). The privacy page reuses .apparel-catalog:has(
+   .product-detail) as its OWN card — with no home-catalog wrapper — so it must
+   keep that ring as its single border; excluding it here leaves it intact.
+   ============================================================ */
+@media (min-width: 1025px) {
+  .home-catalog__inner .apparel-catalog:has(.product-detail) {
+    box-shadow: none !important;
+    clip-path: none !important;
+  }
+}
+
+/* ============================================================
+   Header side border: OUTSET at the same x=71 edge as the card, with an opaque
+   greige ring behind it so it can't double on scroll.
+
+   The page card + sidebar draw their side ring as an OUTSET 1px shadow just
+   OUTSIDE the content edge (x≈71) — it has to sit there, since the sidebar fills
+   the column to its edge and would cover an inset line. For the header's border
+   to LINE UP with them it must sit on that same x=71 edge (outset), not tucked
+   inside the bar. But two outset borders on the same edge composite darker where
+   they overlap — which is exactly the header band once the card scrolls up under
+   the sticky header. Fix: paint an OPAQUE greige ring (matching the surround at
+   that edge) directly BEHIND the header's dark border. The header pins above the
+   content (z 9999), so that greige ring hides the card's border wherever the two
+   meet, leaving a single clean line; the 1px greige over the dotted margin is
+   imperceptible. clip-path clips the BOTTOM so the bar meets the content with no
+   bottom line. Height collapses to the bar so no header fill shows below its edge
+   (fixes the header/content seam). Box-shadow overrides win the cascade cleanly.
+   ============================================================ */
+@media (min-width: 1025px) {
+  .site-header {
+    height: auto !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  /* Side border OUTSET at x=71 (aligned with the card + sidebar + footer), with
+     an opaque greige ring directly behind it that hides the card's 1px border as
+     the card scrolls under the sticky header. The card's soft GLOW is removed
+     (see .home-catalog__inner / footer below), so there's no spread shadow left
+     to bleed up and stack on the x-borders — they stay one clean line on scroll,
+     both sides, seamless like the header's bottom edge. clip-path clips the
+     bottom so the bar meets the content with no bottom line. */
+  .site-header__inner {
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.12),
+      0 0 0 1px var(--ce-greige),
+      0 3px 10px -4px rgba(0, 0, 0, 0.14) !important;
+    clip-path: inset(-24px -24px 0 -24px) !important;
+  }
+  /* Drop the card's/footer's soft side GLOW — it spread ~11px into the margin and
+     bled up into the header band on scroll, reading as a doubled/stacked x-shadow.
+     A single clean 1px rim on each side instead (the header's greige ring occludes
+     the card's rim on scroll, leaving one continuous line). */
+  .home-catalog__inner,
+  .apparel-catalog:has(.product-detail),
+  .site-footer {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12) !important;
+  }
+}
+
+/* Footer: trim the vertical padding. It carried 2.5rem top and bottom around
+   only ~49px of content, so it read as a tall panel; ~1.4rem keeps comfortable
+   breathing room while making it a proper footer band. (Side padding unchanged;
+   phones keep their own fixed-height footer.) */
+@media (min-width: 1025px) {
+  .site-footer { padding-top: 1.4rem !important; padding-bottom: 1.4rem !important; }
+}
+
+/* ============================================================
+   Only the OUTSIDE area below the footer gets the greige dot field.
+
+   That area was a flat cool grey (--wt-orange = #dfe2e6, set on <html> as "the
+   footer's tone") which read as a stray grey band under the page. It's the html
+   background — the page's own sections (header, footer, catalog, product) all
+   paint their own opaque fills on top, so this shows ONLY where nothing else
+   does: the strip below the footer. Give it the same greige + fixed dots as the
+   x-margins so the space under the site matches the side surround, while the
+   header, footer and content areas keep their own backgrounds untouched.
+   ============================================================ */
+@media (min-width: 1025px) {
+  html {
+    background:
+      radial-gradient(circle, rgba(0,0,0,0.035) 1.5px, transparent 1.5px) 0 0 / 15px 15px,
+      var(--ce-greige) !important;
+    background-attachment: fixed !important;
+  }
+  /* The side x-margins run the FULL height of the page — beside the header and
+     the footer too, not just beside the catalog/product content. Those bands are
+     backed by <body>, whose greige surround carried NO dots, so the margins went
+     dotless wherever the header or footer sat. Add the same fixed dot layer to
+     body so every side margin is dotted end to end; the header, footer and
+     content panels paint their own opaque fills on top, so the dots stay in the
+     margins only and never land on the bars themselves. Fixed origin keeps them
+     aligned with the catalog layer's dots. */
+  body {
+    background-image:
+      radial-gradient(circle, rgba(0,0,0,0.035) 1.5px, transparent 1.5px),
+      var(--wt-surround) !important;
+    background-size: 15px 15px, auto !important;
+    background-position: 0 0, center !important;
+    background-repeat: repeat, no-repeat !important;
+    background-attachment: fixed, scroll !important;
+  }
+}
+
+/* Slightly round the footer's BOTTOM corners so the page closes on a soft edge
+   rather than a hard square (top stays square where it meets the content). */
+@media (min-width: 1025px) {
+  .site-footer {
+    border-bottom-left-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+  }
+}
+
+/* ============================================================
+   Mobile + tablet: "coming soon" gate.
+
+   The responsive (<=1024px) layouts aren't launch-ready, so below the desktop
+   breakpoint the whole app is covered by a full-screen branded "coming soon"
+   screen. Hidden by default (desktop); shown only at <=1024px, where its max
+   z-index sits above the header (9999), the login overlay and the content, and
+   scroll is locked so nothing shows behind it.
+   ============================================================ */
+.mobile-coming-soon { display: none; }
+@media (max-width: 1024px) {
+  html:has(.mobile-coming-soon), body:has(.mobile-coming-soon) { overflow: hidden !important; }
+  .mobile-coming-soon {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 2147483647;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    /* Same green iron "sign" surface family the login pane uses. */
+    background:
+      radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px) 0 0 / 14px 14px,
+      linear-gradient(160deg, #14212b 0%, #1c2f3d 55%, #12202b 100%);
+    color: #fff;
+    overscroll-behavior: contain;
+  }
+  .mobile-coming-soon__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    max-width: 30rem;
+  }
+  /* Footer-style diamond lockup. The base .brand-cluster__mark already tilts the
+     mark 45° into the diamond; shape-rendering: crispEdges removes the dark
+     anti-alias seams that showed between the triangles on the dark ground. Light
+     type since this sits on the dark sign surface (the footer's is dark-on-light). */
+  .mobile-coming-soon .brand-cluster__mark {
+    width: 58px;
+    height: 58px;
+    shape-rendering: crispEdges;
+  }
+  .mobile-coming-soon .brand-cluster__word { color: #fff; }
+  .mobile-coming-soon .brand-cluster__word--sub { color: rgba(255, 255, 255, 0.72); }
+  .mobile-coming-soon .brand-cluster__word--muted { color: rgba(255, 255, 255, 0.5); }
+  .mobile-coming-soon__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.18;
+    margin-top: 0.3rem;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Privacy page now uses normal block flow (see the flow-like-home block above),
+   so the header centres at the shared card width via its own `margin: 0 auto`
+   — no privacy-specific header override needed. */
+
+/* ============================================================
+   Privacy page: flow like the home route (footer NOT pinned).
+
+   The privacy page pinned its footer to the exact viewport bottom (flex column
+   + min-height:100dvh + a flex-grow content card), so the greige card ran all
+   the way down with no dot strip below the footer. The home route instead lets
+   the content fill to ~one viewport and the footer flow after it, with the
+   greige dot field showing below. Restore that here: normal block flow, the
+   content card capped at the same ~viewport min-height, footer after it, dots
+   below — the "extra space at the bottom" the home route has.
+   ============================================================ */
+@media (min-width: 1025px) {
+  body:has(.privacy-page) { display: block !important; min-height: 0 !important; }
+  body:has(.privacy-page) > main { display: block !important; flex: none !important; }
+  body:has(.privacy-page) .site-footer { width: auto !important; align-self: auto !important; }
+  /* Fill the content card to the same level a 1-row catalog (e.g. Electrical)
+     reaches — most of the viewport, leaving a modest greige dot strip below the
+     footer, rather than floating the footer high with a huge empty band. */
+  .privacy-page.apparel-page { min-height: calc(100dvh - 260px) !important; flex: none !important; }
+  .privacy-page.apparel-page > .apparel-catalog { flex: 1 0 auto !important; }
+}
+
+/* Login: the Service portal isn't live yet — this note replaces the password +
+   submit when Service is selected (see layout.tsx). Sits on the dark sign-in
+   pane, so light type on a subtle recessed fill. */
+.login-modal__coming-soon {
+  padding: 0.95rem 1rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+
+/* Logout cell is at the header's top-RIGHT corner, so its full 1px inset outline
+   ran ALONGSIDE the header's own rim on the top and right edges — two lines,
+   reading too thick there. Keep only a subtle LEFT divider (from the cart cell);
+   the header's rim already draws the top and right edges. */
+@media (min-width: 1025px) {
+  .site-header .logout-btn {
+    box-shadow: inset 1px 0 0 0 rgba(0, 0, 0, 0.10) !important;
   }
 }

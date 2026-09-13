@@ -39,6 +39,9 @@ async function fetchAndWrite() {
     "MN-17": { name: "Insulated Two Compartment Cooler" },
     // Duck Bib: 3 fits — Regular S-5XL, Short (MS-4XLS), Tall (MT-4XLT).
     "MN-8": { sizes: "S - 5XL / MS - 4XLS / MT - 4XLT" },
+    // FR Force Dearborn (100235): abbreviate "Long Sleeve" to "LS" so the long
+    // title fits on one line in the catalog card.
+    "MN-38": { name: "Carhartt FR Force Dearborn LS T-Shirt - Navy" },
   };
 
   try {
@@ -145,6 +148,7 @@ const colorNames: Record<string, Record<string, string>> = {
   "#b0b0b0": { en: "Grey", fr: "Gris" },
   "#b6e021": { en: "Safety Green", fr: "Vert sécurité" },
   "#b8ad97": { en: "Khaki", fr: "Kaki" },
+  "#ab8f66": { en: "Dark Khaki", fr: "Kaki foncé" },
   "#b98b8b": { en: "Rose", fr: "Rose" },
   "#bf5700": { en: "Burnt Orange", fr: "Orange brûlé" },
   "#c2a878": { en: "Tan", fr: "Beige" },

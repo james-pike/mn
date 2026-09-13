@@ -1,5 +1,5 @@
-import { component$, useSignal, useComputed$, useContext, $, useVisibleTask$ } from "@builder.io/qwik";
-import { Link } from "@builder.io/qwik-city";
+import { component$, useSignal, useComputed$, useContext, $, useVisibleTask$, Slot } from "@builder.io/qwik";
+import { Link, useLocation, useNavigate } from "@builder.io/qwik-city";
 import { LocaleContext, t } from "../../i18n";
 import { allProducts, categoryLabel, colorName } from "../../routes/apparel/products";
 import type { Product } from "../../routes/apparel/products";
@@ -15,19 +15,29 @@ const VIEW_MODES: { key: number | "list"; label: string; icon: string }[] = [
 ];
 
 
-const CLOTHING_CATEGORIES = ["All", "Jackets", "Sweaters", "Shirts", "Polos", "Hats", "SWAG", "New Hire Kit"];
+export const CLOTHING_CATEGORIES = ["All", "Jackets", "Sweaters", "Shirts", "Polos", "Hats", "SWAG", "New Hire Kit"];
+
+// Electrical portal: shows ONLY these SKUs (the small Electrical-division lineup).
+// Add/replace the Electrical SKU codes here — order is preserved in the grid.
+// MN-36 = Carhartt FR Rigby Pants (104204), MN-37 = Carhartt FR Full Zip Hoodie
+// (104982) — renamed off the old MNFR- prefix to match the catalog's MN- numbering.
+// The FR Dearborn LS Tee (100235) isn't in the catalog yet — add it to the DB,
+// then drop its SKU in here.
+// Display order: T-Shirts, Sweaters, Pants, Headwear (matches the sidebar).
+export const ELECTRICAL_SKUS: string[] = ["MN-38", "MN-37", "MN-36", "MN-39"];
+const ELECTRICAL_SKU_SET = new Set(ELECTRICAL_SKUS);
 
 // Safety catalog: every MNFR-* item plus a small allowlist of standard SKUs,
 // minus a deny list for FR items we don't carry yet.
 const SAFETY_SKU_PREFIX = "MNFR-";
 const SAFETY_EXTRA_SKUS = new Set(["MN-2", "MN-3", "MN-5", "MN-6"]);
 const SAFETY_HIDDEN_SKUS = new Set(["MNFR-5", "MNFR-6"]); // FR Insulated Bib & Jacket
-const SAFETY_CATEGORIES = ["All", "Flame Resistant", "Shirts", "Hats"];
+export const SAFETY_CATEGORIES = ["All", "Flame Resistant", "Shirts", "Hats"];
 // Explicit display order for the Safety "All" view: FR shirt + hoodies,
 // FR pants, then the standard-SKU allowlist (short-sleeve tee,
 // long-sleeve tee, ball cap, toque).
-const SAFETY_SKU_ORDER = ["MNFR-2", "MNFR-3", "MNFR-4", "MNFR-1", "MN-3", "MN-2", "MN-5", "MN-6"];
-const isSafetyProduct = (sku: string) =>
+export const SAFETY_SKU_ORDER = ["MNFR-2", "MNFR-3", "MNFR-4", "MNFR-1", "MN-3", "MN-2", "MN-5", "MN-6"];
+export const isSafetyProduct = (sku: string) =>
   !SAFETY_HIDDEN_SKUS.has(sku) && (sku.startsWith(SAFETY_SKU_PREFIX) || SAFETY_EXTRA_SKUS.has(sku));
 
 // Colors hidden from catalog-card swatches (still visible on product detail page).
@@ -38,7 +48,7 @@ const CARD_HIDDEN_COLORS = new Set(["#c0392b", "#1e40af", "#6b3fa0"]);
 const CARD_SHOW_ALL_COLORS = new Set(["MN-33"]);
 const EMPTY_COLOR_SET = new Set<string>();
 
-const CATEGORY_ICONS: Record<string, string> = {
+export const CATEGORY_ICONS: Record<string, string> = {
   "All": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
   "Work Wear": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M4 6h16v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/><path d="M4 6l-2 4v2h4V8"/><path d="M20 6l2 4v2h-4V8"/></svg>',
   "Jackets": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>',
@@ -50,11 +60,13 @@ const CATEGORY_ICONS: Record<string, string> = {
   "SWAG": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>',
   "New Hire Kit": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>',
   "Flame Resistant": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>',
+  "Pants": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12l1 20h-5l-2-11-2 11H5L6 2z"/><path d="M6 2h12"/></svg>',
+  "Headwear": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16"/><path d="M4 18a8 8 0 0116 0"/><path d="M2 18h20"/></svg>',
 };
 
 // Longer category names shown ONLY in the desktop sidebar column; mobile/tablet
 // tabs keep the short cat.* labels (see the --short/--full spans + CSS).
-const FULL_CAT_KEYS: Record<string, string> = {};
+export const FULL_CAT_KEYS: Record<string, string> = {};
 
 // Search matcher for name/sku/category, with a simple plural fallback so
 // "boots" still hits "Safety Boot" (names are singular, and the footwear
@@ -113,7 +125,7 @@ function sizesOf(p: Product): string[] {
 // up as a filter (the facet list is BRAND_LIST ∩ brands-present).
 const BRAND_LIST = [
   // Clothing brands first...
-  "Carhartt", "Cole Harbour", "Flexfit", "FootJoy", "Gildan",
+  "Carhartt", "Coal Harbour", "Flexfit", "FootJoy", "Gildan",
   "Travis Mathew", "Under Armour",
   // ...then non-clothing brands (bags, golf, towels, tech, headwear).
   "Nexgen", "Nomad", "Srixon", "Titleist", "Tranzip", "Cap America",
@@ -207,7 +219,7 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
   displayName = displayName.trim();
 
   return (
-    <Link href={`/apparel/${sku}/`} class={`product-card product-card-link ${sku === "CAR-21" ? "product-card--cover" : ""}`}>
+    <Link href={`/${sku}/`} class={`product-card product-card-link ${sku === "CAR-21" ? "product-card--cover" : ""}`}>
       <div class="product-card__image">
         <ProductImage
           src={item.img}
@@ -239,7 +251,12 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
               const dollars = Math.floor(p);
               const cents = Math.round((p - dollars) * 100).toString().padStart(2, "0");
               return (
-                <div class="product-card__price">${dollars}<span class="product-card__price-cents">.{cents}</span></div>
+                <div class="product-card__price">
+                  ${dollars}
+                  {cents !== "00" && (
+                    <span class="product-card__price-cents">.{cents}</span>
+                  )}
+                </div>
               );
             })()}
           </div>
@@ -290,8 +307,9 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
               const g = genderOf(item);
               return g === "Men" || g === "Women" ? <span class="product-card__gender">{t(g === "Men" ? "gender.mens" : "gender.womens", locale.value)}</span> : null;
             })()}
-            {/* One line per fit, so a product stocked in regular AND tall shows
-                both instead of a single run-on list (see sizeGroups). */}
+            {/* Fits shown beside each other on one line — regular plus any extra
+                variant (Tall/Short) the SKU carries. The " / " separator between
+                lines comes from CSS (.product-card__sizes-line + …::before). */}
             <span class="product-card__sizes">
               {(item.sizes === "One Size" ? [t("modal.onesize", locale.value)] : sizeGroups(item.sizes)).map((g) => (
                 <span key={g} class="product-card__sizes-line">{g}</span>
@@ -328,8 +346,16 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
 export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) => {
   const locale = useContext(LocaleContext);
   const loginType = useContext(LoginTypeContext);
+  const loc = useLocation();
+  const nav = useNavigate();
+  // On a product route (/<sku>/) the shared shell shows the routed product
+  // detail (<Slot/>) in the main column instead of the grid. The catalog is "/";
+  // any deeper path under this (shop) layout is a product page. The sidebar +
+  // header stay mounted, so there is no shift between the catalog and PDP.
+  const isPdp = useComputed$(() => loc.url.pathname.replace(/\/+$/, "") !== "");
   const isTech = useComputed$(() => loginType.value === "tech");
   const isSafety = useComputed$(() => loginType.value === "safety");
+  const isElectrical = useComputed$(() => loginType.value === "electrical");
   const isSingleCat = useComputed$(() => isTech.value);
   const activeCat = useSignal("All");
   const searchQuery = useSignal("");
@@ -346,6 +372,22 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
   });
   const searchOpen = useSignal(false); // tablet: search field opens over the tab bar
   const tabletCols = useSignal<number | "list">(3);
+  // Desktop grid density: false = default (5 per row), true = Catalog view (8 per
+  // row). Toggled from the sidebar; ignored on mobile/tablet.
+  const denseGrid = useSignal(false);
+  // Persist the density choice (shared with the PDP sidebar's toggle) so it
+  // survives navigation between the catalog and the product pages.
+  const densityLoaded = useSignal(false);
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    const v = track(() => denseGrid.value);
+    if (!densityLoaded.value) {
+      densityLoaded.value = true;
+      try { const s = localStorage.getItem("ce_grid_density"); if (s) denseGrid.value = s === "catalog"; } catch { /* ignore */ }
+      return;
+    }
+    try { localStorage.setItem("ce_grid_density", v ? "catalog" : "standard"); } catch { /* ignore */ }
+  });
 
   const HASH_TO_CAT: Record<string, string> = isSingleCat.value
     ? {}
@@ -362,6 +404,16 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
         );
 
   const baseProducts = useComputed$(() => {
+    if (isElectrical.value) {
+      const rank = (sku: string) => {
+        const i = ELECTRICAL_SKUS.indexOf(sku);
+        return i === -1 ? ELECTRICAL_SKUS.length : i;
+      };
+      return allProducts
+        .filter((p) => ELECTRICAL_SKU_SET.has(p.sku))
+        .slice()
+        .sort((a, b) => rank(a.sku) - rank(b.sku));
+    }
     if (isTech.value) return allProducts.filter((p) => p.category === "Work Wear");
     if (isSafety.value) {
       const rank = (sku: string) => {
@@ -377,7 +429,8 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     // the "Footwear" tab so they show when it's selected.
     const isFootwear = (c: string) => c === "Safety Boots" || c === "Safety Shoes" || c === "Footwear";
     return allProducts
-      .filter((p) => p.category !== "Flame Resistant")
+      // Exclude FR items and the Electrical-only SKUs from the full (Service) catalog.
+      .filter((p) => p.category !== "Flame Resistant" && !ELECTRICAL_SKU_SET.has(p.sku))
       .map((p) => (isFootwear(p.category) ? { ...p, category: "Footwear" } : p));
   });
 
@@ -482,6 +535,15 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
 
   const visibleCategories = useComputed$(() => {
     if (isTech.value) return ["Work Wear"];
+    // Electrical: show every category its products actually span (not limited to
+    // the standard clothing tabs).
+    if (isElectrical.value) {
+      const order = ["Shirts", "Sweaters", "Pants", "Headwear", "Work Wear", "Jackets", "Polos", "Hats", "SWAG", "Flame Resistant"];
+      const present = new Set(baseProducts.value.map((p) => p.category));
+      const cats = order.filter((c) => present.has(c));
+      for (const c of present) if (!cats.includes(c)) cats.push(c);
+      return ["All", ...cats];
+    }
     // Safety still hides empty categories; the clothing catalog shows its full
     // curated tab list regardless of current stock.
     if (isSafety.value) {
@@ -489,6 +551,34 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       return SAFETY_CATEGORIES.filter((c) => ALWAYS_SHOW.has(c) || present.has(c));
     }
     return CLOTHING_CATEGORIES;
+  });
+
+  // SKU count per category (from the unfiltered base set) for the sidebar
+  // count pills; "All" is the total.
+  const categoryCounts = useComputed$(() => {
+    const counts: Record<string, number> = { All: baseProducts.value.length };
+    for (const p of baseProducts.value) counts[p.category] = (counts[p.category] ?? 0) + 1;
+    return counts;
+  });
+
+  // Select a category from the desktop sidebar nav (no tab-strip centering — the
+  // vertical list is always fully visible). Mirrors the horizontal tab onClick.
+  const selectCat = $(async (cat: string) => {
+    if (isSingleCat.value) return;
+    window.dispatchEvent(new CustomEvent("apparel-search-clear"));
+    searchOpen.value = false;
+    searchQuery.value = "";
+    if (isPdp.value) {
+      // On a product page the grid isn't shown. Go to the catalog filtered to
+      // this category — ProductCatalog stays mounted (shared shell), so setting
+      // activeCat here carries the selection over to the grid.
+      activeCat.value = cat;
+      await nav("/");
+      return;
+    }
+    if (activeCat.value === cat) { activeCat.value = "All"; scrollProductsBelowBar(); return; }
+    activeCat.value = cat;
+    scrollProductsBelowBar();
   });
 
 
@@ -549,7 +639,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
   });
 
   return (
-    <section class={`home-catalog ${cls || ""}`}>
+    <section class={`home-catalog ${isElectrical.value ? "home-catalog--electrical" : ""} ${cls || ""}`}>
       <div class="home-catalog__inner">
         <div class={`home-catalog__header ${tabsAtEnd.value ? "home-catalog__header--tabs-end" : ""}`}>
           <h2 class="home-catalog__title">{t("nav.apparel", locale.value)}</h2>
@@ -686,7 +776,57 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
           <span class="home-catalog__seam" aria-hidden="true" />
         </div>
         <aside class="home-catalog__filters" aria-label="Filter products">
-          {facetOptions.value.genders.length >= 1 && (
+          {/* Desktop category nav — the collection titles moved out of the
+              horizontal tab strip into a vertical sidebar list (sm-style), each
+              with a SKU count pill. The tab strip stays for mobile/tablet. */}
+          {!isSingleCat.value && (
+            <nav class="home-catalog__catnav" aria-label="Collections">
+              <div class="home-catalog__catnav-head">
+                <div class="home-catalog__catnav-title">{isElectrical.value ? t("login.portal.electrical", locale.value) : t("filter.collections", locale.value)}</div>
+                {/* Grid-density toggle, inline on the right of the Collections
+                    label — icon-only (Standard 5-up / Catalog 8-up). Hidden for
+                    the Electrical shop — too few products to need it. */}
+                {!isElectrical.value && (
+                <div class="home-catalog__density home-catalog__density--inline" role="group" aria-label="Grid density">
+                  <button
+                    type="button"
+                    class={`home-catalog__density-btn ${!denseGrid.value ? "active" : ""}`}
+                    aria-pressed={!denseGrid.value}
+                    aria-label={t("viewmode.standard", locale.value)}
+                    onClick$={() => { denseGrid.value = false; }}
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                  </button>
+                  <button
+                    type="button"
+                    class={`home-catalog__density-btn ${denseGrid.value ? "active" : ""}`}
+                    aria-pressed={denseGrid.value}
+                    aria-label={t("viewmode.catalog", locale.value)}
+                    onClick$={() => { denseGrid.value = true; }}
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="4" height="4"/><rect x="10" y="3" width="4" height="4"/><rect x="17" y="3" width="4" height="4"/><rect x="3" y="10" width="4" height="4"/><rect x="10" y="10" width="4" height="4"/><rect x="17" y="10" width="4" height="4"/><rect x="3" y="17" width="4" height="4"/><rect x="10" y="17" width="4" height="4"/><rect x="17" y="17" width="4" height="4"/></svg>
+                  </button>
+                </div>
+                )}
+              </div>
+              {visibleCategories.value.map((cat) => (
+                <button
+                  key={cat}
+                  class={`home-catalog__catnav-item ${activeCat.value === cat ? "active" : ""}`}
+                  onClick$={() => selectCat(cat)}
+                >
+                  <span class="home-catalog__catnav-icon" dangerouslySetInnerHTML={CATEGORY_ICONS[cat]} />
+                  <span class="home-catalog__catnav-label">
+                    {cat === "All"
+                      ? t("apparel.all", locale.value)
+                      : (FULL_CAT_KEYS[cat] ? t(FULL_CAT_KEYS[cat] as any, locale.value) : categoryLabel(cat, locale.value))}
+                  </span>
+                  <span class="home-catalog__catnav-count">{categoryCounts.value[cat] ?? 0}</span>
+                </button>
+              ))}
+            </nav>
+          )}
+          {!isPdp.value && !isElectrical.value && facetOptions.value.genders.length >= 1 && (
             <div class="home-catalog__filter-group">
               <div class="home-catalog__filter-title">{t("filter.fit", locale.value)}</div>
               {facetOptions.value.genders.map((g) => (
@@ -708,7 +848,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
               ))}
             </div>
           )}
-          {facetOptions.value.brands.length >= 1 && (
+          {!isPdp.value && facetOptions.value.brands.length >= 1 && (
             <div class="home-catalog__filter-group">
               <div class="home-catalog__filter-title">{t("filter.brand", locale.value)}</div>
               {facetOptions.value.brands.map((b) => (
@@ -730,30 +870,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
               ))}
             </div>
           )}
-          {facetOptions.value.sizes.length >= 1 && (
-            <div class="home-catalog__filter-group">
-              <div class="home-catalog__filter-title">{t("filter.size", locale.value)}</div>
-              <div class="home-catalog__filter-sizes">
-                {facetOptions.value.sizes.map((s) => (
-                  <button
-                    key={s}
-                    class={`home-catalog__filter-size ${effFilters.value.sizes.includes(s) ? "active" : ""}`}
-                    onClick$={() => {
-                      const f = effFilters.value;
-                      filters.value = {
-                        ...f,
-                        sizes: f.sizes.includes(s) ? f.sizes.filter((x) => x !== s) : [...f.sizes, s],
-                      };
-                      scrollProductsBelowBar();
-                    }}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-          {(effFilters.value.genders.length > 0 || effFilters.value.sizes.length > 0 || effFilters.value.brands.length > 0) && (
+          {!isPdp.value && (effFilters.value.genders.length > 0 || effFilters.value.sizes.length > 0 || effFilters.value.brands.length > 0) && (
             <button
               class="home-catalog__filter-clear"
               onClick$={() => {
@@ -765,11 +882,15 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
             </button>
           )}
         </aside>
-        <div class={`apparel-grid ${tabletCols.value === "list" ? "apparel-grid--list" : `apparel-grid--cols-${tabletCols.value}`}`}>
-          {filtered.value.map((item, i) => (
-            <ProductCard key={item.sku} item={item} sku={item.sku} index={i} />
-          ))}
-        </div>
+        {isPdp.value ? (
+          <div class="home-catalog__pdp-main"><Slot /></div>
+        ) : (
+          <div class={`apparel-grid ${denseGrid.value ? "apparel-grid--dense" : ""} ${tabletCols.value === "list" ? "apparel-grid--list" : `apparel-grid--cols-${tabletCols.value}`}`}>
+            {filtered.value.map((item, i) => (
+              <ProductCard key={item.sku} item={item} sku={item.sku} index={i} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

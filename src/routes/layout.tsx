@@ -25,11 +25,10 @@ import { createCheckoutSession } from "../lib/stripe";
 const AUTH_COOKIE = "ce_auth"; // v2: orders persist to db
 const LOCALE_COOKIE = "ce_locale";
 
-// The home hero is enabled (see routes/index.tsx SHOW_HERO), so the header runs
-// in hero slide-in mode: on the home page it stays hidden/transparent at the top
-// (the hero carousel is the top of the page, with its own floating in-hero
-// header) and slides in solid once the user scrolls past 60px.
-const SHOW_HERO_HEADER = true;
+// The home hero has been removed — "/" is now the catalog itself, so the header
+// must always be visible (solid, with its logo) exactly like every other route,
+// including the product pages. Hero slide-in mode is therefore OFF.
+const SHOW_HERO_HEADER = false;
 
 // Canadian provincial sales tax rates (combined GST/HST/PST/QST)
 const PROVINCE_TAX: Record<string, number> = {
@@ -77,12 +76,14 @@ export const useLocaleLoader = routeLoader$(({ cookie }) => {
   return (saved === "fr" ? "fr" : "en") as Locale;
 });
 
-type LoginType = "clothing" | "tech" | "safety" | null;
+type LoginType = "service" | "electrical" | null;
 
 function getLoginType(cookie: Cookie): LoginType {
   const val = cookie.get(AUTH_COOKIE)?.value;
-  if (val === "clothing" || val === "tech" || val === "safety") return val;
-  if (val === "authenticated") return "clothing"; // backward compat
+  if (val === "service" || val === "electrical") return val;
+  // backward compat: the old clothing/authenticated logins map to the full
+  // Service catalog.
+  if (val === "clothing" || val === "authenticated") return "service";
   return null;
 }
 
@@ -92,7 +93,7 @@ function isAuthenticated(cookie: Cookie): boolean {
 
 export const useAuthCheck = routeLoader$(({ cookie }) => {
   const loginType = getLoginType(cookie);
-  return { loggedIn: loginType !== null, loginType: loginType || "clothing" };
+  return { loggedIn: loginType !== null, loginType: loginType || "service" };
 });
 
 export const useCartCountLoader = routeLoader$(({ cookie }) => {
@@ -100,44 +101,28 @@ export const useCartCountLoader = routeLoader$(({ cookie }) => {
 });
 
 export const useLogin = routeAction$(
-  ({ username, password }, { cookie, fail, env }) => {
-    const expectedUser = env.get("APP_USERNAME") || env.get("VITE_APP_USERNAME") || "admin";
-    const expectedPass = env.get("APP_PASSWORD") || env.get("VITE_APP_PASSWORD");
-    const techUser = env.get("TECH_USERNAME") || env.get("VITE_TECH_USERNAME") || "tech";
-    const techPass = env.get("TECH_PASSWORD") || env.get("VITE_TECH_PASSWORD");
-    const safetyUser = env.get("SAFETY_USERNAME") || env.get("VITE_SAFETY_USERNAME") || "Safety";
-    const safetyPass = env.get("SAFETY_PASSWORD") || env.get("VITE_SAFETY_PASSWORD");
-
-    // Check Tech login first
-    if (techPass && username === techUser && password === techPass) {
-      cookie.set(AUTH_COOKIE, "tech", {
-        path: "/",
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        maxAge: 60 * 60 * 24 * 3,
-      });
-      return { success: true };
+  ({ portal, password }, { cookie, fail, env }) => {
+    // Two portals — the user picks one (no username typed) and enters the
+    // password. Both share the single APP_PASSWORD; the SELECTED portal is what
+    // determines the catalog (Service = full, Electrical = its small SKU set), so
+    // one password is enough while the bubble still drives what's shown.
+    const PORTALS = ["service", "electrical"];
+    if (!PORTALS.includes(portal)) {
+      return fail(400, { message: "Unknown portal" });
     }
-
-    // Check Safety login
-    if (safetyPass && username === safetyUser && password === safetyPass) {
-      cookie.set(AUTH_COOKIE, "safety", {
-        path: "/",
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        maxAge: 60 * 60 * 24 * 3,
-      });
-      return { success: true };
-    }
-
-    // Check Clothing login
-    if (!expectedPass) {
+    const expected = env.get("APP_PASSWORD") || env.get("VITE_APP_PASSWORD");
+    if (!expected) {
       return fail(500, { message: "Login not configured" });
     }
-    if (username === expectedUser && password === expectedPass) {
-      cookie.set(AUTH_COOKIE, "clothing", {
+
+    if (password === expected) {
+      // Correct password — but the Service store isn't open to shoppers yet, so
+      // even a valid password only surfaces the coming-soon notice for it; never
+      // a session. Only Electrical proceeds to log in.
+      if (portal === "service") {
+        return fail(403, { message: "Service coming soon", comingSoon: true });
+      }
+      cookie.set(AUTH_COOKIE, portal, {
         path: "/",
         httpOnly: true,
         secure: true,
@@ -146,10 +131,10 @@ export const useLogin = routeAction$(
       });
       return { success: true };
     }
-    return fail(401, { message: "Invalid username or password" });
+    return fail(401, { message: "Invalid password" });
   },
   zod$({
-    username: z.string().min(1).max(64),
+    portal: z.string().min(1).max(32),
     password: z.string().min(1).max(128),
   }),
 );
@@ -183,7 +168,9 @@ export const useSubmitOrder = routeAction$(
       return fail(401, { message: "Not authenticated" });
     }
     const lt = getLoginType(cookie);
-    const vendor = lt === "tech" ? "modernniagara-tech" : lt === "safety" ? "modernniagara-safety" : "modernniagara";
+    // Electrical orders are tagged to their own vendor bucket; Service uses the
+    // main Modern Niagara vendor.
+    const vendor = lt === "electrical" ? "modernniagara-electrical" : "modernniagara";
     // Read from non-prefixed names first, fall back to VITE_* for backward compat.
     // Both are safe at runtime — env.get() reads server env, never bundles.
     const tursoUrl = env.get("TURSO_URL") || env.get("VITE_TURSO_URL");
@@ -347,7 +334,7 @@ export const useSubmitOrder = routeAction$(
       if (apiKey) await sendConfirmationEmail({ apiKey, from: fromAddress, staffAddresses }, buildEmailData());
       // Build the return-URL base from the ORIGIN only. Stripe needs an absolute
       // https URL, and a SITE_URL that includes a path (".../apparel") would push
-      // success_url to /apparel/checkout/success/ — a non-existent route. Add a
+      // success_url to /checkout/success/ — a non-existent route. Add a
       // scheme if missing, then strip everything to scheme+host.
       let siteBase = (env.get("SITE_URL") || url.origin || "").trim();
       if (siteBase && !/^https?:\/\//i.test(siteBase)) siteBase = "https://" + siteBase;
@@ -361,7 +348,7 @@ export const useSubmitOrder = routeAction$(
     if (cardAmount > 0) {
       // Build the return-URL base from the ORIGIN only. Stripe needs an absolute
       // https URL, and a SITE_URL that includes a path (".../apparel") would push
-      // success_url to /apparel/checkout/success/ — a non-existent route. Add a
+      // success_url to /checkout/success/ — a non-existent route. Add a
       // scheme if missing, then strip everything to scheme+host.
       let siteBase = (env.get("SITE_URL") || url.origin || "").trim();
       if (siteBase && !/^https?:\/\//i.test(siteBase)) siteBase = "https://" + siteBase;
@@ -518,6 +505,8 @@ export default component$(() => {
   // Autoplay runs every 6s and only pauses while the sign-in form is focused.
   const loginHeroIndex = useSignal(0);
   const loginCarouselPaused = useSignal(false);
+  // Which portal bubble is selected in the login form (Service / Electrical).
+  const selectedPortal = useSignal("service");
   const menuOpen = useSignal(false);
   const savedLocale = useLocaleLoader();
   const locale = useSignal<Locale>(savedLocale.value);
@@ -544,7 +533,10 @@ export default component$(() => {
   // the listing (see the input handlers) — the search bar itself stays put in
   // the header the whole time.
   const showSearch = useComputed$(
-    () => loc.url.pathname === "/" || loc.url.pathname.startsWith("/apparel"),
+    () =>
+      (loc.url.pathname === "/" || (!loc.url.pathname.startsWith("/privacy") && !loc.url.pathname.startsWith("/checkout"))) &&
+      // Electrical has only a handful of products — no need for search.
+      auth.value.loginType !== "electrical",
   );
 
   useContextProvider(LocaleContext, locale);
@@ -866,7 +858,7 @@ export default component$(() => {
     const path = track(() => loc.url.pathname);
     // The catalog strip is sticky from the top of the apparel route, so its
     // tabs are pinned there from the first frame.
-    tabsStuck.value = path.startsWith("/apparel");
+    tabsStuck.value = !path.startsWith("/privacy") && !path.startsWith("/checkout");
     headerScrolled.value = false;
     if (isBrowser) document.documentElement.classList.remove("scrolled");
   });
@@ -892,7 +884,7 @@ export default component$(() => {
       document.documentElement.classList.toggle("scrolled", window.scrollY > 60);
       // Search icon appears only once the catalog tab strip is stuck; always
       // available on the apparel route (tabs sticky from the top).
-      if (loc.url.pathname.startsWith("/apparel")) {
+      if ((!loc.url.pathname.startsWith("/privacy") && !loc.url.pathname.startsWith("/checkout"))) {
         tabsStuck.value = true;
       } else {
         const strip = document.querySelector(".home-catalog__header");
@@ -1083,6 +1075,34 @@ export default component$(() => {
 
   return (
     <>
+      {/* Mobile + tablet: the responsive layouts aren't ready for launch yet, so
+          below the desktop breakpoint (<=1024px) cover the whole app with a
+          "coming soon" screen. Pure CSS media query (see .mobile-coming-soon in
+          global.css) — always rendered, shown only on small viewports, and its
+          max z-index sits over the header, login overlay and content alike. */}
+      <div class="mobile-coming-soon" aria-hidden="true">
+        <div class="mobile-coming-soon__inner">
+          <div class="mobile-coming-soon__brand brand-cluster">
+            <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
+              <polygon points="50,50 100,0 100,50" fill="#ae1f2a" />
+              <polygon points="50,50 100,50 100,100" fill="#d43950" />
+              <polygon points="50,50 100,100 50,100" fill="#9ec069" />
+              <polygon points="50,50 50,100 0,100" fill="#7fa244" />
+              <polygon points="50,50 0,100 0,50" fill="#4689b3" />
+              <polygon points="50,50 0,50 0,0" fill="#31759c" />
+              <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
+            </svg>
+            <div class="brand-cluster__words">
+              <span class="brand-cluster__word">MODERN NIAGARA</span>
+              <span class="brand-cluster__word brand-cluster__word--sub">BUILDING SERVICES</span>
+              <span class="brand-cluster__word brand-cluster__word--muted">{t("logo.apparel", locale.value).toUpperCase()}</span>
+            </div>
+          </div>
+          <h1 class="mobile-coming-soon__title">Mobile &amp; Tablet<br />Coming Soon</h1>
+        </div>
+      </div>
+
       {/* Login Modal */}
       {showLogin.value && !isPaymentReturn.value && (
         <div class={`login-overlay ${overlayFading.value ? "login-overlay--fading" : ""}`} onClick$={() => { if (auth.value.loggedIn) showLogin.value = false; }}>
@@ -1119,9 +1139,6 @@ export default component$(() => {
                     <span class="brand-cluster__word brand-cluster__word--muted">{t("logo.apparel", locale.value).toUpperCase()}</span>
                   </div>
                 </div>
-                <p class="login-card__hint">
-                  {t("login.subtitle", locale.value)}
-                </p>
                 <Form
                   action={loginAction}
                   reloadDocument
@@ -1130,18 +1147,33 @@ export default component$(() => {
                   onFocusOut$={() => { loginCarouselPaused.value = false; }}
                 >
                   {loginAction.value?.failed && (
-                    <div class="login-modal__error">{loginAction.value.message}</div>
+                    <div class={`login-modal__error ${(loginAction.value as { comingSoon?: boolean }).comingSoon ? "login-modal__error--info" : ""}`}>{loginAction.value.message}</div>
                   )}
+                  {/* Portal picker — two bubbles instead of typing a username. The
+                      selected portal is submitted as a hidden field. */}
+                  <input type="hidden" name="portal" value={selectedPortal.value} />
                   <div class="login-modal__field">
-                    <label for="username">{t("login.username", locale.value)}</label>
-                    <input
-                      id="username"
-                      name="username"
-                      type="text"
-                      autoComplete="username"
-                      required
-                      placeholder={t("login.username.placeholder", locale.value)}
-                    />
+                    <label>{t("login.portal", locale.value)}</label>
+                    <div class="login-portals" role="radiogroup" aria-label={t("login.portal", locale.value)}>
+                      <button
+                        type="button"
+                        role="radio"
+                        aria-checked={selectedPortal.value === "service"}
+                        class={`login-portal ${selectedPortal.value === "service" ? "is-selected" : ""}`}
+                        onClick$={() => { selectedPortal.value = "service"; }}
+                      >
+                        <span>{t("login.portal.service", locale.value)}</span>
+                      </button>
+                      <button
+                        type="button"
+                        role="radio"
+                        aria-checked={selectedPortal.value === "electrical"}
+                        class={`login-portal ${selectedPortal.value === "electrical" ? "is-selected" : ""}`}
+                        onClick$={() => { selectedPortal.value = "electrical"; }}
+                      >
+                        <span>{t("login.portal.electrical", locale.value)}</span>
+                      </button>
+                    </div>
                   </div>
                   <div class="login-modal__field">
                     <label for="password">{t("login.password", locale.value)}</label>
@@ -1178,10 +1210,10 @@ export default component$(() => {
               class="login-modal__carousel"
               onClick$={() => { loginHeroIndex.value = (loginHeroIndex.value + 1) % 2; }}
             >
-              <img src="/hero.jpg" alt="" width="1600" height="900"
+              <img src="/hero-building-services.webp" alt="" width="1920" height="776"
                    loading="eager" decoding="sync"
-                   class={`login-modal__slide ${loginHeroIndex.value === 0 ? "is-active" : ""}`} />
-              <img src="/hero-edmonton-van.jpg" alt="" width="1600" height="900"
+                   class={`login-modal__slide login-modal__slide--wide ${loginHeroIndex.value === 0 ? "is-active" : ""}`} />
+              <img src="/hero.jpg" alt="" width="1600" height="900"
                    loading="eager" decoding="sync"
                    class={`login-modal__slide ${loginHeroIndex.value === 1 ? "is-active" : ""}`} />
             </div>
@@ -1197,9 +1229,22 @@ export default component$(() => {
       </div>
 
       {(auth.value.loggedIn || (loginAction.value && !loginAction.value.failed) || isPaymentReturn.value) && <>
-      <header class={`site-header site-header--white ${tabsStuck.value ? "site-header--tabs-stuck" : ""} ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value ? "site-header--cart-open" : ""} ${SHOW_HERO_HEADER && loc.url.pathname === "/" && !cartOpen.value ? `site-header--hero-hidden ${headerScrolled.value || searchOpen.value ? "site-header--hero-visible" : ""}` : ""} ${loc.url.pathname === "/" && !headerScrolled.value && !searchOpen.value && !cartOpen.value ? "site-header--logo-hidden" : ""}`}>
+      <header class={`site-header site-header--white ${tabsStuck.value ? "site-header--tabs-stuck" : ""} ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value ? "site-header--cart-open" : ""}`}>
         <div class="site-header__inner">
-          <Link href="/" class="site-header__logo brand-cluster brand-cluster--small">
+          <Link
+            href="/"
+            class="site-header__logo brand-cluster brand-cluster--small"
+            onClick$={(e) => {
+              // Already on the catalog home: clicking the logo resets the active
+              // collection back to "All" (rather than a no-op navigation to the
+              // same route that leaves a specific category selected).
+              if (loc.url.pathname === "/") {
+                e.preventDefault();
+                window.dispatchEvent(new CustomEvent("select-category", { detail: "All" }));
+                window.scrollTo({ top: 0, behavior: "instant" });
+              }
+            }}
+          >
             <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
               <polygon points="50,50 100,0 100,50" fill="#ae1f2a" />
@@ -1218,7 +1263,7 @@ export default component$(() => {
           </Link>
           <nav class="site-header__categories">
             <Link href="/" class={loc.url.pathname === "/" ? "active" : ""}>{t("nav.home", locale.value)}</Link>
-            <Link href="/apparel/" class={loc.url.pathname.startsWith("/apparel") ? "active" : ""}>{loginType.value === "tech" ? t("cat.Work Wear", locale.value) : t("nav.apparel", locale.value)}</Link>
+            <Link href="/" class={(!loc.url.pathname.startsWith("/privacy") && !loc.url.pathname.startsWith("/checkout")) ? "active" : ""}>{loginType.value === "tech" ? t("cat.Work Wear", locale.value) : t("nav.apparel", locale.value)}</Link>
           </nav>
           <nav class="site-header__nav">
             {showSearch.value && (
@@ -1253,7 +1298,7 @@ export default component$(() => {
                   // rather than re-deriving the pinned scroll position. The
                   // derived `top` carries a +2 fudge and uses stickyTop(),
                   // which drifts from the header's real height — so on a route
-                  // whose strip is always stuck (/apparel/) the comparison read
+                  // whose strip is always stuck (/) the comparison read
                   // "a few px short" even when the catalog sat exactly under the
                   // bar, and every open nudged the page ~6px. That nudge was the
                   // shift around the tab strip.
@@ -1264,7 +1309,7 @@ export default component$(() => {
                     // few px from the header's real height, so with the old +2
                     // fudge and a 1px threshold every open nudged the page ~5px
                     // even when the catalog already sat under the bar (the visible
-                    // shift on /apparel/, where the strip is always pinned). An
+                    // shift on /, where the strip is always pinned). An
                     // 8px threshold absorbs that drift; genuine repositions (the
                     // hero's full height) are far larger and still fire.
                     if (window.scrollY < top - 8) window.scrollTo({ top, behavior: "instant" });
@@ -1313,13 +1358,7 @@ export default component$(() => {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
               </button>
             )}
-            {/* EN/FR toggle sits between search and cart (tablet + desktop; hidden
-                on phones, where it lives in the menu drawer instead). */}
-            <button class="locale-btn locale-btn--header" onClick$={toggleLocale} aria-label="Toggle language">
-              <span class="locale-btn__full">{locale.value === "en" ? "Français" : "English"}</span>
-              <span class="locale-btn__short">{locale.value === "en" ? "FR" : "EN"}</span>
-              <svg class="locale-btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-            </button>
+            {/* EN/FR toggle moved to the footer. */}
             <button class={`cart-btn ${cart.items.length > 0 ? "cart-btn--active" : ""}`} onClick$={() => { cartOpen.value = !cartOpen.value; if (cartOpen.value) menuOpen.value = false; if (!cartOpen.value) checkoutStep.value = "cart"; }}>
               <span class="cart-btn__label">{t("cart.mycart", locale.value)}</span>
               {cartOpen.value ? (
@@ -1374,7 +1413,7 @@ export default component$(() => {
                         // No catalog here (product page): Enter takes the user to the
                         // listing, swapping the breadcrumb bar for the tabs + grid,
                         // with the typed term carried along in ?q=.
-                        nav(`/apparel/?q=${encodeURIComponent(el.value)}`);
+                        nav(`/?q=${encodeURIComponent(el.value)}`);
                       }
                     }
                     if (e.key === "Escape") { searchValue.value = ""; window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" })); searchOpen.value = false; }
@@ -1426,13 +1465,13 @@ export default component$(() => {
             </div>
             <div class="nav-drawer__links">
               {loginType.value === "tech" && (
-                <Link href="/apparel/" class={`nav-drawer__link ${loc.url.pathname.startsWith("/apparel") ? "active" : ""}`} onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "Work Wear" })); }}>
+                <Link href="/" class={`nav-drawer__link ${(!loc.url.pathname.startsWith("/privacy") && !loc.url.pathname.startsWith("/checkout")) ? "active" : ""}`} onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "Work Wear" })); }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M4 6h16v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/><path d="M4 6l-2 4v2h4V8"/><path d="M20 6l2 4v2h-4V8"/></svg>
                   {t("cat.Work Wear", locale.value)}
                 </Link>
               )}
               {loginType.value === "safety" && (
-                <Link href="/apparel/" class={`nav-drawer__link ${loc.url.pathname.startsWith("/apparel") ? "active" : ""}`} onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "Flame Resistant" })); }}>
+                <Link href="/" class={`nav-drawer__link ${(!loc.url.pathname.startsWith("/privacy") && !loc.url.pathname.startsWith("/checkout")) ? "active" : ""}`} onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "Flame Resistant" })); }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
                   {t("cat.Flame Resistant", locale.value)}
                 </Link>
@@ -1476,7 +1515,7 @@ export default component$(() => {
                                     e.stopPropagation();
                                     menuOpen.value = false;
                                     window.dispatchEvent(new CustomEvent("select-category", { detail: c.cat }));
-                                    await nav(`/apparel/#${c.cat.toLowerCase().replace(/\s+/g, "-")}`);
+                                    await nav(`/#${c.cat.toLowerCase().replace(/\s+/g, "-")}`);
                                   }
                                 }}
                               >
@@ -1490,7 +1529,7 @@ export default component$(() => {
                             {items.length === 0 ? (
                               <span class="nav-drawer__cat-empty">—</span>
                             ) : items.map((p) => (
-                              <a key={p.sku} href={`/apparel/${p.sku}/`} class="nav-drawer__cat-item" onClick$={() => (menuOpen.value = false)}>
+                              <a key={p.sku} href={`/${p.sku}/`} class="nav-drawer__cat-item" onClick$={() => (menuOpen.value = false)}>
                                 <img src={p.img} alt="" width="24" height="24" class="nav-drawer__cat-item-img" loading="lazy" decoding="async" />
                                 {p.name.replace(/#\S+/g, '').replace(/\s*-\s*$/, '').trim()}
                               </a>
@@ -1533,28 +1572,32 @@ export default component$(() => {
           <div class="site-footer__col">
           {loginType.value === "safety" && (
           <nav class="site-footer__links">
-            <Link href="/apparel/#fr" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Flame Resistant" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Flame Resistant", locale.value)}</Link>
-            <Link href="/apparel/#shirts" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Shirts" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Shirts", locale.value)}</Link>
-            <Link href="/apparel/#hats" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Hats" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Hats", locale.value)}</Link>
+            <Link href="/#fr" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Flame Resistant" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Flame Resistant", locale.value)}</Link>
+            <Link href="/#shirts" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Shirts" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Shirts", locale.value)}</Link>
+            <Link href="/#hats" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Hats" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Hats", locale.value)}</Link>
             <Link class="site-footer__links-privacy" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>
           </nav>
           )}
           {(loginType.value !== "tech" && loginType.value !== "safety") && (
           <nav class="site-footer__links">
-            <Link href="/apparel/#shirts" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Shirts" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Shirts", locale.value)}</Link>
-            <Link href="/apparel/#jackets" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Jackets" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Jackets", locale.value)}</Link>
-            <Link href="/apparel/#hats" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Hats" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Hats", locale.value)}</Link>
-            <Link href="/apparel/#swag" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "SWAG" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.SWAG", locale.value)}</Link>
-            <Link href="/apparel/#new-hire-kit" onClick$={(e) => { if (/^\/apparel\/?$/.test(loc.url.pathname)) { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "New Hire Kit" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.New Hire Kit", locale.value)}</Link>
+            <Link href="/#shirts" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Shirts" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Shirts", locale.value)}</Link>
+            <Link href="/#jackets" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Jackets" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Jackets", locale.value)}</Link>
+            <Link href="/#hats" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Hats" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Hats", locale.value)}</Link>
+            <Link href="/#swag" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "SWAG" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.SWAG", locale.value)}</Link>
+            <Link href="/#new-hire-kit" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "New Hire Kit" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.New Hire Kit", locale.value)}</Link>
             <Link class="site-footer__links-privacy" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>
           </nav>
           )}
           <div class="site-footer__contact-block">
             <div class="site-footer__contact site-footer__contact--inline">
               <svg class="site-footer__contact-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-              <a href="mailto:info@modernniagaraapparel.ca">info@modernniagaraapparel.ca</a>
+              <a href="mailto:info@mnbsapparel.ca">info@mnbsapparel.ca</a>
             </div>
             <Link class="site-footer__privacy-link" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>
+            <button type="button" class="site-footer__locale locale-btn locale-btn--footer" onClick$={toggleLocale} aria-label="Toggle language">
+              <svg class="locale-btn__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+              <span>{locale.value === "en" ? "Français" : "English"}</span>
+            </button>
           </div>
           </div>
         </div>
@@ -1582,7 +1625,7 @@ export default component$(() => {
             {cart.items.length === 0 ? (
               <div class="cart-drawer__empty">
                 <p>{t("cart.empty", locale.value)}</p>
-                <Link href="/apparel/" class="cart-drawer__back-link" onClick$={() => (cartOpen.value = false)}>{t("cart.backtoapparel", locale.value)}</Link>
+                <Link href="/" class="cart-drawer__back-link" onClick$={() => (cartOpen.value = false)}>{t("cart.backtoapparel", locale.value)}</Link>
               </div>
             ) : checkoutStep.value === "cart" ? (
               <>
@@ -1602,7 +1645,7 @@ export default component$(() => {
                             <div class="cart-table__product-row">
                             <img src={item.img} alt={item.name} width="40" height="30" class="cart-table__img" />
                             <div>
-                            <Link href={item.sku ? `/apparel/${item.sku}/` : "/apparel/"} class="cart-table__name-link">{stripColorSuffix(item.name)}</Link>
+                            <Link href={item.sku ? `/${item.sku}/` : "/"} class="cart-table__name-link">{stripColorSuffix(item.name)}</Link>
                             <div class="cart-table__meta">
                               {item.color && item.color.startsWith("#") && <span class="cart-table__swatch" style={{ background: item.color }} aria-hidden="true" />}
                               <span>{item.color ? `${item.color.startsWith("#") ? colorName(item.color, locale.value) : item.color} / ` : ""}{item.size}</span>

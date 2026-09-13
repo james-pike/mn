@@ -4,24 +4,6 @@ import type { Locale } from "../../i18n";
 
 export const allProducts = [
   {
-    "sku": "MN-7",
-    "name": "Men's Carhartt Winter Jacket - Navy",
-    "category": "Jackets",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 198.49,
-    "img": "/sku/mwinterjacket.png",
-    "imgs": [
-      "/sku/mwinterjacket.png",
-      "/sku/winterjacket.png"
-    ],
-    "material": "12 oz 100% ringspun cotton duck shell, quilted nylon lining, Arctic-weight polyester insulation",
-    "details": "Two-way brass zip, pleated bi-swing back, internal rib-knit storm cuffs, four exterior pockets, two interior pockets, triple-stitched seams, #106674"
-  },
-  {
     "sku": "MN-9",
     "name": "Carhartt Pullover Hoodie - Navy",
     "category": "Sweaters",
@@ -60,7 +42,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-20",
-    "name": "Men's Cole Harbour Soft Shell Jacket",
+    "name": "Men's Coal Harbour Soft Shell Jacket",
     "category": "Jackets",
     "sizes": "XS - 6XL",
     "badge": "",
@@ -80,7 +62,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-19",
-    "name": "Women's Cole Harbour Soft Shell Jacket",
+    "name": "Women's Coal Harbour Soft Shell Jacket",
     "category": "Jackets",
     "sizes": "XS - 4XL",
     "badge": "",
@@ -311,41 +293,6 @@ export const allProducts = [
     "details": "Quarter-zip pullover, Performance stretch fabric, Ribbed cuffs and hem, Modern logo on sleeve (tone on tone)"
   },
   {
-    "sku": "MN-1",
-    "name": "Carhartt Rigby Dungaree Pants - Navy",
-    "category": "Pants",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 69.99,
-    "img": "/sku/pants.png",
-    "imgs": [
-      "/sku/pants.png"
-    ],
-    "material": "",
-    "details": "#102291"
-  },
-  {
-    "sku": "MN-8",
-    "name": "Carhartt Duck Insulated Bib Overall - Navy",
-    "category": "Work Wear",
-    "sizes": "S - 5XL / MS - 4XLS / MT - 4XLT",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 189.99,
-    "img": "/sku/106672_NVY_MF21_b_V4.png",
-    "imgs": [
-      "/sku/106672_NVY_MF21_b_V4.png",
-      "/sku/bib.png"
-    ],
-    "material": "",
-    "details": "#106672"
-  },
-  {
     "sku": "MN-5",
     "name": "Flexfit Trucker Ball Cap - Navy",
     "category": "Hats",
@@ -380,18 +327,18 @@ export const allProducts = [
     "details": "Stretchy thick knit, fold-up cuff with Carhartt patch, one-size-fits-most, #A18"
   },
   {
-    "sku": "MNFR-1",
-    "name": "Carhartt FR Rigby Pants - Navy",
-    "category": "Flame Resistant",
-    "sizes": "S - 4XL",
+    "sku": "MN-36",
+    "name": "Carhartt FR Rigby Pants - Dark Khaki",
+    "category": "Pants",
+    "sizes": "W 30 - 52 / L 30 - 36",
     "badge": "",
     "colors": [
-      "#2c3e50"
+      "#ab8f66"
     ],
     "price": 159,
-    "img": "/sku/FRpants.png",
+    "img": "/sku/104204-darkkhaki.png",
     "imgs": [
-      "/sku/FRpants.png"
+      "/sku/104204-darkkhaki.png"
     ],
     "material": "9 oz 98% cotton / 2% spandex canvas with Rugged Flex stretch",
     "details": "Flame-resistant, NFPA 70E and UL classified to NFPA 2112, relaxed fit, straight leg, phone and utility pockets, OEKO-TEX Standard 100, #104204"
@@ -482,18 +429,37 @@ export const allProducts = [
     "details": "#B0000558"
   },
   {
-    "sku": "MNFR-4",
+    "sku": "MN-38",
+    "name": "Carhartt FR Force Dearborn LS T-Shirt - Navy",
+    "category": "Shirts",
+    "sizes": "S - 4XL / LT - 3XLT",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 79,
+    "img": "/sku/100235-navy.png",
+    "imgs": [
+      "/sku/100235-navy.png",
+      "/sku/100235-navy-back.png"
+    ],
+    "material": "6.75 oz Force FR jersey knit",
+    "details": "Flame-resistant, meets NFPA 2112 / NFPA 70E, Force sweat-wicking, loose fit, long sleeve, #100235"
+  },
+  {
+    "sku": "MN-37",
     "name": "Carhartt FR Full Zip Hoodie - Navy",
-    "category": "Flame Resistant",
+    "category": "Sweaters",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
       "#2c3e50"
     ],
-    "price": 239.99,
-    "img": "/sku/FRfullzip.png",
+    "price": 239,
+    "img": "/sku/104982-navy.png",
     "imgs": [
-      "/sku/FRfullzip.png"
+      "/sku/104982-navy.png",
+      "/sku/104982-navy-back.png"
     ],
     "material": "10.5 oz 40% cotton / 35% modacrylic / 15% viscose / 8% aramid / 2% antistat FR fleece",
     "details": "Full-zip hood with adjustable drawcord, Vislon zip with Nomex tape, flame-resistant (meets NFPA 70E, ASTM F1506, UL classified to NFPA 2112), Force sweat-wicking, FastDry, #104982"
@@ -514,6 +480,23 @@ export const allProducts = [
     ],
     "material": "",
     "details": "#B0000536"
+  },
+  {
+    "sku": "MN-39",
+    "name": "Flexfit Embroidered Cap - Navy",
+    "category": "Headwear",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 24,
+    "img": "/sku/i8502-navy.png",
+    "imgs": [
+      "/sku/i8502-navy.png"
+    ],
+    "material": "63% polyester / 34% cotton / 3% spandex",
+    "details": "Flexfit stretch-fit, structured, embroidered, #i8502"
   },
   {
     "sku": "MNFR-5",
@@ -801,6 +784,7 @@ const colorNames: Record<string, Record<string, string>> = {
   "#b0b0b0": { en: "Grey", fr: "Gris" },
   "#b6e021": { en: "Safety Green", fr: "Vert sécurité" },
   "#b8ad97": { en: "Khaki", fr: "Kaki" },
+  "#ab8f66": { en: "Dark Khaki", fr: "Kaki foncé" },
   "#b98b8b": { en: "Rose", fr: "Rose" },
   "#bf5700": { en: "Burnt Orange", fr: "Orange brûlé" },
   "#c2a878": { en: "Tan", fr: "Beige" },
