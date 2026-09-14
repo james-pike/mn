@@ -4418,35 +4418,35 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   .hero-card-header__btn--to-fr,
   .hero-card-header__btn--to-en { display: none !important; }
 }
-/* On touch widths the header language toggle is dropped: phones reach it from
-   the hamburger drawer, tablet from the footer (see .site-footer__locale).
-   Desktop keeps the header toggle. */
+/* The header no longer carries a language toggle — it lives in the footer on
+   tablet + desktop, and in the hamburger drawer on phones. This guard stays as
+   a harmless no-op should a header .locale-btn ever return. */
 @media (max-width: 1024px) {
   .site-header .locale-btn { display: none !important; }
 }
-/* Footer language toggle — shown only on tablet (phone uses the hamburger
-   drawer, desktop uses the header). Styled for the dark footer. */
+/* Footer language toggle — the header no longer carries the EN/FR toggle, so
+   the footer is its home on tablet AND desktop (phones still use the hamburger
+   drawer). Styled for the light footer: text colour comes from the footer
+   override below, the icon follows currentColor, with a subtle dark hairline. */
 .site-footer__locale { display: none; }
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) {
   .site-footer__locale {
     display: inline-flex;
     align-items: center;
     gap: 4px;
     margin-top: 0;
     padding: 6px 9px;
-    border: 1px solid rgba(255,255,255,0.25);
+    border: 1px solid rgba(0,0,0,0.18);
     border-radius: 4px;
     background: transparent;
-    color: rgba(255,255,255,0.85);
     font-family: var(--font-sans);
     font-size: 0.85rem;
     font-weight: 600;
     letter-spacing: 0.02em;
     cursor: pointer;
   }
-  .site-footer__locale svg { stroke: rgba(255,255,255,0.85); }
-  .site-footer__locale:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
-  .site-footer__locale:hover svg { stroke: #fff; }
+  .site-footer__locale svg { stroke: currentColor; }
+  .site-footer__locale:hover { border-color: rgba(0,0,0,0.35); }
 }
 
 /* ===== Header apparel search (mobile/tablet) ===== */
@@ -6518,6 +6518,17 @@ details[open] > .cart-drawer__checkout-title::after {
   color: #fff;
 }
 .order-confirm__btn:hover { color: #fff; }
+
+/* Order failure modal: red title + a row of actions (Try Again). */
+.order-confirm--error .order-confirm__title { color: #a4161e; }
+.order-confirm__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+}
+.order-confirm__actions .btn { margin: 0; }
 
 /* ===== Login Button ===== */
 .site-header__login {
@@ -14832,3 +14843,143 @@ html { background: rgb(223, 226, 230) !important; }
     box-shadow: inset 1px 0 0 0 rgba(0, 0, 0, 0.10) !important;
   }
 }
+
+/* ============================================================
+   Standalone /checkout route.
+   The checkout "details" step now lives on its own page
+   (src/routes/checkout/index.tsx), reusing the cart drawer's markup and
+   classes so it looks identical. But on its own route it must flow BENEATH
+   the sticky site header as a normal page — not cover it like the in-drawer
+   overlay did. Neutralise the fixed overlay + drawer positioning here; every
+   inner .checkout-modal__* / .cart-drawer__* style is inherited unchanged.
+   (Scoped by the extra .checkout-page class so the in-layout cart drawer and
+   the order-confirmation modal — plain .modal-overlay — are untouched.)
+   ============================================================ */
+/* Keep the drawer's own (fixed) desktop layout intact — it produces the clean
+   two-column details view — but drop the whole thing BELOW the sticky site
+   header and behind it in the stack, so the header stays visible on top. */
+.modal-overlay.checkout-page {
+  top: var(--wt-header-pin, 73px);
+  z-index: 9998;
+  background: transparent;
+  backdrop-filter: none;
+}
+.checkout-page .drawer.cart-drawer {
+  top: var(--wt-header-pin, 73px);
+}
+
+/* --- Standardised checkout surfaces ---
+   On a full page the drawer's mixed greige/white fills read as inconsistent.
+   Give the route one calm off-white ground, white section cards with a single
+   border weight and radius, and even gutters — the conventional checkout look.
+   Scoped to .checkout-page so the in-drawer cart keeps its own styling. */
+.checkout-page .drawer.cart-drawer { background: var(--ce-off-white); }
+.checkout-page .cart-drawer__details-step {
+  padding: 0 !important;
+  gap: 14px !important;
+  overflow: visible;
+}
+.checkout-page .checkout-modal__form,
+.checkout-page .checkout-modal__pay,
+.checkout-page .cart-drawer__summary {
+  background: var(--ce-white) !important;
+  border: 1px solid var(--ce-gray-200);
+  border-radius: var(--radius-lg);
+  margin: 0 !important;
+  padding: 1.05rem 1.15rem !important;
+}
+.checkout-page .cart-drawer__back-btn {
+  background: #f2f2f2 !important;
+  border-bottom: 1px solid var(--ce-gray-200);
+}
+.checkout-page .cart-drawer__footer {
+  background: var(--ce-off-white);
+  border-top: 1px solid var(--ce-gray-200);
+  margin: 0;
+}
+.checkout-page .checkout-modal__field input,
+.checkout-page .checkout-modal__field select {
+  background: var(--ce-white);
+  border: 1px solid var(--ce-gray-300);
+}
+
+/* --- Checkout / Place Order button (cart drawer AND checkout page) ---
+   Use the same solid brand blue as the header "My Cart" button instead of the
+   weathered light "sign-panel" fill (--wt-orange), which read as whited-out.
+   Flat blue, white text, simple hover; stays recognisably blue (just muted)
+   when disabled rather than greyed/whited out. */
+.cart-drawer__order-btn.btn.btn--primary {
+  background: #2E698E;
+  color: #fff;
+  border: 1px solid #2E698E;
+  border-radius: var(--radius-md);
+  box-shadow: none;
+  text-shadow: none;
+}
+.cart-drawer__order-btn.btn.btn--primary:hover {
+  background: #245471;
+  border-color: #245471;
+  color: #fff;
+  box-shadow: none;
+}
+.cart-drawer__order-btn.btn.btn--primary:active {
+  background: #1e4a66;
+  box-shadow: none;
+  transform: translateY(1px);
+}
+.cart-drawer__order-btn--disabled,
+.cart-drawer__order-btn:disabled {
+  opacity: 0.55;
+  filter: none;
+}
+
+/* --- Lighter cart drawer, matching the checkout page ---
+   The cart's greige chrome bars (the "My Cart" title bar and the
+   PRODUCT/QTY/TOTAL strip) read muddy/too dark next to the white content.
+   Drop them to the same off-white ground the checkout page uses, separated by
+   a single hairline border instead of a heavy fill. (.cart-table lives only in
+   the cart drawer, so the checkout page is unaffected.) */
+.cart-drawer__header {
+  background: #f2f2f2 !important;
+  background-image: none !important;
+  border-bottom: 1px solid var(--ce-gray-200);
+}
+.cart-table thead tr,
+.cart-table thead th {
+  background: #f2f2f2 !important;
+  background-image: none !important;
+}
+.cart-table thead tr {
+  border-bottom: 1px solid var(--ce-gray-200);
+}
+
+/* --- Even out the cart content ---
+   The area behind the rows (.cart-drawer__items) was a darker greige panel
+   (--mn-panel) while the strip and footer were off-white, so it read dark and
+   the footer looked like a lighter inset band. Put the whole cart body on the
+   one off-white surface, flush (no ring / inset margin). Cart-only selectors —
+   the checkout page has no .cart-table. */
+.drawer.cart-drawer .cart-drawer__items {
+  background: var(--ce-off-white) !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+}
+.cart-table tbody tr,
+.cart-table tfoot tr {
+  background: transparent !important;
+}
+
+/* --- Checkout bar flush + consistent spacing (match the cart) ---
+   The cart's secondary bar sits flush on its rows; the checkout's Back-to-Cart
+   bar had a 14px grid row-gap under it, showing a band of ground (read as a
+   darker second strip). Zero the ROW gap so the bar butts against the cards
+   like the cart strip does, keep one 14px gutter between the two columns and
+   between the stacked cards, and drop the leftover rounded footer corners
+   (this checkout is a full-width page, not a rounded drawer card). */
+.checkout-page .cart-drawer__details-step {
+  row-gap: 0 !important;
+  column-gap: 14px !important;
+}
+.checkout-page .cart-drawer__back-btn { margin: 0 !important; }
+.checkout-page .checkout-modal__pay { margin-top: 14px !important; }
+.checkout-page .cart-drawer__footer { border-radius: 0 !important; }

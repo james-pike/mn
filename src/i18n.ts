@@ -218,6 +218,13 @@ const translations = {
   "cart.error.phone": { en: "Please enter a valid phone number", fr: "Veuillez entrer un numéro de téléphone valide" },
   "cart.error.postal": { en: "Please enter a valid postal code (e.g. A1A 1A1)", fr: "Veuillez entrer un code postal valide (p. ex. A1A 1A1)" },
   "cart.error.network": { en: "Network error placing order", fr: "Erreur réseau lors de la commande" },
+  "cart.error.unconfirmed": { en: "We couldn't confirm your order was received. Your cart has been kept — please try again.", fr: "Nous n'avons pas pu confirmer la réception de votre commande. Votre panier a été conservé — veuillez réessayer." },
+  "order.fail.title": { en: "Order Not Submitted", fr: "Commande non soumise" },
+  "order.fail.text": {
+    en: "Your order could not be submitted at this time. Please try again.",
+    fr: "Votre commande n'a pas pu être soumise pour le moment. Veuillez réessayer.",
+  },
+  "order.fail.retry": { en: "Try Again", fr: "Réessayer" },
   "cart.error.failed": { en: "Failed to place order. Please try again.", fr: "Échec de la commande. Veuillez réessayer." },
   "filter.collections": { en: "Collections", fr: "Collections" },
   "filter.fit": { en: "Fit", fr: "Coupe" },

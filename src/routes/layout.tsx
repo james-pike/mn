@@ -178,7 +178,7 @@ export const useSubmitOrder = routeAction$(
     const apiKey = env.get("RESEND_API_KEY") || env.get("VITE_RESEND_API_KEY");
     const stripeKey = env.get("STRIPE_SECRET_KEY") || env.get("VITE_STRIPE_SECRET_KEY");
 
-    const { employee, items, date } = data;
+    const { employee, items, date, idempotencyKey } = data;
     const paymentMethod = (data.paymentMethod || "po") as PaymentMethod;
     const wantsGift = paymentMethod === "giftcard" || paymentMethod === "giftcard_card";
     const wantsCard = paymentMethod === "card" || paymentMethod === "giftcard_card";
@@ -198,6 +198,20 @@ export const useSubmitOrder = routeAction$(
     const subtotal = items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0);
     const tax = subtotal * taxRate;
     const total = +(subtotal + tax).toFixed(2);
+
+    // Dry-run / test mode (local .env only — never set in production). Runs the
+    // full validation + UI flow but skips the Turso write, gift/Stripe, and email:
+    //   ORDER_TEST_MODE=1|true|yes  -> simulate SUCCESS (no DB, no email)
+    //   ORDER_TEST_MODE=fail        -> simulate the real DB-failure response
+    const testModeVal = (env.get("ORDER_TEST_MODE") || env.get("VITE_ORDER_TEST_MODE") || "").trim().toLowerCase();
+    if (testModeVal === "fail") {
+      console.warn("[ORDER_TEST_MODE=fail] Simulating a failed order (no DB, no email).");
+      return fail(500, { message: "Order could not be saved. Please try again." });
+    }
+    if (/^(1|true|yes)$/.test(testModeVal)) {
+      console.warn("[ORDER_TEST_MODE] Skipping DB insert + email. Simulated order.", { vendor, total });
+      return { success: true, orderNumber: "MN-TEST" };
+    }
 
     if (!tursoUrl || !tursoToken) {
       return fail(500, { message: "Order database not configured (missing env vars)" });
@@ -248,38 +262,93 @@ export const useSubmitOrder = routeAction$(
     const status = cardAmount > 0 ? "awaiting_payment" : paymentMethod === "po" ? "pending" : "paid";
     let orderNumber = "";
     let orderId: bigint | number | null = null;
+    // Empty string must become NULL so orders without a key don't collide on the
+    // unique index (SQLite treats NULLs as distinct, empty strings not).
+    const idemKey = (idempotencyKey || "").trim() || null;
     try {
-      const result = await db.execute({
-        sql: `INSERT INTO orders (vendor, emp_number, emp_name, emp_dept, po_number, items, total, status, payment_method, gift_card_code, gift_amount, card_amount, device, created_at, updated_at)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-        args: [
-          vendor,
-          "",
-          // The name IS stored (so the admin knows who ordered); email/phone are
-          // NOT — for card orders they travel through Stripe metadata to the
-          // webhook, never a column here. See the privacy policy.
-          employee.name || "",
-          "",
-          employee.po || "",
-          JSON.stringify(items),
-          total,
-          status,
-          paymentMethod,
-          giftCode,
-          giftAmount,
-          cardAmount,
-          data.device || null,
-        ],
-      });
-      orderId = (result.lastInsertRowid as any) ?? null;
-      if (orderId != null) {
-        const seq = await db.execute({
-          sql: "SELECT COUNT(*) AS n FROM orders WHERE vendor LIKE 'modernniagara%' AND id <= ?",
-          args: [orderId as any],
-        });
-        const n = Number((seq.rows[0] as any)?.n) || Number(orderId);
-        orderNumber = `MN-${n}`;
+      // Warm up the connection before writing. Turso databases on low-traffic
+      // apps can be cold, and the first request after idle can fail or be slow.
+      // Retry a harmless SELECT a few times (with backoff) to wake it. We retry
+      // only this read — never the INSERT — so a cold start can't create a
+      // duplicate order. The INSERT below then runs once on a live connection.
+      const WARMUP_TRIES = 3;
+      let warmErr: unknown = null;
+      for (let attempt = 1; attempt <= WARMUP_TRIES; attempt++) {
+        try {
+          await db.execute("SELECT 1");
+          warmErr = null;
+          break;
+        } catch (err) {
+          warmErr = err;
+          console.warn(`Turso warmup attempt ${attempt}/${WARMUP_TRIES} failed:`, err);
+          if (attempt < WARMUP_TRIES) await new Promise((r) => setTimeout(r, 600 * attempt));
+        }
       }
+      if (warmErr) throw warmErr;
+
+      try {
+        const result = await db.execute({
+          sql: `INSERT INTO orders (vendor, emp_number, emp_name, emp_dept, po_number, items, total, status, payment_method, gift_card_code, gift_amount, card_amount, device, idempotency_key, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
+          args: [
+            vendor,
+            "",
+            // The name IS stored (so the admin knows who ordered); email/phone are
+            // NOT — for card orders they travel through Stripe metadata to the
+            // webhook, never a column here. See the privacy policy.
+            employee.name || "",
+            "",
+            employee.po || "",
+            JSON.stringify(items),
+            total,
+            status,
+            paymentMethod,
+            giftCode,
+            giftAmount,
+            cardAmount,
+            data.device || null,
+            idemKey,
+          ],
+        });
+        orderId = (result.lastInsertRowid as any) ?? null;
+      } catch (err) {
+        // Idempotent replay: if this key already produced an order (a prior
+        // attempt saved before the response was lost), reuse that same order
+        // instead of inserting a duplicate. Any other error propagates.
+        if (idemKey && /UNIQUE constraint failed/i.test(String((err as any)?.message ?? err))) {
+          const existing = await db.execute({
+            sql: "SELECT id FROM orders WHERE idempotency_key = ?",
+            args: [idemKey],
+          });
+          if (existing.rows.length > 0) {
+            orderId = (existing.rows[0] as any).id;
+            console.warn("Idempotent replay — reusing existing order for key", idemKey);
+          } else {
+            throw err;
+          }
+        } else {
+          throw err;
+        }
+      }
+
+      // Confirm the row actually persisted before telling the customer it went
+      // through — a silent non-write returns 0 rows and we fail loudly instead
+      // of showing a false success.
+      if (orderId == null) {
+        console.error("Insert returned no rowid — order not confirmed");
+        return fail(500, { message: "Order could not be confirmed. Please try again." });
+      }
+      const check = await db.execute({ sql: "SELECT id FROM orders WHERE id = ?", args: [orderId as any] });
+      if (check.rows.length === 0) {
+        console.error("Order row not found after insert — order not confirmed", orderId);
+        return fail(500, { message: "Order could not be confirmed. Please try again." });
+      }
+      const seq = await db.execute({
+        sql: "SELECT COUNT(*) AS n FROM orders WHERE vendor LIKE 'modernniagara%' AND id <= ?",
+        args: [orderId as any],
+      });
+      const n = Number((seq.rows[0] as any)?.n) || Number(orderId);
+      orderNumber = `MN-${n}`;
     } catch (err) {
       console.error("Failed to save order to database:", err);
       return fail(500, { message: "Order could not be saved. Please try again." });
@@ -461,6 +530,7 @@ export const useSubmitOrder = routeAction$(
       .min(1)
       .max(100),
     date: z.string().min(1).max(40),
+    idempotencyKey: z.string().max(80).optional().default(""),
   }),
 );
 
@@ -511,7 +581,7 @@ export default component$(() => {
   const savedLocale = useLocaleLoader();
   const locale = useSignal<Locale>(savedLocale.value);
 
-  // EN/FR language toggle (header on tablet+desktop, menu drawer on mobile).
+  // EN/FR language toggle (footer on tablet+desktop, menu drawer on mobile).
   const toggleLocale = $(() => {
     locale.value = locale.value === "en" ? "fr" : "en";
     document.cookie = `${LOCALE_COOKIE}=${locale.value};path=/;max-age=31536000`;
@@ -1631,7 +1701,7 @@ export default component$(() => {
                 <p>{t("cart.empty", locale.value)}</p>
                 <Link href="/" class="cart-drawer__back-link" onClick$={() => (cartOpen.value = false)}>{t("cart.backtoapparel", locale.value)}</Link>
               </div>
-            ) : checkoutStep.value === "cart" ? (
+            ) : (
               <>
                 <div class="cart-drawer__items">
                   <table class="cart-table">
@@ -1701,191 +1771,10 @@ export default component$(() => {
                   </span>
                   <button
                     class="btn btn--primary cart-drawer__order-btn"
-                    onClick$={() => { summaryOpen.value = true; checkoutStep.value = "details"; }}
+                    onClick$={() => { cartOpen.value = false; nav("/checkout/"); }}
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
                     {t("cart.checkout", locale.value)}
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <div class="cart-drawer__details-step">
-                  <button class="cart-drawer__back-btn" onClick$={() => { checkoutStep.value = "cart"; }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-                    {t("cart.backtocart", locale.value)}
-                  </button>
-                  <Collapsible.Root class="cart-drawer__summary" bind:open={summaryOpen}>
-                    <Collapsible.Trigger class="cart-drawer__checkout-title">
-                      {t("cart.ordersummary", locale.value)} — {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}
-                    </Collapsible.Trigger>
-                    <Collapsible.Content>
-                      <div class="cart-drawer__summary-list">
-                        {cart.items.map((item) => (
-                          <div key={`${item.name}-${item.size}`} class="cart-drawer__summary-item">
-                            <span>
-                              {item.color && item.color.startsWith("#") && <span class="cart-drawer__summary-swatch" style={{ background: item.color }} aria-hidden="true" />}
-                              {item.quantity}x {stripColorSuffix(item.name)}{(item.color || item.size) ? ` — ${item.color ? (item.color.startsWith("#") ? colorName(item.color, locale.value) : item.color) : ""}${item.color && item.size ? " / " : ""}${item.size || ""}` : ""}
-                            </span>
-                            {loginType.value !== "tech" && <span>${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</span>}
-                          </div>
-                        ))}
-                        {loginType.value !== "tech" && (
-                          <>
-                            <div class="cart-drawer__summary-item cart-drawer__summary-total">
-                              <span>{t("cart.invoice.subtotal", locale.value)}</span>
-                              <span>${subtotal.value.toFixed(2)}</span>
-                            </div>
-                            {empProvince.value ? (
-                              <>
-                                <div class="cart-drawer__summary-item">
-                                  <span>{taxLabel.value}</span>
-                                  <span>${(taxAmount.value ?? 0).toFixed(2)}</span>
-                                </div>
-                                <div class="cart-drawer__summary-item cart-drawer__summary-total">
-                                  <span>{t("cart.invoice.total", locale.value)}</span>
-                                  <span>${orderTotal.value.toFixed(2)}</span>
-                                </div>
-                              </>
-                            ) : (
-                              <div class="cart-drawer__summary-item">
-                                <span>+ {t("cart.invoice.tax", locale.value)}</span>
-                                <span>—</span>
-                              </div>
-                            )}
-                          </>
-                        )}
-                      </div>
-                    </Collapsible.Content>
-                  </Collapsible.Root>
-                  <div class="checkout-modal__form">
-                    <h3 class="checkout-modal__form-title">{t("cart.orderdetails", locale.value)}</h3>
-                    <div class="checkout-modal__row">
-                      <div class={`checkout-modal__field ${formTouched.value && !empFirstName.value ? "checkout-modal__field--error" : ""}`}>
-                        <label>{t("cart.firstname", locale.value)}</label>
-                        <input
-                          type="text"
-                          value={empFirstName.value}
-                          onInput$={(_, el) => { empFirstName.value = el.value; formError.value = ""; }}
-                        />
-                      </div>
-                      <div class={`checkout-modal__field ${formTouched.value && !empLastName.value ? "checkout-modal__field--error" : ""}`}>
-                        <label>{t("cart.lastname", locale.value)}</label>
-                        <input
-                          type="text"
-                          value={empLastName.value}
-                          onInput$={(_, el) => { empLastName.value = el.value; formError.value = ""; }}
-                        />
-                      </div>
-                    </div>
-                    {/* Full shipping address — all required. */}
-                    <div class={`checkout-modal__field ${formTouched.value && !empAddress1.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.address", locale.value)}</label>
-                      <input
-                        type="text"
-                        autoComplete="street-address"
-                        value={empAddress1.value}
-                        onInput$={(_, el) => { empAddress1.value = el.value; formError.value = ""; }}
-                      />
-                    </div>
-                    <div class={`checkout-modal__field ${formTouched.value && !empCity.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.city", locale.value)}</label>
-                      <input
-                        type="text"
-                        autoComplete="address-level2"
-                        value={empCity.value}
-                        onInput$={(_, el) => { empCity.value = el.value; formError.value = ""; }}
-                      />
-                    </div>
-                    {/* Province sits directly under the name row so the
-                        tax line in the cart total updates as soon as
-                        possible — before the user fills in phone/email. */}
-                    <div class={`checkout-modal__field ${formTouched.value && !empProvince.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.province", locale.value)}</label>
-                      <select
-                        required
-                        value={empProvince.value}
-                        onChange$={(_, el) => {
-                          empProvince.value = el.value;
-                          formError.value = "";
-                        }}
-                      >
-                        <option value="" disabled hidden>{locale.value === "fr" ? "Sélectionner…" : "Select…"}</option>
-                        <option value="AB">{t("prov.AB", locale.value)}</option>
-                        <option value="BC">{t("prov.BC", locale.value)}</option>
-                        <option value="MB">{t("prov.MB", locale.value)}</option>
-                        <option value="NB">{t("prov.NB", locale.value)}</option>
-                        <option value="NL">{t("prov.NL", locale.value)}</option>
-                        <option value="NS">{t("prov.NS", locale.value)}</option>
-                        <option value="ON">{t("prov.ON", locale.value)}</option>
-                        <option value="PE">{t("prov.PE", locale.value)}</option>
-                        <option value="QC">{t("prov.QC", locale.value)}</option>
-                        <option value="SK">{t("prov.SK", locale.value)}</option>
-                      </select>
-                    </div>
-                    <div class={`checkout-modal__field ${formTouched.value && !empPostal.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.postal", locale.value)}</label>
-                      <input
-                        type="text"
-                        autoComplete="postal-code"
-                        value={empPostal.value}
-                        onInput$={(_, el) => { empPostal.value = el.value; formError.value = ""; }}
-                      />
-                    </div>
-                    <div class={`checkout-modal__field ${formTouched.value && !empEmail.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.email", locale.value)}</label>
-                      <input
-                        type="email"
-                        value={empEmail.value}
-                        onInput$={(_, el) => { empEmail.value = el.value; formError.value = ""; }}
-                      />
-                    </div>
-                    <div class={`checkout-modal__field ${formTouched.value && !empPhone.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.phone", locale.value)}</label>
-                      <input
-                        type="tel"
-                        value={empPhone.value}
-                        onInput$={(_, el) => { empPhone.value = el.value; formError.value = ""; }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* ---- Payment method ---- */}
-                  <div class="checkout-modal__pay">
-                    <h3 class="checkout-modal__form-title">{t("pay.title", locale.value)}</h3>
-                    {/* MN accepts purchase-order checkout only — no gift card or
-                        credit-card options. payMethod stays at its "po" default. */}
-                    <div class={`checkout-modal__field ${formTouched.value && !empPO.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.po", locale.value)}</label>
-                      <input type="text" value={empPO.value} onInput$={(_, el) => (empPO.value = el.value)} />
-                    </div>
-                  </div>
-                </div>
-                {formError.value && (
-                  <div class="cart-drawer__error" role="alert">{formError.value}</div>
-                )}
-                <div class="cart-drawer__footer">
-                  <span class="cart-drawer__total">
-                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{loginType.value !== "tech" && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
-                  </span>
-                  <button
-                    class={`btn btn--primary cart-drawer__order-btn ${!canPlaceOrder.value ? "cart-drawer__order-btn--disabled" : ""}`}
-                    disabled={!canPlaceOrder.value || submitting.value}
-                    onClick$={submitOrder}
-                  >
-                    {submitting.value ? (
-                      <>
-                        <span class="btn-spinner" aria-hidden="true" />
-                        {t("cart.placing", locale.value)}
-                      </>
-                    ) : (
-                      <>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-                    {(payMethod.value === "card" || (payMethod.value === "giftcard_card" && giftRemaining.value > 0))
-                      ? t("cart.continuepayment", locale.value)
-                      : t("cart.createorder", locale.value)}
-                      </>
-                    )}
                   </button>
                 </div>
               </>
