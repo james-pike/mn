@@ -245,11 +245,18 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
     visibleColors.length === 1
       ? (visibleColors[0].startsWith("#") ? colorName(visibleColors[0], locale.value) : visibleColors[0])
       : null;
+  // The product name is authored in English, so strip the trailing "- Colour"
+  // using the ENGLISH label — singleColorName may be localized (e.g. French),
+  // which wouldn't match the English suffix and left the colour on the title.
+  const singleColorEn =
+    visibleColors.length === 1
+      ? (visibleColors[0].startsWith("#") ? colorName(visibleColors[0], "en") : visibleColors[0])
+      : null;
   // Title: drop the model code, the gender prefix, and — when there's a single
   // colour — the trailing "- Colour" (it's shown beside the swatch instead).
   let displayName = item.name.replace(/#\S+/g, "").replace(/^(men|women|ladies|unisex)['’]?s?\s+/i, "");
-  if (singleColorName) {
-    displayName = displayName.replace(new RegExp(`\\s*[-–]\\s*${singleColorName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "i"), "");
+  if (singleColorEn) {
+    displayName = displayName.replace(new RegExp(`\\s*[-–]\\s*${singleColorEn.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "i"), "");
   }
   displayName = displayName.trim();
 
