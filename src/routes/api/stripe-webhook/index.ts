@@ -93,7 +93,7 @@ export const onPost: RequestHandler = async ({ request, env, json }) => {
   if (apiKey) {
     let items: OrderItem[] = [];
     try { items = JSON.parse(String(row.items || "[]")); } catch { items = []; }
-    const fromAddress = env.get("RESEND_FROM") || env.get("VITE_RESEND_FROM") || "Modern Niagara <onboarding@resend.dev>";
+    const fromAddress = env.get("RESEND_FROM") || env.get("VITE_RESEND_FROM") || "MNBS <onboarding@resend.dev>";
     const staffAddresses = (env.get("ORDER_NOTIFY_TO") || env.get("VITE_ORDER_NOTIFY_TO") || "cs@safetyhouse.ca")
       .split(",").map((a) => a.trim()).filter(Boolean);
     const emailData: OrderEmailData = {
