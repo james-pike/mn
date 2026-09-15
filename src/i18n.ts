@@ -259,8 +259,8 @@ const translations = {
   // Order confirmation
   "order.title": { en: "Thank you for your order!", fr: "Merci pour votre commande!" },
   "order.text": {
-    en: "It has been confirmed and sent for processing.",
-    fr: "Elle a été confirmée et envoyée pour traitement.",
+    en: "Your order has been sent for processing and you will receive an order confirmation email.",
+    fr: "Votre commande a été envoyée pour traitement et vous recevrez un courriel de confirmation de commande.",
   },
   "order.continue": { en: "Home", fr: "Accueil" },
 

@@ -1974,6 +1974,12 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   align-items: center;
   gap: var(--wt-gap);
 }
+/* Privacy Policy + language toggle grouped on one row (privacy on the left). */
+.site-footer__legal-row {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
 /* Privacy Policy link under the contact email. */
 .site-footer__privacy-link {
   color: rgba(255,255,255,0.6);
@@ -6479,20 +6485,54 @@ details[open] > .cart-drawer__checkout-title::after {
   flex-direction: column;
   align-items: center;
 }
-/* Success badge — blue ring with a white check on a filled blue disc. */
+/* Success badge — the brand pinwheel triangles fade in in sequence, then a
+   white checkmark settles into the centre. */
 .order-confirm__badge {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: var(--ce-green);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
+  width: 72px;
+  height: 72px;
   margin: 0 0 1.25rem;
-  box-shadow: 0 0 0 6px rgba(65, 111, 141, 0.14);
+  color: #fff;
 }
-.order-confirm__badge svg { width: 32px; height: 32px; }
+.order-confirm__pinwheel {
+  width: 100%;
+  height: 100%;
+  display: block;
+  /* Tilt the square of triangles onto its point so it reads as the brand
+     diamond; scale down so the rotated corners still fit the badge box. */
+  transform: rotate(45deg) scale(0.72);
+}
+/* Each triangle starts hidden and fades in staggered (mirrors the hero
+   brandmark / add-to-cart pinwheel build). */
+.order-confirm__pinwheel polygon {
+  opacity: 0;
+  animation: oc-tri-fade 0.5s ease-out forwards;
+}
+.order-confirm__pinwheel polygon:nth-child(8) { animation-delay: 0.05s; }
+.order-confirm__pinwheel polygon:nth-child(1) { animation-delay: 0.11s; }
+.order-confirm__pinwheel polygon:nth-child(2) { animation-delay: 0.17s; }
+.order-confirm__pinwheel polygon:nth-child(3) { animation-delay: 0.23s; }
+.order-confirm__pinwheel polygon:nth-child(4) { animation-delay: 0.29s; }
+.order-confirm__pinwheel polygon:nth-child(5) { animation-delay: 0.35s; }
+.order-confirm__pinwheel polygon:nth-child(6) { animation-delay: 0.41s; }
+.order-confirm__pinwheel polygon:nth-child(7) { animation-delay: 0.47s; }
+@keyframes oc-tri-fade { to { opacity: 1; } }
+/* White check appears in the centre once the triangles have filled in. */
+.order-confirm__check {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 34px;
+  height: 34px;
+  transform: translate(-50%, -50%) scale(0.5);
+  opacity: 0;
+  color: #fff;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+  animation: oc-check-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.62s forwards;
+}
+@keyframes oc-check-in {
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
 .order-confirm__title {
   font-size: 1.35rem;
   font-weight: 700;
@@ -12083,7 +12123,10 @@ body:has(.product-fullscreen) { overflow: hidden; }
   }
   .drawer.cart-drawer {
     pointer-events: auto;
-    top: var(--wt-header-pin);
+    /* Pull the card up a few px so its top ring tucks BEHIND the elevated site
+       header (which is z-above the drawer while open) — no darker line under the
+       header, just the header's own clean bottom edge like the home/PDP routes. */
+    top: calc(var(--wt-header-pin) - 5px);
     /* A small greige gap at the bottom mirroring the strip above the header, so
        the card's bottom edge (and its ring) shows instead of running off the
        viewport edge — like the other cards' bottom margin. */
@@ -12099,11 +12142,10 @@ body:has(.product-fullscreen) { overflow: hidden; }
        dark layers used to sit on top of the ring's inner 2px and cut the strip
        to 1px, the desktop version of the grey x-border removed on mobile. Now
        the full 3px white shows with the grey rim outside it. */
-    /* Single thin grey edge (one ring, no inner line) + a soft even shadow, so
-       the card reads as one slick outline instead of a doubled border. */
-    box-shadow:
-      0 0 0 1px rgba(0, 0, 0, 0.14),
-      0 0 10px var(--wt-ring) rgba(0, 0, 0, 0.11);
+    /* One thin grey edge only — matches the product / catalog / privacy cards
+       (sg parity): no outer blur, so the ring reads the same light weight on
+       every side and never darker where it meets the header. */
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
   }
   /* The panel floats above the header (z 10001) so it stays interactive, but
      that also lifted the ring's TOP edge over the header's bottom seam — a
@@ -14548,7 +14590,7 @@ body .site-header__inner { border-top-left-radius: 0 !important; border-top-righ
    --site-max) is pulled in a touch, and hard-capped on ultra-wide displays. The
    login portal is a separate full-screen overlay and is unaffected. */
 @media (min-width: 90rem) {
-  :root { --site-max: min(calc(100vw - 8rem), 122rem); }
+  :root { --site-max: min(calc(100vw - 11rem), 106rem); }
   /* Bring the sticky header bar in to the same width as the content column. */
   .site-header { max-width: var(--site-max); margin-inline: auto; }
 }
@@ -14865,7 +14907,8 @@ html { background: rgb(223, 226, 230) !important; }
   backdrop-filter: none;
 }
 .checkout-page .drawer.cart-drawer {
-  top: var(--wt-header-pin, 73px);
+  /* Tuck the top ring behind the (now elevated) header — see the cart rule. */
+  top: calc(var(--wt-header-pin, 73px) - 5px);
 }
 
 /* --- Standardised checkout surfaces ---
@@ -14882,19 +14925,24 @@ html { background: rgb(223, 226, 230) !important; }
 .checkout-page .checkout-modal__form,
 .checkout-page .checkout-modal__pay,
 .checkout-page .cart-drawer__summary {
-  background: var(--ce-white) !important;
-  border: 1px solid var(--ce-gray-200);
-  border-radius: var(--radius-lg);
+  background: transparent !important;
+  border: none;
   margin: 0 !important;
   padding: 1.05rem 1.15rem !important;
 }
+/* Thin the gutter BETWEEN the two columns without changing the outer indent:
+   trim the padding on the facing edges (details' right, summary's left). */
+.checkout-page .checkout-modal__form { padding-right: 0.5rem !important; }
+.checkout-page .cart-drawer__summary { padding-left: 0.5rem !important; }
 .checkout-page .cart-drawer__back-btn {
+  /* Same light-grey secondary-bar fill as the cart's PRODUCT/QTY strip, so the
+     bar reads distinct from the order-details content below it. */
   background: #f2f2f2 !important;
-  border-bottom: 1px solid var(--ce-gray-200);
+  border-bottom: none;
 }
 .checkout-page .cart-drawer__footer {
-  background: var(--ce-off-white);
-  border-top: 1px solid var(--ce-gray-200);
+  background: transparent;
+  border-top: none;
   margin: 0;
 }
 .checkout-page .checkout-modal__field input,
@@ -14978,7 +15026,7 @@ html { background: rgb(223, 226, 230) !important; }
    (this checkout is a full-width page, not a rounded drawer card). */
 .checkout-page .cart-drawer__details-step {
   row-gap: 0 !important;
-  column-gap: 14px !important;
+  column-gap: 8px !important;
 }
 .checkout-page .cart-drawer__back-btn { margin: 0 !important; }
 .checkout-page .checkout-modal__pay { margin-top: 14px !important; }

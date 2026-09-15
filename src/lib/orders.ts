@@ -9,6 +9,7 @@
  * privacy policy.
  */
 import { Resend } from "resend";
+import { colorName as colorLabel } from "../routes/apparel/products";
 
 export type PaymentMethod = "po" | "giftcard" | "giftcard_card" | "card";
 
@@ -54,15 +55,10 @@ export interface OrderEmailData {
   };
 }
 
-const COLOR_NAMES: Record<string, string> = {
-  "#00703c": "Green", "#1a1a18": "Black", "#ffffff": "White",
-  "#2c3e50": "Navy", "#94a3b8": "Silver", "#4a4a4a": "Charcoal",
-  "#8d5f18": "Bronze", "#c0392b": "Red", "#6b3fa0": "Purple",
-  "#C97B0C": "Royal", "#b8b8b8": "Grey Heather", "#7dd3fc": "Light Blue",
-  "#6b8bb0": "Solace Blue", "#8a5d3b": "Carhartt Brown",
-  "#6e6e6e": "Grey", "#ff6600": "Safety Orange",
-};
-const colorName = (hex: string) => COLOR_NAMES[hex] || hex;
+// Use the app's authoritative colour map (the same one the storefront/cart use)
+// so every hex resolves to its label — e.g. "#ab8f66" -> "Dark Khaki" — instead
+// of leaking a raw hex code into the email. English labels for the email.
+const colorName = (hex: string) => colorLabel(hex, "en");
 
 export function esc(s: string | undefined | null): string {
   if (s == null) return "";
@@ -101,14 +97,13 @@ export function buildOrderEmailHtml(o: OrderEmailData): string {
       <div style="background:#39627c;padding:18px 24px;border-radius:8px 8px 0 0">
         ${o.logoUrl
           ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-              <td style="vertical-align:middle;padding-right:12px"><img src="${o.logoUrl}" width="46" height="46" alt="Modern Niagara" style="display:block;width:46px;height:46px;border:0" /></td>
+              <td style="vertical-align:middle;padding-right:12px"><img src="${o.logoUrl}" width="46" height="46" alt="MNBS" style="display:block;width:46px;height:46px;border:0" /></td>
               <td style="vertical-align:middle;font-family:sans-serif">
-                <div style="color:#fff;font-size:15px;font-weight:700;letter-spacing:0.02em;line-height:1.15">MODERN NIAGARA</div>
-                <div style="color:#fff;font-size:15px;font-weight:600;letter-spacing:0.02em;line-height:1.15">BUILDING SERVICES</div>
+                <div style="color:#fff;font-size:15px;font-weight:700;letter-spacing:0.02em;line-height:1.15">MNBS</div>
                 <div style="color:#cfe0ec;font-size:15px;font-weight:500;letter-spacing:0.16em;line-height:1.15">APPAREL</div>
               </td>
             </tr></table>`
-          : `<h1 style="color:#fff;margin:0;font-size:20px">Modern Niagara Business Services Apparel</h1>`}
+          : `<h1 style="color:#fff;margin:0;font-size:20px">MNBS Apparel</h1>`}
         ${o.orderNumber ? `<p style="color:#cfe0ec;margin:10px 0 0;font-size:13px;letter-spacing:0.04em">Order #${esc(o.orderNumber)}</p>` : ""}
       </div>
       <div style="padding:24px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px">
