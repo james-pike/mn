@@ -461,7 +461,7 @@ export const allProducts = [
       "/sku/fr-hivis-hoodie-navy.png"
     ],
     "material": "Pre-shrunk 11 oz 100% cotton",
-    "details": "Flame-resistant and arc-rated (FR/AR) protection — ATPV 18 cal (CAT 2), CSA Z96-22 Class 1 Level 2 hi-visibility, Durable 11 oz FR cotton with Atlas Ultravis 4\" segmented reflective striping, Detachable hood and FR Aramid zipper, PFAS-free with guaranteed flame resistance for the life of the garment, #402NB"
+    "details": "Flame-resistant and arc-rated (FR/AR) protection — ATPV 18 cal (CAT 2), CSA Z96-22 Class 1 Level 2 hi-visibility, Atlas Ultravis 4\" segmented reflective striping, Detachable hood and FR Aramid zipper, PFAS-free with guaranteed flame resistance for the life of the garment, #402NB"
   },
   {
     "sku": "MN-18",
@@ -718,7 +718,7 @@ export const allProducts = [
       "/sku/atlas-guardian-fr-ar-quarter-zip-navy.png"
     ],
     "material": "Pre-shrunk 11 oz 100% cotton",
-    "details": "Flame-resistant and arc-rated (FR/AR) protection — ATPV 18 cal (CAT 2), CSA Z96-22 Class 1 Level 2 hi-visibility, Durable 11 oz FR cotton with Atlas Ultravis 4\" segmented reflective striping, Detachable hood and plastic FR zipper, PFAS-free with guaranteed flame resistance for the life of the garment, #4014NB"
+    "details": "Flame-resistant and arc-rated (FR/AR) protection — ATPV 18 cal (CAT 2), CSA Z96-22 Class 1 Level 2 hi-visibility, Atlas Ultravis 4\" segmented reflective striping, Detachable hood and plastic FR zipper, PFAS-free with guaranteed flame resistance for the life of the garment, #4014NB"
   }
 ];
 
