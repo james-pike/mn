@@ -24,7 +24,7 @@ export const CLOTHING_CATEGORIES = ["All", "Jackets", "Sweaters", "Shirts", "Pol
 // The FR Dearborn LS Tee (100235) isn't in the catalog yet — add it to the DB,
 // then drop its SKU in here.
 // Display order: T-Shirts, Sweaters, Pants, Headwear (matches the sidebar).
-export const ELECTRICAL_SKUS: string[] = ["MN-38", "MN-37", "MN-36", "MN-39"];
+export const ELECTRICAL_SKUS: string[] = ["MN-38", "MN-37", "MN-40", "MN-36", "MN-39"];
 const ELECTRICAL_SKU_SET = new Set(ELECTRICAL_SKUS);
 
 // Safety catalog: every MNFR-* item plus a small allowlist of standard SKUs,
@@ -125,7 +125,7 @@ function sizesOf(p: Product): string[] {
 // up as a filter (the facet list is BRAND_LIST ∩ brands-present).
 const BRAND_LIST = [
   // Clothing brands first...
-  "Carhartt", "Coal Harbour", "Flexfit", "FootJoy", "Gildan",
+  "Atlas", "Carhartt", "Coal Harbour", "Flexfit", "FootJoy", "Gildan",
   "Travis Mathew", "Under Armour",
   // ...then non-clothing brands (bags, golf, towels, tech, headwear).
   "Nexgen", "Nomad", "Srixon", "Titleist", "Tranzip", "Cap America",

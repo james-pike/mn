@@ -9,7 +9,7 @@ export function sortColorsWhiteLast(colors: readonly string[]): string[] {
   });
 }
 
-const SIZE_ORDER = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL", "7XL"];
+const SIZE_ORDER = ["XXS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL", "7XL"];
 const TALL_ORDER = ["ST", "MT", "LT", "XLT", "2XLT", "3XLT", "4XLT", "5XLT"];
 const SHORT_ORDER = ["SS", "MS", "LS", "XLS", "2XLS", "3XLS", "4XLS", "5XLS"];
 

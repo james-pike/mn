@@ -89,7 +89,7 @@ export const allProducts = [
     "colors": [
       "#2c3e50"
     ],
-    "price": 9.5,
+    "price": 13.5,
     "img": "/sku/tshirt.png",
     "imgs": [
       "/sku/tshirt.png"
@@ -335,7 +335,7 @@ export const allProducts = [
     "colors": [
       "#ab8f66"
     ],
-    "price": 159,
+    "price": 159.99,
     "img": "/sku/104204-darkkhaki.png",
     "imgs": [
       "/sku/104204-darkkhaki.png"
@@ -437,7 +437,7 @@ export const allProducts = [
     "colors": [
       "#2c3e50"
     ],
-    "price": 79,
+    "price": 124.99,
     "img": "/sku/100235-navy.png",
     "imgs": [
       "/sku/100235-navy.png",
@@ -448,21 +448,20 @@ export const allProducts = [
   },
   {
     "sku": "MN-37",
-    "name": "Carhartt FR Full Zip Hoodie - Navy",
+    "name": "Atlas Guardian FR/AR Hoodie - Navy",
     "category": "Sweaters",
-    "sizes": "S - 4XL",
+    "sizes": "XXS - 7XL",
     "badge": "",
     "colors": [
       "#2c3e50"
     ],
-    "price": 239,
-    "img": "/sku/104982-navy.png",
+    "price": 0,
+    "img": "/sku/fr-hivis-hoodie-navy.png",
     "imgs": [
-      "/sku/104982-navy.png",
-      "/sku/104982-navy-back.png"
+      "/sku/fr-hivis-hoodie-navy.png"
     ],
-    "material": "10.5 oz 40% cotton / 35% modacrylic / 15% viscose / 8% aramid / 2% antistat FR fleece",
-    "details": "Full-zip hood with adjustable drawcord, Vislon zip with Nomex tape, flame-resistant (meets NFPA 70E, ASTM F1506, UL classified to NFPA 2112), Force sweat-wicking, FastDry, #104982"
+    "material": "Pre-shrunk 11 oz 100% cotton",
+    "details": "Flame-resistant and arc-rated (FR/AR) protection — ATPV 18 cal (CAT 2), CSA Z96-22 Class 1 Level 2 hi-visibility, Durable 11 oz FR cotton with Atlas Ultravis 4\" segmented reflective striping, Detachable hood and FR Aramid zipper, PFAS-free with guaranteed flame resistance for the life of the garment, #402NB"
   },
   {
     "sku": "MN-18",
@@ -490,7 +489,7 @@ export const allProducts = [
     "colors": [
       "#2c3e50"
     ],
-    "price": 24,
+    "price": 23.5,
     "img": "/sku/i8502-navy.png",
     "imgs": [
       "/sku/i8502-navy.png"
@@ -703,6 +702,23 @@ export const allProducts = [
     ],
     "material": "",
     "details": "New faster high-gradient core, Soft cast urethane elastomer cover, Spherically-tiled 388 tetrahedral dimple design, Speed-amplifying high-flex casing layer, Soft 87 compression rating"
+  },
+  {
+    "sku": "MN-40",
+    "name": "Atlas Guardian FR/AR 1/4 Zip Hoodie - Navy",
+    "category": "Sweaters",
+    "sizes": "XXS - 7XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 0,
+    "img": "/sku/atlas-guardian-fr-ar-quarter-zip-navy.png",
+    "imgs": [
+      "/sku/atlas-guardian-fr-ar-quarter-zip-navy.png"
+    ],
+    "material": "Pre-shrunk 11 oz 100% cotton",
+    "details": "Flame-resistant and arc-rated (FR/AR) protection — ATPV 18 cal (CAT 2), CSA Z96-22 Class 1 Level 2 hi-visibility, Durable 11 oz FR cotton with Atlas Ultravis 4\" segmented reflective striping, Detachable hood and plastic FR zipper, PFAS-free with guaranteed flame resistance for the life of the garment, #4014NB"
   }
 ];
 
