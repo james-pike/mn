@@ -24,7 +24,7 @@ export const CLOTHING_CATEGORIES = ["All", "Jackets", "Sweaters", "Shirts", "Pol
 // The FR Dearborn LS Tee (100235) isn't in the catalog yet — add it to the DB,
 // then drop its SKU in here.
 // Display order: T-Shirts, Sweaters, Pants, Headwear (matches the sidebar).
-export const ELECTRICAL_SKUS: string[] = ["MN-38", "MN-37", "MN-40", "MN-36", "MN-39"];
+export const ELECTRICAL_SKUS: string[] = ["MN-38", "MN-40", "MN-36", "MN-39"];
 const ELECTRICAL_SKU_SET = new Set(ELECTRICAL_SKUS);
 
 // Safety catalog: every MNFR-* item plus a small allowlist of standard SKUs,
