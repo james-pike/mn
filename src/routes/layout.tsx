@@ -76,9 +76,9 @@ export const useLocaleLoader = routeLoader$(({ cookie }) => {
   return (saved === "fr" ? "fr" : "en") as Locale;
 });
 
-type LoginType = "service" | "electrical" | null;
+export type LoginType = "service" | "electrical" | null;
 
-function getLoginType(cookie: Cookie): LoginType {
+export function getLoginType(cookie: Cookie): LoginType {
   const val = cookie.get(AUTH_COOKIE)?.value;
   if (val === "service" || val === "electrical") return val;
   // backward compat: the old clothing/authenticated logins map to the full
