@@ -199,6 +199,41 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
   const isTech = loginType.value === "tech";
   const eager = index < EAGER_CARDS;
 
+  // Fit-to-one-line: keep the title at its full size, but scale it down just
+  // enough to avoid wrapping to a second line. If it still can't fit even at the
+  // floor, fall back to wrapping rather than clipping.
+  const nameRef = useSignal<HTMLElement>();
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ cleanup }) => {
+    const el = nameRef.value;
+    if (!el) return;
+    const fit = () => {
+      el.style.fontSize = "";
+      el.style.whiteSpace = "nowrap";
+      el.style.overflow = "hidden";
+      const base = parseFloat(getComputedStyle(el).fontSize);
+      let px = base;
+      const min = base * 0.62;
+      let guard = 0;
+      while (el.scrollWidth > el.clientWidth + 0.5 && px > min && guard++ < 40) {
+        px -= 0.5;
+        el.style.fontSize = `${px}px`;
+      }
+      if (el.scrollWidth > el.clientWidth + 0.5) {
+        el.style.whiteSpace = "";
+        el.style.overflow = "";
+        el.style.fontSize = "";
+      }
+    };
+    // Measure only after the grid has laid out and web fonts have loaded —
+    // measuring too early reports no overflow and the title stays wrapped.
+    const run = () => requestAnimationFrame(() => requestAnimationFrame(fit));
+    run();
+    if ((document as any).fonts?.ready) (document as any).fonts.ready.then(run);
+    window.addEventListener("resize", run);
+    cleanup(() => window.removeEventListener("resize", run));
+  });
+
   // Effective hidden-colour set for THIS product — empty when the SKU is exempt
   // (so all its colours render), otherwise the global declutter set.
   const hiddenColors = CARD_SHOW_ALL_COLORS.has(sku) ? EMPTY_COLOR_SET : CARD_HIDDEN_COLORS;
@@ -232,7 +267,7 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
       </div>
       <div class="product-card__info">
         <div class="product-card__name-row">
-          <div class="product-card__name">
+          <div class="product-card__name" ref={nameRef}>
             {(() => {
               const g = genderOf(item);
               // Desktop-only gender prefix on the title (CSS hides it below 1025
@@ -405,12 +440,20 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
 
   const baseProducts = useComputed$(() => {
     if (isElectrical.value) {
+      // Electrical membership is DB-driven (products.portals includes
+      // "electrical"), falling back to the legacy hardcoded ELECTRICAL_SKUS so
+      // nothing breaks until every row is backfilled. Order: legacy SKUs keep
+      // their curated ELECTRICAL_SKUS order first; DB-only additions follow in
+      // sort_order (their order in allProducts).
+      const inElectrical = (p: (typeof allProducts)[number]) =>
+        (p as { portals?: string[] }).portals?.includes("electrical") ||
+        ELECTRICAL_SKU_SET.has(p.sku);
       const rank = (sku: string) => {
         const i = ELECTRICAL_SKUS.indexOf(sku);
         return i === -1 ? ELECTRICAL_SKUS.length : i;
       };
       return allProducts
-        .filter((p) => ELECTRICAL_SKU_SET.has(p.sku))
+        .filter(inElectrical)
         .slice()
         .sort((a, b) => rank(a.sku) - rank(b.sku));
     }

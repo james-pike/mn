@@ -3023,9 +3023,15 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 
 .product-card:hover {
-  /* Gentle lift — the old 0 8px 24px / 0.1 read as a heavy drop that popped the
-     card off the grid. Softer and tighter so the hover is a subtle cue. */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  /* Very light lift — the hover cue is mainly the panel tint below, not a drop
+     shadow, so keep this barely-there. */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+/* Tint the WHOLE card on hover (not just the image + info panel). On a short
+   card in a taller row the card's own fill shows below the info; without this it
+   stayed #f2f2f2 while the info went grey, so only part of the bottom lit up. */
+.apparel-grid .product-card:hover {
+  background: #ececea;
 }
 
 @media (min-width: 1025px) {
@@ -3035,10 +3041,10 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   .apparel-grid .product-card { background: #f2f2f2; }
 }
 .product-card:hover .product-card__image {
-  background: var(--ce-gray-200);
+  background: #ececea;
 }
 .product-card:hover .product-card__info {
-  background: var(--ce-gray-200);
+  background: #ececea;
 }
 
 .product-card__image {
@@ -3168,6 +3174,9 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   font-weight: 700;
   color: var(--ce-gray-900);
   letter-spacing: -0.035em;
+  /* Let the title shrink inside its flex slot so the fit-to-one-line script
+     (see product-catalog.tsx) can measure and scale long titles down. */
+  min-width: 0;
 }
 .product-card__price-group {
   display: flex;
@@ -14916,7 +14925,7 @@ html { background: rgb(223, 226, 230) !important; }
    Give the route one calm off-white ground, white section cards with a single
    border weight and radius, and even gutters — the conventional checkout look.
    Scoped to .checkout-page so the in-drawer cart keeps its own styling. */
-.checkout-page .drawer.cart-drawer { background: var(--ce-off-white); }
+.checkout-page .drawer.cart-drawer { background: #ffffff; }
 .checkout-page .cart-drawer__details-step {
   padding: 0 !important;
   gap: 14px !important;
@@ -15008,7 +15017,7 @@ html { background: rgb(223, 226, 230) !important; }
    one off-white surface, flush (no ring / inset margin). Cart-only selectors —
    the checkout page has no .cart-table. */
 .drawer.cart-drawer .cart-drawer__items {
-  background: var(--ce-off-white) !important;
+  background: #ffffff !important;
   box-shadow: none !important;
   margin: 0 !important;
 }
