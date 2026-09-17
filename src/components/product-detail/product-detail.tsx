@@ -489,13 +489,22 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
         const isElectrical = loginType.value === "electrical";
         const visible = visibleByLogin[loginType.value] || visibleByLogin.clothing;
         const inVisible = visible.includes(p.category);
-        // Electrical: the "more products" row is just the rest of the Electrical
-        // lineup — not the full catalog.
+        // The "more products" carousel may ONLY contain items in the current
+        // site's lineup — same rule the main catalog uses. Electrical shows just
+        // its ELECTRICAL_SKUS; Service shows everything that isn't an
+        // Electrical-only SKU or a Flame-Resistant item. Without this, an
+        // Electrical-only SKU that happens to share a category (e.g. the Atlas
+        // Guardian FR/AR hoodies, category "Sweaters") leaked into the Service
+        // carousel even though it's off-lineup.
+        const inLineup = (r: (typeof allProducts)[number]) =>
+          isElectrical
+            ? ELECTRICAL_SKUS.includes(r.sku)
+            : !ELECTRICAL_SKUS.includes(r.sku) && r.category !== "Flame Resistant";
         const related = isElectrical
-          ? allProducts.filter((r) => r.sku !== p.sku && ELECTRICAL_SKUS.includes(r.sku)).slice(0, 8)
+          ? allProducts.filter((r) => r.sku !== p.sku && inLineup(r)).slice(0, 8)
           : inVisible
-          ? allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && r.category === p.category).slice(0, 8)
-          : allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && visible.includes(r.category)).slice(0, 8);
+          ? allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && inLineup(r) && r.category === p.category).slice(0, 8)
+          : allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && inLineup(r) && visible.includes(r.category)).slice(0, 8);
         const headingSuffix = isElectrical ? t("login.portal.electrical", locale.value) : inVisible ? catLabel : t("nav.apparel", locale.value);
         // Card inner markup, shared by the grid + carousel below (inline, not a
         // component, to keep it a plain render helper).
