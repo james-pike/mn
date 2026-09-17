@@ -449,7 +449,7 @@ export const allProducts = [
   {
     "sku": "MN-37",
     "name": "Atlas Guardian FR/AR Hoodie - Navy",
-    "category": "Sweaters",
+    "category": "Flame Resistant",
     "sizes": "XXS - 7XL",
     "badge": "",
     "colors": [
@@ -712,7 +712,7 @@ export const allProducts = [
     "colors": [
       "#2c3e50"
     ],
-    "price": 0,
+    "price": 165,
     "img": "/sku/atlas-guardian-fr-ar-quarter-zip-navy.png",
     "imgs": [
       "/sku/atlas-guardian-fr-ar-quarter-zip-navy.png"
