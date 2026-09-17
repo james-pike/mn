@@ -3585,7 +3585,9 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 /* Portal picker — two bubbles instead of a username field. */
 .login-portals { display: flex; gap: 0.6rem; }
 .login-portal {
-  flex: 1;
+  /* Only the Electrical bubble remains; keep it at the same half width it had
+     when the Service bubble sat beside it (50% minus half the 0.6rem gap). */
+  flex: 0 0 calc(50% - 0.3rem);
   display: flex;
   align-items: center;
   justify-content: center;
