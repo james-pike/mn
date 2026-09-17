@@ -582,8 +582,8 @@ export default component$(() => {
   // Autoplay runs every 6s and only pauses while the sign-in form is focused.
   const loginHeroIndex = useSignal(0);
   const loginCarouselPaused = useSignal(false);
-  // Which portal bubble is selected in the login form (Service / Electrical).
-  const selectedPortal = useSignal("service");
+  // Only the Electrical portal remains in the login form, so it's the selection.
+  const selectedPortal = useSignal("electrical");
   const menuOpen = useSignal(false);
   const savedLocale = useLocaleLoader();
   const locale = useSignal<Locale>(savedLocale.value);
@@ -1230,21 +1230,12 @@ export default component$(() => {
                   {loginAction.value?.failed && (
                     <div class={`login-modal__error ${(loginAction.value as { comingSoon?: boolean }).comingSoon ? "login-modal__error--info" : ""}`}>{loginAction.value.message}</div>
                   )}
-                  {/* Portal picker — two bubbles instead of typing a username. The
-                      selected portal is submitted as a hidden field. */}
+                  {/* Portal picker — the Electrical bubble instead of typing a
+                      username. The selected portal is submitted as a hidden field. */}
                   <input type="hidden" name="portal" value={selectedPortal.value} />
                   <div class="login-modal__field">
                     <label>{t("login.portal", locale.value)}</label>
                     <div class="login-portals" role="radiogroup" aria-label={t("login.portal", locale.value)}>
-                      <button
-                        type="button"
-                        role="radio"
-                        aria-checked={selectedPortal.value === "service"}
-                        class={`login-portal ${selectedPortal.value === "service" ? "is-selected" : ""}`}
-                        onClick$={() => { selectedPortal.value = "service"; }}
-                      >
-                        <span>{t("login.portal.service", locale.value)}</span>
-                      </button>
                       <button
                         type="button"
                         role="radio"
