@@ -101,40 +101,36 @@ export const useCartCountLoader = routeLoader$(({ cookie }) => {
 });
 
 export const useLogin = routeAction$(
-  ({ portal, password }, { cookie, fail, env }) => {
-    // Two portals — the user picks one (no username typed) and enters the
-    // password. Both share the single APP_PASSWORD; the SELECTED portal is what
-    // determines the catalog (Service = full, Electrical = its small SKU set), so
-    // one password is enough while the bubble still drives what's shown.
-    const PORTALS = ["service", "electrical"];
-    if (!PORTALS.includes(portal)) {
-      return fail(400, { message: "Unknown portal" });
-    }
-    const expected = env.get("APP_PASSWORD") || env.get("VITE_APP_PASSWORD");
-    if (!expected) {
+  ({ password }, { cookie, fail, env }) => {
+    // One login box (Electrical). The password typed decides which catalog is
+    // granted — the shared APP_PASSWORD logs into Electrical, while a separate
+    // SERVICE_PASSWORD unlocks the full Service suite from the same box. The
+    // portal is derived from the matched password, not from the submitted field.
+    const electricalPw = env.get("APP_PASSWORD") || env.get("VITE_APP_PASSWORD");
+    const servicePw = env.get("SERVICE_PASSWORD") || env.get("VITE_SERVICE_PASSWORD");
+    if (!electricalPw && !servicePw) {
       return fail(500, { message: "Login not configured" });
     }
 
-    if (password === expected) {
-      // Correct password — but the Service store isn't open to shoppers yet, so
-      // even a valid password only surfaces the coming-soon notice for it; never
-      // a session. Only Electrical proceeds to log in.
-      if (portal === "service") {
-        return fail(403, { message: "Service coming soon", comingSoon: true });
-      }
-      cookie.set(AUTH_COOKIE, portal, {
-        path: "/",
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        maxAge: 60 * 60 * 24 * 3,
-      });
-      return { success: true };
+    const granted =
+      servicePw && password === servicePw ? "service"
+      : electricalPw && password === electricalPw ? "electrical"
+      : null;
+    if (!granted) {
+      return fail(401, { message: "Invalid password" });
     }
-    return fail(401, { message: "Invalid password" });
+
+    cookie.set(AUTH_COOKIE, granted, {
+      path: "/",
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 60 * 60 * 24 * 3,
+    });
+    return { success: true };
   },
   zod$({
-    portal: z.string().min(1).max(32),
+    portal: z.string().min(1).max(32).optional(),
     password: z.string().min(1).max(128),
   }),
 );
