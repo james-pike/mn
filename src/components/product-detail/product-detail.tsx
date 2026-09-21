@@ -137,8 +137,10 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
   // alternate VIEWS (front/back of one colour) rather than colourways are left
   // untouched — clicking a swatch there won't move the gallery.
   const colorImgIndex = useComputed$(() => {
-    const imgs = (p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[];
     const map: Record<string, number> = {};
+    const p = product.value;
+    if (!p) return map; // null while navigating away from a product route
+    const imgs = (p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[];
     for (const color of p.colors) {
       const norm = colorName(color, "en").toLowerCase().replace(/[^a-z0-9]/g, "");
       if (!norm) continue;
