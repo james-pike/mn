@@ -7342,7 +7342,7 @@ details[open] > .cart-drawer__checkout-title::after {
     grid-column: 2;
     grid-row: 3;
     align-self: start;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--wt-gap-tight);
     background: var(--ce-gray-200);
     border-radius: 2px;
@@ -7374,7 +7374,7 @@ details[open] > .cart-drawer__checkout-title::after {
     margin-bottom: 0;
   }
   .home-catalog .apparel-grid {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--wt-gap-tight);
   }
   .product-carousel {
@@ -12212,11 +12212,11 @@ body:has(.product-fullscreen) { overflow: hidden; }
      space-between spread), colours on the left — matching the mobile card. */
   .product-card__color-size-row { justify-content: flex-start; }
   .product-card__sizes { text-align: right; }
-  /* Gender is shown as a title prefix on desktop (.product-card__name-gender),
-     so drop the sizes-row gender span and keep the sizes anchored right. */
-  .product-card__name-gender { display: inline; }
-  .product-card__color-size-row .product-card__gender { display: none; }
-  .product-card__color-size-row .product-card__sizes { margin-left: auto; }
+  /* Gender moved off the title into the sizes row (matches sg/tm): hide the
+     title prefix and show the sizes-row gender, grouped with the sizes on the
+     right ("Women's XS - 3XL"). */
+  .product-card__name-gender { display: none; }
+  .product-card__color-size-row .product-card__gender { display: inline; margin-left: auto; margin-right: 0.35em; }
   /* Tall/extra size variants sit BESIDE the regular range on one line (a thin
      "/" separator between), rather than wrapping to a second line. */
   .product-card__sizes-line { display: inline !important; }
@@ -13790,11 +13790,11 @@ body:has(.product-fullscreen) { overflow: hidden; }
   .pdp-breadcrumb__back span,
   .pdp-breadcrumb__cat,
   .pdp-breadcrumb__sku { font-size: 1.2rem !important; }
-  /* Gender shown as a title prefix (like desktop), not in the sizes row. */
-  .product-card__name-gender { display: inline !important; }
+  /* Gender in the sizes row (matches sg/tm), not the title. */
+  .product-card__name-gender { display: none !important; }
   .product-card__color-size-row { justify-content: flex-start !important; }
-  .product-card__sizes { text-align: right !important; margin-left: auto !important; }
-  .product-card__color-size-row .product-card__gender { display: none !important; }
+  .product-card__sizes { text-align: right !important; }
+  .product-card__color-size-row .product-card__gender { display: inline !important; margin-left: auto !important; margin-right: 0.35em !important; }
   /* View toggle blends into the blue tab bar. */
   .apparel-titlebar__action--tablet-cols {
     background: #5b93b8 !important;
