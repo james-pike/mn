@@ -44,6 +44,25 @@ export const allProducts = [
     "details": "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #L7603"
   },
   {
+    "sku": "MN-41",
+    "name": "Carhartt Gilliam Jacket",
+    "category": "Jackets",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#2c3e50"
+    ],
+    "price": 109.99,
+    "img": "/sku/102208-black.png",
+    "imgs": [
+      "/sku/102208-black.png",
+      "/sku/102208-navy.png"
+    ],
+    "material": "",
+    "details": "Rain Defender durable water repellent, Wind Fighter windproof technology, Mock-neck collar, Left-chest map pocket, Two lower-front pockets with hidden snap closure, Two inside pockets (one zippered, one hook-and-loop), Hook-and-loop adjustable cuffs, Drawcord adjustable hem, Triple-stitched main seams, Relaxed fit, #102208"
+  },
+  {
     "sku": "MN-3",
     "name": "Gildan Short Sleeve T-Shirt - Navy",
     "category": "Shirts",
