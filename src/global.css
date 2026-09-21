@@ -3681,6 +3681,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   .login-modal--split .login-card__brand .brand-cluster__word { font-size: 8cqw; }
 
   .login-modal--split .login-modal__form { gap: var(--login-gap); padding: 0 2.8cqw 0; }
+  .login-modal--split .login-modal__subtitle { font-size: 1.2rem; font-weight: 500; color: rgba(255, 255, 255, 0.85); text-align: left; margin: 0; }
   .login-modal--split .login-modal__field { gap: var(--login-label-gap); }
   .login-modal--split .login-portal { font-size: 2.9cqw; padding: 3.1cqw 12px; }
   .login-modal--split .login-modal__submit.btn { margin-top: 0; }
