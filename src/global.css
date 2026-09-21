@@ -14344,12 +14344,29 @@ body:has(.home-catalog) .site-header .cart-btn.cart-btn--active {
 body .site-header .locale-btn:hover,
 body .site-header .logout-btn:hover,
 body .site-header .cart-btn:hover,
-body:has(.home-catalog) .site-header .cart-btn:hover,
-body .site-header .site-header__search:hover,
-body .site-header .site-header__search:focus-within {
+body:has(.home-catalog) .site-header .cart-btn:hover {
   background: #245471 !important;
   color: #fff !important;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.16) !important;
+}
+/* Search field: hover/focus LIGHTENS (a clean white fill) instead of taking the
+   cart button's dark-blue treatment. The input text and magnifier icon are dark,
+   so a dark-blue fill made them dark-on-dark — this keeps them readable. */
+body .site-header .site-header__search:hover,
+body .site-header .site-header__search:focus-within {
+  background: #ffffff !important;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18) !important;
+}
+body .site-header .site-header__search:focus-within {
+  box-shadow: inset 0 0 0 2px rgba(36, 84, 113, 0.5) !important;
+}
+body .site-header .site-header__search:hover .site-header__search-input,
+body .site-header .site-header__search:focus-within .site-header__search-input {
+  color: var(--ce-gray-900) !important;
+}
+body .site-header .site-header__search:hover > svg,
+body .site-header .site-header__search:focus-within > svg {
+  color: rgba(0, 0, 0, 0.55) !important;
 }
 body .site-header .locale-btn:hover svg,
 body .site-header .logout-btn:hover svg,
