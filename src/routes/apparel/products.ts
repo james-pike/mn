@@ -4,43 +4,6 @@ import type { Locale } from "../../i18n";
 
 export const allProducts = [
   {
-    "sku": "MN-9",
-    "name": "Carhartt Pullover Hoodie - Navy",
-    "category": "Sweaters",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 74.99,
-    "img": "/pullovermodel.png",
-    "imgs": [
-      "/pullovermodel.png",
-      "/K121_472_AVF2_MS26_b_w_1.png",
-      "/sku/pullover.png"
-    ],
-    "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
-    "details": "Three-piece hood with drawcord, rib-knit cuffs and waist, front handwarmer pocket, triple-stitched seams, Carhartt patch, #K121"
-  },
-  {
-    "sku": "MN-10",
-    "name": "Carhartt Full Zip Hoodie - Navy",
-    "category": "Sweaters",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 89.99,
-    "img": "/sku/mfullzip.png",
-    "imgs": [
-      "/sku/mfullzip.png",
-      "/sku/fullziphoodie.png"
-    ],
-    "material": "10.5 oz midweight 50% cotton / 50% polyester blend",
-    "details": "Three-piece hood with drawcord, full-length brass zipper, rib-knit cuffs and waist, two front handwarmer pockets, Carhartt patch on pocket, loose fit, #K122"
-  },
-  {
     "sku": "MN-20",
     "name": "Men's Coal Harbour Soft Shell Jacket",
     "category": "Jackets",
