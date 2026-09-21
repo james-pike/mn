@@ -130,7 +130,6 @@ export const useLogin = routeAction$(
     return { success: true };
   },
   zod$({
-    portal: z.string().min(1).max(32).optional(),
     password: z.string().min(1).max(128),
   }),
 );
@@ -578,8 +577,6 @@ export default component$(() => {
   // Autoplay runs every 6s and only pauses while the sign-in form is focused.
   const loginHeroIndex = useSignal(0);
   const loginCarouselPaused = useSignal(false);
-  // Only the Electrical portal remains in the login form, so it's the selection.
-  const selectedPortal = useSignal("electrical");
   const menuOpen = useSignal(false);
   const savedLocale = useLocaleLoader();
   const locale = useSignal<Locale>(savedLocale.value);
@@ -1223,26 +1220,12 @@ export default component$(() => {
                   onFocusIn$={() => { loginCarouselPaused.value = true; }}
                   onFocusOut$={() => { loginCarouselPaused.value = false; }}
                 >
+                  <p class="login-modal__subtitle">{t("login.subtitle", locale.value)}</p>
                   {loginAction.value?.failed && (
                     <div class={`login-modal__error ${(loginAction.value as { comingSoon?: boolean }).comingSoon ? "login-modal__error--info" : ""}`}>{loginAction.value.message}</div>
                   )}
-                  {/* Portal picker — the Electrical bubble instead of typing a
-                      username. The selected portal is submitted as a hidden field. */}
-                  <input type="hidden" name="portal" value={selectedPortal.value} />
-                  <div class="login-modal__field">
-                    <label>{t("login.portal", locale.value)}</label>
-                    <div class="login-portals" role="radiogroup" aria-label={t("login.portal", locale.value)}>
-                      <button
-                        type="button"
-                        role="radio"
-                        aria-checked={selectedPortal.value === "electrical"}
-                        class={`login-portal ${selectedPortal.value === "electrical" ? "is-selected" : ""}`}
-                        onClick$={() => { selectedPortal.value = "electrical"; }}
-                      >
-                        <span>{t("login.portal.electrical", locale.value)}</span>
-                      </button>
-                    </div>
-                  </div>
+                  {/* No portal picker — the password typed decides the catalog
+                      (APP_PASSWORD → Electrical, SERVICE_PASSWORD → Service). */}
                   <div class="login-modal__field">
                     <label for="password">{t("login.password", locale.value)}</label>
                     <input
