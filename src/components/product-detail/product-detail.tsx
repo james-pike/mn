@@ -53,6 +53,44 @@ function variantMapFromSizes(sizes: string): Record<string, string[]> | null {
   return Object.keys(map).length >= 2 ? map : null;
 }
 
+// SKUs whose sizing is a waist × length grid (their own picker), never fit variants.
+const waistLengthSkus = new Set(["CAR-12", "CAR-14", "MN-1", "MNFR-1", "MN-36"]);
+
+// Explicit fit-variant size maps. Any product not listed here still gets fit
+// variants automatically when its sizes string encodes them (variantMapFromSizes),
+// so this is only for overrides that can't be derived from the sizes string.
+const variantSizesBySku: Record<string, Record<string, string[]>> = {
+  "MN-3": {
+    "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+    "Tall": ["L", "XL", "2XL", "3XL", "4XL"],
+  },
+  "CAR-11": {
+    "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+    "Tall": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+  },
+  "CAR-17": {
+    "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+    "Tall": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+  },
+  "MN-8": {
+    "Short": ["M", "L", "XL", "2XL", "3XL", "4XL"],
+    "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
+    "Tall": ["M", "L", "XL", "2XL", "3XL", "4XL"],
+  },
+};
+
+// A product has fit variants when it's explicitly configured OR its sizes string
+// encodes fit groups (e.g. "S - 3XL / LT - 2XLT"). Waist/length SKUs use their own
+// picker, so they never resolve to fit variants. This is what stops multi-fit sizes
+// from ever being clumped into a single size button. Module-scoped (not a closure)
+// so it can be referenced from Qwik's $ / useComputed$ / useTask$ boundaries.
+function getVariantMap(
+  p: { sku: string; sizes: string } | null | undefined,
+): Record<string, string[]> | null {
+  if (!p || waistLengthSkus.has(p.sku)) return null;
+  return variantSizesBySku[p.sku] ?? variantMapFromSizes(p.sizes);
+}
+
 interface ProductDetailPanelProps {
   /** SKU to render (from the route param, or the in-frame catalog overlay). */
   sku: string;
@@ -122,34 +160,6 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
     cleanup(() => mq.removeEventListener("change", apply));
   });
 
-  const waistLengthSkus = new Set(["CAR-12", "CAR-14", "MN-1", "MNFR-1", "MN-36"]);
-  const variantSizesBySku: Record<string, Record<string, string[]>> = {
-    "MN-3": {
-      "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
-      "Tall": ["L", "XL", "2XL", "3XL", "4XL"],
-    },
-    "CAR-11": {
-      "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
-      "Tall": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
-    },
-    "CAR-17": {
-      "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
-      "Tall": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
-    },
-    "MN-8": {
-      "Short": ["M", "L", "XL", "2XL", "3XL", "4XL"],
-      "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
-      "Tall": ["M", "L", "XL", "2XL", "3XL", "4XL"],
-    },
-  };
-  // A product has fit variants when it's explicitly configured OR its sizes
-  // string encodes fit groups (e.g. "S - 3XL / LT - 2XLT"). Waist/length SKUs
-  // use their own picker, so they never resolve to fit variants. This is what
-  // stops multi-fit sizes from ever being clumped into a single size button.
-  const getVariantMap = (p: { sku: string; sizes: string } | null | undefined) => {
-    if (!p || waistLengthSkus.has(p.sku)) return null;
-    return variantSizesBySku[p.sku] ?? variantMapFromSizes(p.sizes);
-  };
   const SIZE_ORDER = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"];
   const waistOptionsBySku: Record<string, string[]> = {
     "MN-1": ["28", "29", "30", "31", "32", "33", "34", "35", "36", "38", "40", "42", "44", "46", "48", "50", "52", "54"],
