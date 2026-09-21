@@ -47,7 +47,7 @@ export const allProducts = [
     "sku": "MN-41",
     "name": "Carhartt Gilliam Jacket",
     "category": "Jackets",
-    "sizes": "S - 3XL",
+    "sizes": "S - 3XL / LT - 2XLT",
     "badge": "",
     "colors": [
       "#1a1a18",

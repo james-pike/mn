@@ -15,7 +15,7 @@ const product = {
   sku: "MN-41",
   name: "Carhartt Gilliam Jacket",
   category: "Jackets",
-  sizes: "S - 3XL",
+  sizes: "S - 3XL / LT - 2XLT",
   colors: [BLACK, NAVY],
   price: 109.99,
   img: "/sku/102208-black.png",
