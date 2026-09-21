@@ -11,6 +11,48 @@ import { ProductImage } from "../product-image/product-image";
 // Tall sizes are rendered on their own row, separate from the regular sizes.
 const TALL_SIZES = new Set(["ST", "MT", "LT", "XLT", "2XLT", "3XLT", "4XLT", "5XLT"]);
 
+// Base (fit-less) size tokens, largest last, for parsing fit variants.
+const SIZE_BASES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"];
+
+/** Split a size token into its base and fit: "LT" → {base:"L",fit:"Tall"},
+ *  "MS" → {base:"M",fit:"Short"}, "2XL" → {base:"2XL",fit:"Regular"}. */
+function parseFitToken(tok: string): { base: string; fit: "Regular" | "Tall" | "Short" } {
+  if (SIZE_BASES.includes(tok)) return { base: tok, fit: "Regular" };
+  if (tok.endsWith("T")) {
+    const base = tok.slice(0, -1);
+    if (SIZE_BASES.includes(base)) return { base, fit: "Tall" };
+  }
+  if (tok.endsWith("S")) {
+    const base = tok.slice(0, -1);
+    if (SIZE_BASES.includes(base)) return { base, fit: "Short" };
+  }
+  return { base: tok, fit: "Regular" };
+}
+
+/**
+ * Derive fit-variant size groups from a slash-separated sizes string, e.g.
+ * "S - 3XL / LT - 2XLT" → { Regular: [S…3XL], Tall: [L…2XL] }. Each "/" group
+ * must be a fit-suffixed range; anything else (volumes like "25 oz / 35 oz",
+ * waist/length "W 30 - 52 / L 30 - 36") yields null so those never become
+ * variants. Returns null unless at least two real fit groups are found — so a
+ * product's sizes are NEVER clumped into one button when they span fits.
+ */
+function variantMapFromSizes(sizes: string): Record<string, string[]> | null {
+  if (!sizes || !sizes.includes("/")) return null;
+  const map: Record<string, string[]> = {};
+  for (const group of sizes.split("/").map((s) => s.trim()).filter(Boolean)) {
+    const m = group.match(/^(\S+)\s*-\s*(\S+)$/);
+    if (!m) return null;
+    const a = parseFitToken(m[1]);
+    const b = parseFitToken(m[2]);
+    const list = expandSizes(`${a.base} - ${b.base}`);
+    // A range that doesn't expand to real sizes (e.g. "W 30 - 52") isn't a fit.
+    if (list.length === 0 || (list.length === 1 && list[0].includes(" "))) return null;
+    map[a.fit] = list;
+  }
+  return Object.keys(map).length >= 2 ? map : null;
+}
+
 interface ProductDetailPanelProps {
   /** SKU to render (from the route param, or the in-frame catalog overlay). */
   sku: string;
@@ -100,7 +142,14 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
       "Tall": ["M", "L", "XL", "2XL", "3XL", "4XL"],
     },
   };
-  const variantSkus = new Set(Object.keys(variantSizesBySku));
+  // A product has fit variants when it's explicitly configured OR its sizes
+  // string encodes fit groups (e.g. "S - 3XL / LT - 2XLT"). Waist/length SKUs
+  // use their own picker, so they never resolve to fit variants. This is what
+  // stops multi-fit sizes from ever being clumped into a single size button.
+  const getVariantMap = (p: { sku: string; sizes: string } | null | undefined) => {
+    if (!p || waistLengthSkus.has(p.sku)) return null;
+    return variantSizesBySku[p.sku] ?? variantMapFromSizes(p.sizes);
+  };
   const SIZE_ORDER = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"];
   const waistOptionsBySku: Record<string, string[]> = {
     "MN-1": ["28", "29", "30", "31", "32", "33", "34", "35", "36", "38", "40", "42", "44", "46", "48", "50", "52", "54"],
@@ -118,7 +167,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
   const sizeOptions = useComputed$<string[]>(() => {
     const p = product.value;
     if (!p) return [];
-    const variantMap = variantSizesBySku[p.sku];
+    const variantMap = getVariantMap(p);
     if (variantMap) {
       if (selectedVariant.value && variantMap[selectedVariant.value]) {
         return variantMap[selectedVariant.value];
@@ -146,10 +195,10 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
     if (!p || !selectedSize.value) return;
     if (p.colors.length > 0 && !selectedColor.value) return;
     if (waistLengthSkus.has(p.sku) && (!selectedWaist.value || !selectedLength.value)) return;
-    if (variantSkus.has(p.sku) && !selectedVariant.value) return;
+    if (getVariantMap(p) && !selectedVariant.value) return;
     const sizeVal = waistLengthSkus.has(p.sku)
       ? `W${selectedWaist.value} x L${selectedLength.value}`
-      : variantSkus.has(p.sku)
+      : getVariantMap(p)
         ? `${selectedSize.value} ${selectedVariant.value}`
         : selectedSize.value;
     try {
@@ -182,7 +231,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
           item.waist = selectedWaist.value;
           item.length = selectedLength.value;
         }
-        if (variantSkus.has(p.sku)) {
+        if (getVariantMap(p)) {
           item.variant = selectedVariant.value;
         }
         items.push(item);
@@ -211,8 +260,8 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
     selectedColor.value = sortColorsWhiteLast(p0.colors)[0];
     if (waistLengthSkus.has(p0.sku)) {
       selectedSize.value = "W/L";
-    } else if (variantSkus.has(p0.sku)) {
-      const variantMap = variantSizesBySku[p0.sku];
+    } else if (getVariantMap(p0)) {
+      const variantMap = getVariantMap(p0)!;
       const variantKeys = Object.keys(variantMap);
       const defVariant = variantKeys.includes("Regular") ? "Regular" : variantKeys[0];
       selectedVariant.value = defVariant;
@@ -372,7 +421,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
             )}
             {!waistLengthSkus.has(p.sku) && (
             <div class="product-modal__field">
-              <label class="product-modal__label">{t("modal.size", locale.value)}{variantSkus.has(p.sku) && selectedVariant.value && <span class="product-modal__color-inline"> — {t(`variant.${selectedVariant.value}` as any, locale.value)}</span>}{!variantSkus.has(p.sku) && sizeOptions.value.some((s) => TALL_SIZES.has(s)) && selectedSize.value && <span class="product-modal__color-inline"> — {t(TALL_SIZES.has(selectedSize.value) ? "variant.Tall" : "variant.Regular", locale.value)}</span>}</label>
+              <label class="product-modal__label">{t("modal.size", locale.value)}{getVariantMap(p) && selectedVariant.value && <span class="product-modal__color-inline"> — {t(`variant.${selectedVariant.value}` as any, locale.value)}</span>}{!getVariantMap(p) && sizeOptions.value.some((s) => TALL_SIZES.has(s)) && selectedSize.value && <span class="product-modal__color-inline"> — {t(TALL_SIZES.has(selectedSize.value) ? "variant.Tall" : "variant.Regular", locale.value)}</span>}</label>
               <div class="product-modal__options">
                 {sizeOptions.value.filter((s) => !TALL_SIZES.has(s)).map((size) => (
                   <button
@@ -399,11 +448,11 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
               )}
             </div>
             )}
-            {variantSkus.has(p.sku) && (
+            {getVariantMap(p) && (
               <div class="product-modal__field">
                 <label class="product-modal__label">{t("product.variant", locale.value)}</label>
                 <div class="product-modal__options">
-                  {(variantSizesBySku[p.sku] ? Object.keys(variantSizesBySku[p.sku]) : []).map((v) => (
+                  {Object.keys(getVariantMap(p) ?? {}).map((v) => (
                     <button
                       key={v}
                       class={`product-modal__option ${selectedVariant.value === v ? "active" : ""}`}
@@ -477,7 +526,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
             <div class="product-modal__actions">
               <button
                 class={`btn btn--primary product-modal__add product-modal__add--branded ${added.value ? "product-modal__add--added" : ""}`}
-                disabled={!selectedSize.value || (waistLengthSkus.has(p.sku) && (!selectedWaist.value || !selectedLength.value)) || (variantSkus.has(p.sku) && !selectedVariant.value)}
+                disabled={!selectedSize.value || (waistLengthSkus.has(p.sku) && (!selectedWaist.value || !selectedLength.value)) || (getVariantMap(p) != null && !selectedVariant.value)}
                 onClick$={addToCart}
               >
                 <span class="product-modal__add-label">
