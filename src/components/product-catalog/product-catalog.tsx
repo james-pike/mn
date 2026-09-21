@@ -187,11 +187,13 @@ function scrollProductsBelowBar() {
   }
 }
 
-// Cards above the fold on a phone (2 columns): fetched eagerly so the first
-// screen isn't waiting on the lazy loader. Everything after this loads as it
-// scrolls into view — the "All" tab is 80+ products, and eager images meant
-// 80+ requests and megabytes of photos on the first paint.
-const EAGER_CARDS = 4;
+// Cards in the first visible rows are fetched eagerly so the first screen isn't
+// waiting on the lazy loader (which, on a slower production network, makes those
+// images visibly pop into their reserved squares one-by-one). 8 covers ~2 rows
+// on the desktop 4-up grid and ~4 rows on a 2-up phone. Everything past this
+// still lazy-loads on scroll — the "All" tab is 80+ products, and eager-loading
+// all of them would mean 80+ requests / megabytes of photos on first paint.
+const EAGER_CARDS = 8;
 
 const ProductCard = component$<{ item: Product; sku: string; index: number }>(({ item, sku, index }) => {
   const locale = useContext(LocaleContext);
@@ -269,7 +271,7 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
           width={440}
           height={440}
           loading={eager ? "eager" : "lazy"}
-          fetchPriority={eager ? "high" : "auto"}
+          fetchPriority={index < 4 ? "high" : "auto"}
         />
       </div>
       <div class="product-card__info">
