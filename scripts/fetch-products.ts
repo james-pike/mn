@@ -49,20 +49,26 @@ async function fetchAndWrite() {
       "SELECT * FROM products WHERE vendor = 'modernniagara' ORDER BY sort_order ASC"
     );
 
-    const products = result.rows.map((row: any) => ({
-      sku: row.sku,
-      name: row.name,
-      category: row.category,
-      sizes: row.sizes,
-      badge: row.badge,
-      colors: JSON.parse(row.colors || "[]"),
-      price: row.price,
-      img: row.img,
-      imgs: JSON.parse(row.imgs || "[]"),
-      material: row.material,
-      details: row.details,
-      pdf: row.pdf || undefined,
-    })).map((p) => ({ ...p, ...OVERRIDES[p.sku] }));
+    const products = result.rows
+      // Products flagged hidden in the admin are delisted from the storefront —
+      // never emitted into the catalog bundle.
+      .filter((row: any) => !row.hidden)
+      .map((row: any) => ({
+        sku: row.sku,
+        name: row.name,
+        category: row.category,
+        sizes: row.sizes,
+        badge: row.badge,
+        colors: JSON.parse(row.colors || "[]"),
+        price: row.price,
+        img: row.img,
+        imgs: JSON.parse(row.imgs || "[]"),
+        material: row.material,
+        details: row.details,
+        pdf: row.pdf || undefined,
+        // Login-group membership (e.g. ["electrical"]); drives the group views.
+        portals: row.portals ? JSON.parse(row.portals) : undefined,
+      })).map((p) => ({ ...p, ...OVERRIDES[p.sku] }));
 
     const output = `// AUTO-GENERATED — do not edit manually. Updated from database at build time.
 import { t } from "../../i18n";

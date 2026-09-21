@@ -341,7 +341,10 @@ export const allProducts = [
       "/sku/104204-darkkhaki.png"
     ],
     "material": "9 oz 98% cotton / 2% spandex canvas with Rugged Flex stretch",
-    "details": "Flame-resistant, NFPA 70E and UL classified to NFPA 2112, relaxed fit, straight leg, phone and utility pockets, OEKO-TEX Standard 100, #104204"
+    "details": "Flame-resistant, NFPA 70E and UL classified to NFPA 2112, relaxed fit, straight leg, phone and utility pockets, OEKO-TEX Standard 100, #104204",
+    "portals": [
+      "electrical"
+    ]
   },
   {
     "sku": "MN-13",
@@ -444,24 +447,10 @@ export const allProducts = [
       "/sku/100235-navy-back.png"
     ],
     "material": "6.75 oz Force FR jersey knit",
-    "details": "Flame-resistant, meets NFPA 2112 / NFPA 70E, Force sweat-wicking, loose fit, long sleeve, #100235"
-  },
-  {
-    "sku": "MN-37",
-    "name": "Atlas Guardian FR/AR Hoodie - Navy",
-    "category": "Flame Resistant",
-    "sizes": "XXS - 7XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 0,
-    "img": "/sku/fr-hivis-hoodie-navy.png",
-    "imgs": [
-      "/sku/fr-hivis-hoodie-navy.png"
-    ],
-    "material": "Pre-shrunk 11 oz 100% cotton",
-    "details": "Flame-resistant and arc-rated (FR/AR) protection — ATPV 18 cal (CAT 2), CSA Z96-22 Class 1 Level 2 hi-visibility, Atlas Ultravis 4\" segmented reflective striping, Detachable hood and FR Aramid zipper, PFAS-free with guaranteed flame resistance for the life of the garment, #402NB"
+    "details": "Flame-resistant, meets NFPA 2112 / NFPA 70E, Force sweat-wicking, loose fit, long sleeve, #100235",
+    "portals": [
+      "electrical"
+    ]
   },
   {
     "sku": "MN-18",
@@ -495,7 +484,10 @@ export const allProducts = [
       "/sku/i8502-navy.png"
     ],
     "material": "63% polyester / 34% cotton / 3% spandex",
-    "details": "Flexfit stretch-fit, structured, embroidered, #i8502"
+    "details": "Flexfit stretch-fit, structured, embroidered, #i8502",
+    "portals": [
+      "electrical"
+    ]
   },
   {
     "sku": "MNFR-5",
@@ -718,7 +710,10 @@ export const allProducts = [
       "/sku/atlas-guardian-fr-ar-quarter-zip-navy.png"
     ],
     "material": "Pre-shrunk 11 oz 100% cotton",
-    "details": "Flame-resistant and arc-rated (FR/AR) protection — ATPV 18 cal (CAT 2), CSA Z96-22 Class 1 Level 2 hi-visibility, Atlas Ultravis 4\" segmented reflective striping, Detachable hood and plastic FR zipper, PFAS-free with guaranteed flame resistance for the life of the garment, #4014NB"
+    "details": "Flame-resistant and arc-rated (FR/AR) protection — ATPV 18 cal (CAT 2), CSA Z96-22 Class 1 Level 2 hi-visibility, Atlas Ultravis 4\" segmented reflective striping, Detachable hood and plastic FR zipper, PFAS-free with guaranteed flame resistance for the life of the garment, #4014NB",
+    "portals": [
+      "electrical"
+    ]
   }
 ];
 
