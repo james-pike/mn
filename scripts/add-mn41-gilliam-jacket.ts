@@ -17,12 +17,12 @@ const product = {
   category: "Jackets",
   sizes: "S - 3XL / LT - 2XLT",
   colors: [BLACK, NAVY],
-  price: 109.99,
+  price: 110,
   img: "/sku/102208-black.png",
   imgs: ["/sku/102208-black.png", "/sku/102208-navy.png"],
   material: "",
   details:
-    "Rain Defender durable water repellent, Wind Fighter windproof technology, Mock-neck collar, Left-chest map pocket, Two lower-front pockets with hidden snap closure, Two inside pockets (one zippered, one hook-and-loop), Hook-and-loop adjustable cuffs, Drawcord adjustable hem, Triple-stitched main seams, Relaxed fit, #102208",
+    "Rain Defender durable water repellent, Wind Fighter windproof technology, Mock-neck collar, Left-chest map pocket, Two lower-front pockets with hidden snap closure, Two inside pockets, Hook-and-loop adjustable cuffs, Drawcord adjustable hem, Triple-stitched main seams, #102208",
   sort_order: 9, // Jackets tab, right after the Coal Harbour soft shells (7, 8)
 };
 

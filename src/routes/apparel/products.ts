@@ -53,14 +53,14 @@ export const allProducts = [
       "#1a1a18",
       "#2c3e50"
     ],
-    "price": 109.99,
+    "price": 110,
     "img": "/sku/102208-black.png",
     "imgs": [
       "/sku/102208-black.png",
       "/sku/102208-navy.png"
     ],
     "material": "",
-    "details": "Rain Defender durable water repellent, Wind Fighter windproof technology, Mock-neck collar, Left-chest map pocket, Two lower-front pockets with hidden snap closure, Two inside pockets (one zippered, one hook-and-loop), Hook-and-loop adjustable cuffs, Drawcord adjustable hem, Triple-stitched main seams, Relaxed fit, #102208"
+    "details": "Rain Defender durable water repellent, Wind Fighter windproof technology, Mock-neck collar, Left-chest map pocket, Two lower-front pockets with hidden snap closure, Two inside pockets, Hook-and-loop adjustable cuffs, Drawcord adjustable hem, Triple-stitched main seams, #102208"
   },
   {
     "sku": "MN-3",

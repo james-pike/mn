@@ -51,6 +51,25 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
   const imgFullscreen = useSignal(false);
   const imgLayout = useSignal<"rail" | "full">("rail");
 
+  // Map each colour to the gallery image that depicts it, by matching the
+  // colour's name against the image filename (e.g. "…-navy.png" ↔ "Navy"). Only
+  // colours whose image exists get an entry, so products whose images are
+  // alternate VIEWS (front/back of one colour) rather than colourways are left
+  // untouched — clicking a swatch there won't move the gallery.
+  const colorImgIndex = useComputed$(() => {
+    const imgs = (p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[];
+    const map: Record<string, number> = {};
+    for (const color of p.colors) {
+      const norm = colorName(color, "en").toLowerCase().replace(/[^a-z0-9]/g, "");
+      if (!norm) continue;
+      const idx = imgs.findIndex((src) =>
+        src.toLowerCase().replace(/[^a-z0-9]/g, "").includes(norm),
+      );
+      if (idx >= 0) map[color] = idx;
+    }
+    return map;
+  });
+
   const relatedPerView = useSignal(2);
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup }) => {
@@ -435,7 +454,11 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
                       key={color}
                       class={`product-modal__color ${selectedColor.value === color ? "active" : ""}`}
                       style={{ background: color }}
-                      onClick$={() => (selectedColor.value = color)}
+                      onClick$={() => {
+                        selectedColor.value = color;
+                        const idx = colorImgIndex.value[color];
+                        if (idx !== undefined) imgIndex.value = idx;
+                      }}
                       aria-label={colorName(color, locale.value)}
                       title={colorName(color, locale.value)}
                     />
