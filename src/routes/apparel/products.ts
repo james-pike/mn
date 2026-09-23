@@ -337,8 +337,8 @@ export const allProducts = [
     "img": "/swag/cap.png",
     "imgs": [
       "/swag/cap.png",
-      "/swag/cap-back.webp",
-      "/swag/cap-side.webp"
+      "/sku/i8502-navy-back.webp",
+      "/sku/i8502-navy-side.webp"
     ],
     "material": "Poly/spandex blend with performance mesh back",
     "details": "Mid-profile structured trucker cap, shapeable pre-curved visor, UV protection, moisture wicking, 110 Technology® sweatband, adjustable plastic snapback, grey under visor, #i8502"
