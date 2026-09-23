@@ -15003,7 +15003,28 @@ html { background: rgb(223, 226, 230) !important; }
 /* Thin the gutter BETWEEN the two columns without changing the outer indent:
    trim the padding on the facing edges (details' right, summary's left). */
 .checkout-page .checkout-modal__form { padding-right: 0.5rem !important; }
-.checkout-page .cart-drawer__summary { padding-left: 0.5rem !important; }
+/* Grey divider between the order-details and order-summary columns (matches tm). */
+.checkout-page .cart-drawer__summary { padding-left: 24px !important; border-left: 1px solid var(--ce-gray-300) !important; align-self: stretch !important; }
+/* Keep the input fields from sprawling across the wide details column. */
+.checkout-page .checkout-modal__form,
+.checkout-page .checkout-modal__pay { max-width: 640px; }
+/* A touch more breathing room below the secondary "Back to Cart" bar (only the
+   content area beneath it, not the bar itself). */
+.checkout-page .checkout-modal__form,
+.checkout-page .cart-drawer__summary { padding-top: 1.5rem !important; }
+/* Widen the gap between the two field columns for every row. The fields sit in
+   a 2-col grid (column-gap widens all pairs); the first First/Last pair is a
+   flex row spanning both columns, so match its gap to keep the columns aligned. */
+.checkout-page .checkout-modal__form { column-gap: 1.5rem; }
+.checkout-page .checkout-modal__row { gap: 1.5rem; }
+/* Push the order-details fields a little further right from the panel edge.
+   Same on the payment/PO block so it lines up with the fields above it. */
+.checkout-page .checkout-modal__form,
+.checkout-page .checkout-modal__pay { padding-left: 1.75rem !important; }
+/* Align the footer items/total line with the pushed-right fields above. */
+.checkout-page .cart-drawer__footer { padding-left: 1.75rem !important; }
+/* Cap the PO # field to a single field's width so it doesn't run longer. */
+.checkout-page .checkout-modal__pay .checkout-modal__field { max-width: 282px; }
 .checkout-page .cart-drawer__back-btn {
   /* Same light-grey secondary-bar fill as the cart's PRODUCT/QTY strip, so the
      bar reads distinct from the order-details content below it. */
@@ -15017,7 +15038,7 @@ html { background: rgb(223, 226, 230) !important; }
 }
 .checkout-page .checkout-modal__field input,
 .checkout-page .checkout-modal__field select {
-  background: var(--ce-white);
+  background: #f8f9fb;
   border: 1px solid var(--ce-gray-300);
 }
 
