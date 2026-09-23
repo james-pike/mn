@@ -2249,12 +2249,17 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   .home-catalog__search-desktop { display: none !important; }
   .home-catalog .apparel-titlebar__action--mobile-search { display: flex; }
   .home-catalog .apparel-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; margin-top: -3px; min-height: 100vh; align-content: start; }
+  /* 2-col: hug once a 2nd row exists (3rd card). */
+  .home-catalog .apparel-grid:has(> .product-card:nth-child(3)) { min-height: 0; }
 }
 @media (min-width: 601px) and (max-width: 1024px) {
   .home-catalog { padding: 0; }
   .home-catalog__inner { padding: 0; max-width: 100%; }
   .home-catalog .apparel-grid { grid-template-columns: repeat(3, 1fr); gap: 0.2rem; min-height: 100vh; align-content: start; padding: 0 0.25rem; margin: -3px 0 0; }
   .home-catalog .apparel-grid.apparel-grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
+  /* 3-col: hug once a 2nd row exists (4th card); the 2-col variant at its 3rd. */
+  .home-catalog .apparel-grid:has(> .product-card:nth-child(4)) { min-height: 0; }
+  .home-catalog .apparel-grid--cols-2:has(> .product-card:nth-child(3)) { min-height: 0; }
   /* List view: two columns of short, horizontal rows — small square thumbnail
      on the left, all the product details beside it. Shows many products at
      once without the tall image tiles. */
@@ -3275,16 +3280,16 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 
 .product-card__sizes {
-  font-size: 0.72rem;
-  color: var(--ce-gray-500);
+  font-size: 0.8rem;
+  color: var(--ce-gray-600);
   letter-spacing: -0.01em;
 }
 /* Gender ("Men's"/"Women's") and the single-colour name — same muted style as
    the sizes text. */
 .product-card__gender,
 .product-card__color-name {
-  font-size: 0.72rem;
-  color: var(--ce-gray-500);
+  font-size: 0.8rem;
+  color: var(--ce-gray-600);
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
@@ -3429,10 +3434,10 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   opacity: 0;
   transition: opacity 0.8s ease;
 }
-/* The wide building-services photo (1920×776) fills the tall pane with `cover`
-   (full height, like the other slide); the crop is centred so the van logo and
-   a worker stay in frame. */
-.login-modal__slide--wide { object-fit: cover; object-position: center center; }
+/* The van photo fills the whole pane (no side margins): `cover` always spans the
+   full width and trims top/bottom as the pane's aspect changes. object-position
+   keeps the van (lower-centre of the frame) in view. */
+.login-modal__slide--wide { object-fit: cover; object-position: center 76%; }
 .login-modal__slide.is-active { opacity: 1; }
 .login-modal__dots {
   position: absolute; bottom: clamp(1.25rem, 3.2vh, 2rem); right: clamp(1.35rem, 2.3vw, 2.1rem); left: auto;
@@ -3680,7 +3685,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   .login-modal--split .login-card__brand .brand-cluster__words { gap: 0.8cqw; }
   .login-modal--split .login-card__brand .brand-cluster__word { font-size: 8cqw; }
 
-  .login-modal--split .login-modal__form { gap: var(--login-gap); padding: 0 2.8cqw 0; }
+  .login-modal--split .login-modal__form { gap: var(--login-gap); padding: 0 2.8cqw 0 calc(2.8cqw + 8px); }
   .login-modal--split .login-modal__subtitle { font-size: 1.2rem; font-weight: 500; color: rgba(255, 255, 255, 0.85); text-align: left; margin: 0; }
   .login-modal--split .login-modal__field { gap: var(--login-label-gap); }
   .login-modal--split .login-portal { font-size: 2.9cqw; padding: 3.1cqw 12px; }
@@ -3742,12 +3747,31 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 
 /* ===== Footer ===== */
 .site-footer {
+  position: relative;
   background: var(--ce-gray-900);
   color: rgba(255,255,255,0.4);
   padding: 2.5rem 2rem;
-  /* Extend the dark colour a few px below the footer so a sub-pixel rounding
-     gap at the very bottom never shows the light page behind it. */
-  box-shadow: 0 4px 0 0 var(--ce-gray-900);
+}
+/* Bottom accent: the 8 Modern Niagara diamond colours in equal eighths. */
+.site-footer::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  z-index: 1;
+  background: linear-gradient(
+    to right,
+    #2a7fc3 0 12.5%,
+    #42a1d9 12.5% 25%,
+    #6cc60f 25% 37.5%,
+    #94e840 37.5% 50%,
+    #ffd440 50% 62.5%,
+    #ffe399 62.5% 75%,
+    #d7145a 75% 87.5%,
+    #af0011 87.5% 100%
+  );
 }
 .site-footer__inner {
   max-width: var(--site-max); margin: 0 auto;
@@ -4603,7 +4627,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   justify-content: center;
   box-shadow: inset 0 1px 4px rgba(0,0,0,0.08), inset 0 0 6px rgba(0,0,0,0.04);
 }
-@media (hover: hover) { .cart-btn:hover { border-color: var(--ce-gold); background: #eaf3fa; color: #1e4a66; } .cart-btn:hover svg { stroke: #1e4a66; } }
+@media (hover: hover) { .cart-btn:hover { border-color: #96b95c; background: #96b95c; color: #ffffff; } .cart-btn:hover svg { stroke: #ffffff; } }
 .cart-btn svg { stroke: var(--ce-gray-700); width: 17px; height: 17px; }
 .cart-btn--active {
   border-color: #2E698E;
@@ -4613,7 +4637,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 .cart-btn--active svg { stroke: #ffffff; }
 .cart-btn--active .cart-btn__label { color: #ffffff; }
-@media (hover: hover) { .cart-btn--active:hover { border-color: var(--ce-gold); background: #245471; color: #ffffff; } .cart-btn--active:hover svg { stroke: #ffffff; } }
+@media (hover: hover) { .cart-btn--active:hover { border-color: #96b95c; background: #96b95c; color: #ffffff; } .cart-btn--active:hover svg { stroke: #ffffff; } }
 /* Wherever the catalog header shows (home + apparel routes), the cart reads as
    an actual button in the bright tab-bar orange on the darker textured header,
    instead of the old brown / transparent outline that blended in. !important
@@ -4630,7 +4654,7 @@ body:has(.home-catalog) .site-header .cart-btn {
 body:has(.home-catalog) .site-header .cart-btn svg { stroke: #ffffff !important; }
 body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff !important; }
 @media (hover: hover) {
-  body:has(.home-catalog) .site-header .cart-btn:hover { border-color: var(--ce-gold) !important; background: #245471 !important; color: #ffffff !important; }
+  body:has(.home-catalog) .site-header .cart-btn:hover { border-color: #96b95c !important; background: #96b95c !important; color: #ffffff !important; }
   body:has(.home-catalog) .site-header .cart-btn:hover svg { stroke: #ffffff !important; }
 }
 /* Logout button in site-header gets a subtle green tint to match the other accented buttons */
@@ -4645,7 +4669,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .site-header .logout-btn svg { stroke: var(--ce-gray-900); }
 .site-header .logout-btn .logout-btn__label { display: none; }
 @media (hover: hover) {
-  .site-header .logout-btn:hover { border-color: rgba(0,0,0,0.25); background: rgba(0,0,0,0.08); }
+  .site-header .logout-btn:hover { border-color: rgba(215,20,90,0.4); background: #fce7ef; }
 }
 .cart-btn {
   position: relative;
@@ -4673,8 +4697,8 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 }
 .logout-btn svg { stroke: var(--ce-gray-700); width: 17px; height: 17px; }
 @media (hover: hover) {
-  .logout-btn:hover { border-color: var(--ce-gold); background: #eaf3fa; color: #1e4a66; }
-  .logout-btn:hover svg { stroke: #1e4a66; }
+  .logout-btn:hover { border-color: #d7145a; background: #fce7ef; color: #d7145a; }
+  .logout-btn:hover svg { stroke: #d7145a; }
 }
 /* ===== Mobile Apparel Link ===== */
 .site-header__apparel-link {
@@ -4708,18 +4732,21 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 
 .cart-btn__dot {
   position: absolute;
-  top: 3px;
-  right: 3px;
-  width: 8px;
-  height: 8px;
-  background: var(--ce-orange);
-  border-radius: 50%;
-  border: 1.5px solid rgba(26,58,40,0.8);
+  top: 9px;
+  right: 12px; /* nudged in toward the cart icon, off the far corner */
+  width: 10px;
+  height: 10px;
+  background: #6cc60f; /* mnbs brand green (was orange) */
+  border-radius: 2px; /* rotated square => diamond */
+  border: 2px solid #ffffff; /* white ring lifts it off the header */
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.35);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transform: rotate(45deg) scale(0.6);
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 .cart-btn__dot--visible {
   opacity: 1;
+  transform: rotate(45deg) scale(1);
 }
 .cart-btn__badge {
   display: inline-flex;
@@ -5076,10 +5103,10 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
   inset: 0;
   width: 100%;
   height: 100%;
-  /* Fill the square panel edge-to-edge (was contain, which letterboxed
-     portrait/tall images with white side gaps). Only the white margin is
-     trimmed. Slides that must never crop opt into --contain below. */
-  object-fit: cover;
+  /* Keep each product image at its OWN aspect ratio — never crop it to the
+     panel. The images sit on white and use mix-blend-mode: multiply, so the
+     "letterbox" area is invisible against the white panel. */
+  object-fit: contain;
   object-position: center center;
   opacity: 0;
   transition: opacity 0.4s ease;
@@ -7347,12 +7374,12 @@ details[open] > .cart-drawer__checkout-title::after {
     background: var(--ce-gray-200);
     border-radius: 2px;
     padding: 0;
-    /* Dynamic fit: fill the viewport MINUS the pinned header+tab bar (~109px) and
-       the footer (~140px), so a thin category's tray ends exactly where the
-       footer begins and the footer lands flush at the viewport bottom on any
-       screen height. Longer lists grow past it and the footer follows the last
-       product. */
-    min-height: calc(100vh - 249px);
+    /* Reserve ~2 card rows so 1-row AND 2-row categories share the SAME footer
+       height: a lone row still ends where a 2-row category would, 2 rows hug
+       their content, and 3+ rows grow past it. The card image is square (= the
+       column width), so a row ≈ colW + 74px info; colW = (site-max − sidebar)/4.
+       This scales with the viewport (and plateaus at the 1600px site-max cap). */
+    min-height: min(calc((min(100vw - 32px, 1600px) - 274px) / 2 + 176px), calc(100dvh - 172px));
     align-content: start;
   }
   .cart-btn__label { display: inline; }
@@ -9561,7 +9588,7 @@ details[open] > .cart-drawer__checkout-title::after {
 .site-header .logout-btn svg,
 .site-header .hamburger-btn svg,
 .site-header .site-header__search-btn svg { stroke: #fff !important; }
-.site-header .cart-btn__dot { border-color: var(--wt-orange) !important; }
+.site-header .cart-btn__dot { border-color: #ffffff !important; }
 
 /* Search field uses the same darker-orange overlay box as the logo/buttons.
    White text on that box is ~5.3:1 contrast (passes WCAG AA), and a brighter
@@ -10253,7 +10280,7 @@ details[open] > .cart-drawer__checkout-title::after {
     gap: 8px;
     padding-right: 10px;
   }
-  .home-catalog__catnav-head .home-catalog__catnav-title { padding-bottom: 0; }
+  .home-catalog__catnav-head .home-catalog__catnav-title { padding-top: 0.05rem; padding-bottom: 0.3rem; }
   /* Inline (compact, icon-only) grid-density toggle. */
   .home-catalog__density--inline {
     margin: 0;
@@ -10357,7 +10384,7 @@ details[open] > .cart-drawer__checkout-title::after {
     transition: background 0.12s ease, color 0.12s ease;
   }
   .home-catalog__catnav-item:hover { background: rgba(0, 0, 0, 0.04); color: var(--ce-gray-900); }
-  .home-catalog__catnav-item.active { background: var(--ce-green); color: #fff; font-weight: 600; }
+  .home-catalog__catnav-item.active { background: var(--ce-green); color: #fff; font-weight: 600; border-radius: 0; }
   .home-catalog__catnav-icon {
     width: 18px;
     height: 18px;
@@ -11030,7 +11057,10 @@ details[open] > .cart-drawer__checkout-title::after {
   /* Same height as the catalog's tab strip and the PDP breadcrumb (44px on
      phones), rather than whatever the cell padding happened to add up to. */
   height: 44px;
-  padding: 0 0.25rem;
+  /* Top-heavy padding nudges the vertically-centred label down a touch so it
+     sits optically centred over the bottom divider + inset shadow (height is a
+     cell minimum, so this doesn't grow the strip). */
+  padding: 4px 0.25rem 0;
   vertical-align: middle;
   border-bottom: none;
 }
@@ -14319,7 +14349,14 @@ body:has(.cart-drawer) .pdp-breadcrumb {
 .home-catalog__sidebar-search {
   background: var(--mn-bar-hi) !important;
   color: var(--ce-gray-900) !important;
-  border: 1px solid var(--ce-gray-200) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+/* No focus/selected border or ring on the search field. */
+.home-catalog__sidebar-search:focus-within,
+.home-catalog__sidebar-search .apparel-titlebar__search-input:focus {
+  border: none !important;
+  outline: none !important;
   box-shadow: none !important;
 }
 .home-catalog__viewmode svg,
@@ -14358,7 +14395,7 @@ body .site-header .site-header__search:focus-within {
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18) !important;
 }
 body .site-header .site-header__search:focus-within {
-  box-shadow: inset 0 0 0 2px rgba(36, 84, 113, 0.5) !important;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18) !important;
 }
 body .site-header .site-header__search:hover .site-header__search-input,
 body .site-header .site-header__search:focus-within .site-header__search-input {
@@ -14622,15 +14659,16 @@ body .site-header__inner { border-top-left-radius: 0 !important; border-top-righ
   /* One smooth expression (no breakpoint jump, so browser zoom stays monotonic):
      near full-width on laptops, and once the viewport passes the 1728px cap the
      content plateaus and wide desktop monitors get real side margins. */
-  :root { --site-max: min(calc(100vw - 2rem), 1728px); }
+  :root { --site-max: min(calc(100vw - 2rem), 1600px); }
   /* Bring the sticky header bar in to the same width as the content column. */
   .site-header { max-width: var(--site-max); margin-inline: auto; }
 }
 
 @media (min-width: 1025px) {
-  /* Fill the viewport so the footer sits flush at the bottom with no page
-     background showing below it on short catalogs (e.g. the Electrical shop). */
-  .apparel-page:not(.privacy-page) { min-height: calc(100dvh - 58px); }
+  /* The catalog grid reserves ~2 rows (see .apparel-grid min-height), which
+     drives where the footer sits, so the page frame just hugs its content
+     instead of stacking a second viewport under it. */
+  .apparel-page:not(.privacy-page) { min-height: 0; }
 }
 
 /* Electrical shop: only a handful of products (never a 2nd row), so drop the
@@ -15063,3 +15101,21 @@ html { background: rgb(223, 226, 230) !important; }
 .checkout-page .cart-drawer__back-btn { margin: 0 !important; }
 .checkout-page .checkout-modal__pay { margin-top: 14px !important; }
 .checkout-page .cart-drawer__footer { border-radius: 0 !important; }
+
+/* Editorial feature sections — per-colour alt-image PDPs (TravisMathew polos) */
+.product-features { max-width: 1180px; margin: 3.5rem auto 0; padding: 0 16px; display: flex; flex-direction: column; gap: 2rem; }
+.product-feature { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; gap: 0; background: #f5f6f8; border-radius: 18px; overflow: hidden; box-shadow: 0 1px 2px rgba(20,28,40,.05); }
+.product-feature--reverse .product-feature__media { order: 2; }
+.product-feature__media { aspect-ratio: 4 / 5; background: #eceef1; }
+.product-feature__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.product-feature__body { padding: 2.25rem 2.75rem; display: flex; flex-direction: column; justify-content: center; }
+.product-feature__eyebrow { text-transform: uppercase; letter-spacing: .14em; font-size: .72rem; font-weight: 700; color: #7a8493; margin: 0 0 .6rem; }
+.product-feature__title { font-size: 1.75rem; line-height: 1.12; font-weight: 700; color: #18202e; margin: 0 0 .8rem; letter-spacing: -.01em; }
+.product-feature__text { font-size: 1rem; line-height: 1.6; color: #48525f; margin: 0; }
+@media (max-width: 760px) {
+  .product-features { margin-top: 2.25rem; gap: 1.25rem; }
+  .product-feature { grid-template-columns: 1fr; }
+  .product-feature--reverse .product-feature__media { order: 0; }
+  .product-feature__body { padding: 1.5rem 1.5rem 2rem; }
+  .product-feature__title { font-size: 1.4rem; }
+}

@@ -1,4 +1,4 @@
-import { component$, useSignal, useComputed$, useContext, $, useVisibleTask$, Slot } from "@builder.io/qwik";
+import { component$, useSignal, useComputed$, useContext, $, useVisibleTask$, useOnDocument, Slot } from "@builder.io/qwik";
 import { Link, useLocation, useNavigate } from "@builder.io/qwik-city";
 import { LocaleContext, t } from "../../i18n";
 import { allProducts, categoryLabel, colorName } from "../../routes/apparel/products";
@@ -7,15 +7,7 @@ import { sizeGroups, sortColorsWhiteLast } from "../../routes/apparel/utils";
 import { LoginTypeContext, stickyTop } from "../../routes/layout";
 import { ProductImage } from "../product-image/product-image";
 
-// The two desktop view modes. The toggle shows the one you'll switch TO.
-// Labels are the single source for the button text, aria-label and title.
-const VIEW_MODES: { key: number | "list"; label: string; icon: string }[] = [
-  { key: 3, label: "Gallery", icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>' },
-  { key: "list", label: "Catalog", icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="4" height="4"/><line x1="10" y1="6" x2="21" y2="6"/><rect x="3" y="10" width="4" height="4"/><line x1="10" y1="12" x2="21" y2="12"/><rect x="3" y="16" width="4" height="4"/><line x1="10" y1="18" x2="21" y2="18"/></svg>' },
-];
-
-
-export const CLOTHING_CATEGORIES = ["All", "Jackets", "Sweaters", "Shirts", "Polos", "Hats", "SWAG", "New Hire Kit"];
+export const CLOTHING_CATEGORIES = ["All", "Shirts", "Jackets", "Sweaters", "Polos", "Hats", "SWAG", "New Hire Kit"];
 
 // Electrical portal: shows ONLY these SKUs (the small Electrical-division lineup).
 // Add/replace the Electrical SKU codes here — order is preserved in the grid.
@@ -39,6 +31,22 @@ export const SAFETY_CATEGORIES = ["All", "Flame Resistant", "Shirts", "Hats"];
 export const SAFETY_SKU_ORDER = ["MNFR-2", "MNFR-3", "MNFR-4", "MNFR-1", "MN-3", "MN-2", "MN-5", "MN-6"];
 export const isSafetyProduct = (sku: string) =>
   !SAFETY_HIDDEN_SKUS.has(sku) && (sku.startsWith(SAFETY_SKU_PREFIX) || SAFETY_EXTRA_SKUS.has(sku));
+
+// Is a SKU part of the given login's catalogue lineup? Mirrors `baseProducts`
+// below, but as a pure function so the server-side route guard can reuse it —
+// keeping direct-URL access in lockstep with what each login can browse.
+export const isSkuInLineup = (
+  loginType: string | null,
+  product: { sku: string; category: string; portals?: string[] },
+): boolean => {
+  const { sku, category } = product;
+  if (loginType === "electrical")
+    return !!product.portals?.includes("electrical") || ELECTRICAL_SKUS.includes(sku);
+  if (loginType === "tech") return category === "Work Wear";
+  if (loginType === "safety") return isSafetyProduct(sku);
+  // Clothing / Service (default): everything except FR + Electrical-only SKUs.
+  return category !== "Flame Resistant" && !ELECTRICAL_SKUS.includes(sku);
+};
 
 // Colors hidden from catalog-card swatches (still visible on product detail page).
 const CARD_HIDDEN_COLORS = new Set(["#c0392b", "#1e40af", "#6b3fa0"]);
@@ -205,6 +213,9 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
   // enough to avoid wrapping to a second line. If it still can't fit even at the
   // floor, fall back to wrapping rather than clipping.
   const nameRef = useSignal<HTMLElement>();
+  // Colour name shown while hovering a swatch (multi-colour cards) — mirrors the
+  // single-colour name that shows permanently on one-swatch cards.
+  const hoverColorName = useSignal("");
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup }) => {
     const el = nameRef.value;
@@ -319,17 +330,15 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
           <div class="product-card__color-size-row">
             {(() => {
               const all = item.colors || [];
-              const shown = all.filter((c) => !hiddenColors.has(c));
-              // If every colour got hidden (e.g. a single-colour product whose one
-              // colour is in the declutter list, like the Royal-blue notebook),
-              // fall back to the product's own colours so its swatch still shows.
-              const visible = sortColorsWhiteLast(shown.length ? shown : all);
-              // Cap the swatches at 4; beyond that a "+N" chip stands in for the
+              // Show the SKU's actual colours as swatches (no declutter filter) so
+              // a 7-colour SKU like the UA polo shows a full row.
+              const visible = sortColorsWhiteLast(all);
+              // Cap the swatches at 5; beyond that a "+N" chip stands in for the
               // rest, so a product with many colours doesn't spill a long row of
-              // dots across the card.
-              const MAX_DOTS = 4;
+              // dots across the card (e.g. UA polo → 5 dots + "+2").
+              const MAX_DOTS = 5;
               const dots = visible.slice(0, MAX_DOTS);
-              const extra = visible.length - dots.length;
+              const extra = all.length - dots.length;
               return visible.length > 0 ? (
                 <div class="product-card__colors">
                   {dots.map((c) => (
@@ -338,12 +347,16 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
                       class="product-card__color-dot"
                       style={{ background: c }}
                       aria-hidden="true"
+                      onMouseEnter$={() => (hoverColorName.value = c.startsWith("#") ? colorName(c, locale.value) : c)}
+                      onMouseLeave$={() => (hoverColorName.value = "")}
                     />
                   ))}
                   {extra > 0 && (
                     <span class="product-card__color-more" aria-label={`+${extra} more colours`}>+{extra}</span>
                   )}
-                  {singleColorName && <span class="product-card__color-name">{singleColorName}</span>}
+                  {(hoverColorName.value || singleColorName) && (
+                    <span class="product-card__color-name">{hoverColorName.value || singleColorName}</span>
+                  )}
                 </div>
               ) : <span />;
             })()}
@@ -397,6 +410,22 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
   // any deeper path under this (shop) layout is a product page. The sidebar +
   // header stay mounted, so there is no shift between the catalog and PDP.
   const isPdp = useComputed$(() => loc.url.pathname.replace(/\/+$/, "") !== "");
+  // On a product page, clicking the empty page margins / gutters around the detail
+  // panel (any of the structural background layers, never the header/panel/links)
+  // returns to the catalog. A document listener is used because a per-element
+  // handler on the huge section doesn't fire reliably in Qwik's dev delegation,
+  // and matching the TARGET's own class (not closest) avoids the open-click race
+  // where the click that opened the PDP would immediately bounce it back.
+  useOnDocument(
+    "click",
+    $((ev: Event) => {
+      if (!isPdp.value) return;
+      const tg = ev.target as HTMLElement | null;
+      if (!tg || !tg.classList) return;
+      const bg = ["home-catalog", "home-catalog__inner", "home-catalog__pdp-main", "apparel-catalog", "apparel-page", "dot-pattern"];
+      if (bg.some((c) => tg.classList.contains(c))) nav("/");
+    }),
+  );
   const isTech = useComputed$(() => loginType.value === "tech");
   const isSafety = useComputed$(() => loginType.value === "safety");
   const isElectrical = useComputed$(() => loginType.value === "electrical");
@@ -570,10 +599,16 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     });
   });
 
-  const doSearch = $((query: string) => {
+  const doSearch = $(async (query: string) => {
     if (query.trim()) {
       activeCat.value = categoryForQuery(query, baseProducts.value);
       searchQuery.value = query.trim();
+      // On a product page the grid isn't shown, so a committed search must go
+      // back to the catalog to display results (otherwise it appears to hang).
+      if (isPdp.value) {
+        await nav("/");
+        return;
+      }
       scrollProductsBelowBar();
       // Committed search: bring the highlighted category's tab into view.
       centerActiveTab();
@@ -695,23 +730,6 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       <div class="home-catalog__inner">
         <div class={`home-catalog__header ${tabsAtEnd.value ? "home-catalog__header--tabs-end" : ""}`}>
           <h2 class="home-catalog__title">{t("nav.apparel", locale.value)}</h2>
-          {/* Desktop view mode: Catalog (tall photo-led cards) vs Gallery (short
-              horizontal rows, thumbnail left). Two modes, so a toggle — the
-              button shows the mode it will switch to. */}
-          <button
-            class="home-catalog__viewmode"
-            aria-label={`Show ${(tabletCols.value === "list" ? VIEW_MODES[0] : VIEW_MODES[1]).label.toLowerCase()} view`}
-            title={`${(tabletCols.value === "list" ? VIEW_MODES[0] : VIEW_MODES[1]).label} view`}
-            onClick$={() => {
-              tabletCols.value = tabletCols.value === "list" ? 3 : "list";
-              // The card heights change between modes, so the old scroll offset
-              // lands mid-product — re-pin the grid to the top of the list.
-              requestAnimationFrame(() => requestAnimationFrame(() => scrollProductsBelowBar()));
-            }}
-          >
-            <span class="home-catalog__viewmode-icon" dangerouslySetInnerHTML={(tabletCols.value === "list" ? VIEW_MODES[0] : VIEW_MODES[1]).icon} />
-            <span class="home-catalog__viewmode-label">{tabletCols.value === "list" ? t("viewmode.gallery", locale.value) : t("viewmode.catalog", locale.value)}</span>
-          </button>
           <div class="home-catalog__sidebar-search">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
             <input
@@ -720,7 +738,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
               placeholder=""
               aria-label="Search apparel"
               value={searchQuery.value}
-              onInput$={(_, el) => { searchQuery.value = el.value; activeCat.value = categoryForQuery(el.value, baseProducts.value); }}
+              onInput$={(_, el) => { searchQuery.value = el.value; if (!isPdp.value) activeCat.value = categoryForQuery(el.value, baseProducts.value); }}
               onKeyDown$={(e) => { if (e.key === "Enter") doSearch(searchQuery.value); }}
               onBlur$={() => doSearch(searchQuery.value)}
             />
@@ -772,7 +790,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                 placeholder=""
                 aria-label="Search apparel"
                 value={searchQuery.value}
-                onInput$={(_, el) => { searchQuery.value = el.value; activeCat.value = categoryForQuery(el.value, baseProducts.value); }}
+                onInput$={(_, el) => { searchQuery.value = el.value; if (!isPdp.value) activeCat.value = categoryForQuery(el.value, baseProducts.value); }}
                 onKeyDown$={(e) => { if (e.key === "Enter") doSearch(searchQuery.value); }}
                 onBlur$={() => doSearch(searchQuery.value)}
               />
@@ -813,7 +831,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                 placeholder=""
                 aria-label="Search apparel"
                 value={searchQuery.value}
-                onInput$={(_, el) => { searchQuery.value = el.value; activeCat.value = categoryForQuery(el.value, baseProducts.value); }}
+                onInput$={(_, el) => { searchQuery.value = el.value; if (!isPdp.value) activeCat.value = categoryForQuery(el.value, baseProducts.value); }}
                 onKeyDown$={(e) => { if (e.key === "Enter") doSearch(searchQuery.value); if (e.key === "Escape") { searchQuery.value = ""; searchOpen.value = false; } }}
               />
               <button class="home-catalog__tabbar-search-close" aria-label="Close search" onClick$={() => { doSearch(searchQuery.value); searchOpen.value = false; }}>
@@ -827,7 +845,15 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
               needs its own node. */}
           <span class="home-catalog__seam" aria-hidden="true" />
         </div>
-        <aside class="home-catalog__filters" aria-label="Filter products">
+        <aside
+          class={`home-catalog__filters${isPdp.value ? " home-catalog__filters--pdp-back" : ""}`}
+          aria-label="Filter products"
+          onClick$={() => {
+            // On a product page the sidebar has no grid to filter, so any click
+            // in it returns to the catalog (SPA nav keeps the shell mounted).
+            if (isPdp.value) nav("/");
+          }}
+        >
           {/* Desktop category nav — the collection titles moved out of the
               horizontal tab strip into a vertical sidebar list (sm-style), each
               with a SKU count pill. The tab strip stays for mobile/tablet. */}
@@ -835,31 +861,6 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
             <nav class="home-catalog__catnav" aria-label="Collections">
               <div class="home-catalog__catnav-head">
                 <div class="home-catalog__catnav-title">{isElectrical.value ? t("login.portal.electrical", locale.value) : t("filter.collections", locale.value)}</div>
-                {/* Grid-density toggle, inline on the right of the Collections
-                    label — icon-only (Standard 5-up / Catalog 8-up). Hidden for
-                    the Electrical shop — too few products to need it. */}
-                {!isElectrical.value && (
-                <div class="home-catalog__density home-catalog__density--inline" role="group" aria-label="Grid density">
-                  <button
-                    type="button"
-                    class={`home-catalog__density-btn ${!denseGrid.value ? "active" : ""}`}
-                    aria-pressed={!denseGrid.value}
-                    aria-label={t("viewmode.standard", locale.value)}
-                    onClick$={() => { denseGrid.value = false; }}
-                  >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-                  </button>
-                  <button
-                    type="button"
-                    class={`home-catalog__density-btn ${denseGrid.value ? "active" : ""}`}
-                    aria-pressed={denseGrid.value}
-                    aria-label={t("viewmode.catalog", locale.value)}
-                    onClick$={() => { denseGrid.value = true; }}
-                  >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="4" height="4"/><rect x="10" y="3" width="4" height="4"/><rect x="17" y="3" width="4" height="4"/><rect x="3" y="10" width="4" height="4"/><rect x="10" y="10" width="4" height="4"/><rect x="17" y="10" width="4" height="4"/><rect x="3" y="17" width="4" height="4"/><rect x="10" y="17" width="4" height="4"/><rect x="17" y="17" width="4" height="4"/></svg>
-                  </button>
-                </div>
-                )}
               </div>
               {visibleCategories.value.map((cat) => (
                 <button
@@ -935,7 +936,19 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
           )}
         </aside>
         {isPdp.value ? (
-          <div class="home-catalog__pdp-main"><Slot /></div>
+          <div
+            class="home-catalog__pdp-main"
+            onClick$={(e, el) => {
+              // Clicking the empty gutter/margin around the detail panel returns
+              // to the catalog. Only the structural containers' own areas count
+              // (this column's gutter, or the .apparel-catalog padding/backdrop),
+              // never the panel content, breadcrumb, or related-item links inside.
+              const t = e.target as HTMLElement;
+              if (t === el || t.classList.contains("apparel-catalog")) nav("/");
+            }}
+          >
+            <Slot />
+          </div>
         ) : (
           <div class={`apparel-grid ${denseGrid.value ? "apparel-grid--dense" : ""} ${tabletCols.value === "list" ? "apparel-grid--list" : `apparel-grid--cols-${tabletCols.value}`}`}>
             {filtered.value.map((item, i) => (

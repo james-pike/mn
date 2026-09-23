@@ -577,6 +577,16 @@ export default component$(() => {
   // Autoplay runs every 6s and only pauses while the sign-in form is focused.
   const loginHeroIndex = useSignal(0);
   const loginCarouselPaused = useSignal(false);
+  const loginTypingTimer = useSignal(0);
+  // Pause the carousel while actively typing, then resume after a short idle —
+  // focusing the field alone shouldn't freeze it forever.
+  const pauseCarouselWhileTyping = $(() => {
+    loginCarouselPaused.value = true;
+    if (loginTypingTimer.value) clearTimeout(loginTypingTimer.value);
+    loginTypingTimer.value = setTimeout(() => {
+      loginCarouselPaused.value = false;
+    }, 4000) as unknown as number;
+  });
   const menuOpen = useSignal(false);
   const savedLocale = useLocaleLoader();
   const locale = useSignal<Locale>(savedLocale.value);
@@ -1102,12 +1112,13 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track, cleanup }) => {
     if (!track(() => showLogin.value)) return;
+    loginCarouselPaused.value = false; // clear any stale pause when the modal opens
     const id = setInterval(() => {
       if (loginCarouselPaused.value) return;
       loginHeroIndex.value = (loginHeroIndex.value + 1) % 2;
-    }, 6000);
+    }, 10000);
     cleanup(() => clearInterval(id));
-  });
+  }, { strategy: "document-ready" });
 
   // Close modal and unlock scroll on successful login
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -1217,8 +1228,8 @@ export default component$(() => {
                   action={loginAction}
                   reloadDocument
                   class="login-modal__form"
-                  onFocusIn$={() => { loginCarouselPaused.value = true; }}
-                  onFocusOut$={() => { loginCarouselPaused.value = false; }}
+                  onInput$={pauseCarouselWhileTyping}
+                  onKeyDown$={pauseCarouselWhileTyping}
                 >
                   <p class="login-modal__subtitle">{t("login.subtitle", locale.value)}</p>
                   {loginAction.value?.failed && (
@@ -1257,11 +1268,10 @@ export default component$(() => {
                 />
               </div>
             </div>
-            <div
-              class="login-modal__carousel"
+            <div class="login-modal__carousel"
               onClick$={() => { loginHeroIndex.value = (loginHeroIndex.value + 1) % 2; }}
             >
-              <img src="/hero-building-services.webp" alt="" width="1920" height="776"
+              <img src="/hero-van.webp" alt="" width="1000" height="1008"
                    loading="eager" decoding="sync"
                    class={`login-modal__slide login-modal__slide--wide ${loginHeroIndex.value === 0 ? "is-active" : ""}`} />
               <img src="/hero.jpg" alt="" width="1600" height="900"
@@ -1432,7 +1442,7 @@ export default component$(() => {
                 to hold the width → no shift); on mobile it's an in-flow flex
                 field that fills up to the hamburger (which stays at the far
                 right). */}
-            {showSearch.value && (
+            {showSearch.value && !cartOpen.value && (
               <div class="site-header__search">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
                 <input
@@ -1443,11 +1453,12 @@ export default component$(() => {
                   value={searchValue.value}
                   onInput$={(_, el) => {
                     searchValue.value = el.value;
-                    // With the catalog on the page (home / apparel listing), relay
-                    // keystrokes to it for live filtering. On a page without a
-                    // catalog (e.g. a product page) typing just fills the field —
-                    // nothing moves until Enter (see below).
-                    if (document.querySelector(".home-catalog")) {
+                    // Only relay keystrokes for LIVE filtering when the catalog
+                    // grid is actually showing (the "/" route). The catalog stays
+                    // mounted on product pages (shared shell), so a DOM check would
+                    // wrongly relay there and shove the sidebar highlight around —
+                    // key off the route instead; Enter navigates back (see below).
+                    if (loc.url.pathname.replace(/\/+$/, "") === "") {
                       window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value }));
                     }
                   }}
@@ -1457,14 +1468,19 @@ export default component$(() => {
                       // Close the menu takeover so the filtered products are visible
                       // (searching from inside the open menu otherwise did nothing).
                       menuOpen.value = false;
-                      if (document.querySelector(".home-catalog")) {
+                      if (loc.url.pathname.replace(/\/+$/, "") === "") {
+                        // On the grid: commit the live-filtered results in place.
                         window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value }));
                         window.dispatchEvent(new CustomEvent("apparel-search-commit"));
                       } else {
-                        // No catalog here (product page): Enter takes the user to the
-                        // listing, swapping the breadcrumb bar for the tabs + grid,
-                        // with the typed term carried along in ?q=.
-                        nav(`/?q=${encodeURIComponent(el.value)}`);
+                        // On a product page: apply the search to the mounted catalog
+                        // FIRST (the shared shell keeps it alive), then swap to the
+                        // grid so it opens straight on the results. A ?q= nav doesn't
+                        // work here — the mount-time query handler doesn't re-run when
+                        // the already-mounted catalog leaves PDP mode.
+                        window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value }));
+                        window.dispatchEvent(new CustomEvent("apparel-search-commit"));
+                        nav("/");
                       }
                     }
                     if (e.key === "Escape") { searchValue.value = ""; window.dispatchEvent(new CustomEvent("apparel-search", { detail: "" })); searchOpen.value = false; }

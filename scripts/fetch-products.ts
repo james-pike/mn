@@ -21,7 +21,11 @@ async function fetchAndWrite() {
   // truth for most fields, but these title/category tweaks live here so they
   // survive every regeneration — editing products.ts directly does NOT persist
   // (this script overwrites it on every build). Update the DB to retire one.
-  const OVERRIDES: Record<string, Partial<{ name: string; category: string; sizes: string }>> = {
+  const OVERRIDES: Record<string, Partial<{ name: string; category: string; sizes: string; img: string }>> = {
+    // Coal Harbour Soft Shell Jackets: default the gallery to grey (women's) / navy (men's).
+    "MN-19": { img: "/coalharbour-womens/grey.webp" },
+    "MN-20": { img: "/coalharbour/black.webp" },
+    "MN-41": { img: "/sku/102208-navy.png" }, // Carhartt Gilliam Jacket: default to navy
     "MN-5": { name: "Flexfit Trucker Ball Cap - Navy" },
     "MN-7": { name: "Men's Carhartt Winter Jacket - Navy" },
     "MN-9": { category: "Sweaters" },   // Pullover Hoodie: not a jacket
@@ -30,9 +34,9 @@ async function fetchAndWrite() {
     "MN-12": { name: "Women's FootJoy Speckle Print Polo", category: "Polos" },
     "MN-15": { category: "Polos" },   // Men's Under Armour Tech Polo
     "MN-16": { category: "Polos" },   // Women's Under Armour Tech Polo
-    "MN-32": { category: "Polos" },   // Men's Travis Mathew Heater Polo
+    "MN-32": { category: "Polos", img: "/heater/vintageindigo-front.webp" }, // Heater: default gallery to vintage indigo
     "MN-33": { category: "Polos" },   // Men's Travis Mathew Heater Jersey Polo
-    "MN-34": { category: "Polos" },     // Men's Travis Mathew Final Drive View Polo
+    "MN-34": { category: "Polos", img: "/final-drive/greenbay.webp" }, // Final Drive: default gallery to green (green bay)
     "MN-35": { category: "Sweaters" },  // Men's Travis Mathew Tour Ready Stripe 1/4 Zip (mid-layer)
     "MN-13": { sizes: "25 oz" },        // Yeti Rambler: only the 25oz size
     "MN-14": { sizes: "35L" },          // Yeti Tundra Cooler: only the 35L size
@@ -91,18 +95,25 @@ const colorNames: Record<string, Record<string, string>> = {
   "#ffffff": { en: "White", fr: "Blanc" },
   "#2c3e50": { en: "Navy", fr: "Marine" },
   "#6e6e6e": { en: "Grey", fr: "Gris" },
+  "#a1a8b0": { en: "Grey", fr: "Gris" }, // towel grey (matches the SM blank swatch)
   "#ff6600": { en: "Safety Orange", fr: "Orange sécurité" },
   "#94a3b8": { en: "Silver", fr: "Argent" },
   "#4a4a4a": { en: "Charcoal", fr: "Charbon" },
   "#6b8bb0": { en: "Solace Blue", fr: "Bleu Solace" },
   "#517fa4": { en: "Copen Blue", fr: "Bleu Copen" }, // Travis Mathew Heater Polo (MN-32)
+  "#c9c7c8": { en: "Heather Microchip", fr: "Microchip chiné" }, // Travis Mathew Heater Polo (MN-32)
+  "#47536b": { en: "Indigo", fr: "Indigo" }, // Travis Mathew Heater Polo (MN-32)
+  "#ca7988": { en: "Red", fr: "Rouge" }, // Travis Mathew Heater Polo (MN-32) — was "Heather Scooter"
+  "#758073": { en: "Balsam Green", fr: "Vert Balsam" }, // Travis Mathew Heater Jersey Polo (MN-33)
+  "#2a3a49": { en: "Total Eclipse", fr: "Éclipse totale" }, // Travis Mathew Heater Jersey Polo (MN-33)
+  "#baa591": { en: "Roasted Cashew", fr: "Cajou torréfié" }, // Travis Mathew Heater Jersey Polo (MN-33)
   "#9caf88": { en: "Green Bay", fr: "Green Bay" }, // Travis Mathew Final Drive View Polo (MN-34)
   "#3b4657": { en: "Heather Navy", fr: "Marine chiné" }, // Travis Mathew Tour Ready 1/4 Zip (MN-35)
   "#7dd3fc": { en: "Light Blue", fr: "Bleu clair" },
   "#b8b8b8": { en: "Grey Heather", fr: "Gris chiné" },
   "#6b3fa0": { en: "Purple", fr: "Violet" },
   "#c0392b": { en: "Red", fr: "Rouge" },
-  "#1e40af": { en: "Royal", fr: "Bleu royal" },
+  "#1e40af": { en: "Blue", fr: "Bleu" }, // UA polos royal -> shown as Blue (image files still "royal")
   "#8a5d3b": { en: "Carhartt Brown", fr: "Brun Carhartt" },
   "#00b5e2": { en: "Sky Blue", fr: "Bleu ciel" },
   "#0047ab": { en: "Cobalt", fr: "Cobalt" },
@@ -118,6 +129,7 @@ const colorNames: Record<string, Record<string, string>> = {
   "#3a3a3a": { en: "Charcoal", fr: "Charbon" },
   "#3a5bbf": { en: "Royal Blue", fr: "Bleu royal" },
   "#3a8fb7": { en: "Blue", fr: "Bleu" },
+  "#3758a9": { en: "Blue", fr: "Bleu" }, // Microfiber Waffle Towel (MN-29)
   "#3d4a63": { en: "Slate Blue", fr: "Bleu ardoise" },
   "#3f3f3f": { en: "Charcoal", fr: "Charbon" },
   "#4a2545": { en: "Plum", fr: "Prune" },

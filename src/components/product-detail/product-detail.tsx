@@ -8,8 +8,25 @@ import { LoginTypeContext } from "../../routes/layout";
 import { ELECTRICAL_SKUS } from "../product-catalog/product-catalog";
 import { ProductImage } from "../product-image/product-image";
 
+// Colours whose per-colour IMAGE FILES use a slug that differs from the (renamed)
+// display name. The gallery matches images by colour NAME → filename, so a rename
+// like #ca7988 "Heather Scooter" → "Red" (files still heatherscooter-*) needs the
+// original slug here, else no image matches and ALL colours' images show at once.
+const IMG_NAME_ALIAS: Record<string, string> = {
+  "#ca7988": "heatherscooter",
+  "#1e40af": "royal", // UA polos: shown as "Blue" but the image files are "royal"
+};
+const imgNorm = (color: string) =>
+  (IMG_NAME_ALIAS[color.toLowerCase()] ?? colorName(color, "en"))
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+
 // Tall sizes are rendered on their own row, separate from the regular sizes.
 const TALL_SIZES = new Set(["ST", "MT", "LT", "XLT", "2XLT", "3XLT", "4XLT", "5XLT"]);
+
+// SKUs whose TALL fit costs more than the regular fit (both fits live on one
+// product); selecting a tall size swaps the PDP price to this amount.
+const TALL_PRICE: Record<string, number> = { "MN-20": 85 };
 
 // Base (fit-less) size tokens, largest last, for parsing fit variants.
 const SIZE_BASES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"];
@@ -142,7 +159,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
     if (!p) return map; // null while navigating away from a product route
     const imgs = (p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[];
     for (const color of p.colors) {
-      const norm = colorName(color, "en").toLowerCase().replace(/[^a-z0-9]/g, "");
+      const norm = imgNorm(color);
       if (!norm) continue;
       const idx = imgs.findIndex((src) =>
         src.toLowerCase().replace(/[^a-z0-9]/g, "").includes(norm),
@@ -150,6 +167,34 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
       if (idx >= 0) map[color] = idx;
     }
     return map;
+  });
+
+  // For per-colour products (each colour maps to its own images, e.g. the Travis
+  // Mathew polos with front/side/chest per colour) show ONLY the selected
+  // colour's images in the gallery, instead of every colour's images at once.
+  const visibleImgs = useComputed$(() => {
+    const p = product.value;
+    if (!p) return [] as string[];
+    const all = (p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[];
+    const cmap = colorImgIndex.value;
+    const color = selectedColor.value;
+    if (color && Object.keys(cmap).length > 1) {
+      const norm = imgNorm(color);
+      const filtered = norm
+        ? all.filter((src) =>
+            src.toLowerCase().replace(/[^a-z0-9]/g, "").includes(norm),
+          )
+        : [];
+      if (filtered.length) return filtered;
+    }
+    return all;
+  });
+  // Keep the same view position (front/side/…) when switching colour instead of
+  // snapping back to the first image — clamp it to the new colour's image set.
+  useTask$(({ track }) => {
+    track(() => selectedColor.value);
+    const n = visibleImgs.value.length;
+    if (imgIndex.value >= n) imgIndex.value = Math.max(0, n - 1);
   });
 
   const relatedPerView = useSignal(2);
@@ -160,6 +205,23 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
     apply();
     mq.addEventListener("change", apply);
     cleanup(() => mq.removeEventListener("change", apply));
+  });
+
+  // Warm the browser cache with EVERY colourway's image as soon as the PDP
+  // opens, so the first swatch switch is instant instead of flashing while the
+  // browser fetches the new image. Preloads the .webp the <picture> actually
+  // renders. Re-runs when navigating to a different product.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    const p = track(() => product.value);
+    if (!p) return;
+    const imgs = (p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[];
+    for (const src of imgs) {
+      if (!src) continue;
+      const img = new Image();
+      img.decoding = "async";
+      img.src = src.replace(/\.(jpe?g|png)$/i, ".webp");
+    }
   });
 
   const SIZE_ORDER = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"];
@@ -228,6 +290,17 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
           const nm = p.name.match(/\s-\s([A-Za-z ]+)$/);
           if (nm) colorVal = nm[1].trim();
         }
+        // Cart thumbnail: use the SELECTED colour's image (matched the same way
+        // the gallery filters), not the product's default image.
+        let colorImg = p.img;
+        if (selectedColor.value) {
+          const all = (p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[];
+          const norm = imgNorm(selectedColor.value);
+          const match = norm
+            ? all.find((s) => s.toLowerCase().replace(/[^a-z0-9]/g, "").includes(norm))
+            : null;
+          if (match) colorImg = match;
+        }
         const item: any = {
           name: p.name,
           sku: p.sku,
@@ -236,7 +309,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
           color: colorVal,
           quantity: selectedQty.value,
           price: p.price,
-          img: p.img,
+          img: colorImg,
         };
         if (codeMatch) item.code = codeMatch[0];
         if (waistLengthSkus.has(p.sku)) {
@@ -299,7 +372,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
 
   const p = product.value;
   const pdf = (p as any).pdf as string | undefined;
-  const hasMultipleImgs = (p.imgs && p.imgs.length ? p.imgs : [p.img]).length > 1;
+  const hasMultipleImgs = visibleImgs.value.length > 1;
   const isFootwear = (c: string) => c === "Safety Boots" || c === "Safety Shoes" || c === "Footwear";
   const tabCategory = isFootwear(p.category) ? "Footwear" : p.category;
   const catHash = tabCategory.toLowerCase().replace(/\s+/g, "-");
@@ -350,7 +423,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
               onTouchStart$={(e) => { touchStartX.value = e.touches[0].clientX; }}
               onTouchEnd$={(e) => {
                 const diff = touchStartX.value - e.changedTouches[0].clientX;
-                const imgs = ((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[]);
+                const imgs = visibleImgs.value;
                 if (Math.abs(diff) > 40) {
                   if (diff > 0) {
                     imgIndex.value = (imgIndex.value + 1) % imgs.length;
@@ -360,7 +433,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
                 }
               }}
               onClick$={() => {
-                const imgs = ((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[]);
+                const imgs = visibleImgs.value;
                 if (window.innerWidth > 1024) {
                   imgFullscreen.value = true;
                 } else if (imgs.length > 1) {
@@ -368,7 +441,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
                 }
               }}
             >
-              {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).map((src, i) => (
+              {(visibleImgs.value).map((src, i) => (
                 <picture key={i}>
                   <source srcset={src.replace(/\.(jpe?g|png)$/i, ".webp")} type="image/webp" />
                   <img
@@ -389,9 +462,9 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
                   {t("product.specsheet.pdf", locale.value)}
                 </a>
               )}
-              {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).length > 1 && (
+              {(visibleImgs.value).length > 1 && (
                 <div class="product-carousel__indicators">
-                  {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).map((_, i) => (
+                  {(visibleImgs.value).map((_, i) => (
                     <button
                       key={i}
                       class={`product-carousel__dot ${imgIndex.value === i ? "active" : ""}`}
@@ -402,9 +475,9 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
                 </div>
               )}
             </div>
-            {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).length > 1 && (
+            {(visibleImgs.value).length > 1 && (
               <div class="product-thumbs product-thumbs--column">
-                {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).map((src, i) => (
+                {(visibleImgs.value).map((src, i) => (
                   <button
                     key={i}
                     class={`product-thumbs__item ${imgIndex.value === i ? "active" : ""}`}
@@ -418,7 +491,18 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
           </div>
           <div class="product-modal__details">
             <h2 class="product-modal__name">{p.name}</h2>
-            {!hidePrice && <div class="product-modal__price">${(Number(p.price) || 0).toFixed(2)}</div>}
+            {!hidePrice && (() => {
+              // Tall fit costs more on some SKUs. The fit is either a Regular/Tall
+              // variant toggle (getVariantMap) or a tall-suffixed size token.
+              const isTall =
+                (getVariantMap(p) != null && selectedVariant.value === "Tall") ||
+                (!!selectedSize.value && TALL_SIZES.has(selectedSize.value));
+              const price =
+                isTall && TALL_PRICE[p.sku] != null
+                  ? TALL_PRICE[p.sku]
+                  : Number(p.price) || 0;
+              return <div class="product-modal__price">${price.toFixed(2)}</div>;
+            })()}
             {p.material && (
               <div class="product-modal__material">
                 <strong>{t("modal.material", locale.value)}:</strong> {p.material}
@@ -516,9 +600,10 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
                       class={`product-modal__color ${selectedColor.value === color ? "active" : ""}`}
                       style={{ background: color }}
                       onClick$={() => {
+                        // Keep the current view (front/side/…) — the task below
+                        // clamps imgIndex to the new colour's set instead of
+                        // snapping back to the first image.
                         selectedColor.value = color;
-                        const idx = colorImgIndex.value[color];
-                        if (idx !== undefined) imgIndex.value = idx;
                       }}
                       aria-label={colorName(color, locale.value)}
                       title={colorName(color, locale.value)}
@@ -584,12 +669,16 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
           isElectrical
             ? ELECTRICAL_SKUS.includes(r.sku)
             : !ELECTRICAL_SKUS.includes(r.sku) && r.category !== "Flame Resistant";
+        const sameCat = allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && inLineup(r) && r.category === p.category);
+        const allApparel = allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && inLineup(r) && visible.includes(r.category));
+        // Use the SKU's own category only when it has enough siblings to fill a
+        // carousel; otherwise (e.g. Sweaters, with a single item) fall back to the
+        // whole "Apparel" lineup so the row isn't empty/near-empty.
+        const useCat = inVisible && sameCat.length >= 2;
         const related = isElectrical
           ? allProducts.filter((r) => r.sku !== p.sku && inLineup(r)).slice(0, 8)
-          : inVisible
-          ? allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && inLineup(r) && r.category === p.category).slice(0, 8)
-          : allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && inLineup(r) && visible.includes(r.category)).slice(0, 8);
-        const headingSuffix = isElectrical ? t("login.portal.electrical", locale.value) : inVisible ? catLabel : t("nav.apparel", locale.value);
+          : (useCat ? sameCat : allApparel).slice(0, 8);
+        const headingSuffix = isElectrical ? t("login.portal.electrical", locale.value) : useCat ? catLabel : t("nav.apparel", locale.value);
         // Card inner markup, shared by the grid + carousel below (inline, not a
         // component, to keep it a plain render helper).
         const cardInner = (item: typeof related[number], loading: "eager" | "lazy") => (
@@ -601,7 +690,17 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
               <div class="product-card__name-row">
                 <div class="product-card__name">{item.name}</div>
                 <div class="product-card__price-group">
-                  {!hidePrice && <div class="product-card__price">${(Number(item.price) || 0).toFixed(2)}</div>}
+                  {!hidePrice && (() => {
+                    const pr = Number(item.price) || 0;
+                    const dollars = Math.floor(pr);
+                    const cents = Math.round((pr - dollars) * 100).toString().padStart(2, "0");
+                    return (
+                      <div class="product-card__price">
+                        ${dollars}
+                        {cents !== "00" && <span class="product-card__price-cents">.{cents}</span>}
+                      </div>
+                    );
+                  })()}
                   <span class="product-card__sizes">
                     {(item.sizes === "One Size" ? [t("modal.onesize", locale.value)] : sizeGroups(item.sizes)).map((g) => (
                       <span key={g} class="product-card__sizes-line">{g}</span>
@@ -669,7 +768,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
         <div class="product-fullscreen" onClick$={() => (imgFullscreen.value = false)}>
           <button class="product-fullscreen__close" aria-label="Close fullscreen" onClick$={(e) => { e.stopPropagation(); imgFullscreen.value = false; }}>&times;</button>
           <img
-            src={(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[]))[imgIndex.value]}
+            src={(visibleImgs.value)[imgIndex.value]}
             alt={p.name}
             class="product-fullscreen__img"
             onClick$={(e) => e.stopPropagation()}

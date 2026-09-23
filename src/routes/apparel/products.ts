@@ -4,65 +4,6 @@ import type { Locale } from "../../i18n";
 
 export const allProducts = [
   {
-    "sku": "MN-20",
-    "name": "Men's Coal Harbour Soft Shell Jacket",
-    "category": "Jackets",
-    "sizes": "XS - 6XL",
-    "badge": "",
-    "colors": [
-      "#1a1a18",
-      "#6e6e6e",
-      "#2c3e50"
-    ],
-    "price": 65,
-    "img": "/j7603model.webp",
-    "imgs": [
-      "/j7603model.webp",
-      "/sku/mens-jacket.webp"
-    ],
-    "material": "100% polyester woven soft shell bonded to 100% polyester microfleece",
-    "details": "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #J7603"
-  },
-  {
-    "sku": "MN-19",
-    "name": "Women's Coal Harbour Soft Shell Jacket",
-    "category": "Jackets",
-    "sizes": "XS - 4XL",
-    "badge": "",
-    "colors": [
-      "#1a1a18",
-      "#6e6e6e",
-      "#2c3e50"
-    ],
-    "price": 65,
-    "img": "/womensjacket1.webp",
-    "imgs": [
-      "/womensjacket1.webp",
-      "/sku/women-jacket.jpg"
-    ],
-    "material": "100% polyester woven soft shell bonded to 100% polyester microfleece",
-    "details": "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #L7603"
-  },
-  {
-    "sku": "MN-41",
-    "name": "Carhartt Gilliam Jacket",
-    "category": "Jackets",
-    "sizes": "S - 3XL / LT - 2XLT",
-    "badge": "",
-    "colors": [
-      "#1a1a18",
-      "#2c3e50"
-    ],
-    "price": 110,
-    "img": "/sku/102208-black.png",
-    "imgs": [
-      "/sku/102208-black.png",
-      "/sku/102208-navy.png"
-    ],
-    "material": "",
-    "details": "Rain Defender durable water repellent, Wind Fighter windproof technology, Mock-neck collar, Left-chest map pocket, Two lower-front pockets with hidden snap closure, Two inside pockets, Hook-and-loop adjustable cuffs, Drawcord adjustable hem, Triple-stitched main seams, #102208"
-  },
-  {
     "sku": "MN-3",
     "name": "Gildan Short Sleeve T-Shirt - Navy",
     "category": "Shirts",
@@ -72,9 +13,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 13.5,
-    "img": "/sku/tshirt.png",
+    "img": "/gildan/navy.webp",
     "imgs": [
-      "/sku/tshirt.png"
+      "/gildan/navy.webp"
     ],
     "material": "100% US cotton, 18 singles, 6 oz/yd² ",
     "details": "Classic fit, rib collar, taped neck and shoulders, tear-away label, no optical brighteners for consistent dye adherence, #2000 / #2000T"
@@ -105,14 +46,95 @@ export const allProducts = [
     "colors": [
       "#2c3e50"
     ],
-    "price": 59.99,
+    "price": 60,
     "img": "/K126-model.png",
     "imgs": [
-      "/K126-model.png",
-      "/sku/sleeve.png"
+      "/K126-model.png"
     ],
     "material": "100% cotton jersey, 6.75 oz heavyweight",
     "details": "Loose fit with dropped shoulders, rib-knit crewneck, side-seam construction, left-chest pocket with Carhartt patch, tagless neck label, #K126"
+  },
+  {
+    "sku": "MN-20",
+    "name": "Men's Coal Harbour Soft Shell Jacket",
+    "category": "Jackets",
+    "sizes": "XS - 6XL / LT - 4XLT",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#6e6e6e",
+      "#2c3e50"
+    ],
+    "price": 65,
+    "img": "/coalharbour/black.webp",
+    "imgs": [
+      "/coalharbour/black.webp",
+      "/coalharbour/grey.webp",
+      "/coalharbour/navy.webp"
+    ],
+    "material": "100% polyester woven soft shell bonded to 100% polyester microfleece",
+    "details": "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #J7603"
+  },
+  {
+    "sku": "MN-19",
+    "name": "Women's Coal Harbour Soft Shell Jacket",
+    "category": "Jackets",
+    "sizes": "XS - 4XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#6e6e6e",
+      "#2c3e50"
+    ],
+    "price": 65,
+    "img": "/coalharbour-womens/grey.webp",
+    "imgs": [
+      "/coalharbour-womens/black.webp",
+      "/coalharbour-womens/grey.webp",
+      "/coalharbour-womens/navy.webp"
+    ],
+    "material": "100% polyester woven soft shell bonded to 100% polyester microfleece",
+    "details": "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #L7603"
+  },
+  {
+    "sku": "MN-41",
+    "name": "Carhartt Gilliam Jacket",
+    "category": "Jackets",
+    "sizes": "S - 3XL / LT - 2XLT",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#2c3e50"
+    ],
+    "price": 110,
+    "img": "/sku/102208-navy.png",
+    "imgs": [
+      "/sku/102208-black.png",
+      "/sku/102208-navy.png"
+    ],
+    "material": "",
+    "details": "Rain Defender durable water repellent, Wind Fighter windproof technology, Mock-neck collar, Left-chest map pocket, Two lower-front pockets with hidden snap closure, Two inside pockets, Hook-and-loop adjustable cuffs, Drawcord adjustable hem, Triple-stitched main seams, #102208"
+  },
+  {
+    "sku": "MN-35",
+    "name": "Men's Travis Mathew Tour Ready Stripe 1/4 Zip",
+    "category": "Sweaters",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#3b4657"
+    ],
+    "price": 110,
+    "img": "/tour-ready/black.webp",
+    "imgs": [
+      "/tour-ready/black.webp",
+      "/tour-ready/black-side.webp",
+      "/tour-ready/heathernavy.webp",
+      "/tour-ready/heathernavy-side.webp"
+    ],
+    "material": "",
+    "details": "Quarter-zip pullover, Performance stretch fabric, Ribbed cuffs and hem, MNBS logo on sleeve (tone on tone), #A48471"
   },
   {
     "sku": "MN-15",
@@ -125,14 +147,20 @@ export const allProducts = [
       "#1a1a18",
       "#ffffff",
       "#b8b8b8",
-      "#6b3fa0",
+      "#1e40af",
       "#c0392b",
-      "#1e40af"
+      "#6b3fa0"
     ],
     "price": 65,
-    "img": "/uapolomodel.webp",
+    "img": "/uapolo/navy.webp",
     "imgs": [
-      "/uapolomodel.webp"
+      "/uapolo/navy.webp",
+      "/uapolo/black.webp",
+      "/uapolo/white.webp",
+      "/uapolo/greyheather.webp",
+      "/uapolo/purple.webp",
+      "/uapolo/red.webp",
+      "/uapolo/royal.webp"
     ],
     "material": "5.3 oz/yd² (US), 8.8 oz/L yd (CA), 100% polyester",
     "details": "Moisture-management properties, Anti-odor technology, Textured fabric that's soft, light and breathable, Self-fabric collar, Three-button placket, #1370399"
@@ -144,18 +172,24 @@ export const allProducts = [
     "sizes": "XS - 2XL",
     "badge": "",
     "colors": [
-      "#2c3e50",
       "#1a1a18",
+      "#2c3e50",
       "#ffffff",
       "#b8b8b8",
-      "#6b3fa0",
+      "#1e40af",
       "#c0392b",
-      "#1e40af"
+      "#6b3fa0"
     ],
     "price": 65,
-    "img": "/sku/ua-womens.jpg",
+    "img": "/uapolo-womens/black.webp",
     "imgs": [
-      "/sku/ua-womens.jpg"
+      "/uapolo-womens/black.webp",
+      "/uapolo-womens/navy.webp",
+      "/uapolo-womens/white.webp",
+      "/uapolo-womens/greyheather.webp",
+      "/uapolo-womens/purple.webp",
+      "/uapolo-womens/red.webp",
+      "/uapolo-womens/royal.webp"
     ],
     "material": "5.3 oz/yd² (US), 8.8 oz/L yd (CA), 100% polyester",
     "details": "Moisture-management properties, Anti-odor technology, Textured fabric that's soft, light and breathable, Self-fabric collar, Three-button placket, #1370431"
@@ -168,16 +202,21 @@ export const allProducts = [
     "badge": "",
     "colors": [
       "#1a1a18",
-      "#2c3e50",
-      "#6b8bb0"
+      "#6b8bb0",
+      "#2c3e50"
     ],
     "price": 130,
-    "img": "/sku/footjoy.png",
+    "img": "/footjoy/black.webp",
     "imgs": [
-      "/sku/footjoy.png"
+      "/footjoy/black.webp",
+      "/footjoy/black-back.webp",
+      "/footjoy/solaceblue.webp",
+      "/footjoy/solaceblue-back.webp",
+      "/footjoy/navy.webp",
+      "/footjoy/navy-back.webp"
     ],
     "material": "ProDry® performance polyester",
-    "details": "Moisture-wicking, anti-microbial, double-stitched seams, extended back shirt tail, easy-care fabric, #16324"
+    "details": "Moisture-wicking, anti-microbial, double-stitched seams, extended back shirt tail, easy-care fabric, Tone on tone logo, #16324"
   },
   {
     "sku": "MN-12",
@@ -186,16 +225,19 @@ export const allProducts = [
     "sizes": "XS - 2XL",
     "badge": "",
     "colors": [
-      "#1a1a18",
-      "#6b8bb0"
+      "#6b8bb0",
+      "#1a1a18"
     ],
     "price": 130,
-    "img": "/sku/footjoy-ladies.png",
+    "img": "/footjoy/womens-solaceblue.webp",
     "imgs": [
-      "/sku/footjoy-ladies.png"
+      "/footjoy/womens-solaceblue.webp",
+      "/footjoy/womens-solaceblue-back.webp",
+      "/footjoy/womens-black.webp",
+      "/footjoy/womens-black-back.webp"
     ],
     "material": "ProDry® performance polyester",
-    "details": "Moisture-wicking, anti-microbial, double-stitched seams, lock-stitched hem, extended back shirt tail, machine washable, FootJoy, #96324"
+    "details": "Moisture-wicking, anti-microbial, double-stitched seams, lock-stitched hem, extended back shirt tail, machine washable, FootJoy, Tone on tone logo, #96324"
   },
   {
     "sku": "MN-32",
@@ -204,18 +246,29 @@ export const allProducts = [
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
-      "#1a1a18",
-      "#ffffff",
-      "#2c3e50",
-      "#517fa4"
+      "#47536b",
+      "#517fa4",
+      "#ca7988",
+      "#1a1a18"
     ],
     "price": 110,
-    "img": "/heater.webp",
+    "img": "/heater/vintageindigo-front.webp",
     "imgs": [
-      "/heater.webp"
+      "/heater/black-front.webp",
+      "/heater/black-side.webp",
+      "/heater/black-chest.webp",
+      "/heater/copenblue-front.webp",
+      "/heater/copenblue-side.webp",
+      "/heater/copenblue-chest.webp",
+      "/heater/vintageindigo-front.webp",
+      "/heater/vintageindigo-side.webp",
+      "/heater/vintageindigo-chest.webp",
+      "/heater/heatherscooter-front.webp",
+      "/heater/heatherscooter-side.webp",
+      "/heater/heatherscooter-chest.webp"
     ],
     "material": "67% Polyester / 23% Cotton / 7% Elastane / 3% Polyester Blend",
-    "details": "4-Way Stretch, Breathable, Easy Wash & Wear, Modern Fit, Versatile Performance Fabric, Signature Double-Needle Collar, Modern logo on sleeve (tone on tone)"
+    "details": "4-Way Stretch, Breathable, Easy Wash & Wear, Modern Fit, Versatile Performance Fabric, Signature Double-Needle Collar, MNBS logo on sleeve (tone on tone), #1MW395"
   },
   {
     "sku": "MN-33",
@@ -225,54 +278,51 @@ export const allProducts = [
     "badge": "",
     "colors": [
       "#1a1a18",
-      "#c0392b",
-      "#ffffff"
+      "#ffffff",
+      "#758073",
+      "#2a3a49",
+      "#baa591"
     ],
     "price": 110,
-    "img": "/heater-jersey.webp",
+    "img": "/heater-jersey/black-front.webp",
     "imgs": [
-      "/heater-jersey.webp"
+      "/heater-jersey/black-front.webp",
+      "/heater-jersey/black-chest.webp",
+      "/heater-jersey/white-front.webp",
+      "/heater-jersey/white-chest.webp",
+      "/heater-jersey/balsamgreen-front.webp",
+      "/heater-jersey/balsamgreen-chest.webp",
+      "/heater-jersey/totaleclipse-front.webp",
+      "/heater-jersey/totaleclipse-chest.webp",
+      "/heater-jersey/roastedcashew-front.webp",
+      "/heater-jersey/roastedcashew-chest.webp"
     ],
     "material": "63% Polyester / 34% Cotton / 3% Elastane, Imported",
-    "details": "Signature double-needle collar, Contrast interior collar, Printed logo on the back yoke, Fold over placket, Modern logo on sleeve (tone on tone)"
+    "details": "Signature double-needle collar, Contrast interior collar, Printed logo on the back yoke, Fold over placket, MNBS logo on sleeve (tone on tone), #A47463"
   },
   {
     "sku": "MN-34",
-    "name": "Travis Mathew Final Drive View Polo",
+    "name": "Men's Travis Mathew Final Drive View Polo",
     "category": "Polos",
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
-      "#1a1a18",
       "#9caf88",
+      "#1a1a18",
       "#ffffff"
     ],
     "price": 120,
-    "img": "/final-drive-view-polo-green.webp",
+    "img": "/final-drive/greenbay.webp",
     "imgs": [
-      "/final-drive-view-polo-green.webp",
-      "/final-drive-view-polo.webp"
+      "/final-drive/black.webp",
+      "/final-drive/black-side.webp",
+      "/final-drive/greenbay.webp",
+      "/final-drive/greenbay-side.webp",
+      "/final-drive/white.webp",
+      "/final-drive/white-side.webp"
     ],
     "material": "",
-    "details": "4-Way Stretch, Breathable, Modern Fit, Signature self-fabric collar, Modern logo on sleeve (tone on tone)"
-  },
-  {
-    "sku": "MN-35",
-    "name": "Travis Mathew Tour Ready Stripe 1/4 Zip",
-    "category": "Sweaters",
-    "sizes": "S - 3XL",
-    "badge": "",
-    "colors": [
-      "#1a1a18",
-      "#3b4657"
-    ],
-    "price": 110,
-    "img": "/tour-ready-quarter-zip.webp",
-    "imgs": [
-      "/tour-ready-quarter-zip.webp"
-    ],
-    "material": "",
-    "details": "Quarter-zip pullover, Performance stretch fabric, Ribbed cuffs and hem, Modern logo on sleeve (tone on tone)"
+    "details": "4-Way Stretch, Breathable, Modern Fit, Signature self-fabric collar, MNBS logo on sleeve (tone on tone), #A48406"
   },
   {
     "sku": "MN-5",
@@ -286,7 +336,9 @@ export const allProducts = [
     "price": 23.5,
     "img": "/swag/cap.png",
     "imgs": [
-      "/swag/cap.png"
+      "/swag/cap.png",
+      "/swag/cap-back.webp",
+      "/swag/cap-side.webp"
     ],
     "material": "Poly/spandex blend with performance mesh back",
     "details": "Mid-profile structured trucker cap, shapeable pre-curved visor, UV protection, moisture wicking, 110 Technology® sweatband, adjustable plastic snapback, grey under visor, #i8502"
@@ -405,7 +457,7 @@ export const allProducts = [
     "colors": [
       "#1a1a18"
     ],
-    "price": 84.95,
+    "price": 85,
     "img": "/sku/cooler.png",
     "imgs": [
       "/sku/cooler.png"
@@ -463,7 +515,9 @@ export const allProducts = [
     "price": 23.5,
     "img": "/sku/i8502-navy.png",
     "imgs": [
-      "/sku/i8502-navy.png"
+      "/sku/i8502-navy.png",
+      "/sku/i8502-navy-back.webp",
+      "/sku/i8502-navy-side.webp"
     ],
     "material": "63% polyester / 34% cotton / 3% spandex",
     "details": "Flexfit stretch-fit, structured, embroidered, #i8502",
@@ -605,6 +659,23 @@ export const allProducts = [
     "details": "Premium Cart Bag offering storage and organization in a lightweight design, Optimized for accessibility and convenience, 14-way top with full-length dividers, 11 storage compartments, Waterproof valuables pocket, Insulated cooler pocket, Hook and loop glove holder, Cart strap pass-through, 5.5 lbs."
   },
   {
+    "sku": "MN-28",
+    "name": "Nomad Air Stand Bag - Black",
+    "category": "SWAG",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 210,
+    "img": "/nomad.jpeg",
+    "imgs": [
+      "/nomad.jpeg"
+    ],
+    "material": "Durable Polyester",
+    "details": "Deluxe 9.5\" stand bag with 7 pockets, 3 full-length dividers and integrated grab handle, Lightweight high-mount automatic stand system for added stability, Two extra-thick hip pads with airflow channel, 4-point adjustable equilibrium dual strap for balance and comfort, Extra-large club cover/rain hood, Removable ball pocket, Fur-lined welded waterproof valuables pocket."
+  },
+  {
     "sku": "MN-27",
     "name": "Srixon Q-Star Tour Golf Balls (6)",
     "category": "SWAG",
@@ -624,42 +695,6 @@ export const allProducts = [
     "details": "Low compression tuned for moderate swing speeds, Tour-level distance and greenside spin, Soft feel with urethane cover, 3-piece construction"
   },
   {
-    "sku": "MN-28",
-    "name": "Nomad Air Stand Bag - Black",
-    "category": "SWAG",
-    "sizes": "One Size",
-    "badge": "",
-    "colors": [
-      "#1a1a18"
-    ],
-    "price": 210,
-    "img": "/nomad.jpeg",
-    "imgs": [
-      "/nomad.jpeg"
-    ],
-    "material": "Durable Polyester",
-    "details": "Deluxe 9.5\" stand bag with 7 pockets, 3 full-length dividers and integrated grab handle, Lightweight high-mount automatic stand system for added stability, Two extra-thick hip pads with airflow channel, 4-point adjustable equilibrium dual strap for balance and comfort, Extra-large club cover/rain hood, Removable ball pocket, Fur-lined welded waterproof valuables pocket."
-  },
-  {
-    "sku": "MN-29",
-    "name": "Microfiber Waffle Towel",
-    "category": "SWAG",
-    "sizes": "One Size",
-    "badge": "",
-    "colors": [
-      "#1a1a18",
-      "#6e6e6e",
-      "#ffffff"
-    ],
-    "price": 20,
-    "img": "/towel.jpg",
-    "imgs": [
-      "/towel.jpg"
-    ],
-    "material": "Microfibre Waffle",
-    "details": "Absorbent microfibre waffle towel, Includes carabiner clip for attachment to golf or duffel bag, Hangs folded or fully open, 18\" x 18\""
-  },
-  {
     "sku": "MN-30",
     "name": "Titleist Pro V1 Golf Balls (12)",
     "category": "SWAG",
@@ -676,6 +711,29 @@ export const allProducts = [
     ],
     "material": "",
     "details": "New faster high-gradient core, Soft cast urethane elastomer cover, Spherically-tiled 388 tetrahedral dimple design, Speed-amplifying high-flex casing layer, Soft 87 compression rating"
+  },
+  {
+    "sku": "MN-29",
+    "name": "Microfiber Waffle Towel",
+    "category": "SWAG",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#3758a9",
+      "#a1a8b0",
+      "#ffffff"
+    ],
+    "price": 20,
+    "img": "/towel/black.webp",
+    "imgs": [
+      "/towel/black.webp",
+      "/towel/blue.webp",
+      "/towel/grey.webp",
+      "/towel/white.webp"
+    ],
+    "material": "Microfibre Waffle",
+    "details": "Absorbent microfibre waffle towel, Includes carabiner clip for attachment to golf or duffel bag, Hangs folded or fully open, 18\" x 18\""
   },
   {
     "sku": "MN-40",
@@ -714,18 +772,25 @@ const colorNames: Record<string, Record<string, string>> = {
   "#ffffff": { en: "White", fr: "Blanc" },
   "#2c3e50": { en: "Navy", fr: "Marine" },
   "#6e6e6e": { en: "Grey", fr: "Gris" },
+  "#a1a8b0": { en: "Grey", fr: "Gris" }, // towel grey (matches the SM blank swatch)
   "#ff6600": { en: "Safety Orange", fr: "Orange sécurité" },
   "#94a3b8": { en: "Silver", fr: "Argent" },
   "#4a4a4a": { en: "Charcoal", fr: "Charbon" },
   "#6b8bb0": { en: "Solace Blue", fr: "Bleu Solace" },
   "#517fa4": { en: "Copen Blue", fr: "Bleu Copen" }, // Travis Mathew Heater Polo (MN-32)
+  "#c9c7c8": { en: "Heather Microchip", fr: "Microchip chiné" }, // Travis Mathew Heater Polo (MN-32)
+  "#47536b": { en: "Indigo", fr: "Indigo" }, // Travis Mathew Heater Polo (MN-32)
+  "#ca7988": { en: "Red", fr: "Rouge" }, // Travis Mathew Heater Polo (MN-32) — was "Heather Scooter"
+  "#758073": { en: "Balsam Green", fr: "Vert Balsam" }, // Travis Mathew Heater Jersey Polo (MN-33)
+  "#2a3a49": { en: "Total Eclipse", fr: "Éclipse totale" }, // Travis Mathew Heater Jersey Polo (MN-33)
+  "#baa591": { en: "Roasted Cashew", fr: "Cajou torréfié" }, // Travis Mathew Heater Jersey Polo (MN-33)
   "#9caf88": { en: "Green Bay", fr: "Green Bay" }, // Travis Mathew Final Drive View Polo (MN-34)
   "#3b4657": { en: "Heather Navy", fr: "Marine chiné" }, // Travis Mathew Tour Ready 1/4 Zip (MN-35)
   "#7dd3fc": { en: "Light Blue", fr: "Bleu clair" },
   "#b8b8b8": { en: "Grey Heather", fr: "Gris chiné" },
   "#6b3fa0": { en: "Purple", fr: "Violet" },
   "#c0392b": { en: "Red", fr: "Rouge" },
-  "#1e40af": { en: "Royal", fr: "Bleu royal" },
+  "#1e40af": { en: "Blue", fr: "Bleu" }, // UA polos royal -> shown as Blue (image files still "royal")
   "#8a5d3b": { en: "Carhartt Brown", fr: "Brun Carhartt" },
   "#00b5e2": { en: "Sky Blue", fr: "Bleu ciel" },
   "#0047ab": { en: "Cobalt", fr: "Cobalt" },
@@ -741,6 +806,7 @@ const colorNames: Record<string, Record<string, string>> = {
   "#3a3a3a": { en: "Charcoal", fr: "Charbon" },
   "#3a5bbf": { en: "Royal Blue", fr: "Bleu royal" },
   "#3a8fb7": { en: "Blue", fr: "Bleu" },
+  "#3758a9": { en: "Blue", fr: "Bleu" }, // Microfiber Waffle Towel (MN-29)
   "#3d4a63": { en: "Slate Blue", fr: "Bleu ardoise" },
   "#3f3f3f": { en: "Charcoal", fr: "Charbon" },
   "#4a2545": { en: "Plum", fr: "Prune" },
