@@ -519,6 +519,12 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
                       style={{ background: c }}
                       role="button"
                       aria-label={c.startsWith("#") ? colorName(c, locale.value) : c}
+                      // Declarative stop: Qwik runs onClick$ lazily/async, so an
+                      // imperative e.stopPropagation() fires AFTER the native click
+                      // has already bubbled to the card's goToPdp (navigates in the
+                      // prod build). This attribute stops propagation synchronously
+                      // during the native event, so the swatch only swaps the image.
+                      stoppropagation:click
                       onMouseEnter$={() => {
                         hoverColorName.value = c.startsWith("#") ? colorName(c, locale.value) : c;
                         preload(imageForColor(item, c));

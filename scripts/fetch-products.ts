@@ -34,10 +34,10 @@ async function fetchAndWrite() {
     "MN-12": { name: "Women's FootJoy Speckle Print Polo", category: "Polos" },
     "MN-15": { category: "Polos" },   // Men's Under Armour Tech Polo
     "MN-16": { category: "Polos" },   // Women's Under Armour Tech Polo
-    "MN-32": { category: "Polos", img: "/heater/vintageindigo-front.webp" }, // Heater: default gallery to vintage indigo
+    "MN-32": { category: "Polos", img: "/heater/heatherscooter-front.webp" }, // Heater: default gallery to red (heather scooter)
     "MN-33": { category: "Polos" },   // Men's Travis Mathew Heater Jersey Polo
     "MN-34": { category: "Polos", img: "/final-drive/greenbay.webp" }, // Final Drive: default gallery to green (green bay)
-    "MN-35": { category: "Sweaters" },  // Men's Travis Mathew Tour Ready Stripe 1/4 Zip (mid-layer)
+    "MN-35": { category: "Jackets" },  // Men's Travis Mathew Tour Ready Stripe 1/4 Zip (grouped with jackets; Sweaters category retired)
     "MN-13": { sizes: "25 oz" },        // Yeti Rambler: only the 25oz size
     "MN-14": { sizes: "35L" },          // Yeti Tundra Cooler: only the 35L size
     "MN-17": { name: "Insulated Two Compartment Cooler" },
