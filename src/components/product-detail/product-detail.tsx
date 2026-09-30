@@ -191,6 +191,10 @@ const RelatedCard = component$<{
   const nav = useNavigate();
   const activeImg = useSignal(item.img);
   const activeColor = useSignal("");
+  // Colour actually shown (base image + logo overlay), flipped only after decode
+  // so the logo product's base and CSS logo repaint together — see the gallery
+  // ProductCard for the full rationale. activeColor flips immediately (highlight).
+  const shownColor = useSignal("");
   const hoverColorName = useSignal("");
   // Hide the gender prefix when the hover colour-name overlay overflows onto it.
   const colorNameRef = useSignal<HTMLElement>();
@@ -242,7 +246,7 @@ const RelatedCard = component$<{
   // the gallery cards), so e.g. the 1/4 zip's logo appears in the "More …" strip.
   const rcLogoCfg = getLogoConfig(item.sku);
   const rcLogoColor = rcLogoCfg
-    ? (rcLogoCfg.colors[(activeColor.value || sortColorsWhiteLast(item.colors || [])[0] || "").toLowerCase()] ?? null)
+    ? (rcLogoCfg.colors[(shownColor.value || sortColorsWhiteLast(item.colors || [])[0] || "").toLowerCase()] ?? null)
     : null;
 
   const body = (
@@ -330,18 +334,25 @@ const RelatedCard = component$<{
                     style={{ background: c }}
                     role="button"
                     aria-label={c.startsWith("#") ? colorName(c, locale.value) : c}
+                    // Qwik loads onClick$ lazily, so an imperative stopPropagation
+                    // fires after the native click has already bubbled to the card's
+                    // open() (navigates in prod). Stop it synchronously here so the
+                    // swatch only swaps the image.
+                    stoppropagation:click
                     onMouseEnter$={() => {
                       hoverColorName.value = c.startsWith("#") ? colorName(c, locale.value) : c;
-                      preload(imageForColor(item, c));
+                      preload(rcLogoCfg?.colors[c.toLowerCase()]?.views.front.src ?? imageForColor(item, c));
                     }}
                     onMouseLeave$={() => { hoverColorName.value = ""; }}
                     onClick$={async (e) => {
                       e.stopPropagation();
-                      const src = imageForColor(item, c);
-                      activeColor.value = c;
+                      const src = rcLogoCfg?.colors[c.toLowerCase()]?.views.front.src ?? imageForColor(item, c);
+                      activeColor.value = c; // immediate: swatch highlight
                       // Wait for decode so the swap doesn't flash — but cap the
                       // wait so a slow/uncached decode can never block the swap.
                       await Promise.race([preload(src), new Promise((r) => setTimeout(r, 400))]);
+                      // Flip shown colour + image together so base + logo repaint in sync.
+                      shownColor.value = c;
                       activeImg.value = src;
                     }}
                   />

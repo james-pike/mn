@@ -267,6 +267,12 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
   // colour rides along to the PDP via ?c= so it opens on the same colour.
   const activeImg = useSignal(item.img);
   const activeColor = useSignal("");
+  // The colour actually SHOWN (base image + logo overlay), updated only after the
+  // new image has decoded. `activeColor` flips immediately for the swatch
+  // highlight, but for logo products the base image AND the CSS logo overlay both
+  // derive from the shown colour, so gating them on decode keeps them in sync —
+  // otherwise the logo jumps to the new position over a still-loading image.
+  const shownColor = useSignal("");
   const goToPdp = $(() =>
     nav(`/${sku}/${activeColor.value ? `?c=${encodeURIComponent(activeColor.value)}` : ""}`),
   );
@@ -276,7 +282,7 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
   const logoCfg = getLogoConfig(sku);
   const cardLogoColor = useComputed$(() => {
     if (!logoCfg) return null;
-    const key = (activeColor.value || sortColorsWhiteLast(item.colors || [])[0] || "").toLowerCase();
+    const key = (shownColor.value || sortColorsWhiteLast(item.colors || [])[0] || "").toLowerCase();
     return logoCfg.colors[key] ?? null;
   });
   // Warm the browser cache and fully decode a colour's photo BEFORE it's shown,
@@ -527,16 +533,23 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
                       stoppropagation:click
                       onMouseEnter$={() => {
                         hoverColorName.value = c.startsWith("#") ? colorName(c, locale.value) : c;
-                        preload(imageForColor(item, c));
+                        // Warm the image that actually shows: the logo base for logo
+                        // products, otherwise the colour's catalog photo.
+                        preload(logoCfg?.colors[c.toLowerCase()]?.views.front.src ?? imageForColor(item, c));
                       }}
                       onMouseLeave$={() => { hoverColorName.value = ""; }}
                       onClick$={async (e) => {
                         e.stopPropagation();
-                        const src = imageForColor(item, c);
-                        activeColor.value = c;
+                        // The base image that will be shown for this colour — the
+                        // logo product's front base, or the plain colour photo.
+                        const src = logoCfg?.colors[c.toLowerCase()]?.views.front.src ?? imageForColor(item, c);
+                        activeColor.value = c; // immediate: swatch highlight
                         // Wait for decode so the swap doesn't flash — but cap the
                         // wait so a slow/uncached decode can never block the swap.
                         await Promise.race([preload(src), new Promise((r) => setTimeout(r, 400))]);
+                        // Flip the shown colour + image TOGETHER so the base and the
+                        // logo overlay repaint in the same frame (smooth, in sync).
+                        shownColor.value = c;
                         activeImg.value = src;
                       }}
                     />
