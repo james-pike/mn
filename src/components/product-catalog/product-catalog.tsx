@@ -1,13 +1,65 @@
 import { component$, useSignal, useComputed$, useContext, $, useVisibleTask$, useOnDocument, Slot } from "@builder.io/qwik";
-import { Link, useLocation, useNavigate } from "@builder.io/qwik-city";
+import { useLocation, useNavigate } from "@builder.io/qwik-city";
 import { LocaleContext, t } from "../../i18n";
 import { allProducts, categoryLabel, colorName } from "../../routes/apparel/products";
 import type { Product } from "../../routes/apparel/products";
 import { sizeGroups, sortColorsWhiteLast } from "../../routes/apparel/utils";
 import { LoginTypeContext, stickyTop } from "../../routes/layout";
-import { ProductImage } from "../product-image/product-image";
+import { getLogoConfig } from "../../data/logo-placements";
 
-export const CLOTHING_CATEGORIES = ["All", "Shirts", "Jackets", "Sweaters", "Polos", "Hats", "SWAG", "New Hire Kit"];
+// Card colour preview: resolve a colour to the gallery image that depicts it,
+// using the same name→filename rule the PDP applies (see product-detail's
+// imgNorm), so multi-image-per-colour SKUs — e.g. the FootJoy / Travis Mathew
+// polos that carry front + side + back per colour — pick the right photo rather
+// than a positional imgs[i] guess. Falls back to the primary image.
+const CARD_IMG_NAME_ALIAS: Record<string, string> = {
+  "#ca7988": "heatherscooter",
+  "#1e40af": "royal",
+};
+const cardImgNorm = (color: string) =>
+  (CARD_IMG_NAME_ALIAS[color.toLowerCase()] ?? colorName(color, "en"))
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+export function imageForColor(item: Product, color: string): string {
+  const imgs = (item.imgs && item.imgs.length ? item.imgs : [item.img]) as string[];
+  const norm = cardImgNorm(color);
+  if (norm) {
+    const hit = imgs.find((src) => src.toLowerCase().replace(/[^a-z0-9]/g, "").includes(norm));
+    if (hit) return hit;
+  }
+  return item.img;
+}
+
+// Canonical swatch DISPLAY order, independent of which colour is the default
+// image: neutrals first (black, navy, greys), then blues, greens, warm/unique
+// colours, and white always last. Keeps the swatch row consistent even when a
+// product defaults to a less-common colour (e.g. Roasted Cashew) — the default
+// only drives the card image, never the swatch order.
+const SWATCH_PRIORITY = [
+  "black",
+  "navy",
+  "charcoal", "graphite", "storm", "microchip", "grey", "gray", "silver",
+  "indigo", "eclipse", "copen", "royal", "cobalt", "sapphire", "teal", "sky", "blue",
+  "forest", "balsam", "olive", "sage", "green",
+  "khaki", "sand", "tan", "brown", "cashew", "camel",
+  "cardinal", "scooter", "red", "orange", "pink", "mauve", "purple", "yellow", "gold",
+];
+function swatchRank(color: string): number {
+  const name = (color.startsWith("#") ? colorName(color, "en") : color).toLowerCase();
+  if (name.includes("white")) return 9999;
+  for (let i = 0; i < SWATCH_PRIORITY.length; i++) {
+    if (name.includes(SWATCH_PRIORITY[i])) return i;
+  }
+  return SWATCH_PRIORITY.length; // unknown colours: after the knowns, before white
+}
+export function swatchOrder(colors: readonly string[]): string[] {
+  return [...colors]
+    .map((c, i) => [c, i] as const)
+    .sort((a, b) => swatchRank(a[0]) - swatchRank(b[0]) || a[1] - b[1])
+    .map(([c]) => c);
+}
+
+export const CLOTHING_CATEGORIES = ["All", "Shirts", "Jackets", "Polos", "Hats", "SWAG", "New Hire Kit"];
 
 // Electrical portal: shows ONLY these SKUs (the small Electrical-division lineup).
 // Add/replace the Electrical SKU codes here — order is preserved in the grid.
@@ -98,7 +150,7 @@ function categoryForQuery(query: string, products: Product[]): string {
 // ---- Filter-sidebar facets (desktop) ----
 // The data has no explicit gender/fit field, so derive it from the name.
 // Check "women"/"ladies" first: "women's" contains "men's" as a substring.
-function genderOf(p: Product): string {
+export function genderOf(p: Product): string {
   const n = p.name.toLowerCase();
   if (/\bwomen['’]?s?\b|ladies/.test(n)) return "Women";
   if (/\bmen['’]?s?\b/.test(n)) return "Men";
@@ -209,6 +261,35 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
   const isTech = loginType.value === "tech";
   const eager = index < EAGER_CARDS;
 
+  const nav = useNavigate();
+  // Card-level colour preview: clicking a swatch swaps the card image to that
+  // colour's photo (matched by name) without leaving the gallery, and the picked
+  // colour rides along to the PDP via ?c= so it opens on the same colour.
+  const activeImg = useSignal(item.img);
+  const activeColor = useSignal("");
+  const goToPdp = $(() =>
+    nav(`/${sku}/${activeColor.value ? `?c=${encodeURIComponent(activeColor.value)}` : ""}`),
+  );
+  // Logo-overlay products (FootJoy / Travis Mathew): the card shows the SAME live
+  // chest-logo overlay as the PDP's front view, so the placement is visible on the
+  // card too (the baked TM fronts are logo-free). Follows the shown colour.
+  const logoCfg = getLogoConfig(sku);
+  const cardLogoColor = useComputed$(() => {
+    if (!logoCfg) return null;
+    const key = (activeColor.value || sortColorsWhiteLast(item.colors || [])[0] || "").toLowerCase();
+    return logoCfg.colors[key] ?? null;
+  });
+  // Warm the browser cache and fully decode a colour's photo BEFORE it's shown,
+  // so the first swap doesn't flash a half-painted image (after that the HTTP
+  // cache makes every swap instant). The <picture> serves the .webp sibling, so
+  // that's what we preload. Called on hover to pre-warm, and awaited on click so
+  // the visible image only changes once the new one is ready to paint.
+  const preload = $((src: string) => {
+    const im = new Image();
+    im.src = src.replace(/\.(jpe?g|png)$/i, ".webp");
+    return im.decode().catch(() => {});
+  });
+
   // Fit-to-one-line: keep the title at its full size, but scale it down just
   // enough to avoid wrapping to a second line. If it still can't fit even at the
   // floor, fall back to wrapping rather than clipping.
@@ -216,6 +297,24 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
   // Colour name shown while hovering a swatch (multi-colour cards) — mirrors the
   // single-colour name that shows permanently on one-swatch cards.
   const hoverColorName = useSignal("");
+  // When the hover colour name (an absolute overlay) is long enough to overflow
+  // onto the gender prefix ("Men's"/"Women's") to its right, hide that prefix so
+  // it doesn't show as a half-covered fragment. Measured after the overlay paints.
+  const colorNameRef = useSignal<HTMLElement>();
+  const genderRef = useSignal<HTMLElement>();
+  const genderHidden = useSignal(false);
+  // Measure AFTER the overlay text re-renders (track hoverColorName), not in the
+  // hover handler — otherwise it measures the previous, shorter name's width.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    const name = track(() => hoverColorName.value);
+    if (!name) { genderHidden.value = false; return; }
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const ov = colorNameRef.value;
+      const g = genderRef.value;
+      genderHidden.value = !!(ov && g && ov.getBoundingClientRect().right > g.getBoundingClientRect().left - 2);
+    }));
+  });
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup }) => {
     const el = nameRef.value;
@@ -274,16 +373,83 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
   displayName = displayName.trim();
 
   return (
-    <Link href={`/${sku}/`} class={`product-card product-card-link ${sku === "CAR-21" ? "product-card--cover" : ""}`}>
+    <div
+      role="link"
+      tabIndex={0}
+      style={{ cursor: "pointer" }}
+      class={`product-card product-card-link ${sku === "CAR-21" ? "product-card--cover" : ""}`}
+      onClick$={goToPdp}
+      onKeyDown$={(e) => { if (e.key === "Enter") goToPdp(); }}
+    >
       <div class="product-card__image">
-        <ProductImage
-          src={item.img}
-          alt={item.name}
-          width={440}
-          height={440}
-          loading={eager ? "eager" : "lazy"}
-          fetchPriority={index < 4 ? "high" : "auto"}
-        />
+        {cardLogoColor.value ? (() => {
+          // Logo product: show the chest-logo overlay (front view) on the card so
+          // the placement is visible, matching the PDP's default view. The card
+          // image is a fixed square, so the logo is positioned with pure CSS
+          // percentages — reproducing the base image's object-contain letterbox
+          // from its aspect ratio — instead of a JS-measured overlay (which is
+          // unreliable to time on a lazy card grid).
+          const cd = cardLogoColor.value;
+          // Use the SKU's default logo style (tone-on-tone or standard) so the
+          // card matches the PDP's default view.
+          const cardLogoSrc = logoCfg && logoCfg.defaultStyle === "default" ? cd.defaultLogo : cd.toneLogo;
+          const box = cd.boxes["left-chest"];
+          const ar = cd.views.front.ar;
+          const rw = ar >= 1 ? 1 : ar;
+          const rh = ar >= 1 ? 1 / ar : 1;
+          const ox = (1 - rw) / 2;
+          const oy = (1 - rh) / 2;
+          const webp = cd.views.front.src.replace(/\.(jpe?g|png)$/i, ".webp");
+          return (
+            <>
+              <picture>
+                {webp !== cd.views.front.src && <source srcset={webp} type="image/webp" />}
+                <img
+                  src={cd.views.front.src}
+                  alt={item.name}
+                  width={440}
+                  height={440}
+                  loading={eager ? "eager" : "lazy"}
+                  fetchPriority={index < 4 ? "high" : "auto"}
+                  decoding="async"
+                />
+              </picture>
+              <div
+                class="product-card__logo"
+                style={{
+                  position: "absolute",
+                  left: `${(ox + box.x * rw) * 100}%`,
+                  top: `${(oy + box.y * rh) * 100}%`,
+                  width: `${box.w * rw * 100}%`,
+                  height: `${box.h * rh * 100}%`,
+                  backgroundImage: `url("${cardLogoSrc}")`,
+                  backgroundSize: "contain",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center",
+                  transform: box.rotation ? `rotate(${box.rotation}deg)` : undefined,
+                  pointerEvents: "none",
+                }}
+              />
+            </>
+          );
+        })() : (
+          /* Bound to the activeImg signal so a swatch click swaps the src in
+             place (a nested component wouldn't react to the signal change). */
+          <picture>
+            {activeImg.value.replace(/\.(jpe?g|png)$/i, ".webp") !== activeImg.value && (
+              <source srcset={activeImg.value.replace(/\.(jpe?g|png)$/i, ".webp")} type="image/webp" />
+            )}
+            <img
+              src={activeImg.value}
+              alt={item.name}
+              width={440}
+              height={440}
+              loading={eager ? "eager" : "lazy"}
+              fetchPriority={index < 4 ? "high" : "auto"}
+              decoding="async"
+            />
+          </picture>
+        )}
       </div>
       <div class="product-card__info">
         <div class="product-card__name-row">
@@ -331,38 +497,56 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
             {(() => {
               const all = item.colors || [];
               // Show the SKU's actual colours as swatches (no declutter filter) so
-              // a 7-colour SKU like the UA polo shows a full row.
-              const visible = sortColorsWhiteLast(all);
+              // a 7-colour SKU like the UA polo shows a full row, in the canonical
+              // swatch order (neutrals first, white last) regardless of default.
+              const visible = swatchOrder(all);
               // Cap the swatches at 5; beyond that a "+N" chip stands in for the
               // rest, so a product with many colours doesn't spill a long row of
               // dots across the card (e.g. UA polo → 5 dots + "+2").
               const MAX_DOTS = 5;
-              const dots = visible.slice(0, MAX_DOTS);
+              let dots = visible.slice(0, MAX_DOTS);
+              // Keep white visible: if the cap cut it off, show it as the last dot
+              // (replacing the 5th other colour) instead of hiding it in the "+N".
+              const white = visible.find((c) => c.toLowerCase() === "#ffffff");
+              if (white && !dots.includes(white)) dots = [...visible.slice(0, MAX_DOTS - 1), white];
               const extra = all.length - dots.length;
               return visible.length > 0 ? (
                 <div class="product-card__colors">
                   {dots.map((c) => (
                     <span
                       key={c}
-                      class="product-card__color-dot"
+                      class={`product-card__color-dot${c.toLowerCase() === "#ffffff" ? " product-card__color-dot--white" : ""}${activeColor.value === c ? " active" : ""}`}
                       style={{ background: c }}
-                      aria-hidden="true"
-                      onMouseEnter$={() => (hoverColorName.value = c.startsWith("#") ? colorName(c, locale.value) : c)}
-                      onMouseLeave$={() => (hoverColorName.value = "")}
+                      role="button"
+                      aria-label={c.startsWith("#") ? colorName(c, locale.value) : c}
+                      onMouseEnter$={() => {
+                        hoverColorName.value = c.startsWith("#") ? colorName(c, locale.value) : c;
+                        preload(imageForColor(item, c));
+                      }}
+                      onMouseLeave$={() => { hoverColorName.value = ""; }}
+                      onClick$={async (e) => {
+                        e.stopPropagation();
+                        const src = imageForColor(item, c);
+                        activeColor.value = c;
+                        // Wait for decode so the swap doesn't flash — but cap the
+                        // wait so a slow/uncached decode can never block the swap.
+                        await Promise.race([preload(src), new Promise((r) => setTimeout(r, 400))]);
+                        activeImg.value = src;
+                      }}
                     />
                   ))}
                   {extra > 0 && (
                     <span class="product-card__color-more" aria-label={`+${extra} more colours`}>+{extra}</span>
                   )}
                   {(hoverColorName.value || singleColorName) && (
-                    <span class="product-card__color-name">{hoverColorName.value || singleColorName}</span>
+                    <span ref={colorNameRef} class={`product-card__color-name${singleColorName ? "" : " product-card__color-name--overlay"}`}>{hoverColorName.value || singleColorName}</span>
                   )}
                 </div>
               ) : <span />;
             })()}
             {(() => {
               const g = genderOf(item);
-              return g === "Men" || g === "Women" ? <span class="product-card__gender">{t(g === "Men" ? "gender.mens" : "gender.womens", locale.value)}</span> : null;
+              return g === "Men" || g === "Women" ? <span ref={genderRef} class={`product-card__gender${genderHidden.value ? " product-card__gender--hidden" : ""}`}>{t(g === "Men" ? "gender.mens" : "gender.womens", locale.value)}</span> : null;
             })()}
             {/* Fits shown beside each other on one line — regular plus any extra
                 variant (Tall/Short) the SKU carries. The " / " separator between
@@ -396,7 +580,7 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
           </div>
         )}
       </div>
-    </Link>
+    </div>
   );
 });
 
@@ -509,10 +693,29 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     // Clothing catalog: group the footwear products (safety boots + shoes) under
     // the "Footwear" tab so they show when it's selected.
     const isFootwear = (c: string) => c === "Safety Boots" || c === "Safety Shoes" || c === "Footwear";
-    return allProducts
+    const clothing = allProducts
       // Exclude FR items and the Electrical-only SKUs from the full (Service) catalog.
       .filter((p) => p.category !== "Flame Resistant" && !ELECTRICAL_SKU_SET.has(p.sku))
       .map((p) => (isFootwear(p.category) ? { ...p, category: "Footwear" } : p));
+    // Order the "All" grid to follow the sidebar/tab category order, so the
+    // display matches the sidebar. Stable sort keeps each category's products in
+    // their existing (products.ts) order; unknown categories fall to the end.
+    const catRank = (c: string) => {
+      const i = CLOTHING_CATEGORIES.indexOf(c);
+      return i === -1 ? CLOTHING_CATEGORIES.length : i;
+    };
+    const ordered = [...clothing].sort((a, b) => catRank(a.category) - catRank(b.category));
+    // Single-SKU display exception: the Travis Mathew Tour Ready 1/4 zip (MN-35)
+    // is categorised as a Jacket (so it filters under Jackets), but in the "All"
+    // grid it's shown among the polos, immediately AFTER the Final Drive polo
+    // (MN-34). This deliberately breaks the category-grouping order for MN-35.
+    const i35 = ordered.findIndex((p) => p.sku === "MN-35");
+    if (i35 !== -1) {
+      const [m35] = ordered.splice(i35, 1);
+      const at = ordered.findIndex((p) => p.sku === "MN-34");
+      ordered.splice(at === -1 ? ordered.length : at + 1, 0, m35);
+    }
+    return ordered;
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task

@@ -3228,8 +3228,30 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 .product-card__colors {
   display: flex;
   align-items: center;
-  gap: 5px;
+  position: relative;
+  /* A touch wider than the dots' visual gap so their expanded hit targets
+     (::after inset -3px) don't overlap a neighbour. */
+  gap: 6px;
 }
+/* Hover colour name on multi-colour cards: overlay it just right of the swatches,
+   on top of the size line, instead of reflowing the row to a new line when the
+   name is long. Masked with the hovered card-info background so it reads cleanly. */
+.product-card__color-name--overlay {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 6px;
+  padding: 0 2px;
+  background: #ececea;
+  white-space: nowrap;
+  z-index: 3;
+  pointer-events: none;
+}
+/* Gender prefix ("Men's"/"Women's") fades out when the hover colour name overflows
+   onto it, so it never shows as a half-covered fragment beside the overlay. */
+.product-card__gender { transition: opacity 0.12s ease; }
+.product-card__gender--hidden { opacity: 0; }
 
 /* "+N" chip standing in for colours beyond the first four, so a many-coloured
    product shows a compact cue instead of a long row of swatches. */
@@ -3242,12 +3264,25 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 
 .product-card__color-dot {
-  width: 16px;
-  height: 16px;
+  width: 17px;
+  height: 17px;
   border-radius: 3px;
   border: 1px solid var(--ce-border);
   cursor: pointer;
+  position: relative;
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+/* Invisible padding around the swatch: a wider hit target so the smaller dot is
+   still easy to click/tap without the dot itself looking oversized. */
+.product-card__color-dot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+}
+/* The swatch whose colour is currently previewed on the card image. */
+.product-card__color-dot.active {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 2px var(--ce-white, #fff), 0 0 0 3px rgba(0, 0, 0, 0.55);
 }
 
 .product-card__colors-inline {
@@ -3271,6 +3306,11 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 
 .product-card__color-dot--light {
   border-color: var(--ce-gray-200);
+}
+/* White swatches: a slightly darker border (between the default and gray-400) so
+   they don't vanish against the light card without looking heavy-handed. */
+.product-card__color-dot--white {
+  border-color: var(--ce-gray-300, #c7cace);
 }
 
 .product-card__meta {
@@ -5017,6 +5057,15 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
   max-height: 85vh;
   object-fit: contain;
 }
+/* Live logo overlay in the fullscreen viewer (LogoSlide fills this box and
+   letterboxes the garment inside it, placing the logo from the measured rect). */
+.product-fullscreen__logo {
+  position: relative;
+  height: 85vh;
+  width: min(90vw, 68vh);
+  background: var(--ce-white);
+  border-radius: var(--radius-sm);
+}
 .product-fullscreen__nav {
   position: absolute;
   top: 50%;
@@ -5119,6 +5168,77 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .product-carousel__slide.active {
   opacity: 1;
 }
+/* Live logo-overlay slide: a blank garment image with the MN logo composited at
+   runtime (see LogoSlide). The base image keeps the same contain + multiply
+   treatment as a normal slide; the logo sits on top with normal blending. */
+.logo-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.logo-slide.active {
+  opacity: 1;
+}
+.logo-slide__base {
+  /* The garment is a background-image so it paints reliably after hydration;
+     background-size: contain letterboxes it inside the panel like object-fit. */
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+}
+.logo-slide__logo {
+  /* The logo is a background-image div positioned in px by LogoSlide. */
+  position: absolute;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+}
+/* On a gallery card the LogoSlide base must blend its white studio background
+   into the greige panel, matching the normal card image (object-fit + multiply). */
+.product-card__image .logo-slide__base {
+  mix-blend-mode: multiply;
+}
+/* Logo position + style pickers sit together on one compact line. */
+.product-modal__logo-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* Match the size↔colour row gap so position/style feel evenly spaced. */
+  gap: 0.85rem;
+}
+.product-modal__logo-group {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+/* Slimmer buttons in the logo row so the two pickers stay tidy. */
+.product-modal__logo-row .product-modal__options {
+  gap: 0.35rem;
+}
+.product-modal__logo-row .product-modal__option {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  min-width: 0;
+}
+/* Logo products: the logo position/style pickers share the size row, sitting in
+   the bottom-right quadrant (right of the size options, under the 2nd bullet
+   column) instead of taking their own vertical line. Wraps below on narrow. */
+.product-modal__field--with-logo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1.5rem;
+  row-gap: 0.75rem;
+  align-items: start;
+}
+/* Left column stacks size (row 1) then colour (row 2); the logo pickers sit in
+   the right column spanning both rows (under the right column of detail bullets),
+   so the colour swatches fill the space the logo pickers used to occupy below. */
+.product-modal__field--with-logo .product-modal__size-block { grid-column: 1; }
+.product-modal__field--with-logo .product-modal__color-block { grid-column: 1; }
+.product-modal__field--with-logo .product-modal__logo-row { grid-column: 2; grid-row: 1 / span 2; }
 .product-carousel__indicators {
   position: absolute;
   bottom: 10px;
@@ -5900,6 +6020,14 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
   display: flex;
   align-items: center;
   gap: var(--wt-gap);
+}
+/* Logo choice on a cart row — a subtle pill so it reads apart from colour/size. */
+.cart-table__logo-meta {
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  background: var(--ce-gray-100);
+  color: var(--ce-gray-600);
+  white-space: nowrap;
 }
 .cart-table__swatch { display: inline-block; width: 12px; height: 12px; border-radius: 2px; border: 1px solid rgba(0,0,0,0.15); flex-shrink: 0; }
 .cart-drawer__summary-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; border: 1px solid rgba(0,0,0,0.15); margin-right: 6px; vertical-align: -1px; }
@@ -14655,11 +14783,11 @@ body .site-header__inner { border-top-left-radius: 0 !important; border-top-righ
    column (header, tab bar, catalog, product page, footer — everything keyed to
    --site-max) is pulled in a touch, and hard-capped on ultra-wide displays. The
    login portal is a separate full-screen overlay and is unaffected. */
-@media (min-width: 90rem) {
-  /* One smooth expression (no breakpoint jump, so browser zoom stays monotonic):
-     near full-width on laptops, and once the viewport passes the 1728px cap the
-     content plateaus and wide desktop monitors get real side margins. */
-  :root { --site-max: min(calc(100vw - 2rem), 1600px); }
+/* Laptops and narrower desktops stay full-width (the base --site-max: 100vw);
+   once past ~1600px the content column caps at 1600px, so wide desktop monitors
+   get their side margins back (about an inch near ~1800px, more beyond). */
+@media (min-width: 100rem) {
+  :root { --site-max: 1600px; }
   /* Bring the sticky header bar in to the same width as the content column. */
   .site-header { max-width: var(--site-max); margin-inline: auto; }
 }

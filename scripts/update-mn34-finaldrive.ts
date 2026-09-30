@@ -1,0 +1,10 @@
+import { createClient } from "@libsql/client";
+import { config } from "dotenv";
+config({ path: new URL("../.env", import.meta.url).pathname });
+const url = process.env.TURSO_URL || process.env.VITE_TURSO_URL;
+const authToken = process.env.TURSO_AUTH_TOKEN || process.env.VITE_TURSO_AUTH_TOKEN;
+const db = createClient({ url: url!, authToken });
+const IMGS = ["/final-drive/black.webp", "/final-drive/greenbay.webp"];
+await db.execute({ sql: "UPDATE products SET img=?, imgs=? WHERE vendor='modernniagara' AND sku='MN-34'", args: [IMGS[0], JSON.stringify(IMGS)] });
+const r = await db.execute("SELECT sku,img,imgs FROM products WHERE vendor='modernniagara' AND sku='MN-34'");
+console.log(JSON.stringify(r.rows[0]));

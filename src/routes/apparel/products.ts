@@ -118,23 +118,23 @@ export const allProducts = [
   {
     "sku": "MN-35",
     "name": "Men's Travis Mathew Tour Ready Stripe 1/4 Zip",
-    "category": "Sweaters",
+    "category": "Jackets",
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
-      "#1a1a18",
-      "#3b4657"
+      "#3b4657",
+      "#1a1a18"
     ],
     "price": 110,
-    "img": "/tour-ready/black.webp",
+    "img": "/tour-ready/heathernavy.webp",
     "imgs": [
-      "/tour-ready/black.webp",
-      "/tour-ready/black-side.webp",
       "/tour-ready/heathernavy.webp",
-      "/tour-ready/heathernavy-side.webp"
+      "/tour-ready/heathernavy-side.webp",
+      "/tour-ready/black.webp",
+      "/tour-ready/black-side.webp"
     ],
     "material": "",
-    "details": "Quarter-zip pullover, Performance stretch fabric, Ribbed cuffs and hem, MNBS logo on sleeve (tone on tone), #A48471"
+    "details": "Quarter-zip pullover, Performance stretch fabric, Ribbed cuffs and hem, #A48471"
   },
   {
     "sku": "MN-15",
@@ -195,112 +195,6 @@ export const allProducts = [
     "details": "Moisture-management properties, Anti-odor technology, Textured fabric that's soft, light and breathable, Self-fabric collar, Three-button placket, #1370431"
   },
   {
-    "sku": "MN-11",
-    "name": "Men's FootJoy Speckle Print Polo",
-    "category": "Polos",
-    "sizes": "S - 3XL",
-    "badge": "",
-    "colors": [
-      "#1a1a18",
-      "#6b8bb0",
-      "#2c3e50"
-    ],
-    "price": 130,
-    "img": "/footjoy/black.webp",
-    "imgs": [
-      "/footjoy/black.webp",
-      "/footjoy/black-back.webp",
-      "/footjoy/solaceblue.webp",
-      "/footjoy/solaceblue-back.webp",
-      "/footjoy/navy.webp",
-      "/footjoy/navy-back.webp"
-    ],
-    "material": "ProDry® performance polyester",
-    "details": "Moisture-wicking, anti-microbial, double-stitched seams, extended back shirt tail, easy-care fabric, Tone on tone logo, #16324"
-  },
-  {
-    "sku": "MN-12",
-    "name": "Women's FootJoy Speckle Print Polo",
-    "category": "Polos",
-    "sizes": "XS - 2XL",
-    "badge": "",
-    "colors": [
-      "#6b8bb0",
-      "#1a1a18"
-    ],
-    "price": 130,
-    "img": "/footjoy/womens-solaceblue.webp",
-    "imgs": [
-      "/footjoy/womens-solaceblue.webp",
-      "/footjoy/womens-solaceblue-back.webp",
-      "/footjoy/womens-black.webp",
-      "/footjoy/womens-black-back.webp"
-    ],
-    "material": "ProDry® performance polyester",
-    "details": "Moisture-wicking, anti-microbial, double-stitched seams, lock-stitched hem, extended back shirt tail, machine washable, FootJoy, Tone on tone logo, #96324"
-  },
-  {
-    "sku": "MN-32",
-    "name": "Men's Travis Mathew Heater Polo",
-    "category": "Polos",
-    "sizes": "S - 3XL",
-    "badge": "",
-    "colors": [
-      "#47536b",
-      "#517fa4",
-      "#ca7988",
-      "#1a1a18"
-    ],
-    "price": 110,
-    "img": "/heater/vintageindigo-front.webp",
-    "imgs": [
-      "/heater/black-front.webp",
-      "/heater/black-side.webp",
-      "/heater/black-chest.webp",
-      "/heater/copenblue-front.webp",
-      "/heater/copenblue-side.webp",
-      "/heater/copenblue-chest.webp",
-      "/heater/vintageindigo-front.webp",
-      "/heater/vintageindigo-side.webp",
-      "/heater/vintageindigo-chest.webp",
-      "/heater/heatherscooter-front.webp",
-      "/heater/heatherscooter-side.webp",
-      "/heater/heatherscooter-chest.webp"
-    ],
-    "material": "67% Polyester / 23% Cotton / 7% Elastane / 3% Polyester Blend",
-    "details": "4-Way Stretch, Breathable, Easy Wash & Wear, Modern Fit, Versatile Performance Fabric, Signature Double-Needle Collar, MNBS logo on sleeve (tone on tone), #1MW395"
-  },
-  {
-    "sku": "MN-33",
-    "name": "Men's Travis Mathew Heater Jersey Polo",
-    "category": "Polos",
-    "sizes": "S - 3XL",
-    "badge": "",
-    "colors": [
-      "#1a1a18",
-      "#ffffff",
-      "#758073",
-      "#2a3a49",
-      "#baa591"
-    ],
-    "price": 110,
-    "img": "/heater-jersey/black-front.webp",
-    "imgs": [
-      "/heater-jersey/black-front.webp",
-      "/heater-jersey/black-chest.webp",
-      "/heater-jersey/white-front.webp",
-      "/heater-jersey/white-chest.webp",
-      "/heater-jersey/balsamgreen-front.webp",
-      "/heater-jersey/balsamgreen-chest.webp",
-      "/heater-jersey/totaleclipse-front.webp",
-      "/heater-jersey/totaleclipse-chest.webp",
-      "/heater-jersey/roastedcashew-front.webp",
-      "/heater-jersey/roastedcashew-chest.webp"
-    ],
-    "material": "63% Polyester / 34% Cotton / 3% Elastane, Imported",
-    "details": "Signature double-needle collar, Contrast interior collar, Printed logo on the back yoke, Fold over placket, MNBS logo on sleeve (tone on tone), #A47463"
-  },
-  {
     "sku": "MN-34",
     "name": "Men's Travis Mathew Final Drive View Polo",
     "category": "Polos",
@@ -322,7 +216,113 @@ export const allProducts = [
       "/final-drive/white-side.webp"
     ],
     "material": "",
-    "details": "4-Way Stretch, Breathable, Modern Fit, Signature self-fabric collar, MNBS logo on sleeve (tone on tone), #A48406"
+    "details": "4-Way Stretch, Breathable, Modern Fit, Signature self-fabric collar, #A48406"
+  },
+  {
+    "sku": "MN-33",
+    "name": "Men's Travis Mathew Heater Jersey Polo",
+    "category": "Polos",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#baa591",
+      "#1a1a18",
+      "#ffffff",
+      "#758073",
+      "#2a3a49"
+    ],
+    "price": 110,
+    "img": "/heater-jersey/roastedcashew-front.webp",
+    "imgs": [
+      "/heater-jersey/roastedcashew-front.webp",
+      "/heater-jersey/roastedcashew-chest.webp",
+      "/heater-jersey/black-front.webp",
+      "/heater-jersey/black-chest.webp",
+      "/heater-jersey/white-front.webp",
+      "/heater-jersey/white-chest.webp",
+      "/heater-jersey/balsamgreen-front.webp",
+      "/heater-jersey/balsamgreen-chest.webp",
+      "/heater-jersey/totaleclipse-front.webp",
+      "/heater-jersey/totaleclipse-chest.webp"
+    ],
+    "material": "63% Polyester / 34% Cotton / 3% Elastane, Imported",
+    "details": "Signature double-needle collar, Contrast interior collar, Printed logo on the back yoke, Fold over placket, #A47463"
+  },
+  {
+    "sku": "MN-32",
+    "name": "Men's Travis Mathew Heater Polo",
+    "category": "Polos",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#ca7988",
+      "#47536b",
+      "#517fa4",
+      "#1a1a18"
+    ],
+    "price": 110,
+    "img": "/heater/heatherscooter-front.webp",
+    "imgs": [
+      "/heater/heatherscooter-front.webp",
+      "/heater/heatherscooter-side.webp",
+      "/heater/heatherscooter-chest.webp",
+      "/heater/black-front.webp",
+      "/heater/black-side.webp",
+      "/heater/black-chest.webp",
+      "/heater/copenblue-front.webp",
+      "/heater/copenblue-side.webp",
+      "/heater/copenblue-chest.webp",
+      "/heater/vintageindigo-front.webp",
+      "/heater/vintageindigo-side.webp",
+      "/heater/vintageindigo-chest.webp"
+    ],
+    "material": "67% Polyester / 23% Cotton / 7% Elastane / 3% Polyester Blend",
+    "details": "4-Way Stretch, Breathable, Easy Wash & Wear, Modern Fit, Versatile Performance Fabric, Signature Double-Needle Collar, #1MW395"
+  },
+  {
+    "sku": "MN-11",
+    "name": "Men's FootJoy Speckle Print Polo",
+    "category": "Polos",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#6b8bb0",
+      "#2c3e50"
+    ],
+    "price": 130,
+    "img": "/footjoy/black.webp",
+    "imgs": [
+      "/footjoy/black.webp",
+      "/footjoy/black-back.webp",
+      "/footjoy/solaceblue.webp",
+      "/footjoy/solaceblue-back.webp",
+      "/footjoy/navy.webp",
+      "/footjoy/navy-back.webp"
+    ],
+    "material": "ProDry® performance polyester",
+    "details": "Moisture-wicking, anti-microbial, double-stitched seams, extended back shirt tail, easy-care fabric, #16324"
+  },
+  {
+    "sku": "MN-12",
+    "name": "Women's FootJoy Speckle Print Polo",
+    "category": "Polos",
+    "sizes": "XS - 2XL",
+    "badge": "",
+    "colors": [
+      "#6b8bb0",
+      "#1a1a18"
+    ],
+    "price": 130,
+    "img": "/footjoy/womens-solaceblue.webp",
+    "imgs": [
+      "/footjoy/womens-solaceblue.webp",
+      "/footjoy/womens-solaceblue-back.webp",
+      "/footjoy/womens-black.webp",
+      "/footjoy/womens-black-back.webp"
+    ],
+    "material": "ProDry® performance polyester",
+    "details": "Moisture-wicking, anti-microbial, double-stitched seams, lock-stitched hem, extended back shirt tail, machine washable, #96324"
   },
   {
     "sku": "MN-5",
@@ -719,17 +719,17 @@ export const allProducts = [
     "sizes": "One Size",
     "badge": "",
     "colors": [
-      "#1a1a18",
-      "#3758a9",
       "#a1a8b0",
+      "#3758a9",
+      "#1a1a18",
       "#ffffff"
     ],
     "price": 20,
-    "img": "/towel/black.webp",
+    "img": "/towel/grey.webp",
     "imgs": [
-      "/towel/black.webp",
-      "/towel/blue.webp",
       "/towel/grey.webp",
+      "/towel/blue.webp",
+      "/towel/black.webp",
       "/towel/white.webp"
     ],
     "material": "Microfibre Waffle",

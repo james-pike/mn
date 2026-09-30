@@ -836,6 +836,8 @@ export default component$(() => {
         ...(i.waist ? { waist: i.waist } : {}),
         ...(i.length ? { length: i.length } : {}),
         ...(i.variant ? { variant: i.variant } : {}),
+        ...(i.logoPosition ? { logoPosition: i.logoPosition } : {}),
+        ...(i.logoStyle ? { logoStyle: i.logoStyle } : {}),
         ...(i.code ? { code: i.code } : {}),
       })),
       date: new Date().toLocaleDateString("en-CA"),
@@ -1718,6 +1720,9 @@ export default component$(() => {
                             <div class="cart-table__meta">
                               {item.color && item.color.startsWith("#") && <span class="cart-table__swatch" style={{ background: item.color }} aria-hidden="true" />}
                               <span>{item.color ? `${item.color.startsWith("#") ? colorName(item.color, locale.value) : item.color} / ` : ""}{item.size}</span>
+                              {(item as any).logoPosition && (
+                                <span class="cart-table__logo-meta">(Logo: {(item as any).logoPosition}{(item as any).logoStyle ? ` · ${(item as any).logoStyle}` : ""})</span>
+                              )}
                             </div>
                             </div>
                             </div>

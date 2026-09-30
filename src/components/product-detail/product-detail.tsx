@@ -1,12 +1,14 @@
 import { component$, useSignal, useComputed$, useTask$, useVisibleTask$, $, useContext, type QRL } from "@builder.io/qwik";
 import { Carousel } from "@qwik-ui/headless";
-import { Link } from "@builder.io/qwik-city";
+import { Link, useLocation, useNavigate } from "@builder.io/qwik-city";
 import { LocaleContext, t } from "../../i18n";
 import { allProducts, colorName, categoryLabel } from "../../routes/apparel/products";
 import { expandSizes, sizeGroups, sortColorsWhiteLast } from "../../routes/apparel/utils";
 import { LoginTypeContext } from "../../routes/layout";
-import { ELECTRICAL_SKUS } from "../product-catalog/product-catalog";
+import { ELECTRICAL_SKUS, imageForColor, genderOf, swatchOrder } from "../product-catalog/product-catalog";
 import { ProductImage } from "../product-image/product-image";
+import { LogoSlide } from "../logo-overlay/logo-slide";
+import { getLogoConfig, logoAsset, type LogoPosition, type LogoStyle, type LogoBox } from "../../data/logo-placements";
 
 // Colours whose per-colour IMAGE FILES use a slug that differs from the (renamed)
 // display name. The gallery matches images by colour NAME → filename, so a rename
@@ -108,6 +110,59 @@ function getVariantMap(
   return variantSizesBySku[p.sku] ?? variantMapFromSizes(p.sizes);
 }
 
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+/**
+ * Composite the logo onto the blank garment view (same algorithm as the sm bake:
+ * logo fit object-contain + centred inside the normalized box, then rotated) and
+ * return a small data-URL thumbnail — so the cart line item shows the chosen
+ * view + logo position/style/colour, not a generic product photo.
+ */
+async function composeLogoThumb(
+  baseSrc: string,
+  logoSrc: string,
+  box: LogoBox,
+): Promise<string | null> {
+  try {
+    const [base, logo] = await Promise.all([loadImage(baseSrc), loadImage(logoSrc)]);
+    const maxW = 360;
+    const scale = Math.min(1, maxW / base.naturalWidth);
+    const W = Math.max(1, Math.round(base.naturalWidth * scale));
+    const H = Math.max(1, Math.round(base.naturalHeight * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return null;
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, W, H);
+    ctx.drawImage(base, 0, 0, W, H);
+    const bx = box.x * W, by = box.y * H, bw = box.w * W, bh = box.h * H;
+    const ls = Math.min(bw / logo.naturalWidth, bh / logo.naturalHeight);
+    const lw = logo.naturalWidth * ls, lh = logo.naturalHeight * ls;
+    const px = bx + (bw - lw) / 2, py = by + (bh - lh) / 2;
+    if (box.rotation) {
+      ctx.save();
+      ctx.translate(px + lw / 2, py + lh / 2);
+      ctx.rotate((box.rotation * Math.PI) / 180);
+      ctx.drawImage(logo, -lw / 2, -lh / 2, lw, lh);
+      ctx.restore();
+    } else {
+      ctx.drawImage(logo, px, py, lw, lh);
+    }
+    return canvas.toDataURL("image/webp", 0.85);
+  } catch {
+    return null;
+  }
+}
+
 interface ProductDetailPanelProps {
   /** SKU to render (from the route param, or the in-frame catalog overlay). */
   sku: string;
@@ -116,6 +171,220 @@ interface ProductDetailPanelProps {
   onClose$?: QRL<() => void>;
   onSelectSku$?: QRL<(sku: string) => void>;
 }
+
+/**
+ * A card in the PDP's "More {category}" grid/carousel. Matches the main gallery
+ * card (ProductCard in product-catalog): interactive colour swatches that swap
+ * the card photo (flicker-free, preloaded on hover), the gender moved off the
+ * title onto the size line, the model code as a muted suffix, and the picked
+ * colour carried into the PDP via ?c=. In-frame overlay mode switches the panel
+ * in place via onSelectSku$ instead of navigating (no colour handoff there).
+ */
+const RelatedCard = component$<{
+  item: (typeof allProducts)[number];
+  inFrame: boolean;
+  hidePrice: boolean;
+  loading: "eager" | "lazy";
+  onSelectSku$?: QRL<(sku: string) => void>;
+}>(({ item, inFrame, hidePrice, loading, onSelectSku$ }) => {
+  const locale = useContext(LocaleContext);
+  const nav = useNavigate();
+  const activeImg = useSignal(item.img);
+  const activeColor = useSignal("");
+  const hoverColorName = useSignal("");
+  // Hide the gender prefix when the hover colour-name overlay overflows onto it.
+  const colorNameRef = useSignal<HTMLElement>();
+  const genderRef = useSignal<HTMLElement>();
+  const genderHidden = useSignal(false);
+  // Measure after the overlay text re-renders (track hoverColorName), so the
+  // gender prefix hides only when the (final-width) colour name overflows onto it.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    const name = track(() => hoverColorName.value);
+    if (!name) { genderHidden.value = false; return; }
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const ov = colorNameRef.value;
+      const g = genderRef.value;
+      genderHidden.value = !!(ov && g && ov.getBoundingClientRect().right > g.getBoundingClientRect().left - 2);
+    }));
+  });
+  const preload = $((src: string) => {
+    const im = new Image();
+    im.src = src.replace(/\.(jpe?g|png)$/i, ".webp");
+    return im.decode().catch(() => {});
+  });
+  const open = $(() => {
+    if (inFrame) { onSelectSku$?.(item.sku); return; }
+    nav(`/${item.sku}/${activeColor.value ? `?c=${encodeURIComponent(activeColor.value)}` : ""}`);
+  });
+
+  const all = item.colors || [];
+  const visible = swatchOrder(all);
+  const isKit = item.name === "New Hire Kit";
+  const single = visible.length === 1 ? visible[0] : null;
+  const singleName = single ? (single.startsWith("#") ? colorName(single, locale.value) : single) : null;
+  const singleEn = single ? (single.startsWith("#") ? colorName(single, "en") : single) : null;
+  // Card title: drop the model code and the gender word (shown on the size line),
+  // and — for a single-colour product — the trailing "- Colour".
+  let displayName = item.name.replace(/#\S+/g, "").replace(/^(men|women|ladies|unisex)['’]?s?\s+/i, "");
+  if (singleEn) {
+    displayName = displayName.replace(new RegExp(`\\s*[-–]\\s*${singleEn.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "i"), "");
+  }
+  displayName = displayName.trim();
+  const g = genderOf(item);
+  const MAX_DOTS = 5;
+  let dots = visible.slice(0, MAX_DOTS);
+  const white = visible.find((c) => c.toLowerCase() === "#ffffff");
+  if (white && !dots.includes(white)) dots = [...visible.slice(0, MAX_DOTS - 1), white];
+  const extra = all.length - dots.length;
+
+  // Logo products: show the chest-logo overlay on the related card too (matching
+  // the gallery cards), so e.g. the 1/4 zip's logo appears in the "More …" strip.
+  const rcLogoCfg = getLogoConfig(item.sku);
+  const rcLogoColor = rcLogoCfg
+    ? (rcLogoCfg.colors[(activeColor.value || sortColorsWhiteLast(item.colors || [])[0] || "").toLowerCase()] ?? null)
+    : null;
+
+  const body = (
+    <>
+      <div class="product-card__image">
+        {rcLogoColor ? (() => {
+          const cd = rcLogoColor;
+          const cardLogoSrc = rcLogoCfg && rcLogoCfg.defaultStyle === "default" ? cd.defaultLogo : cd.toneLogo;
+          const box = cd.boxes["left-chest"];
+          const ar = cd.views.front.ar;
+          const rw = ar >= 1 ? 1 : ar;
+          const rh = ar >= 1 ? 1 / ar : 1;
+          const ox = (1 - rw) / 2;
+          const oy = (1 - rh) / 2;
+          const webp = cd.views.front.src.replace(/\.(jpe?g|png)$/i, ".webp");
+          return (
+            <>
+              <picture>
+                {webp !== cd.views.front.src && <source srcset={webp} type="image/webp" />}
+                <img src={cd.views.front.src} alt={item.name} width={440} height={440} loading={loading} decoding="async" />
+              </picture>
+              <div
+                class="product-card__logo"
+                style={{
+                  position: "absolute",
+                  left: `${(ox + box.x * rw) * 100}%`,
+                  top: `${(oy + box.y * rh) * 100}%`,
+                  width: `${box.w * rw * 100}%`,
+                  height: `${box.h * rh * 100}%`,
+                  backgroundImage: `url("${cardLogoSrc}")`,
+                  backgroundSize: "contain",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center",
+                  transform: box.rotation ? `rotate(${box.rotation}deg)` : undefined,
+                  pointerEvents: "none",
+                }}
+              />
+            </>
+          );
+        })() : (
+          <picture>
+            {activeImg.value.replace(/\.(jpe?g|png)$/i, ".webp") !== activeImg.value && (
+              <source srcset={activeImg.value.replace(/\.(jpe?g|png)$/i, ".webp")} type="image/webp" />
+            )}
+            <img src={activeImg.value} alt={item.name} width={440} height={440} loading={loading} decoding="async" />
+          </picture>
+        )}
+      </div>
+      <div class="product-card__info">
+        <div class="product-card__name-row">
+          <div class="product-card__name">
+            <span class="product-card__name-text">{displayName}</span>
+            <span class="product-card__name-code">{(item.name.match(/#\S+/) || [""])[0]}</span>
+          </div>
+          <div class="product-card__price-group">
+            {!hidePrice && (() => {
+              const pr = Number(item.price) || 0;
+              const dollars = Math.floor(pr);
+              const cents = Math.round((pr - dollars) * 100).toString().padStart(2, "0");
+              return (
+                <div class="product-card__price">
+                  ${dollars}
+                  {cents !== "00" && <span class="product-card__price-cents">.{cents}</span>}
+                </div>
+              );
+            })()}
+          </div>
+        </div>
+        {isKit ? (
+          <div class="product-card__color-size-row">
+            <span class="product-card__sizes product-card__kit-items">
+              {item.details.split(",").map((it, i) => (
+                <span key={i}>{it.trim()}</span>
+              ))}
+            </span>
+          </div>
+        ) : (
+          <div class="product-card__color-size-row">
+            {dots.length > 0 && (
+              <div class="product-card__colors">
+                {dots.map((c) => (
+                  <span
+                    key={c}
+                    class={`product-card__color-dot${c.toLowerCase() === "#ffffff" ? " product-card__color-dot--white" : ""}${activeColor.value === c ? " active" : ""}`}
+                    style={{ background: c }}
+                    role="button"
+                    aria-label={c.startsWith("#") ? colorName(c, locale.value) : c}
+                    onMouseEnter$={() => {
+                      hoverColorName.value = c.startsWith("#") ? colorName(c, locale.value) : c;
+                      preload(imageForColor(item, c));
+                    }}
+                    onMouseLeave$={() => { hoverColorName.value = ""; }}
+                    onClick$={async (e) => {
+                      e.stopPropagation();
+                      const src = imageForColor(item, c);
+                      activeColor.value = c;
+                      // Wait for decode so the swap doesn't flash — but cap the
+                      // wait so a slow/uncached decode can never block the swap.
+                      await Promise.race([preload(src), new Promise((r) => setTimeout(r, 400))]);
+                      activeImg.value = src;
+                    }}
+                  />
+                ))}
+                {extra > 0 && (
+                  <span class="product-card__color-more" aria-label={`+${extra} more colours`}>+{extra}</span>
+                )}
+                {(hoverColorName.value || singleName) && (
+                  <span ref={colorNameRef} class={`product-card__color-name${singleName ? "" : " product-card__color-name--overlay"}`}>{hoverColorName.value || singleName}</span>
+                )}
+              </div>
+            )}
+            {(g === "Men" || g === "Women") && (
+              <span ref={genderRef} class={`product-card__gender${genderHidden.value ? " product-card__gender--hidden" : ""}`}>{t(g === "Men" ? "gender.mens" : "gender.womens", locale.value)}</span>
+            )}
+            <span class="product-card__sizes">
+              {(item.sizes === "One Size" ? [t("modal.onesize", locale.value)] : sizeGroups(item.sizes)).map((grp) => (
+                <span key={grp} class="product-card__sizes-line">{grp}</span>
+              ))}
+            </span>
+          </div>
+        )}
+      </div>
+    </>
+  );
+
+  return inFrame ? (
+    <button type="button" class="product-card product-card-link" onClick$={open}>
+      {body}
+    </button>
+  ) : (
+    <div
+      role="link"
+      tabIndex={0}
+      style={{ cursor: "pointer" }}
+      class="product-card product-card-link"
+      onClick$={open}
+      onKeyDown$={(e) => { if (e.key === "Enter") open(); }}
+    >
+      {body}
+    </div>
+  );
+});
 
 /**
  * The product-detail view — image carousel, size/colour/variant pickers, add-to-
@@ -134,6 +403,9 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
   // panel is pointed at a different product (route [sku]→[sku] nav, or the
   // in-frame overlay switching products via a related item).
   const product = useComputed$(() => allProducts.find((p) => p.sku === props.sku) || null);
+  // The catalog card can hand off a pre-selected colour via ?c=<hex> so the PDP
+  // opens on the colour the shopper previewed in the gallery.
+  const loc = useLocation();
 
   const imgIndex = useSignal(0);
   const touchStartX = useSignal(0);
@@ -143,6 +415,10 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
   const selectedWaist = useSignal("");
   const selectedLength = useSignal("");
   const selectedVariant = useSignal("");
+  // Live logo overlay (products in LOGO_PRODUCTS, e.g. MN-34): the chosen logo
+  // position + style drive a CSS overlay instead of loading a new image.
+  const selectedLogoPos = useSignal<LogoPosition | "">("");
+  const selectedLogoStyle = useSignal<LogoStyle>("tone");
   const added = useSignal(false);
   const addedInfo = useSignal("");
   const imgFullscreen = useSignal(false);
@@ -189,12 +465,33 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
     }
     return all;
   });
-  // Keep the same view position (front/side/…) when switching colour instead of
-  // snapping back to the first image — clamp it to the new colour's image set.
+  // Keep the same view position (front/side/back/…) when switching colour instead
+  // of snapping back to the first image — clamp it to the new colour's slide set.
+  // For logo products the slide set is the logo views (front/side) PLUS any plain
+  // extra photos (the back shot), so the clamp must count those too — otherwise
+  // being on the back slide (index past the views) gets knocked off on a colour
+  // change instead of staying on the back.
   useTask$(({ track }) => {
     track(() => selectedColor.value);
-    const n = visibleImgs.value.length;
+    const p0 = product.value;
+    const cfg = p0 ? getLogoConfig(p0.sku) : null;
+    const logoColour = !!(cfg && selectedColor.value && cfg.colors[selectedColor.value.toLowerCase()]);
+    const n = logoColour
+      ? cfg!.views.length + visibleImgs.value.filter((s) => /(back|chest)/i.test(s)).length
+      : visibleImgs.value.length;
     if (imgIndex.value >= n) imgIndex.value = Math.max(0, n - 1);
+  });
+  // For logo-overlay products: picking a logo position also switches the primary
+  // view (chest → front slide, sleeve → side slide). Within one view, changing
+  // position only moves the overlay (no view change).
+  useTask$(({ track }) => {
+    const pos = track(() => selectedLogoPos.value);
+    const p = product.value;
+    if (!p || !pos) return;
+    const cfg = getLogoConfig(p.sku);
+    if (!cfg) return;
+    const opt = cfg.positions.find((o) => o.id === pos);
+    if (opt) imgIndex.value = Math.max(0, cfg.views.indexOf(opt.view));
   });
 
   const relatedPerView = useSignal(2);
@@ -215,12 +512,31 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
   useVisibleTask$(({ track }) => {
     const p = track(() => product.value);
     if (!p) return;
+    const urls = new Set<string>();
     const imgs = (p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[];
-    for (const src of imgs) {
+    for (const src of imgs) if (src) urls.add(src.replace(/\.(jpe?g|png)$/i, ".webp"));
+    // Logo products render the blank front/side bases and the tone/full logo as
+    // CSS background-images (LogoSlide), which are NOT in `imgs`. Preload every
+    // colour's bases + logos too, or the first few colour switches flash while
+    // the new colour's base/logo load. These paths are already final (webp/png).
+    const cfg = getLogoConfig(p.sku);
+    if (cfg) {
+      for (const c of Object.values(cfg.colors)) {
+        urls.add(c.views.front.src);
+        urls.add(c.views.side.src);
+        urls.add(c.toneLogo);
+        urls.add(c.defaultLogo);
+      }
+    }
+    for (const src of urls) {
       if (!src) continue;
       const img = new Image();
       img.decoding = "async";
-      img.src = src.replace(/\.(jpe?g|png)$/i, ".webp");
+      img.src = src;
+      // Decode ahead of time (not just download) so the FIRST switch to a colour
+      // repaints instantly instead of decoding on paint — the source of the
+      // remaining flash on the chest/back slide. Ignore failures (e.g. 404).
+      img.decode?.().catch(() => {});
     }
   });
 
@@ -264,7 +580,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
     }
   });
 
-  const addToCart = $(() => {
+  const addToCart = $(async () => {
     const p = product.value;
     if (!p || !selectedSize.value) return;
     if (p.colors.length > 0 && !selectedColor.value) return;
@@ -275,11 +591,34 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
       : getVariantMap(p)
         ? `${selectedSize.value} ${selectedVariant.value}`
         : selectedSize.value;
+    // For logo-overlay products, bake a thumbnail that reflects the chosen view
+    // (sleeve → side image, chest → front) with the logo composited at the
+    // selected position/style, so the cart shows exactly what was configured.
+    let logoThumb: string | null = null;
+    const lcfgThumb = getLogoConfig(p.sku);
+    if (lcfgThumb && selectedLogoPos.value && selectedColor.value) {
+      const cc = lcfgThumb.colors[selectedColor.value.toLowerCase()];
+      const opt = lcfgThumb.positions.find((o) => o.id === selectedLogoPos.value);
+      if (cc && opt) {
+        logoThumb = await composeLogoThumb(
+          cc.views[opt.view].src,
+          logoAsset(cc, selectedLogoStyle.value),
+          cc.boxes[selectedLogoPos.value as LogoPosition],
+        );
+      }
+    }
     try {
       const saved = localStorage.getItem(`ce_cart_mn_${loginType.value || "clothing"}`);
       const items = saved ? JSON.parse(saved) : [];
+      const lcfg = getLogoConfig(p.sku);
+      const logoActiveCart = !!(lcfg && selectedLogoPos.value);
+      const logoPosLabel = logoActiveCart
+        ? lcfg!.positions.find((o) => o.id === selectedLogoPos.value)?.label ?? ""
+        : "";
+      const logoStyleLabel = selectedLogoStyle.value === "tone" ? "Tone on tone" : "Standard";
       const existing = items.find(
         (i: any) => i.name === p.name && i.size === sizeVal && i.color === selectedColor.value
+          && (!logoActiveCart || (i.logoPosition === logoPosLabel && i.logoStyle === logoStyleLabel))
       );
       if (existing) {
         existing.quantity += selectedQty.value;
@@ -301,6 +640,8 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
             : null;
           if (match) colorImg = match;
         }
+        // Prefer the composited logo thumbnail when we have one.
+        if (logoThumb) colorImg = logoThumb;
         const item: any = {
           name: p.name,
           sku: p.sku,
@@ -318,6 +659,10 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
         }
         if (getVariantMap(p)) {
           item.variant = selectedVariant.value;
+        }
+        if (logoActiveCart) {
+          item.logoPosition = logoPosLabel;
+          item.logoStyle = logoStyleLabel;
         }
         items.push(item);
       }
@@ -343,6 +688,25 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
     const p0 = product.value;
     if (!p0) return;
     selectedColor.value = sortColorsWhiteLast(p0.colors)[0];
+    // Honour a colour handed off from the gallery card (?c=<hex>), when it's a
+    // real colour of this product — otherwise keep the default first colour.
+    const wantColor = loc.url.searchParams.get("c");
+    if (wantColor) {
+      const dec = decodeURIComponent(wantColor).toLowerCase();
+      const match = p0.colors.find((c) => c.toLowerCase() === dec);
+      if (match) selectedColor.value = match;
+    }
+    const lcfg0 = getLogoConfig(p0.sku);
+    if (lcfg0) {
+      selectedLogoPos.value = lcfg0.defaultPosition;
+      selectedLogoStyle.value = lcfg0.defaultStyle;
+      // Start on the default position's view (e.g. sleeve → side slide).
+      const opt = lcfg0.positions.find((o) => o.id === lcfg0.defaultPosition);
+      if (opt) imgIndex.value = Math.max(0, lcfg0.views.indexOf(opt.view));
+    } else {
+      selectedLogoPos.value = "";
+      selectedLogoStyle.value = "tone";
+    }
     if (waistLengthSkus.has(p0.sku)) {
       selectedSize.value = "W/L";
     } else if (getVariantMap(p0)) {
@@ -373,6 +737,37 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
   const p = product.value;
   const pdf = (p as any).pdf as string | undefined;
   const hasMultipleImgs = visibleImgs.value.length > 1;
+  // Live logo overlay: resolve the config + the selected colour's blank bases /
+  // placement boxes. `logoActive` gates the whole feature to configured SKUs.
+  const logoDef = getLogoConfig(p.sku);
+  const logoColor = logoDef && selectedColor.value
+    ? logoDef.colors[selectedColor.value.toLowerCase()] ?? null
+    : null;
+  const logoActive = !!(logoDef && logoColor);
+  const logoPosOpt = logoDef && selectedLogoPos.value
+    ? logoDef.positions.find((o) => o.id === selectedLogoPos.value) ?? null
+    : null;
+  // A view shows the logo ONLY when the customer's SELECTED position lives on it
+  // (chest → front, sleeve → side). Picking "Right chest" leaves the side view
+  // bare; picking "Sleeve" leaves the front views bare. The un-logo'd view just
+  // renders the pre-logo blank base (exported from the sm and preloaded), so the
+  // garment shown always matches the order and switching stays instant. Returning
+  // the selected option (not merely the first one on the view) also means the box
+  // is the selected placement — e.g. right-chest vs left-chest, not always left.
+  const posForView = (vk: string) =>
+    logoPosOpt && logoPosOpt.view === vk ? logoPosOpt : null;
+  // For logo products the carousel shows the live logo VIEWS (front/side) first,
+  // then any plain alternate photos for the colour that aren't part of the
+  // overlay system — e.g. the FootJoy back shot — as extra slides after them.
+  // Plain extra photos for logo products (shown as slides after the live logo
+  // views): the FootJoy back shot and the Heater Jersey chest close-up. NOT the
+  // MN-34 side (that's already a logo view), so match only back/chest, not side.
+  const logoExtraImgs = logoActive ? visibleImgs.value.filter((s) => /(back|chest)/i.test(s)) : [];
+  const logoThumbs = logoActive
+    ? [...logoDef!.views.map((vk) => logoColor!.views[vk].src), ...logoExtraImgs]
+    : [];
+  // Effective carousel slide count (logo views + extra photos, or plain images).
+  const slideCount = logoActive ? logoThumbs.length : visibleImgs.value.length;
   const isFootwear = (c: string) => c === "Safety Boots" || c === "Safety Shoes" || c === "Footwear";
   const tabCategory = isFootwear(p.category) ? "Footwear" : p.category;
   const catHash = tabCategory.toLowerCase().replace(/\s+/g, "-");
@@ -423,25 +818,73 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
               onTouchStart$={(e) => { touchStartX.value = e.touches[0].clientX; }}
               onTouchEnd$={(e) => {
                 const diff = touchStartX.value - e.changedTouches[0].clientX;
-                const imgs = visibleImgs.value;
-                if (Math.abs(diff) > 40) {
+                const n = slideCount;
+                if (Math.abs(diff) > 40 && n > 1) {
                   if (diff > 0) {
-                    imgIndex.value = (imgIndex.value + 1) % imgs.length;
+                    imgIndex.value = (imgIndex.value + 1) % n;
                   } else {
-                    imgIndex.value = (imgIndex.value - 1 + imgs.length) % imgs.length;
+                    imgIndex.value = (imgIndex.value - 1 + n) % n;
                   }
                 }
               }}
               onClick$={() => {
-                const imgs = visibleImgs.value;
                 if (window.innerWidth > 1024) {
                   imgFullscreen.value = true;
-                } else if (imgs.length > 1) {
-                  imgIndex.value = (imgIndex.value + 1) % imgs.length;
+                } else if (slideCount > 1) {
+                  imgIndex.value = (imgIndex.value + 1) % slideCount;
                 }
               }}
             >
-              {(visibleImgs.value).map((src, i) => (
+              {logoActive
+                ? (() => {
+                    const views = logoDef!.views;
+                    // The first slides are the live logo VIEWS (front/side); any
+                    // extra colour photos (the back shot) follow as plain images.
+                    if (imgIndex.value >= views.length) {
+                      const src = logoExtraImgs[imgIndex.value - views.length];
+                      // Stable key (by slot, NOT src) so a colour change swaps this
+                      // <img>'s src in place instead of remounting a blank element —
+                      // the new colour's photo is preloaded+decoded, so it repaints
+                      // with no flash. (Remounting on key={src} caused the flicker.)
+                      return (
+                        <picture key={`logo-extra-${imgIndex.value - views.length}`}>
+                          <source srcset={src.replace(/\.(jpe?g|png)$/i, ".webp")} type="image/webp" />
+                          <img
+                            src={src}
+                            alt={p.name}
+                            width="600"
+                            height="400"
+                            loading="eager"
+                            decoding="async"
+                            class="product-carousel__slide active"
+                          />
+                        </picture>
+                      );
+                    }
+                    // Render only the CURRENT view (front or side). Selecting a
+                    // position switches the view; clicking a thumbnail does too.
+                    // The logo shows only on the view the selected position lives
+                    // on (chest → front, sleeve → side).
+                    const vk = views[imgIndex.value] ?? views[0];
+                    const viewPos = posForView(vk);
+                    const showLogo = !!viewPos;
+                    return (
+                      <LogoSlide
+                        // Key by the base image so a colour/view swap remounts a
+                        // fresh <img> (it repaints); position/style changes keep
+                        // the same base, so only the overlay moves.
+                        key={logoColor!.views[vk].src}
+                        base={logoColor!.views[vk].src}
+                        ar={logoColor!.views[vk].ar}
+                        logo={showLogo ? logoAsset(logoColor!, selectedLogoStyle.value) : null}
+                        box={showLogo ? logoColor!.boxes[viewPos!.id] : null}
+                        active={true}
+                        alt={p.name}
+                        eager={true}
+                      />
+                    );
+                  })()
+                : (visibleImgs.value).map((src, i) => (
                 <picture key={i}>
                   <source srcset={src.replace(/\.(jpe?g|png)$/i, ".webp")} type="image/webp" />
                   <img
@@ -462,9 +905,9 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
                   {t("product.specsheet.pdf", locale.value)}
                 </a>
               )}
-              {(visibleImgs.value).length > 1 && (
+              {slideCount > 1 && (
                 <div class="product-carousel__indicators">
-                  {(visibleImgs.value).map((_, i) => (
+                  {Array.from({ length: slideCount }).map((_, i) => (
                     <button
                       key={i}
                       class={`product-carousel__dot ${imgIndex.value === i ? "active" : ""}`}
@@ -475,9 +918,9 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
                 </div>
               )}
             </div>
-            {(visibleImgs.value).length > 1 && (
+            {slideCount > 1 && (
               <div class="product-thumbs product-thumbs--column">
-                {(visibleImgs.value).map((src, i) => (
+                {(logoActive ? logoThumbs : visibleImgs.value).map((src, i) => (
                   <button
                     key={i}
                     class={`product-thumbs__item ${imgIndex.value === i ? "active" : ""}`}
@@ -516,30 +959,84 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
               </ul>
             )}
             {!waistLengthSkus.has(p.sku) && (
-            <div class="product-modal__field">
-              <label class="product-modal__label">{t("modal.size", locale.value)}{getVariantMap(p) && selectedVariant.value && <span class="product-modal__color-inline"> — {t(`variant.${selectedVariant.value}` as any, locale.value)}</span>}{!getVariantMap(p) && sizeOptions.value.some((s) => TALL_SIZES.has(s)) && selectedSize.value && <span class="product-modal__color-inline"> — {t(TALL_SIZES.has(selectedSize.value) ? "variant.Tall" : "variant.Regular", locale.value)}</span>}</label>
-              <div class="product-modal__options">
-                {sizeOptions.value.filter((s) => !TALL_SIZES.has(s)).map((size) => (
-                  <button
-                    key={size}
-                    class={`product-modal__option ${selectedSize.value === size ? "active" : ""}`}
-                    onClick$={() => (selectedSize.value = size)}
-                  >
-                    {size === "One Size" ? t("modal.onesize", locale.value) : size}
-                  </button>
-                ))}
-              </div>
-              {sizeOptions.value.some((s) => TALL_SIZES.has(s)) && (
-                <div class="product-modal__options product-modal__options--tall">
-                  {sizeOptions.value.filter((s) => TALL_SIZES.has(s)).map((size) => (
+            <div class={`product-modal__field ${logoActive ? "product-modal__field--with-logo" : ""}`}>
+              <div class="product-modal__size-block">
+                <label class="product-modal__label">{t("modal.size", locale.value)}{getVariantMap(p) && selectedVariant.value && <span class="product-modal__color-inline"> — {t(`variant.${selectedVariant.value}` as any, locale.value)}</span>}{!getVariantMap(p) && sizeOptions.value.some((s) => TALL_SIZES.has(s)) && selectedSize.value && <span class="product-modal__color-inline"> — {t(TALL_SIZES.has(selectedSize.value) ? "variant.Tall" : "variant.Regular", locale.value)}</span>}</label>
+                <div class="product-modal__options">
+                  {sizeOptions.value.filter((s) => !TALL_SIZES.has(s)).map((size) => (
                     <button
                       key={size}
                       class={`product-modal__option ${selectedSize.value === size ? "active" : ""}`}
                       onClick$={() => (selectedSize.value = size)}
                     >
-                      {size}
+                      {size === "One Size" ? t("modal.onesize", locale.value) : size}
                     </button>
                   ))}
+                </div>
+                {sizeOptions.value.some((s) => TALL_SIZES.has(s)) && (
+                  <div class="product-modal__options product-modal__options--tall">
+                    {sizeOptions.value.filter((s) => TALL_SIZES.has(s)).map((size) => (
+                      <button
+                        key={size}
+                        class={`product-modal__option ${selectedSize.value === size ? "active" : ""}`}
+                        onClick$={() => (selectedSize.value = size)}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {logoActive && (
+                <div class="product-modal__logo-row">
+                  <div class="product-modal__logo-group">
+                    <label class="product-modal__label">Logo position{logoPosOpt && <span class="product-modal__color-inline"> — {logoPosOpt.label}</span>}</label>
+                    <div class="product-modal__options">
+                      {logoDef!.positions.map((opt) => (
+                        <button
+                          key={opt.id}
+                          class={`product-modal__option ${selectedLogoPos.value === opt.id ? "active" : ""}`}
+                          onClick$={() => (selectedLogoPos.value = opt.id)}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div class="product-modal__logo-group">
+                    <label class="product-modal__label">Style<span class="product-modal__color-inline"> — {selectedLogoStyle.value === "tone" ? "Tone on tone" : "Standard"}</span></label>
+                    <div class="product-modal__options">
+                      <button
+                        class={`product-modal__option ${selectedLogoStyle.value === "default" ? "active" : ""}`}
+                        onClick$={() => (selectedLogoStyle.value = "default")}
+                      >
+                        Standard
+                      </button>
+                      <button
+                        class={`product-modal__option ${selectedLogoStyle.value === "tone" ? "active" : ""}`}
+                        onClick$={() => (selectedLogoStyle.value = "tone")}
+                      >
+                        Tone on tone
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {logoActive && p.colors.length > 0 && (
+                <div class="product-modal__color-block">
+                  <label class="product-modal__label">{t("modal.color", locale.value)}{selectedColor.value && <span class="product-modal__color-inline"> — {colorName(selectedColor.value, locale.value)}</span>}</label>
+                  <div class="product-modal__options">
+                    {swatchOrder(p.colors).map((color) => (
+                      <button
+                        key={color}
+                        class={`product-modal__color ${selectedColor.value === color ? "active" : ""}`}
+                        style={{ background: color }}
+                        onClick$={() => { selectedColor.value = color; }}
+                        aria-label={colorName(color, locale.value)}
+                        title={colorName(color, locale.value)}
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -590,11 +1087,11 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
                 </div>
               </div>
             )}
-            {p.colors.length > 0 && (
+            {p.colors.length > 0 && !logoActive && (
               <div class="product-modal__field">
                 <label class="product-modal__label">{t("modal.color", locale.value)}{selectedColor.value && <span class="product-modal__color-inline"> — {colorName(selectedColor.value, locale.value)}</span>}</label>
                 <div class="product-modal__options">
-                  {sortColorsWhiteLast(p.colors).map((color) => (
+                  {swatchOrder(p.colors).map((color) => (
                     <button
                       key={color}
                       class={`product-modal__color ${selectedColor.value === color ? "active" : ""}`}
@@ -679,38 +1176,6 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
           ? allProducts.filter((r) => r.sku !== p.sku && inLineup(r)).slice(0, 8)
           : (useCat ? sameCat : allApparel).slice(0, 8);
         const headingSuffix = isElectrical ? t("login.portal.electrical", locale.value) : useCat ? catLabel : t("nav.apparel", locale.value);
-        // Card inner markup, shared by the grid + carousel below (inline, not a
-        // component, to keep it a plain render helper).
-        const cardInner = (item: typeof related[number], loading: "eager" | "lazy") => (
-          <>
-            <div class="product-card__image">
-              <ProductImage src={item.img} alt={item.name} width={440} height={440} loading={loading} />
-            </div>
-            <div class="product-card__info">
-              <div class="product-card__name-row">
-                <div class="product-card__name">{item.name}</div>
-                <div class="product-card__price-group">
-                  {!hidePrice && (() => {
-                    const pr = Number(item.price) || 0;
-                    const dollars = Math.floor(pr);
-                    const cents = Math.round((pr - dollars) * 100).toString().padStart(2, "0");
-                    return (
-                      <div class="product-card__price">
-                        ${dollars}
-                        {cents !== "00" && <span class="product-card__price-cents">.{cents}</span>}
-                      </div>
-                    );
-                  })()}
-                  <span class="product-card__sizes">
-                    {(item.sizes === "One Size" ? [t("modal.onesize", locale.value)] : sizeGroups(item.sizes)).map((g) => (
-                      <span key={g} class="product-card__sizes-line">{g}</span>
-                    ))}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </>
-        );
         return (
           <div class="related-items">
             <h3 class="related-items__title">{t("product.more", locale.value)} {headingSuffix}</h3>
@@ -718,15 +1183,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
                 Route: they navigate (Link). */}
             <div class="related-items__grid">
               {related.slice(0, 4).map((item) => (
-                inFrame ? (
-                  <button key={item.sku} type="button" class="product-card product-card-link" onClick$={() => props.onSelectSku$?.(item.sku)}>
-                    {cardInner(item, "eager")}
-                  </button>
-                ) : (
-                  <Link key={item.sku} href={`/${item.sku}/`} class="product-card product-card-link">
-                    {cardInner(item, "eager")}
-                  </Link>
-                )
+                <RelatedCard key={item.sku} item={item} inFrame={inFrame} hidePrice={hidePrice} loading="eager" onSelectSku$={props.onSelectSku$} />
               ))}
             </div>
             <Carousel.Root class="related-carousel" slidesPerView={relatedPerView.value} gap={0.4} align="start" sensitivity={{ touch: 1.5, mouse: 1.5 }} rewind>
@@ -739,15 +1196,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
                 <Carousel.Scroller class="related-carousel__scroller">
                   {related.map((item) => (
                     <Carousel.Slide key={item.sku} class="related-carousel__slide">
-                      {inFrame ? (
-                        <button type="button" class="product-card product-card-link" onClick$={() => props.onSelectSku$?.(item.sku)}>
-                          {cardInner(item, "lazy")}
-                        </button>
-                      ) : (
-                        <Link href={`/${item.sku}/`} class="product-card product-card-link">
-                          {cardInner(item, "lazy")}
-                        </Link>
-                      )}
+                      <RelatedCard item={item} inFrame={inFrame} hidePrice={hidePrice} loading="lazy" onSelectSku$={props.onSelectSku$} />
                     </Carousel.Slide>
                   ))}
                 </Carousel.Scroller>
@@ -767,12 +1216,32 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
       {imgFullscreen.value && (
         <div class="product-fullscreen" onClick$={() => (imgFullscreen.value = false)}>
           <button class="product-fullscreen__close" aria-label="Close fullscreen" onClick$={(e) => { e.stopPropagation(); imgFullscreen.value = false; }}>&times;</button>
+          {logoActive && imgIndex.value < logoDef!.views.length ? (() => {
+            const vk = logoDef!.views[imgIndex.value] ?? logoDef!.views[0];
+            const viewPos = posForView(vk);
+            const showLogo = !!viewPos;
+            return (
+              <div class="product-fullscreen__logo" onClick$={(e) => e.stopPropagation()}>
+                <LogoSlide
+                  key={logoColor!.views[vk].src}
+                  base={logoColor!.views[vk].src}
+                  ar={logoColor!.views[vk].ar}
+                  logo={showLogo ? logoAsset(logoColor!, selectedLogoStyle.value) : null}
+                  box={showLogo ? logoColor!.boxes[viewPos!.id] : null}
+                  active={true}
+                  alt={p.name}
+                  eager={true}
+                />
+              </div>
+            );
+          })() : (
           <img
-            src={(visibleImgs.value)[imgIndex.value]}
+            src={logoActive ? logoExtraImgs[imgIndex.value - logoDef!.views.length] : (visibleImgs.value)[imgIndex.value]}
             alt={p.name}
             class="product-fullscreen__img"
             onClick$={(e) => e.stopPropagation()}
           />
+          )}
         </div>
       )}
     </div>
