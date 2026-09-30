@@ -533,20 +533,27 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
                       stoppropagation:click
                       onMouseEnter$={() => {
                         hoverColorName.value = c.startsWith("#") ? colorName(c, locale.value) : c;
-                        // Warm the image that actually shows: the logo base for logo
-                        // products, otherwise the colour's catalog photo.
-                        preload(logoCfg?.colors[c.toLowerCase()]?.views.front.src ?? imageForColor(item, c));
+                        // Warm BOTH the base image and the colour's logo graphic
+                        // (logo products), otherwise just the colour's catalog photo.
+                        const cc = logoCfg?.colors[c.toLowerCase()];
+                        preload(cc?.views.front.src ?? imageForColor(item, c));
+                        if (cc) preload(logoCfg?.defaultStyle === "default" ? cc.defaultLogo : cc.toneLogo);
                       }}
                       onMouseLeave$={() => { hoverColorName.value = ""; }}
                       onClick$={async (e) => {
                         e.stopPropagation();
-                        // The base image that will be shown for this colour — the
-                        // logo product's front base, or the plain colour photo.
-                        const src = logoCfg?.colors[c.toLowerCase()]?.views.front.src ?? imageForColor(item, c);
+                        const cc = logoCfg?.colors[c.toLowerCase()];
+                        // The base image + logo graphic that will be shown for this colour.
+                        const src = cc?.views.front.src ?? imageForColor(item, c);
+                        const logoSrc = cc ? (logoCfg?.defaultStyle === "default" ? cc.defaultLogo : cc.toneLogo) : undefined;
                         activeColor.value = c; // immediate: swatch highlight
-                        // Wait for decode so the swap doesn't flash — but cap the
-                        // wait so a slow/uncached decode can never block the swap.
-                        await Promise.race([preload(src), new Promise((r) => setTimeout(r, 400))]);
+                        // Decode the base AND the logo before swapping, so the logo
+                        // appears already on the garment instead of popping in after.
+                        // Capped so a slow/uncached decode can never block the swap.
+                        await Promise.race([
+                          Promise.all([preload(src), logoSrc ? preload(logoSrc) : Promise.resolve()]),
+                          new Promise((r) => setTimeout(r, 400)),
+                        ]);
                         // Flip the shown colour + image TOGETHER so the base and the
                         // logo overlay repaint in the same frame (smooth, in sync).
                         shownColor.value = c;

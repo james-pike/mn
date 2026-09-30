@@ -341,16 +341,23 @@ const RelatedCard = component$<{
                     stoppropagation:click
                     onMouseEnter$={() => {
                       hoverColorName.value = c.startsWith("#") ? colorName(c, locale.value) : c;
-                      preload(rcLogoCfg?.colors[c.toLowerCase()]?.views.front.src ?? imageForColor(item, c));
+                      const cc = rcLogoCfg?.colors[c.toLowerCase()];
+                      preload(cc?.views.front.src ?? imageForColor(item, c));
+                      if (cc) preload(rcLogoCfg?.defaultStyle === "default" ? cc.defaultLogo : cc.toneLogo);
                     }}
                     onMouseLeave$={() => { hoverColorName.value = ""; }}
                     onClick$={async (e) => {
                       e.stopPropagation();
-                      const src = rcLogoCfg?.colors[c.toLowerCase()]?.views.front.src ?? imageForColor(item, c);
+                      const cc = rcLogoCfg?.colors[c.toLowerCase()];
+                      const src = cc?.views.front.src ?? imageForColor(item, c);
+                      const logoSrc = cc ? (rcLogoCfg?.defaultStyle === "default" ? cc.defaultLogo : cc.toneLogo) : undefined;
                       activeColor.value = c; // immediate: swatch highlight
-                      // Wait for decode so the swap doesn't flash — but cap the
-                      // wait so a slow/uncached decode can never block the swap.
-                      await Promise.race([preload(src), new Promise((r) => setTimeout(r, 400))]);
+                      // Decode base AND logo before swapping so the logo shows already
+                      // on the garment instead of popping in after. Capped for safety.
+                      await Promise.race([
+                        Promise.all([preload(src), logoSrc ? preload(logoSrc) : Promise.resolve()]),
+                        new Promise((r) => setTimeout(r, 400)),
+                      ]);
                       // Flip shown colour + image together so base + logo repaint in sync.
                       shownColor.value = c;
                       activeImg.value = src;
