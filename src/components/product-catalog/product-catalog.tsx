@@ -389,54 +389,24 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
     >
       <div class="product-card__image">
         {cardLogoColor.value ? (() => {
-          // Logo product: show the chest-logo overlay (front view) on the card so
-          // the placement is visible, matching the PDP's default view. The card
-          // image is a fixed square, so the logo is positioned with pure CSS
-          // percentages — reproducing the base image's object-contain letterbox
-          // from its aspect ratio — instead of a JS-measured overlay (which is
-          // unreliable to time on a lazy card grid).
-          const cd = cardLogoColor.value;
-          // Use the SKU's default logo style (tone-on-tone or standard) so the
-          // card matches the PDP's default view.
-          const cardLogoSrc = logoCfg && logoCfg.defaultStyle === "default" ? cd.defaultLogo : cd.toneLogo;
-          const box = cd.boxes["left-chest"];
-          const ar = cd.views.front.ar;
-          const rw = ar >= 1 ? 1 : ar;
-          const rh = ar >= 1 ? 1 / ar : 1;
-          const ox = (1 - rw) / 2;
-          const oy = (1 - rh) / 2;
-          const webp = cd.views.front.src.replace(/\.(jpe?g|png)$/i, ".webp");
+          // Logo product: show the STATIC pre-baked card image (front with the
+          // default chest logo already composited — scripts/bake-card-logos.ts),
+          // not a live overlay. The logo is always on the garment and never pops
+          // in after a colour switch. Keyed by src so a colour swap repaints the
+          // already-decoded image in place (the swatch handler decodes first).
+          const cardSrc = cardLogoColor.value.views.front.src.replace(/\.webp$/i, "-logo.webp");
           return (
-            <>
-              <picture>
-                {webp !== cd.views.front.src && <source srcset={webp} type="image/webp" />}
-                <img
-                  src={cd.views.front.src}
-                  alt={item.name}
-                  width={440}
-                  height={440}
-                  loading={eager ? "eager" : "lazy"}
-                  fetchPriority={index < 4 ? "high" : "auto"}
-                  decoding="async"
-                />
-              </picture>
-              <div
-                class="product-card__logo"
-                style={{
-                  position: "absolute",
-                  left: `${(ox + box.x * rw) * 100}%`,
-                  top: `${(oy + box.y * rh) * 100}%`,
-                  width: `${box.w * rw * 100}%`,
-                  height: `${box.h * rh * 100}%`,
-                  backgroundImage: `url("${cardLogoSrc}")`,
-                  backgroundSize: "contain",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center",
-                  transform: box.rotation ? `rotate(${box.rotation}deg)` : undefined,
-                  pointerEvents: "none",
-                }}
+            <picture key={cardSrc}>
+              <img
+                src={cardSrc}
+                alt={item.name}
+                width={440}
+                height={440}
+                loading={eager ? "eager" : "lazy"}
+                fetchPriority={index < 4 ? "high" : "auto"}
+                decoding="async"
               />
-            </>
+            </picture>
           );
         })() : (
           /* Bound to the activeImg signal so a swatch click swaps the src in
@@ -533,30 +503,23 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
                       stoppropagation:click
                       onMouseEnter$={() => {
                         hoverColorName.value = c.startsWith("#") ? colorName(c, locale.value) : c;
-                        // Warm BOTH the base image and the colour's logo graphic
-                        // (logo products), otherwise just the colour's catalog photo.
+                        // Warm the image the card actually shows: the pre-baked logo
+                        // card image for logo products, else the colour's catalog photo.
                         const cc = logoCfg?.colors[c.toLowerCase()];
-                        preload(cc?.views.front.src ?? imageForColor(item, c));
-                        if (cc) preload(logoCfg?.defaultStyle === "default" ? cc.defaultLogo : cc.toneLogo);
+                        preload(cc ? cc.views.front.src.replace(/\.webp$/i, "-logo.webp") : imageForColor(item, c));
                       }}
                       onMouseLeave$={() => { hoverColorName.value = ""; }}
                       onClick$={async (e) => {
                         e.stopPropagation();
                         const cc = logoCfg?.colors[c.toLowerCase()];
-                        // The base image + logo graphic that will be shown for this colour.
-                        const src = cc?.views.front.src ?? imageForColor(item, c);
-                        const logoSrc = cc ? (logoCfg?.defaultStyle === "default" ? cc.defaultLogo : cc.toneLogo) : undefined;
+                        // The flat image shown for this colour: baked logo card image
+                        // (logo products) or the plain colour photo.
+                        const src = cc ? cc.views.front.src.replace(/\.webp$/i, "-logo.webp") : imageForColor(item, c);
                         activeColor.value = c; // immediate: swatch highlight
-                        // Decode the base AND the logo before swapping, so the logo
-                        // appears already on the garment instead of popping in after.
-                        // Capped so a slow/uncached decode can never block the swap.
-                        await Promise.race([
-                          Promise.all([preload(src), logoSrc ? preload(logoSrc) : Promise.resolve()]),
-                          new Promise((r) => setTimeout(r, 400)),
-                        ]);
-                        // Flip the shown colour + image TOGETHER so the base and the
-                        // logo overlay repaint in the same frame (smooth, in sync).
-                        shownColor.value = c;
+                        // Decode before swapping so the (logo-baked) image paints at
+                        // once. Capped so a slow/uncached decode can't block the swap.
+                        await Promise.race([preload(src), new Promise((r) => setTimeout(r, 400))]);
+                        shownColor.value = c; // drives the logo card image
                         activeImg.value = src;
                       }}
                     />

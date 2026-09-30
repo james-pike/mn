@@ -253,38 +253,14 @@ const RelatedCard = component$<{
     <>
       <div class="product-card__image">
         {rcLogoColor ? (() => {
-          const cd = rcLogoColor;
-          const cardLogoSrc = rcLogoCfg && rcLogoCfg.defaultStyle === "default" ? cd.defaultLogo : cd.toneLogo;
-          const box = cd.boxes["left-chest"];
-          const ar = cd.views.front.ar;
-          const rw = ar >= 1 ? 1 : ar;
-          const rh = ar >= 1 ? 1 / ar : 1;
-          const ox = (1 - rw) / 2;
-          const oy = (1 - rh) / 2;
-          const webp = cd.views.front.src.replace(/\.(jpe?g|png)$/i, ".webp");
+          // Static pre-baked card image (front + default chest logo already
+          // composited — scripts/bake-card-logos.ts), same as the gallery card:
+          // the logo is always present and never pops in on a colour switch.
+          const cardSrc = rcLogoColor.views.front.src.replace(/\.webp$/i, "-logo.webp");
           return (
-            <>
-              <picture>
-                {webp !== cd.views.front.src && <source srcset={webp} type="image/webp" />}
-                <img src={cd.views.front.src} alt={item.name} width={440} height={440} loading={loading} decoding="async" />
-              </picture>
-              <div
-                class="product-card__logo"
-                style={{
-                  position: "absolute",
-                  left: `${(ox + box.x * rw) * 100}%`,
-                  top: `${(oy + box.y * rh) * 100}%`,
-                  width: `${box.w * rw * 100}%`,
-                  height: `${box.h * rh * 100}%`,
-                  backgroundImage: `url("${cardLogoSrc}")`,
-                  backgroundSize: "contain",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center",
-                  transform: box.rotation ? `rotate(${box.rotation}deg)` : undefined,
-                  pointerEvents: "none",
-                }}
-              />
-            </>
+            <picture key={cardSrc}>
+              <img src={cardSrc} alt={item.name} width={440} height={440} loading={loading} decoding="async" />
+            </picture>
           );
         })() : (
           <picture>
@@ -342,23 +318,16 @@ const RelatedCard = component$<{
                     onMouseEnter$={() => {
                       hoverColorName.value = c.startsWith("#") ? colorName(c, locale.value) : c;
                       const cc = rcLogoCfg?.colors[c.toLowerCase()];
-                      preload(cc?.views.front.src ?? imageForColor(item, c));
-                      if (cc) preload(rcLogoCfg?.defaultStyle === "default" ? cc.defaultLogo : cc.toneLogo);
+                      preload(cc ? cc.views.front.src.replace(/\.webp$/i, "-logo.webp") : imageForColor(item, c));
                     }}
                     onMouseLeave$={() => { hoverColorName.value = ""; }}
                     onClick$={async (e) => {
                       e.stopPropagation();
                       const cc = rcLogoCfg?.colors[c.toLowerCase()];
-                      const src = cc?.views.front.src ?? imageForColor(item, c);
-                      const logoSrc = cc ? (rcLogoCfg?.defaultStyle === "default" ? cc.defaultLogo : cc.toneLogo) : undefined;
+                      const src = cc ? cc.views.front.src.replace(/\.webp$/i, "-logo.webp") : imageForColor(item, c);
                       activeColor.value = c; // immediate: swatch highlight
-                      // Decode base AND logo before swapping so the logo shows already
-                      // on the garment instead of popping in after. Capped for safety.
-                      await Promise.race([
-                        Promise.all([preload(src), logoSrc ? preload(logoSrc) : Promise.resolve()]),
-                        new Promise((r) => setTimeout(r, 400)),
-                      ]);
-                      // Flip shown colour + image together so base + logo repaint in sync.
+                      // Decode before swapping so the (logo-baked) image paints at once.
+                      await Promise.race([preload(src), new Promise((r) => setTimeout(r, 400))]);
                       shownColor.value = c;
                       activeImg.value = src;
                     }}
