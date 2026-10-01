@@ -21,6 +21,10 @@ export interface OrderItem {
   size?: string | null;
   quantity: number;
   price: number;
+  /** Logo-feature products (golf polos): the customer's chosen placement +
+   *  style, shown on the confirmation email and kept in the order items JSON. */
+  logoPosition?: string | null;
+  logoStyle?: string | null;
 }
 
 export interface OrderEmailData {
@@ -70,7 +74,7 @@ export function esc(s: string | undefined | null): string {
 export function buildOrderEmailHtml(o: OrderEmailData): string {
   const itemRows = o.items.map((i) =>
     `<tr>
-      <td style="padding:6px 12px;border-bottom:1px solid #eee">${esc(i.name)}${i.code ? ` <span style="color:#999;font-size:12px">${esc(i.code)}</span>` : i.sku ? ` <span style="color:#999;font-size:12px">(${esc(i.sku)})</span>` : ""}</td>
+      <td style="padding:6px 12px;border-bottom:1px solid #eee">${esc(i.name)}${i.code ? ` <span style="color:#999;font-size:12px">${esc(i.code)}</span>` : i.sku ? ` <span style="color:#999;font-size:12px">(${esc(i.sku)})</span>` : ""}${i.logoPosition ? `<br><span style="color:#999;font-size:12px">Logo: ${esc(i.logoPosition)}${i.logoStyle ? ` · ${esc(i.logoStyle)}` : ""}</span>` : ""}</td>
       <td style="padding:6px 12px;border-bottom:1px solid #eee">${i.color ? esc(i.color.startsWith("#") ? colorName(i.color) : i.color) + " / " : ""}${esc(i.size)}</td>
       <td style="padding:6px 12px;border-bottom:1px solid #eee;text-align:center">${i.quantity}</td>
       <td style="padding:6px 12px;border-bottom:1px solid #eee;text-align:right">$${(((Number(i.price) || 0) * i.quantity)).toFixed(2)}</td>

@@ -520,6 +520,11 @@ export const useSubmitOrder = routeAction$(
           length: z.string().max(20).optional().nullable(),
           variant: z.string().max(40).optional().nullable(),
           code: z.string().max(40).optional().nullable(),
+          // Logo-feature products: customer's chosen placement + style. Declared
+          // here so Zod keeps them (it strips undeclared keys) — they then flow
+          // into the confirmation email and the order items JSON.
+          logoPosition: z.string().max(60).optional().nullable(),
+          logoStyle: z.string().max(40).optional().nullable(),
         }),
       )
       .min(1)
