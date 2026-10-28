@@ -32986,4 +32986,100 @@
   @media (max-width: 999px) {
     html body .site-footer .site-footer__brand.brand-cluster { display: none !important; }
   }
+
+  /* ---- Add-to-Cart pinwheel: MN's own behaviour (transparent at rest; colours
+     fill in on tap/hover and while "Added" shows). From the desktop stylesheet. ---- */
+  /* The pinwheel logo chip */
+  .product-modal__add-mark {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 auto;
+  }
+  /* At rest the mark is an axis-aligned square; on hover it rotates into a
+     diamond (matching the header logo) as the colours come in. */
+  .product-modal__add-pinwheel {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(0deg) scale(0.7);
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.25));
+    transition: transform var(--transition);
+  }
+  /* Default: nothing shown — the triangles are transparent. The brand
+     colours stagger in (forward) on hover/press, stay coloured while the
+     "Added" state shows, then fade out in the reverse order. */
+  .product-modal__add-pinwheel polygon {
+    fill: transparent;
+    transition: fill 0.2s ease;
+  }
+  /* Fade-OUT stagger = reverse of the fade-in order. These delays apply
+     whenever the polygons return to transparent (on unhover, or when the
+     "Added" state ends). Hover/added rules below override the delay while
+     the colours are coming in, so fade-in stays forward. */
+  .product-modal__add-pinwheel polygon:nth-child(1) { transition-delay: 0.175s; }
+  .product-modal__add-pinwheel polygon:nth-child(2) { transition-delay: 0.15s; }
+  .product-modal__add-pinwheel polygon:nth-child(3) { transition-delay: 0.125s; }
+  .product-modal__add-pinwheel polygon:nth-child(4) { transition-delay: 0.1s; }
+  .product-modal__add-pinwheel polygon:nth-child(5) { transition-delay: 0.075s; }
+  .product-modal__add-pinwheel polygon:nth-child(6) { transition-delay: 0.05s; }
+  .product-modal__add-pinwheel polygon:nth-child(7) { transition-delay: 0.025s; }
+  .product-modal__add-pinwheel polygon:nth-child(8) { transition-delay: 0s; }
+  /* Press (touch/click) and the "Added" state reveal the colours. Hover is
+     handled separately under @media (hover: hover) so it doesn't stick on
+     touch devices after the tap. */
+  .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(1),
+  .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(1) { fill: #ffe2a6; transition-delay: 0s; }
+  .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(2),
+  .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(2) { fill: #ae1f2a; transition-delay: 0.025s; }
+  .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(3),
+  .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(3) { fill: #d43950; transition-delay: 0.05s; }
+  .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(4),
+  .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(4) { fill: #9ec069; transition-delay: 0.075s; }
+  .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(5),
+  .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(5) { fill: #7fa244; transition-delay: 0.1s; }
+  .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(6),
+  .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(6) { fill: #4689b3; transition-delay: 0.125s; }
+  .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(7),
+  .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(7) { fill: #31759c; transition-delay: 0.15s; }
+  .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(8),
+  .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(8) { fill: #ffd25b; transition-delay: 0.175s; }
+  .product-modal__add-glyph {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    width: 19px;
+    height: 19px;
+    color: var(--ce-white);
+    stroke-width: 2.6px;
+    filter: drop-shadow(0 1px 1.5px rgba(0,0,0,0.6));
+    /* Exit (added -> rest): snap back quickly. */
+    transition: opacity 0.12s ease;
+  }
+  /* Entry (rest -> added): slightly quicker than before, still a soft fade. */
+  .product-modal__add--added .product-modal__add-glyph {
+    transition: opacity 0.2s ease;
+  }
+  /* Crossfade cart -> checkmark in place when added */
+  .product-modal__add--branded:not(:disabled):active .product-modal__add-pinwheel,
+  .product-modal__add--added .product-modal__add-pinwheel {
+    transform: rotate(45deg) scale(0.62);
+  }
+  @media (hover: hover) {
+    .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(1) { fill: #ffe2a6; transition-delay: 0s; }
+    .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(2) { fill: #ae1f2a; transition-delay: 0.025s; }
+    .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(3) { fill: #d43950; transition-delay: 0.05s; }
+    .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(4) { fill: #9ec069; transition-delay: 0.075s; }
+    .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(5) { fill: #7fa244; transition-delay: 0.1s; }
+    .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(6) { fill: #4689b3; transition-delay: 0.125s; }
+    .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(7) { fill: #31759c; transition-delay: 0.15s; }
+    .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(8) { fill: #ffd25b; transition-delay: 0.175s; }
+    .product-modal__add--branded:not(:disabled):hover .product-modal__add-pinwheel { transform: rotate(45deg) scale(0.62); }
+  }
 }
