@@ -33082,4 +33082,27 @@
     .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(8) { fill: #ffd25b; transition-delay: 0.175s; }
     .product-modal__add--branded:not(:disabled):hover .product-modal__add-pinwheel { transform: rotate(45deg) scale(0.62); }
   }
+
+  /* ---- Login photo carousel: MN's second slide is a photo (not a logo
+     graphic like the template's), so it fills the frame like the van. ---- */
+  html body .login-modal--split .login-modal__slide:not(.login-modal__slide--wide) {
+    object-fit: cover !important;
+    object-position: center 45% !important;
+    padding: 0 !important;
+  }
+  /* Phones: keep the carousel (the template shows the van only). */
+  @media (max-width: 600px) {
+    html body .login-modal--split .login-modal__slide--wide { opacity: 0 !important; }
+    html body .login-modal--split .login-modal__slide--wide.is-active { opacity: 1 !important; }
+    html body .login-modal--split .login-modal__slide:not(.login-modal__slide--wide) { display: block !important; }
+    html body .login-modal--split .login-modal__dots.login-modal__dots--mob { display: flex !important; }
+    html body .login-modal--split .login-modal__carousel { pointer-events: auto !important; cursor: pointer; }
+  }
+  /* Tablets: no carousel — just the van photo, always (no dots, no tap). */
+  @media (min-width: 601px) {
+    html body .login-modal--split .login-modal__slide--wide { opacity: 1 !important; }
+    html body .login-modal--split .login-modal__slide:not(.login-modal__slide--wide),
+    html body .login-modal--split .login-modal__dots { display: none !important; }
+    html body .login-modal--split .login-modal__carousel { pointer-events: none !important; }
+  }
 }
