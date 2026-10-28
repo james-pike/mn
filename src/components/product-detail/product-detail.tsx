@@ -402,7 +402,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
   const selectedWaist = useSignal("");
   const selectedLength = useSignal("");
   const selectedVariant = useSignal("");
-  // Live logo overlay (products in LOGO_PRODUCTS, e.g. MN-34): the chosen logo
+  // Live logo overlay (products in LOGO_PRODUCTS): the chosen logo
   // position + style drive a CSS overlay instead of loading a new image.
   const selectedLogoPos = useSignal<LogoPosition | "">("");
   const selectedLogoStyle = useSignal<LogoStyle>("tone");
@@ -683,6 +683,19 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
       const match = p0.colors.find((c) => c.toLowerCase() === dec);
       if (match) selectedColor.value = match;
     }
+    // Open on the colour the gallery card was showing (its default image colour,
+    // or whatever swatch the user switched to before clicking through). The card
+    // stashes it in sessionStorage right before navigating; consume it once.
+    try {
+      const raw = typeof sessionStorage !== "undefined" ? sessionStorage.getItem("pdp-initial-color") : null;
+      if (raw) {
+        const saved = JSON.parse(raw) as { sku?: string; color?: string };
+        if (saved && saved.sku === p0.sku && saved.color && p0.colors.includes(saved.color)) {
+          selectedColor.value = saved.color;
+        }
+        sessionStorage.removeItem("pdp-initial-color");
+      }
+    } catch { /* sessionStorage unavailable (SSR / private mode) — keep default */ }
     const lcfg0 = getLogoConfig(p0.sku);
     if (lcfg0) {
       selectedLogoPos.value = lcfg0.defaultPosition;
@@ -748,7 +761,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
   // overlay system — e.g. the FootJoy back shot — as extra slides after them.
   // Plain extra photos for logo products (shown as slides after the live logo
   // views): the FootJoy back shot and the Heater Jersey chest close-up. NOT the
-  // MN-34 side (that's already a logo view), so match only back/chest, not side.
+  // side view (that's already a logo view), so match only back/chest, not side.
   const logoExtraImgs = logoActive ? visibleImgs.value.filter((s) => /(back|chest)/i.test(s)) : [];
   const logoThumbs = logoActive
     ? [...logoDef!.views.map((vk) => logoColor!.views[vk].src), ...logoExtraImgs]
@@ -1074,6 +1087,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
                 </div>
               </div>
             )}
+            <div class="product-modal__color-qty-row">
             {p.colors.length > 0 && !logoActive && (
               <div class="product-modal__field">
                 <label class="product-modal__label">{t("modal.color", locale.value)}{selectedColor.value && <span class="product-modal__color-inline"> — {colorName(selectedColor.value, locale.value)}</span>}</label>
@@ -1103,6 +1117,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
                 <span class="product-modal__qty-val">{selectedQty.value}</span>
                 <button class="product-modal__qty-btn" aria-label="Increase quantity" onClick$={() => (selectedQty.value++)}>+</button>
               </div>
+            </div>
             </div>
             <div class="product-modal__actions">
               <button
@@ -1198,7 +1213,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
         );
       })()}
       {added.value && (
-        <div class="toast">{t("modal.added", locale.value)} — {addedInfo.value}</div>
+        <div class="toast toast--show">{t("modal.added", locale.value)} — {addedInfo.value}</div>
       )}
       {imgFullscreen.value && (
         <div class="product-fullscreen" onClick$={() => (imgFullscreen.value = false)}>

@@ -1,6 +1,6 @@
 import { component$, Slot, useSignal, useTask$, useVisibleTask$, $, useContextProvider, useStore, useComputed$, createContextId, isBrowser } from "@builder.io/qwik";
 import type { Signal } from "@builder.io/qwik";
-import { Modal, Collapsible, Accordion } from '@qwik-ui/headless';
+import { Modal, Accordion } from '@qwik-ui/headless';
 import {
   Link,
   routeAction$,
@@ -15,9 +15,12 @@ import {
 import type { Cookie } from "@builder.io/qwik-city";
 import { createClient } from "@libsql/client";
 import { LocaleContext, t } from "../i18n";
+import { SecondaryBarContext } from "../context/secondary-bar";
 import type { Locale, TranslationKey } from "../i18n";
-import { allProducts, colorName } from "./apparel/products";
+import { allProducts, colorName, categoryLabel } from "./apparel/products";
 import { getGiftCard, giftContribution, deductGiftCard } from "../lib/giftcards";
+import { sortColorsWhiteLast } from "./apparel/utils";
+import { CATEGORY_ICONS } from "../lib/categories";
 import { sendConfirmationEmail } from "../lib/orders";
 import type { OrderEmailData, PaymentMethod } from "../lib/orders";
 import { createCheckoutSession } from "../lib/stripe";
@@ -28,7 +31,6 @@ const LOCALE_COOKIE = "ce_locale";
 // The home hero has been removed — "/" is now the catalog itself, so the header
 // must always be visible (solid, with its logo) exactly like every other route,
 // including the product pages. Hero slide-in mode is therefore OFF.
-const SHOW_HERO_HEADER = false;
 
 // Canadian provincial sales tax rates (combined GST/HST/PST/QST)
 const PROVINCE_TAX: Record<string, number> = {
@@ -593,6 +595,10 @@ export default component$(() => {
     }, 4000) as unknown as number;
   });
   const menuOpen = useSignal(false);
+  // Set when the menu closes because a search was committed from inside it, so
+  // the scroll-lock release lands on the results (top of the catalog) instead of
+  // restoring the scrolled-down position the menu was opened from.
+  const menuSearchScrollTop = useSignal(false);
   const savedLocale = useLocaleLoader();
   const locale = useSignal<Locale>(savedLocale.value);
 
@@ -633,6 +639,19 @@ export default component$(() => {
   const loginType = useSignal<string>(auth.value.loginType);
   useContextProvider(LoginTypeContext, loginType);
 
+  // Unified secondary-bar state (see SecondaryBarContext). Created here so the
+  // shell-level bar and the descendant ProductCatalog share one source of truth.
+  const barActiveCat = useSignal("All");
+  const barSearchQuery = useSignal("");
+  const barSearchOpen = useSignal(false);
+  const barVisibleCategories = useSignal<string[]>([]);
+  useContextProvider(SecondaryBarContext, {
+    activeCat: barActiveCat,
+    searchQuery: barSearchQuery,
+    searchOpen: barSearchOpen,
+    visibleCategories: barVisibleCategories,
+  });
+
   // Cart state
   const initialCartCount = useCartCountLoader();
   const cart = useStore<{ items: CartItem[] }>({ items: [] });
@@ -647,7 +666,6 @@ export default component$(() => {
   const submitting = useSignal(false);
   const checkoutOpen = useSignal(false);
   const checkoutStep = useSignal<"cart" | "details">("cart");
-  const summaryOpen = useSignal(true);
   const formError = useSignal("");
   const formTouched = useSignal(false);
   const empFirstName = useSignal("");
@@ -1041,7 +1059,25 @@ export default component$(() => {
     } else {
       const scrollY = Math.abs(parseInt(document.body.style.top || "0", 10));
       document.body.style.cssText = "";
-      window.scrollTo({ top: scrollY, behavior: "instant" });
+      if (menuSearchScrollTop.value) {
+        // Search committed from the menu: don't restore the pre-menu scroll —
+        // land on the results at the top of the catalog (below the sticky
+        // header/tab bar). Deferred a frame so it runs after the body is
+        // unlocked (scrollTo is a no-op while body is position:fixed).
+        menuSearchScrollTop.value = false;
+        requestAnimationFrame(() => {
+          const catalog = document.querySelector(".home-catalog") as HTMLElement | null;
+          if (catalog) {
+            const headerH = window.innerWidth < 601 ? 64 : window.innerWidth <= 1024 ? 67 : 66;
+            const top = catalog.getBoundingClientRect().top + window.scrollY - headerH;
+            window.scrollTo({ top: Math.max(top, 0), behavior: "instant" });
+          } else {
+            window.scrollTo({ top: 0, behavior: "instant" });
+          }
+        });
+      } else {
+        window.scrollTo({ top: scrollY, behavior: "instant" });
+      }
     }
   }, { strategy: 'document-ready' });
 
@@ -1078,7 +1114,18 @@ export default component$(() => {
   useVisibleTask$(({ track }) => {
     const p = track(() => loc.url.pathname);
     if (prevPath.value !== null && prevPath.value !== p) {
-      cartOpen.value = false;
+      // "Back to Cart"/cart button on the /checkout route navigates here to RE-open
+      // the cart. This close-on-nav would otherwise slam it shut right after, so
+      // honour the flag and open the cart (at the cart step) instead of closing it.
+      let reopen = false;
+      try { reopen = sessionStorage.getItem("reopen-cart") === "1"; } catch { /* ignore */ }
+      if (reopen) {
+        try { sessionStorage.removeItem("reopen-cart"); } catch { /* ignore */ }
+        checkoutStep.value = "cart";
+        cartOpen.value = true;
+      } else {
+        cartOpen.value = false;
+      }
       searchOpen.value = false;
     }
     prevPath.value = p;
@@ -1127,6 +1174,7 @@ export default component$(() => {
     cleanup(() => clearInterval(id));
   }, { strategy: "document-ready" });
 
+
   // Close modal and unlock scroll on successful login
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track, cleanup }) => {
@@ -1167,12 +1215,11 @@ export default component$(() => {
 
   return (
     <>
-      {/* Mobile + tablet: the responsive layouts aren't ready for launch yet, so
-          below the desktop breakpoint (<=1024px) cover the whole app with a
-          "coming soon" screen. Pure CSS media query (see .mobile-coming-soon in
-          global.css) — always rendered, shown only on small viewports, and its
-          max z-index sits over the header, login overlay and content alike. */}
-      <div class="mobile-coming-soon" aria-hidden="true">
+      {/* Mobile + tablet maintenance gate. Kept in the markup but hidden by CSS
+          now that the responsive layouts are live (see .mobile-coming-soon in
+          global.css) — flip it back on there if mobile/tablet ever needs to be
+          taken down again. */}
+      <div class="mobile-coming-soon" role="dialog" aria-label="Under maintenance">
         <div class="mobile-coming-soon__inner">
           <div class="mobile-coming-soon__brand brand-cluster">
             <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -1198,8 +1245,8 @@ export default component$(() => {
       {/* Login Modal */}
       {showLogin.value && !isPaymentReturn.value && (
         <div class={`login-overlay ${overlayFading.value ? "login-overlay--fading" : ""}`} onClick$={() => { if (auth.value.loggedIn) showLogin.value = false; }}>
-          {/* Split login (matches the sg project): sign-in on the left third,
-              a cross-fading carousel of the two MN hero slides on the right.
+          {/* Split login: sign-in on the left third,
+              a cross-fading carousel of the two hero slides on the right.
               Fills the viewport at a 16:9 frame on desktop; the carousel goes
               full-bleed behind the sign-in on tablet/mobile. */}
           <div class="login-modal login-modal--split" onClick$={(e) => e.stopPropagation()}>
@@ -1212,8 +1259,19 @@ export default component$(() => {
                 &times;
               </button>
             )}
+            {/* Desktop: display:contents (no box). Mobile/tablet: the single framed
+                card holding the photo carousel above the sign-in. */}
+            <div class="login-modal__stack">
             <div class="login-modal__form-pane">
               <div class="login-card">
+                {/* Desktop: the cover is display:contents and the locale button is
+                    hidden, so the desktop login is unchanged. Mobile/tablet: the
+                    recessed brand panel above the form. */}
+                <div class="login-card__cover">
+                <button type="button" class="login-card__locale" onClick$={toggleLocale} aria-label="Toggle language">
+                  <span>{locale.value === "en" ? "FR" : "EN"}</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                </button>
                 <div class="login-card__brand brand-cluster">
                   <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
@@ -1230,6 +1288,7 @@ export default component$(() => {
                     <span class="brand-cluster__word brand-cluster__word--sub">BUILDING SERVICES</span>
                     <span class="brand-cluster__word brand-cluster__word--muted">{t("logo.apparel", locale.value).toUpperCase()}</span>
                   </div>
+                </div>
                 </div>
                 <Form
                   action={loginAction}
@@ -1260,7 +1319,8 @@ export default component$(() => {
                   </button>
                 </Form>
               </div>
-              <div class="login-modal__dots">
+              {/* Desktop slide dots (bottom-right of the sign-in pane). */}
+              <div class="login-modal__dots login-modal__dots--desk">
                 <button
                   type="button"
                   class={`login-modal__dot ${loginHeroIndex.value === 0 ? "is-active" : ""}`}
@@ -1284,6 +1344,22 @@ export default component$(() => {
               <img src="/hero.jpg" alt="" width="1600" height="900"
                    loading="eager" decoding="sync"
                    class={`login-modal__slide ${loginHeroIndex.value === 1 ? "is-active" : ""}`} />
+              {/* Mobile/tablet slide dots (on the photo, as in the template). */}
+              <div class="login-modal__dots login-modal__dots--mob" stoppropagation:click>
+                <button
+                  type="button"
+                  class={`login-modal__dot ${loginHeroIndex.value === 0 ? "is-active" : ""}`}
+                  aria-label="Show slide 1"
+                  onClick$={() => { loginHeroIndex.value = 0; }}
+                />
+                <button
+                  type="button"
+                  class={`login-modal__dot ${loginHeroIndex.value === 1 ? "is-active" : ""}`}
+                  aria-label="Show slide 2"
+                  onClick$={() => { loginHeroIndex.value = 1; }}
+                />
+              </div>
+            </div>
             </div>
           </div>
         </div>
@@ -1423,12 +1499,14 @@ export default component$(() => {
                   open();
                 }
               }} aria-label="Search apparel">
+                <span class="site-header__search-label">{t("search.placeholder", locale.value)}</span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
               </button>
             )}
             {/* EN/FR toggle moved to the footer. */}
-            <button class={`cart-btn ${cart.items.length > 0 ? "cart-btn--active" : ""}`} onClick$={() => { if (isCheckout.value) { cartOpen.value = true; nav("/"); return; } cartOpen.value = !cartOpen.value; if (cartOpen.value) menuOpen.value = false; if (!cartOpen.value) checkoutStep.value = "cart"; }}>
-              <span class="cart-btn__label">{t("cart.mycart", locale.value)}</span>
+            <button class={`cart-btn ${cart.items.length > 0 ? "cart-btn--active" : ""}`} onClick$={() => { if (isCheckout.value) { try { sessionStorage.setItem("reopen-cart", "1"); } catch { /* ignore */ } nav("/"); return; } cartOpen.value = !cartOpen.value; if (cartOpen.value) menuOpen.value = false; if (!cartOpen.value) checkoutStep.value = "cart"; }}>
+              <span class="cart-btn__label cart-btn__label-full">{t("cart.mycart", locale.value)}</span>
+              <span class="cart-btn__label-short">{t("cart.short", locale.value)}</span>
               {cartOpen.value && !isCheckout.value ? (
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
               ) : (
@@ -1449,22 +1527,23 @@ export default component$(() => {
                 to hold the width → no shift); on mobile it's an in-flow flex
                 field that fills up to the hamburger (which stays at the far
                 right). */}
-            {showSearch.value && !cartOpen.value && (
+            {showSearch.value && (
               <div class="site-header__search">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
                 <input
                   type="text"
                   class="site-header__search-input"
                   aria-label="Search apparel"
-                  placeholder={narrowSearch.value ? t("search.placeholder.short", locale.value) : t("search.placeholder", locale.value)}
+                  placeholder={narrowSearch.value ? "" : t("search.placeholder", locale.value)}
                   value={searchValue.value}
                   onInput$={(_, el) => {
                     searchValue.value = el.value;
-                    // Only relay keystrokes for LIVE filtering when the catalog
-                    // grid is actually showing (the "/" route). The catalog stays
-                    // mounted on product pages (shared shell), so a DOM check would
-                    // wrongly relay there and shove the sidebar highlight around —
-                    // key off the route instead; Enter navigates back (see below).
+                    // Live-filter only when the catalog GRID is the current view.
+                    // The catalog stays mounted on a product page (PDP mode), so a
+                    // "is .home-catalog present" check is true there too and would
+                    // move the sidebar while the grid isn't even shown. Gate on the
+                    // route instead (grid == home "/"); on a PDP, typing only fills
+                    // the field — nothing moves until Enter (see below).
                     if (loc.url.pathname.replace(/\/+$/, "") === "") {
                       window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value }));
                     }
@@ -1474,17 +1553,23 @@ export default component$(() => {
                       e.preventDefault();
                       // Close the menu takeover so the filtered products are visible
                       // (searching from inside the open menu otherwise did nothing).
+                      // Flag the close as a search commit so the scroll-lock release
+                      // lands on the results instead of restoring the scrolled-down
+                      // position the menu was opened at.
+                      menuSearchScrollTop.value = true;
                       menuOpen.value = false;
                       if (loc.url.pathname.replace(/\/+$/, "") === "") {
                         // On the grid: commit the live-filtered results in place.
                         window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value }));
                         window.dispatchEvent(new CustomEvent("apparel-search-commit"));
                       } else {
-                        // On a product page: apply the search to the mounted catalog
-                        // FIRST (the shared shell keeps it alive), then swap to the
-                        // grid so it opens straight on the results. A ?q= nav doesn't
-                        // work here — the mount-time query handler doesn't re-run when
-                        // the already-mounted catalog leaves PDP mode.
+                        // On a product page: apply the search to the catalog (kept
+                        // mounted by the shared shell) FIRST, then swap to the grid
+                        // so it opens straight on the results. A ?q= navigation
+                        // wouldn't work here — the mount-time query handler doesn't
+                        // re-run when the already-mounted catalog switches out of
+                        // PDP mode, which left the first Enter showing the previous
+                        // category and needing a second Enter.
                         window.dispatchEvent(new CustomEvent("apparel-search", { detail: el.value }));
                         window.dispatchEvent(new CustomEvent("apparel-search-commit"));
                         nav("/");
@@ -1519,7 +1604,6 @@ export default component$(() => {
                 (like the cart button), so this strip carries no redundant close. */}
             <div class="nav-drawer__header">
               <Link href="/" class="nav-drawer__title" onClick$={() => { menuOpen.value = false; requestAnimationFrame(() => window.scrollTo(0, 0)); }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 {t("nav.home", locale.value)}
               </Link>
               {/* Language toggle in the middle of the bar — an inline icon + FR/EN
@@ -1551,25 +1635,37 @@ export default component$(() => {
                 </Link>
               )}
               {loginType.value !== "tech" && (() => {
-                // Mirror the catalog tabs (CLOTHING_CATEGORIES in
-                // product-catalog.tsx, minus "All") so the menu's categories and
-                // labels always match the tab bar. "Footwear" is the tab that
-                // groups the Safety Boots / Safety Shoes data categories.
-                const NAV_CATS: { key: TranslationKey; cat: string; icon: string }[] = [
-                  { key: "cat.Jackets", cat: "Jackets", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>' },
-                  { key: "cat.Sweaters", cat: "Sweaters", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 3 4 6 2 9.5 5 12v9h14v-9l3-2.5L20 6l-4.5-3-1.3 1.7a3.4 3.4 0 0 1-4.4 0z"/><path d="M9 4.2c.9 1.2 4.1 1.2 5 0"/></svg>' },
-                  { key: "cat.Shirts",  cat: "Shirts",  icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>' },
-                  { key: "cat.Polos",   cat: "Polos",   icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2l-4 4-4-4-4.38 1.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/><path d="M12 6v5"/></svg>' },
-                  { key: "cat.CapsBeanies", cat: "Hats", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>' },
-                  { key: "cat.SWAG",    cat: "SWAG",    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>' },
-                  ...(loginType.value !== "safety" ? [{ key: "nav.officewelcomekit" as TranslationKey, cat: "New Hire Kit", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>' }] : []),
-                ];
+                // Derived from the portal-aware category list the catalog
+                // publishes to SecondaryBarContext (barVisibleCategories) — so the
+                // menu's categories always match the tab bar, and a portal with no
+                // products in a category (e.g. Labourers with no Headwear) drops it
+                // here too. "All" is the tab bar's show-everything pill, not a
+                // drawer section, so it's filtered out. Icons + labels come from
+                // the same shared source the tabs use (CATEGORY_ICONS /
+                // categoryLabel), so the two can never drift apart.
+                const NAV_CATS = barVisibleCategories.value
+                  .filter((cat) => cat !== "All")
+                  .map((cat) => ({ cat, icon: CATEGORY_ICONS[cat] || "", label: categoryLabel(cat, locale.value) }));
                 const catMatches = (pCat: string, tabCat: string) =>
                   tabCat === "Footwear"
                     ? (pCat === "Safety Boots" || pCat === "Safety Shoes")
                     : pCat === tabCat;
+                // If the menu is opened from a product page (/<sku>/), pre-open the
+                // accordion on that product's category so the drawer lands already
+                // focused where the user is (the open item gets the green selected
+                // state too). The drawer is re-created each time it opens, so this
+                // initial value is recomputed per open. Collapses to the tab-bar
+                // category: footwear SKUs map to the "Footwear" section.
+                const pdpSku = loc.url.pathname.replace(/^\/+|\/+$/g, "");
+                const pdpProduct = pdpSku ? allProducts.find((p) => p.sku === pdpSku) : undefined;
+                const pdpTabCat = pdpProduct
+                  ? (pdpProduct.category === "Safety Boots" || pdpProduct.category === "Safety Shoes"
+                      ? "Footwear"
+                      : pdpProduct.category)
+                  : undefined;
+                const openCat = pdpTabCat && NAV_CATS.some((c) => c.cat === pdpTabCat) ? pdpTabCat : undefined;
                 return (
-                  <Accordion.Root class="nav-drawer__accordion" collapsible>
+                  <Accordion.Root class="nav-drawer__accordion" collapsible value={openCat}>
                     {NAV_CATS.map((c) => {
                       const items = allProducts.filter((p) => catMatches(p.category, c.cat));
                       return (
@@ -1594,7 +1690,7 @@ export default component$(() => {
                                 }}
                               >
                                 <span class="nav-drawer__cat-icon" dangerouslySetInnerHTML={c.icon} />
-                                {t(c.key, locale.value)}
+                                {c.label}
                               </span>
                               <svg class="nav-drawer__cat-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                             </Accordion.Trigger>
@@ -1605,7 +1701,14 @@ export default component$(() => {
                             ) : items.map((p) => (
                               <a key={p.sku} href={`/${p.sku}/`} class="nav-drawer__cat-item" onClick$={() => (menuOpen.value = false)}>
                                 <img src={p.img} alt="" width="24" height="24" class="nav-drawer__cat-item-img" loading="lazy" decoding="async" />
-                                {p.name.replace(/#\S+/g, '').replace(/\s*-\s*$/, '').trim()}
+                                <span class="nav-drawer__cat-item-name">{p.name.replace(/#\S+/g, '').replace(/\s*-\s*$/, '').trim()}</span>
+                                {p.colors && p.colors.length > 0 && (
+                                  <span class="nav-drawer__cat-item-swatches" aria-hidden="true">
+                                    {sortColorsWhiteLast(p.colors).slice(0, 5).map((c) => (
+                                      <span key={c} class="nav-drawer__cat-item-swatch" style={{ background: c }} />
+                                    ))}
+                                  </span>
+                                )}
                               </a>
                             ))}
                           </Accordion.Content>
@@ -1699,9 +1802,23 @@ export default component$(() => {
               <button class="modal__close cart-drawer__close-desktop" onClick$={() => (cartOpen.value = false)}>x</button>
             </div>
             {cart.items.length === 0 ? (
-              <div class="cart-drawer__empty">
-                <p>{t("cart.empty", locale.value)}</p>
-                <Link href="/" class="cart-drawer__back-link" onClick$={() => (cartOpen.value = false)}>{t("cart.backtoapparel", locale.value)}</Link>
+              <div class="cart-drawer__items cart-drawer__items--empty">
+                {/* Keep the same grey PRODUCT/QTY/TOTAL secondary bar the populated
+                    cart shows, so the empty cart reads as the same view with no
+                    rows rather than the header floating on the empty message. */}
+                <table class="cart-table">
+                  <thead>
+                    <tr>
+                      <th class="cart-table__th-product">{t("cart.invoice.product", locale.value)}</th>
+                      <th class="cart-table__th-qty">{t("cart.invoice.qty", locale.value)}</th>
+                      {loginType.value !== "tech" && <th class="cart-table__th-total"><span class="cart-table__th-qty-inline">{t("cart.invoice.qty", locale.value)} / </span>{t("cart.invoice.total", locale.value)}</th>}
+                    </tr>
+                  </thead>
+                </table>
+                <div class="cart-drawer__empty">
+                  <p>{t("cart.empty", locale.value)}</p>
+                  <Link href="/" class="cart-drawer__back-link" onClick$={() => (cartOpen.value = false)}>{t("cart.backtoapparel", locale.value)}</Link>
+                </div>
               </div>
             ) : (
               <>

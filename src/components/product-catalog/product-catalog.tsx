@@ -1,11 +1,21 @@
-import { component$, useSignal, useComputed$, useContext, $, useVisibleTask$, useOnDocument, Slot } from "@builder.io/qwik";
+import { component$, useSignal, useComputed$, useContext, $, useTask$, useVisibleTask$, useOnDocument, Slot, type QRL } from "@builder.io/qwik";
 import { useLocation, useNavigate } from "@builder.io/qwik-city";
 import { LocaleContext, t } from "../../i18n";
 import { allProducts, categoryLabel, colorName } from "../../routes/apparel/products";
+import { CLOTHING_CATEGORIES, CATEGORY_ICONS } from "../../lib/categories";
 import type { Product } from "../../routes/apparel/products";
 import { sizeGroups, sortColorsWhiteLast } from "../../routes/apparel/utils";
-import { LoginTypeContext, stickyTop } from "../../routes/layout";
+import { stickyTop, LoginTypeContext } from "../../routes/layout";
+import { SecondaryBarContext } from "../../context/secondary-bar";
 import { getLogoConfig } from "../../data/logo-placements";
+
+// Category list + glyphs live in a shared leaf module so the shell's menu drawer
+// uses the exact same source (see src/lib/categories.ts). Re-exported here for
+// any consumer that still imports them from the catalog.
+export { CLOTHING_CATEGORIES, CATEGORY_ICONS };
+
+// FIT (gender) sidebar facet — shown on the desktop sidebar for Carmichael.
+const SHOW_FIT_FACET = true;
 
 // Card colour preview: resolve a colour to the gallery image that depicts it,
 // using the same name→filename rule the PDP applies (see product-detail's
@@ -59,8 +69,6 @@ export function swatchOrder(colors: readonly string[]): string[] {
     .map(([c]) => c);
 }
 
-export const CLOTHING_CATEGORIES = ["All", "Shirts", "Jackets", "Polos", "Hats", "SWAG", "New Hire Kit"];
-
 // Electrical portal: shows ONLY these SKUs (the small Electrical-division lineup).
 // Add/replace the Electrical SKU codes here — order is preserved in the grid.
 // MN-36 = Carhartt FR Rigby Pants (104204), MN-37 = Carhartt FR Full Zip Hoodie
@@ -108,22 +116,6 @@ const CARD_HIDDEN_COLORS = new Set(["#c0392b", "#1e40af", "#6b3fa0"]);
 const CARD_SHOW_ALL_COLORS = new Set(["MN-33"]);
 const EMPTY_COLOR_SET = new Set<string>();
 
-export const CATEGORY_ICONS: Record<string, string> = {
-  "All": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
-  "Work Wear": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M4 6h16v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/><path d="M4 6l-2 4v2h4V8"/><path d="M20 6l2 4v2h-4V8"/></svg>',
-  "Jackets": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>',
-  "Shirts": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>',
-  "Sweaters": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 3 4 6 2 9.5 5 12v9h14v-9l3-2.5L20 6l-4.5-3-1.3 1.7a3.4 3.4 0 0 1-4.4 0z"/><path d="M9 4.2c.9 1.2 4.1 1.2 5 0"/></svg>',
-  "Footwear": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h3v8l7 2.5c1.5.5 2 1.4 2 2.5v2H4V6z"/><path d="M4 18h16"/><path d="M9 12l3 1"/></svg>',
-  "Polos": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2 12 5.5 8 2 3.62 3.46a2 2 0 00-1.34 1.93v15.12a2 2 0 001.34 1.93L8 24l4-3.5L16 24l4.38-1.46a2 2 0 001.34-1.93V5.39a2 2 0 00-1.34-1.93z"/></svg>',
-  "Hats": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>',
-  "SWAG": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>',
-  "New Hire Kit": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>',
-  "Flame Resistant": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>',
-  "Pants": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12l1 20h-5l-2-11-2 11H5L6 2z"/><path d="M6 2h12"/></svg>',
-  "Headwear": '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16"/><path d="M4 18a8 8 0 0116 0"/><path d="M2 18h20"/></svg>',
-};
-
 // Longer category names shown ONLY in the desktop sidebar column; mobile/tablet
 // tabs keep the short cat.* labels (see the --short/--full spans + CSS).
 export const FULL_CAT_KEYS: Record<string, string> = {};
@@ -138,7 +130,7 @@ function matchesQuery(p: Product, q: string): boolean {
 }
 
 // Return the category of the FIRST product that matches the search, so its tab
-// can be highlighted as active (matches the cm storefront). "All" if nothing
+// can be highlighted as active. "All" if nothing
 // matches or the query is empty.
 function categoryForQuery(query: string, products: Product[]): string {
   const q = query.trim().toLowerCase();
@@ -211,7 +203,7 @@ function brandOf(p: Product): string | null {
 }
 // Scroll the product grid up so it pins just below the sticky tab bar, so the
 // first results aren't hidden under it. Used by the category tabs and by search
-// (auto-position, mirroring the cm storefront).
+// (auto-position).
 function scrollProductsBelowBar() {
   const isDesktop = window.innerWidth > 1024;
   const headerH = stickyTop();
@@ -250,9 +242,9 @@ function scrollProductsBelowBar() {
 // Cards in the first visible rows are fetched eagerly so the first screen isn't
 // waiting on the lazy loader (which, on a slower production network, makes those
 // images visibly pop into their reserved squares one-by-one). 8 covers ~2 rows
-// on the desktop 4-up grid and ~4 rows on a 2-up phone. Everything past this
-// still lazy-loads on scroll — the "All" tab is 80+ products, and eager-loading
-// all of them would mean 80+ requests / megabytes of photos on first paint.
+// on the desktop grid and ~4 rows on a 2-up phone. Everything past this still
+// lazy-loads on scroll — the "All" tab is 80+ products, and eager-loading all of
+// them would mean 80+ requests / megabytes of photos on first paint.
 const EAGER_CARDS = 8;
 
 const ProductCard = component$<{ item: Product; sku: string; index: number }>(({ item, sku, index }) => {
@@ -575,7 +567,6 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
 
 export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) => {
   const locale = useContext(LocaleContext);
-  const loginType = useContext(LoginTypeContext);
   const loc = useLocation();
   const nav = useNavigate();
   // On a product route (/<sku>/) the shared shell shows the routed product
@@ -586,9 +577,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
   // On a product page, clicking the empty page margins / gutters around the detail
   // panel (any of the structural background layers, never the header/panel/links)
   // returns to the catalog. A document listener is used because a per-element
-  // handler on the huge section doesn't fire reliably in Qwik's dev delegation,
-  // and matching the TARGET's own class (not closest) avoids the open-click race
-  // where the click that opened the PDP would immediately bounce it back.
+  // handler on the huge section doesn't fire reliably in Qwik's dev delegation.
   useOnDocument(
     "click",
     $((ev: Event) => {
@@ -599,12 +588,15 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       if (bg.some((c) => tg.classList.contains(c))) nav("/");
     }),
   );
+  const loginType = useContext(LoginTypeContext);
   const isTech = useComputed$(() => loginType.value === "tech");
   const isSafety = useComputed$(() => loginType.value === "safety");
   const isElectrical = useComputed$(() => loginType.value === "electrical");
   const isSingleCat = useComputed$(() => isTech.value);
-  const activeCat = useSignal("All");
-  const searchQuery = useSignal("");
+  // Tab/search state is owned by the shell (SecondaryBarContext) so the unified
+  // secondary bar and this catalog stay in lockstep. These are the same signals,
+  // just provided one level up — every read/write below is unchanged.
+  const { activeCat, searchQuery, searchOpen, visibleCategories: publishedCats } = useContext(SecondaryBarContext);
   // Mobile tab strip: true once scrolled to the end (flips the chevron cue).
   const tabsAtEnd = useSignal(false);
   // Center the active category tab in the scrollable strip. The double rAF
@@ -616,7 +608,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
         ?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
     }));
   });
-  const searchOpen = useSignal(false); // tablet: search field opens over the tab bar
+  // searchOpen now comes from SecondaryBarContext (declared above).
   const tabletCols = useSignal<number | "list">(3);
   // Desktop grid density: false = default (5 per row), true = Catalog view (8 per
   // row). Toggled from the sidebar; ignored on mobile/tablet.
@@ -791,6 +783,24 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     });
   });
 
+  // This component also renders the PDP route (see `isPdp`), so navigating back
+  // from a product to /#<category> does NOT remount it: the mount-time applyHash()
+  // above runs only once, and no `hashchange` fires on a path change — so the
+  // breadcrumb's category was ignored and the grid stayed on "All" (with the
+  // active pill stuck on the All tab). Apply the hash REACTIVELY by tracking the
+  // location, so every SPA navigation that lands on the grid with a #category hash
+  // selects and highlights exactly that category. Guarded to a #category hash, so
+  // normal grid/search navigation never triggers it.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    const hash = track(() => loc.url.hash).replace("#", "");
+    if (hash && HASH_TO_CAT[hash]) {
+      activeCat.value = HASH_TO_CAT[hash];
+      history.replaceState(null, "", loc.url.pathname);
+      centerActiveTab();
+    }
+  });
+
   const doSearch = $(async (query: string) => {
     if (query.trim()) {
       activeCat.value = categoryForQuery(query, baseProducts.value);
@@ -830,6 +840,13 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       return SAFETY_CATEGORIES.filter((c) => ALWAYS_SHOW.has(c) || present.has(c));
     }
     return CLOTHING_CATEGORIES;
+  });
+
+  // Publish the login-aware category list to the shell (SecondaryBarContext) so
+  // the menu drawer's links stay in lockstep with the tab bar, with no second
+  // hand-maintained list to fall out of sync.
+  useTask$(({ track }) => {
+    publishedCats.value = track(() => visibleCategories.value);
   });
 
   // SKU count per category (from the unfiltered base set) for the sidebar
@@ -922,6 +939,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       <div class="home-catalog__inner">
         <div class={`home-catalog__header ${tabsAtEnd.value ? "home-catalog__header--tabs-end" : ""}`}>
           <h2 class="home-catalog__title">{t("nav.apparel", locale.value)}</h2>
+          {/* Catalog/list view mode removed — the gallery grid only. */}
           <div class="home-catalog__sidebar-search">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
             <input
@@ -990,26 +1008,9 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
             {/* Tablet column-count toggle. The mobile/tablet search input now
                 lives in the site header (see layout.tsx) so it no longer
                 crowds the category tab strip. */}
-            {/* Tablet view toggle: 3-per-row ↔ list (catalog) only — no 2-per-row.
-                The icon shown is the view you'll switch TO next. */}
-            <button
-              class="apparel-titlebar__action apparel-titlebar__action--tablet-cols"
-              aria-label={tabletCols.value === 3 ? "Show list view" : "Show 3 per row"}
-              onClick$={() => {
-                tabletCols.value = tabletCols.value === 3 ? "list" : 3;
-                requestAnimationFrame(() => requestAnimationFrame(() => scrollProductsBelowBar()));
-              }}
-            >
-              {tabletCols.value === 3 ? (
-                // next: list view — rows with a thumbnail + detail lines
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="4" height="4"/><line x1="10" y1="6" x2="21" y2="6"/><rect x="3" y="10" width="4" height="4"/><line x1="10" y1="12" x2="21" y2="12"/><rect x="3" y="16" width="4" height="4"/><line x1="10" y1="18" x2="21" y2="18"/></svg>
-              ) : (
-                // next: 3 per row
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="18"/><rect x="9.5" y="3" width="5" height="18"/><rect x="16" y="3" width="5" height="18"/></svg>
-              )}
-            </button>
-            {/* Tablet: search icon opens a field over the tab bar (cm-style),
-                so search no longer needs a slot in the site header. */}
+            {/* Tablet list/catalog view toggle removed — gallery grid only. */}
+            {/* Tablet: search icon opens a field over the tab bar, so search no
+                longer needs a slot in the site header. */}
             <button class="apparel-titlebar__action apparel-titlebar__action--tabbar-search" aria-label="Search" onClick$={() => (searchOpen.value = true)}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
             </button>
@@ -1071,7 +1072,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
               ))}
             </nav>
           )}
-          {!isPdp.value && !isElectrical.value && facetOptions.value.genders.length >= 1 && (
+          {SHOW_FIT_FACET && !isPdp.value && !isElectrical.value && facetOptions.value.genders.length >= 1 && (
             <div class="home-catalog__filter-group">
               <div class="home-catalog__filter-title">{t("filter.fit", locale.value)}</div>
               {facetOptions.value.genders.map((g) => (
