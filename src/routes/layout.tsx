@@ -536,6 +536,24 @@ export const useSubmitOrder = routeAction$(
   }),
 );
 
+// Menu product titles: drop the model code and, when the product's swatches are
+// shown beside it, the trailing colour ("… - Navy", "Hoodie-Black") — the same
+// clean-up the product cards do.
+function menuItemName(name: string, colors?: string[]): string {
+  const n = name.replace(/#\S+/g, "").replace(/\s*[-–]\s*$/, "").trim();
+  if (!colors || colors.length === 0) return n;
+  const esc = (x: string) => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const words = colors.map((c) => (c.startsWith("#") ? colorName(c, "en") : c)).filter(Boolean);
+  for (const w of words) {
+    const re = new RegExp(`\\s*[-–]\\s*${esc(w)}\\s*$`, "i");
+    if (re.test(n)) return n.replace(re, "").trim();
+  }
+  // A spaced " - Word(s)" tail that isn't one of its swatch names (e.g. a colour
+  // the catalog names differently): still a colour label, so drop it.
+  const m = n.match(/^(.*\S)\s+[-–]\s+([A-Za-z][A-Za-z /]{1,24})$/);
+  return m ? m[1].trim() : n;
+}
+
 function stripColorSuffix(name: string): string {
   const i = name.lastIndexOf(" - ");
   return i > -1 ? name.slice(0, i) : name;
@@ -1309,7 +1327,10 @@ export default component$(() => {
                       id="password"
                       name="password"
                       type="password"
-                      autoComplete="current-password"
+                      /* Not "current-password": browsers pre-filled a saved
+                         password (the grey dots) on every load. "one-time-code"
+                         keeps the gate empty until the password is typed. */
+                      autoComplete="one-time-code"
                       required
                       placeholder={t("login.password.placeholder", locale.value)}
                     />
@@ -1701,7 +1722,7 @@ export default component$(() => {
                             ) : items.map((p) => (
                               <a key={p.sku} href={`/${p.sku}/`} class="nav-drawer__cat-item" onClick$={() => (menuOpen.value = false)}>
                                 <img src={p.img} alt="" width="24" height="24" class="nav-drawer__cat-item-img" loading="lazy" decoding="async" />
-                                <span class="nav-drawer__cat-item-name">{p.name.replace(/#\S+/g, '').replace(/\s*-\s*$/, '').trim()}</span>
+                                <span class="nav-drawer__cat-item-name">{menuItemName(p.name, p.colors)}</span>
                                 {p.colors && p.colors.length > 0 && (
                                   <span class="nav-drawer__cat-item-swatches" aria-hidden="true">
                                     {sortColorsWhiteLast(p.colors).slice(0, 5).map((c) => (

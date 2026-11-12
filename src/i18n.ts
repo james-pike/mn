@@ -28,7 +28,7 @@ const translations = {
 
   // Login modal
   "login.title": { en: "Employee Login", fr: "Connexion employé" },
-  "login.subtitle": { en: "Login to access apparel", fr: "Connectez-vous pour accéder aux vêtements" },
+  "login.subtitle": { en: "Login to access apparel", fr: "Accédez aux vêtements" },
   "login.username": { en: "Username", fr: "Nom d'utilisateur" },
   "login.username.placeholder": { en: "Enter username", fr: "Entrez le nom d'utilisateur" },
   "login.portal": { en: "Login", fr: "Connexion" },

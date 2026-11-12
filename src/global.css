@@ -32438,12 +32438,18 @@
       top: calc(var(--ph) - var(--blend) * 0.3);
       z-index: 0;
       pointer-events: none;
-      opacity: 0.14;
-      background-image: radial-gradient(circle, rgba(255, 255, 255, 0.4) 1px, transparent 1px);
-      background-size: 12px 12px;
+      /* A vector dot (crisp at any pixel density; the 1px gradient dot smeared into
+         streaks on phones), fainter and on a wider 20px grid so it reads as a
+         light texture rather than a busy repeat. */
+      opacity: 0.1;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ccircle cx='10' cy='10' r='1' fill='%23fff' fill-opacity='0.4'/%3E%3C/svg%3E");
+      background-size: 20px 20px;
       -webkit-mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
       mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
     }
+    /* Phones: the card texture above is the only dot layer — drop the pane's own
+       14px grid underneath it, which doubled up into a busy, blurry repeat. */
+    .login-modal--split .login-modal__form-pane::before { display: none; }
     .login-modal--split .login-modal__form > * { position: relative; z-index: 1; }
   }
   @media (max-width: 600px) {
@@ -33095,7 +33101,10 @@
     html body .login-modal--split .login-modal__slide--wide { opacity: 0 !important; }
     html body .login-modal--split .login-modal__slide--wide.is-active { opacity: 1 !important; }
     html body .login-modal--split .login-modal__slide:not(.login-modal__slide--wide) { display: block !important; }
-    html body .login-modal--split .login-modal__dots.login-modal__dots--mob { display: flex !important; }
+    /* No pagination dots on the phone carousel (tapping still switches photos). */
+    html body .login-modal--split .login-modal__dots { display: none !important; }
+    /* A slightly slower cross-fade on phones (0.8s -> 1.2s). */
+    html body .login-modal--split .login-modal__slide { transition: opacity 1.2s ease !important; }
     html body .login-modal--split .login-modal__carousel { pointer-events: auto !important; cursor: pointer; }
   }
   /* Tablets: no carousel — just the van photo, always (no dots, no tap). */
@@ -33104,5 +33113,192 @@
     html body .login-modal--split .login-modal__slide:not(.login-modal__slide--wide),
     html body .login-modal--split .login-modal__dots { display: none !important; }
     html body .login-modal--split .login-modal__carousel { pointer-events: none !important; }
+  }
+
+  /* Login lockup on tablet/mobile: the desktop shape — mark centred above a
+     LEFT-aligned three-line wordmark that starts at the field edge and spans the
+     form width (BUILDING SERVICES ~98% of it), like the header's left-aligned
+     text, instead of a small centred block. Sized from the card's own width so
+     the proportions match at every phone/tablet size. The mark keeps its current
+     size so nothing is pushed out of the 100dvh screen. Desktop is untouched. */
+  /* The lockup box is its own size reference (the card is display: contents), so
+     the wordmark can be sized as a share of its width. Phones pin it to the
+     content column (--lw, the password field's width); on tablets it already
+     spans the field. */
+  .login-modal--split .login-card__brand.login-card__brand.brand-cluster {
+    container-type: inline-size;
+    padding-inline: 0 !important;
+    align-items: center;
+  }
+  /* Tablets: stretch the lockup box to the column (it was shrink-wrapped, which
+     gives a size-contained box no width to measure from). */
+  @media (min-width: 601px) {
+    .login-modal--split .login-card__brand.login-card__brand.brand-cluster {
+      width: 100% !important;
+      align-self: stretch !important;
+    }
+  }
+  @media (max-width: 600px) {
+    .login-modal--split .login-card__brand.login-card__brand.brand-cluster {
+      width: var(--lw) !important;
+      max-width: var(--lw) !important;
+      margin-inline: auto !important;
+      align-self: center !important;
+    }
+  }
+  /* !important: earlier "html body .login-card__brand ..." rules force a centred,
+     1.15rem wordmark with !important on tablet/mobile. */
+  .login-modal--split .login-card__brand .brand-cluster__words.brand-cluster__words {
+    align-self: stretch !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+  .login-modal--split .login-card__brand .brand-cluster__word.brand-cluster__word {
+    font-size: 9.4cqw !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.04 !important;
+  }
+
+  /* Phones: use the full 100dvh like the cm/tm logins. mn2 has no Proudly
+     Canadian badge between the lockup and the form, so the form sat right under
+     the lockup with a third of the screen empty below the button. Split the
+     spare height evenly above and below the form instead. */
+  @media (max-width: 600px) {
+    /* A modest gap under the lockup (scaled to the screen height) rather than an
+       even split, which left a big gap between the wordmark and the fields; the
+       rest of the spare height sits under the button. */
+    .login-modal--split .login-modal__form.login-modal__form {
+      margin-top: clamp(1.25rem, 7dvh, 4.5rem) !important;
+      margin-bottom: auto !important;
+    }
+  }
+  /* Wide phones: the wordmark ~8% larger (BUILDING SERVICES runs just past the
+     field edge, still well inside the card). */
+  @media (min-width: 401px) and (max-width: 600px) {
+    .login-modal--split .login-card__brand .brand-cluster__word.brand-cluster__word { font-size: 10.15cqw !important; }
+    /* Wide phones: the fields sit closer under the wordmark (~112px -> ~60px). */
+    .login-modal--split .login-modal__form.login-modal__form { margin-top: 0 !important; }
+    /* Wide phones: the logo mark a touch larger (70px -> 80px) and a little lower
+       (moved 8px; translate so the wordmark below doesn't move). */
+    html body .login-modal--split .login-card__brand .brand-cluster__mark.brand-cluster__mark {
+      width: 73px !important;   /* renders ~80px: an earlier rule scales the mark ~1.1x */
+      height: 73px !important;
+      translate: 0 8px;
+    }
+  }
+  /* Narrow phones too: fields closer under the wordmark (a further ~12px), and
+     a smaller LOGIN label (16.7px -> 14.5px; it read too big at this width). */
+  @media (max-width: 400px) {
+    .login-modal--split .login-modal__form.login-modal__form { margin-top: -12px !important; }
+    html body .login-modal--split .login-modal__submit.login-modal__submit { font-size: 14.5px !important; }
+  }
+
+  /* Phones: the header wordmark ~12% larger (12.6/10.5px -> 14.1/11.8px); the
+     three lines still sit within the mark's height. Tablet unchanged. */
+  @media (max-width: 600px) {
+    html body .site-header .site-header__logo .brand-cluster__word.brand-cluster__word {
+      font-size: 14.1px !important;
+      line-height: 1.02 !important;
+    }
+    html body .site-header .site-header__logo .brand-cluster__word.brand-cluster__word--sub,
+    html body .site-header .site-header__logo .brand-cluster__word.brand-cluster__word--muted {
+      font-size: 11.8px !important;
+    }
+  }
+
+  /* Tablets: a bit more horizontal breathing room. Header logo 8px in from the
+     edge (it sat ~5px from it); the login cover + form both 26px in, so the
+     wordmark and the fields move in together and stay aligned. */
+  @media (min-width: 601px) {
+    /* :not(#cm):not(#mn) out-ranks the "html body:not(#cm) ... { margin-left: -4px }" rule. */
+    html body:not(#cm):not(#mn) .site-header .site-header__logo { margin-left: 8px !important; }
+    html body .login-modal--split .login-card__cover.login-card__cover,
+    html body .login-modal--split .login-modal__form.login-modal__form {
+      padding-left: 26px !important;
+      padding-right: 26px !important;
+    }
+  }
+
+  /* Tablet wide: more side room again for the lockup + fields (26px -> 40px),
+     still moved together so the wordmark stays aligned with the fields. */
+  @media (min-width: 900px) {
+    html body .login-modal--split .login-card__cover.login-card__cover,
+    html body .login-modal--split .login-modal__form.login-modal__form {
+      padding-left: 40px !important;
+      padding-right: 40px !important;
+    }
+  }
+
+  /* A thinner light frame around the login gate (page edge + modal padding):
+     ~14px -> 8px on phones (7px on narrow phones), ~18px -> 10px on tablets. */
+  @media (max-width: 600px) {
+    html body .login-overlay.login-overlay { padding: 3px !important; }
+    html body .login-overlay .login-modal.login-modal--split { padding: 5px !important; }
+  }
+  @media (max-width: 400px) {
+    html body .login-overlay.login-overlay { padding: 2px !important; }
+  }
+  @media (min-width: 601px) {
+    html body .login-overlay.login-overlay { padding: 4px !important; }
+    html body .login-overlay .login-modal.login-modal--split { padding: 6px !important; gap: 6px !important; }
+  }
+}
+
+/* Product titles start on ONE line, the state the fit-to-one-line script
+   (product-catalog.tsx) ends in. They used to render wrapped onto two lines and
+   then snap to one after the script ran, which briefly changed every card's
+   height (e.g. when switching to Polos). Now the card height is final from the
+   first frame; the script only fine-tunes the font size. All sizes. */
+.product-card__info .product-card__name {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Tablets: give the login area more of the height and the logo area less —
+   ~28px moved from the lockup's top/bottom padding into the form's, so the
+   fields get more breathing room above and below; the total height is unchanged. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  html body .login-modal--split .login-card__cover.login-card__cover {
+    padding-top: 32px !important;
+    padding-bottom: 18px !important;
+  }
+  html body .login-modal--split .login-modal__form.login-modal__form {
+    padding-top: 33px !important;
+    padding-bottom: 35px !important;
+  }
+}
+
+/* Phones + tablets: swatches a little closer together on product cards (5px ->
+   3.5px) — the grid and the PDP "more like this" carousel share the card. */
+@media (max-width: 1024px) {
+  html body .product-card .product-card__colors { gap: 3.5px !important; column-gap: 3.5px !important; }
+}
+
+/* Phones + tablets: while a hovered/tapped colour name is showing in the swatch
+   row, hide the "Men's / Women's" prefix it would run into (the colour name has
+   the room; the prefix returns when the overlay goes). The older phone rule
+   targeted .product-card__sizes-gender, but the prefix shown here is
+   .product-card__gender. CSS-only, so it applies on the first tap with no
+   measuring. */
+@media (max-width: 1024px) {
+  html body .product-card__color-size-row:has(.product-card__color-name--overlay) .product-card__gender { opacity: 0 !important; }
+}
+
+/* Phones + tablets: the add-to-cart animation plays on TAP only. Hover effects
+   were gated to (hover: hover), which still fires in a desktop-browser preview at
+   these widths and on tablets with a trackpad/mouse — so hovering coloured and
+   turned the pinwheel and ran the sheen. While merely hovered (not pressed, not
+   in the "Added" state), hold the resting look; :active and --added (the tap /
+   added animation) are untouched. Desktop keeps its hover effect. */
+@media (max-width: 1024px) and (hover: hover) {
+  html body .product-modal__add--branded:hover:not(:active):not(.product-modal__add--added) .product-modal__add-pinwheel {
+    transform: rotate(0deg) scale(0.7) !important;
+  }
+  html body .product-modal__add--branded:hover:not(:active):not(.product-modal__add--added) .product-modal__add-pinwheel polygon {
+    fill: transparent !important;
+  }
+  html body .product-modal__add--branded:hover:not(:active):not(.product-modal__add--added)::before {
+    opacity: 0 !important;
+    animation: none !important;
   }
 }

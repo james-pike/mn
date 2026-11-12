@@ -330,7 +330,9 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
         el.style.fontSize = `${px}px`;
       }
       if (el.scrollWidth > el.clientWidth + 0.5) {
-        el.style.whiteSpace = "";
+        // Can't fit even at the floor: wrap instead. Explicit "normal" because the
+        // CSS now starts titles on one line (see .product-card__name in global.css).
+        el.style.whiteSpace = "normal";
         el.style.overflow = "";
         el.style.fontSize = "";
       }
