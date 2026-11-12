@@ -1179,6 +1179,51 @@ export default component$(() => {
     }
   }, { strategy: 'document-ready' });
 
+  // Phones/tablets: hold the login gate at the height it opened at. The
+  // on-screen keyboard shrinks the viewport when the password field is focused,
+  // and a 100dvh-sized gate shrank with it. --login-h (used by the <=1024px CSS)
+  // is measured on open and only re-measured on rotation or a resize while no
+  // field is focused (i.e. not the keyboard). Like tm, lift the card just enough
+  // to keep the field + LOGIN above the keyboard while typing, then settle back.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track, cleanup }) => {
+    if (!track(() => showLogin.value)) return;
+    if (!window.matchMedia("(max-width: 1024px)").matches) return;
+    const root = document.documentElement;
+    const typing = () => document.activeElement instanceof HTMLInputElement;
+    const setH = () => root.style.setProperty("--login-h", `${window.innerHeight}px`);
+    setH();
+    const onResize = () => { if (!typing()) setH(); };
+    const onRotate = () => setTimeout(setH, 250);
+    const vv = window.visualViewport;
+    const nudge = () => {
+      const card = document.querySelector(".login-modal--split") as HTMLElement | null;
+      const btn = document.querySelector(".login-modal__submit") as HTMLElement | null;
+      if (!card || !btn || !vv) return;
+      if (!typing() || !card.contains(document.activeElement)) { card.style.transform = ""; return; }
+      const lifted = new DOMMatrix(getComputedStyle(card).transform).m42; // current lift (<= 0)
+      const hidden = btn.getBoundingClientRect().bottom - lifted - (vv.offsetTop + vv.height - 12);
+      card.style.transition = "transform 0.2s ease";
+      card.style.transform = hidden > 0 ? `translateY(${-Math.ceil(hidden)}px)` : "";
+    };
+    const onFocusOut = () => setTimeout(nudge, 60);
+    window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onRotate);
+    vv?.addEventListener("resize", nudge);
+    vv?.addEventListener("scroll", nudge);
+    document.addEventListener("focusin", nudge);
+    document.addEventListener("focusout", onFocusOut);
+    cleanup(() => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onRotate);
+      vv?.removeEventListener("resize", nudge);
+      vv?.removeEventListener("scroll", nudge);
+      document.removeEventListener("focusin", nudge);
+      document.removeEventListener("focusout", onFocusOut);
+      root.style.removeProperty("--login-h");
+    });
+  }, { strategy: "document-ready" });
+
   // Login carousel autoplay: cross-fade the two hero slides every 6s while the
   // login modal is open. Stops (and is torn down) once the modal closes.
   // eslint-disable-next-line qwik/no-use-visible-task

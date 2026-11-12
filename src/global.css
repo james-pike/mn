@@ -33302,3 +33302,20 @@
     animation: none !important;
   }
 }
+
+/* Login gate height on phones/tablets: --login-h (set by layout.tsx on open; not
+   changed by the on-screen keyboard) instead of 100dvh, which shrank when the
+   keyboard opened. Minus the real frame (overlay padding x2), so the frame is
+   even top and bottom after the thinner-frame change. Falls back to 100dvh. */
+@media (max-width: 600px) {
+  html body .login-overlay .login-modal.login-modal--split { height: calc(var(--login-h, 100dvh) - 6px) !important; max-height: none !important; }
+  html body .login-modal__stack.login-modal__stack { max-height: calc(var(--login-h, 100dvh) - 6px - 10px) !important; }
+}
+@media (max-width: 400px) {
+  html body .login-overlay .login-modal.login-modal--split { height: calc(var(--login-h, 100dvh) - 4px) !important; }
+  html body .login-modal__stack.login-modal__stack { max-height: calc(var(--login-h, 100dvh) - 4px - 10px) !important; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  html body .login-overlay .login-modal.login-modal--split { max-height: calc(var(--login-h, 100dvh) - 8px) !important; }
+  html body .login-modal__stack.login-modal__stack { max-height: calc(var(--login-h, 100dvh) - 8px - 12px) !important; }
+}
