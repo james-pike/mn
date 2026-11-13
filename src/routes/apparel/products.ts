@@ -608,6 +608,23 @@ export const allProducts = [
     "details": "Padded laptop sleeve, Double drop handles, Detachable adjustable shoulder strap, Exterior water bottle pocket, Tranzip, #2020-27"
   },
   {
+    "sku": "MNFR-1",
+    "name": "Carhartt FR Rigby Pants - Navy",
+    "category": "Flame Resistant",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 159,
+    "img": "/sku/FRpants.png",
+    "imgs": [
+      "/sku/FRpants.png"
+    ],
+    "material": "9 oz 98% cotton / 2% spandex canvas with Rugged Flex stretch",
+    "details": "Flame-resistant, NFPA 70E and UL classified to NFPA 2112, relaxed fit, straight leg, phone and utility pockets, OEKO-TEX Standard 100, #104204"
+  },
+  {
     "sku": "MN-23",
     "name": "Eco Spiral Notebook with Pen - Blue",
     "category": "New Hire Kit",
@@ -623,6 +640,23 @@ export const allProducts = [
     ],
     "material": "FSC®-certified Mix paper and recycled materials, spiral bound",
     "details": "60 ruled cream sheets, Matching elastic pen loop, Ballpoint pen included, 5\" × 7\", Bullet, #SM-3468"
+  },
+  {
+    "sku": "MNFR-4",
+    "name": "Carhartt FR Full Zip Hoodie - Navy",
+    "category": "Flame Resistant",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#2c3e50"
+    ],
+    "price": 239.99,
+    "img": "/sku/FRfullzip.png",
+    "imgs": [
+      "/sku/FRfullzip.png"
+    ],
+    "material": "10.5 oz 40% cotton / 35% modacrylic / 15% viscose / 8% aramid / 2% antistat FR fleece",
+    "details": "Full-zip hood with adjustable drawcord, Vislon zip with Nomex tape, flame-resistant (meets NFPA 70E, ASTM F1506, UL classified to NFPA 2112), Force sweat-wicking, FastDry, #104982"
   },
   {
     "sku": "MN-24",

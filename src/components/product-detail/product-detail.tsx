@@ -5,7 +5,7 @@ import { LocaleContext, t } from "../../i18n";
 import { allProducts, colorName, categoryLabel } from "../../routes/apparel/products";
 import { expandSizes, sizeGroups, sortColorsWhiteLast } from "../../routes/apparel/utils";
 import { LoginTypeContext } from "../../routes/layout";
-import { ELECTRICAL_SKUS, imageForColor, genderOf, swatchOrder } from "../product-catalog/product-catalog";
+import { ELECTRICAL_SKUS, imageForColor, genderOf, swatchOrder, isSafetyProduct } from "../product-catalog/product-catalog";
 import { ProductImage } from "../product-image/product-image";
 import { LogoSlide } from "../logo-overlay/logo-slide";
 import { getLogoConfig, logoAsset, type LogoPosition, type LogoStyle, type LogoBox } from "../../data/logo-placements";
@@ -1152,9 +1152,10 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
         const visibleByLogin: Record<string, string[]> = {
           clothing: ["Jackets", "Sweaters", "Shirts", "Polos", "Hats", "SWAG", "New Hire Kit"],
           tech: ["Work Wear"],
-          safety: ["Flame Resistant", "Shirts", "Hats"],
+          hvac: ["Flame Resistant", "Shirts", "Hats"],
         };
         const isElectrical = loginType.value === "electrical";
+        const isHvac = loginType.value === "hvac";
         const visible = visibleByLogin[loginType.value] || visibleByLogin.clothing;
         const inVisible = visible.includes(p.category);
         // The "more products" carousel may ONLY contain items in the current
@@ -1165,7 +1166,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
         // Guardian FR/AR hoodies, category "Sweaters") leaked into the Service
         // carousel even though it's off-lineup.
         const inLineup = (r: (typeof allProducts)[number]) =>
-          isElectrical
+          isHvac ? isSafetyProduct(r.sku) : isElectrical
             ? ELECTRICAL_SKUS.includes(r.sku)
             : !ELECTRICAL_SKUS.includes(r.sku) && r.category !== "Flame Resistant";
         const sameCat = allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && inLineup(r) && r.category === p.category);

@@ -78,11 +78,11 @@ export const useLocaleLoader = routeLoader$(({ cookie }) => {
   return (saved === "fr" ? "fr" : "en") as Locale;
 });
 
-export type LoginType = "service" | "electrical" | null;
+export type LoginType = "service" | "electrical" | "hvac" | null;
 
 export function getLoginType(cookie: Cookie): LoginType {
   const val = cookie.get(AUTH_COOKIE)?.value;
-  if (val === "service" || val === "electrical") return val;
+  if (val === "service" || val === "electrical" || val === "hvac") return val;
   // backward compat: the old clothing/authenticated logins map to the full
   // Service catalog.
   if (val === "clothing" || val === "authenticated") return "service";
@@ -110,12 +110,15 @@ export const useLogin = routeAction$(
     // portal is derived from the matched password, not from the submitted field.
     const electricalPw = env.get("APP_PASSWORD") || env.get("VITE_APP_PASSWORD");
     const servicePw = env.get("SERVICE_PASSWORD") || env.get("VITE_SERVICE_PASSWORD");
-    if (!electricalPw && !servicePw) {
+    // HVAC: its own password (HVAC_PASSWORD) unlocks the FR-workwear lineup.
+    const hvacPw = env.get("HVAC_PASSWORD") || env.get("VITE_HVAC_PASSWORD");
+    if (!electricalPw && !servicePw && !hvacPw) {
       return fail(500, { message: "Login not configured" });
     }
 
     const granted =
       servicePw && password === servicePw ? "service"
+      : hvacPw && password === hvacPw ? "hvac"
       : electricalPw && password === electricalPw ? "electrical"
       : null;
     if (!granted) {
@@ -167,7 +170,7 @@ export const useSubmitOrder = routeAction$(
     const lt = getLoginType(cookie);
     // Electrical orders are tagged to their own vendor bucket; Service uses the
     // main Modern Niagara vendor.
-    const vendor = lt === "electrical" ? "modernniagara-electrical" : "modernniagara";
+    const vendor = lt === "electrical" ? "modernniagara-electrical" : lt === "hvac" ? "modernniagara-hvac" : "modernniagara";
     // Read from non-prefixed names first, fall back to VITE_* for backward compat.
     // Both are safe at runtime — env.get() reads server env, never bundles.
     const tursoUrl = env.get("TURSO_URL") || env.get("VITE_TURSO_URL");
@@ -651,7 +654,7 @@ export default component$(() => {
   useContextProvider(LocaleContext, locale);
 
   // Typed as string (not the "service" | "electrical" union): several views still
-  // compare against legacy portal values ("tech" / "safety"), and this also
+  // compare against other portal values ("tech" / "hvac"), and this also
   // matches LoginTypeContext's Signal<string>. Keeps the type-check (part of the
   // production build) from failing on those otherwise-narrowed comparisons.
   const loginType = useSignal<string>(auth.value.loginType);
@@ -1694,7 +1697,7 @@ export default component$(() => {
                   {t("cat.Work Wear", locale.value)}
                 </Link>
               )}
-              {loginType.value === "safety" && (
+              {loginType.value === "hvac" && (
                 <Link href="/" class={`nav-drawer__link ${(!loc.url.pathname.startsWith("/privacy") && !loc.url.pathname.startsWith("/checkout")) ? "active" : ""}`} onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "Flame Resistant" })); }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
                   {t("cat.Flame Resistant", locale.value)}
@@ -1813,7 +1816,7 @@ export default component$(() => {
             </div>
           </div>
           <div class="site-footer__col">
-          {loginType.value === "safety" && (
+          {loginType.value === "hvac" && (
           <nav class="site-footer__links">
             <Link href="/#fr" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Flame Resistant" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Flame Resistant", locale.value)}</Link>
             <Link href="/#shirts" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Shirts" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Shirts", locale.value)}</Link>
@@ -1821,7 +1824,7 @@ export default component$(() => {
             <Link class="site-footer__links-privacy" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>
           </nav>
           )}
-          {(loginType.value !== "tech" && loginType.value !== "safety") && (
+          {(loginType.value !== "tech" && loginType.value !== "hvac") && (
           <nav class="site-footer__links">
             <Link href="/#shirts" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Shirts" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Shirts", locale.value)}</Link>
             <Link href="/#jackets" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Jackets" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Jackets", locale.value)}</Link>

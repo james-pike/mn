@@ -103,7 +103,7 @@ export const isSkuInLineup = (
   if (loginType === "electrical")
     return !!product.portals?.includes("electrical") || ELECTRICAL_SKUS.includes(sku);
   if (loginType === "tech") return category === "Work Wear";
-  if (loginType === "safety") return isSafetyProduct(sku);
+  if (loginType === "hvac") return isSafetyProduct(sku); // HVAC login: the FR-workwear lineup
   // Clothing / Service (default): everything except FR + Electrical-only SKUs.
   return category !== "Flame Resistant" && !ELECTRICAL_SKUS.includes(sku);
 };
@@ -592,7 +592,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
   );
   const loginType = useContext(LoginTypeContext);
   const isTech = useComputed$(() => loginType.value === "tech");
-  const isSafety = useComputed$(() => loginType.value === "safety");
+  const isSafety = useComputed$(() => loginType.value === "hvac"); // HVAC login uses the Safety (FR) lineup
   const isElectrical = useComputed$(() => loginType.value === "electrical");
   const isSingleCat = useComputed$(() => isTech.value);
   // Tab/search state is owned by the shell (SecondaryBarContext) so the unified
