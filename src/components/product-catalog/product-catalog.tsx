@@ -69,44 +69,12 @@ export function swatchOrder(colors: readonly string[]): string[] {
     .map(([c]) => c);
 }
 
-// Electrical portal: shows ONLY these SKUs (the small Electrical-division lineup).
-// Add/replace the Electrical SKU codes here — order is preserved in the grid.
-// MN-36 = Carhartt FR Rigby Pants (104204), MN-37 = Carhartt FR Full Zip Hoodie
-// (104982) — renamed off the old MNFR- prefix to match the catalog's MN- numbering.
-// The FR Dearborn LS Tee (100235) isn't in the catalog yet — add it to the DB,
-// then drop its SKU in here.
-// Display order: T-Shirts, Sweaters, Pants, Headwear (matches the sidebar).
-export const ELECTRICAL_SKUS: string[] = ["MN-38", "MN-40", "MN-36", "MN-39"];
-const ELECTRICAL_SKU_SET = new Set(ELECTRICAL_SKUS);
-
-// Safety catalog: every MNFR-* item plus a small allowlist of standard SKUs,
-// minus a deny list for FR items we don't carry yet.
-const SAFETY_SKU_PREFIX = "MNFR-";
-const SAFETY_EXTRA_SKUS = new Set(["MN-2", "MN-3", "MN-5", "MN-6"]);
-const SAFETY_HIDDEN_SKUS = new Set(["MNFR-5", "MNFR-6"]); // FR Insulated Bib & Jacket
-export const SAFETY_CATEGORIES = ["All", "Flame Resistant", "Shirts", "Hats"];
-// Explicit display order for the Safety "All" view: FR shirt + hoodies,
-// FR pants, then the standard-SKU allowlist (short-sleeve tee,
-// long-sleeve tee, ball cap, toque).
-export const SAFETY_SKU_ORDER = ["MNFR-2", "MNFR-3", "MNFR-4", "MNFR-1", "MN-3", "MN-2", "MN-5", "MN-6"];
-export const isSafetyProduct = (sku: string) =>
-  !SAFETY_HIDDEN_SKUS.has(sku) && (sku.startsWith(SAFETY_SKU_PREFIX) || SAFETY_EXTRA_SKUS.has(sku));
-
-// Is a SKU part of the given login's catalogue lineup? Mirrors `baseProducts`
-// below, but as a pure function so the server-side route guard can reuse it —
-// keeping direct-URL access in lockstep with what each login can browse.
-export const isSkuInLineup = (
-  loginType: string | null,
-  product: { sku: string; category: string; portals?: string[] },
-): boolean => {
-  const { sku, category } = product;
-  if (loginType === "electrical")
-    return !!product.portals?.includes("electrical") || ELECTRICAL_SKUS.includes(sku);
-  if (loginType === "tech") return category === "Work Wear";
-  if (loginType === "hvac") return isSafetyProduct(sku); // HVAC login: the FR-workwear lineup
-  // Clothing / Service (default): everything except FR + Electrical-only SKUs.
-  return category !== "Flame Resistant" && !ELECTRICAL_SKUS.includes(sku);
-};
+// Login lineups (Electrical SKUs, isSkuInLineup) live in lib/lineup.ts and the
+// HVAC rule in lib/hvac.ts, shared with the layout's menu drawer.
+export { ELECTRICAL_SKUS, isSkuInLineup } from "../../lib/lineup";
+import { ELECTRICAL_SKUS, ELECTRICAL_SKU_SET } from "../../lib/lineup";
+export { SAFETY_CATEGORIES, SAFETY_SKU_ORDER, isSafetyProduct } from "../../lib/hvac";
+import { isSafetyProduct, SAFETY_CATEGORIES, SAFETY_SKU_ORDER } from "../../lib/hvac";
 
 // Colors hidden from catalog-card swatches (still visible on product detail page).
 const CARD_HIDDEN_COLORS = new Set(["#c0392b", "#1e40af", "#6b3fa0"]);
@@ -1055,7 +1023,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
           {!isSingleCat.value && (
             <nav class="home-catalog__catnav" aria-label="Collections">
               <div class="home-catalog__catnav-head">
-                <div class="home-catalog__catnav-title">{isElectrical.value ? t("login.portal.electrical", locale.value) : t("filter.collections", locale.value)}</div>
+                <div class="home-catalog__catnav-title">{isElectrical.value ? t("login.portal.electrical", locale.value) : isSafety.value ? `${t("filter.collections", locale.value)} - HVAC` : t("filter.collections", locale.value)}</div>
               </div>
               {visibleCategories.value.map((cat) => (
                 <button

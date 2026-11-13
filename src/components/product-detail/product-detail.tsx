@@ -73,7 +73,7 @@ function variantMapFromSizes(sizes: string): Record<string, string[]> | null {
 }
 
 // SKUs whose sizing is a waist × length grid (their own picker), never fit variants.
-const waistLengthSkus = new Set(["CAR-12", "CAR-14", "MN-1", "MNFR-1", "MN-36"]);
+const waistLengthSkus = new Set(["CAR-12", "CAR-14", "MN-1", "MNFR-1", "MN-36", "MNFR-5"]);
 
 // Explicit fit-variant size maps. Any product not listed here still gets fit
 // variants automatically when its sizes string encodes them (variantMapFromSizes),
@@ -532,11 +532,14 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
     "MN-1": ["28", "29", "30", "31", "32", "33", "34", "35", "36", "38", "40", "42", "44", "46", "48", "50", "52", "54"],
     "MNFR-1": ["30", "31", "32", "33", "34", "35", "36", "38", "40", "42", "44", "46"],
     "MN-36": ["30", "31", "32", "33", "34", "35", "36", "38", "40", "42", "44", "46", "48", "52"],
+    // FR Insulated Bib, Dark Navy (Carhartt 101626): no W46 in this colour.
+    "MNFR-5": ["30", "32", "34", "36", "38", "40", "42", "44", "48"],
   };
   const lengthOptionsBySku: Record<string, string[]> = {
     "MN-1": ["28", "30", "32", "34", "36"],
     "MNFR-1": ["30", "32", "34", "36"],
     "MN-36": ["30", "32", "34", "36"],
+    "MNFR-5": ["30", "32", "34", "36"],
   };
   const waistOptions = ["28", "29", "30", "31", "32", "33", "34", "35", "36", "38", "40", "42", "44", "46", "48", "50"];
   const lengthOptions = ["30", "32", "34", "36"];

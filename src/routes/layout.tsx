@@ -21,6 +21,7 @@ import { allProducts, colorName, categoryLabel } from "./apparel/products";
 import { getGiftCard, giftContribution, deductGiftCard } from "../lib/giftcards";
 import { sortColorsWhiteLast } from "./apparel/utils";
 import { CATEGORY_ICONS } from "../lib/categories";
+import { isSkuInLineup } from "../lib/lineup";
 import { sendConfirmationEmail } from "../lib/orders";
 import type { OrderEmailData, PaymentMethod } from "../lib/orders";
 import { createCheckoutSession } from "../lib/stripe";
@@ -1697,12 +1698,6 @@ export default component$(() => {
                   {t("cat.Work Wear", locale.value)}
                 </Link>
               )}
-              {loginType.value === "hvac" && (
-                <Link href="/" class={`nav-drawer__link ${(!loc.url.pathname.startsWith("/privacy") && !loc.url.pathname.startsWith("/checkout")) ? "active" : ""}`} onClick$={() => { menuOpen.value = false; window.dispatchEvent(new CustomEvent("select-category", { detail: "Flame Resistant" })); }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
-                  {t("cat.Flame Resistant", locale.value)}
-                </Link>
-              )}
               {loginType.value !== "tech" && (() => {
                 // Derived from the portal-aware category list the catalog
                 // publishes to SecondaryBarContext (barVisibleCategories) — so the
@@ -1736,7 +1731,9 @@ export default component$(() => {
                 return (
                   <Accordion.Root class="nav-drawer__accordion" collapsible value={openCat}>
                     {NAV_CATS.map((c) => {
-                      const items = allProducts.filter((p) => catMatches(p.category, c.cat));
+                      // Only the signed-in login's own lineup — the same rule the
+                      // catalog and the product route use (lib/lineup.ts).
+                      const items = allProducts.filter((p) => catMatches(p.category, c.cat) && isSkuInLineup(loginType.value, p as { sku: string; category: string; portals?: string[] }));
                       return (
                         <Accordion.Item key={c.cat} value={c.cat} class="nav-drawer__cat">
                           <Accordion.Header as="h3">

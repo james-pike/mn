@@ -399,7 +399,7 @@ export const allProducts = [
   },
   {
     "sku": "MNFR-2",
-    "name": "Carhartt FR Long Sleeve Button-Up Shirt - Light Blue",
+    "name": "Carhartt FR LS Button-Up Shirt - Light Blue",
     "category": "Flame Resistant",
     "sizes": "S - 4XL",
     "badge": "",
@@ -527,18 +527,20 @@ export const allProducts = [
   },
   {
     "sku": "MNFR-5",
-    "name": "Carhartt FR Insulated Bib - Navy",
+    "name": "Carhartt FR Duck Insulated Bib - Navy",
     "category": "Flame Resistant",
-    "sizes": "S - 4XL",
+    "sizes": "W30 - W48 / L30 - L36",
     "badge": "",
     "colors": [
       "#2c3e50"
     ],
     "price": 380,
-    "img": "",
-    "imgs": [],
-    "material": "",
-    "details": "Fire-resistant, #101626"
+    "img": "/sku/FRbib.png",
+    "imgs": [
+      "/sku/FRbib.png"
+    ],
+    "material": "13 oz 100% cotton FR duck / 11.5 oz FR quilted twill lining / FR modacrylic insulation",
+    "details": "Built for warmth in severe cold, 11.5 oz FR quilted lining with insulation, Meets NFPA 70E requirements, UL classified to NFPA 2112, Carhartt FR and CAT 4 labels on pocket, High back with FR suspenders and buckles, Multi-compartment bib pocket, Two lower-front and two back pockets, Double knees with knee-pad openings, Ankle-to-thigh brass leg zips, Nomex zip tape with snap-closed flaps, #101626"
   },
   {
     "sku": "MN-21",
@@ -559,7 +561,7 @@ export const allProducts = [
   },
   {
     "sku": "MNFR-6",
-    "name": "Carhartt FR Insulated Jacket - Navy",
+    "name": "Carhartt FR Duck Insulated Jacket - Navy",
     "category": "Flame Resistant",
     "sizes": "S - 4XL",
     "badge": "",
@@ -567,10 +569,12 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 290,
-    "img": "",
-    "imgs": [],
-    "material": "",
-    "details": "Fire-resistant, #101618"
+    "img": "/sku/FRjacket.png",
+    "imgs": [
+      "/sku/FRjacket.png"
+    ],
+    "material": "13 oz 100% cotton FR duck / 11.5 oz FR quilted twill lining / FR modacrylic insulation",
+    "details": "Arc rating CAT 4 (ATPV 54.3 cal/cm²), Meets NFPA 70E requirements, UL classified to NFPA 2112, 11.5 oz FR quilted lining with batting, Two-way brass zipper with Nomex tape, Arc-protective storm flaps, Two inside hook-and-loop pockets, Nomex inside waist drawcord, Nomex rib-knit storm cuffs, Under-collar snaps for optional FR hood, Carhartt FR and CAT 4 chest labels, #101618"
   },
   {
     "sku": "MN-25",
