@@ -569,9 +569,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 290,
-    "img": "/sku/FRjacket.png",
+    "img": "/sku/FRjacket-logo.png",
     "imgs": [
-      "/sku/FRjacket.png"
+      "/sku/FRjacket-logo.png"
     ],
     "material": "13 oz 100% cotton FR duck / 11.5 oz FR quilted twill lining / FR modacrylic insulation",
     "details": "Arc rating CAT 4 (ATPV 54.3 cal/cm²), Meets NFPA 70E requirements, UL classified to NFPA 2112, 11.5 oz FR quilted lining with batting, Two-way brass zipper with Nomex tape, Arc-protective storm flaps, Two inside hook-and-loop pockets, Nomex inside waist drawcord, Nomex rib-knit storm cuffs, Under-collar snaps for optional FR hood, Carhartt FR and CAT 4 chest labels, #101618"
@@ -655,9 +655,9 @@ export const allProducts = [
       "#2c3e50"
     ],
     "price": 239.99,
-    "img": "/sku/FRfullzip.png",
+    "img": "/sku/FRfullzip-logo.png",
     "imgs": [
-      "/sku/FRfullzip.png"
+      "/sku/FRfullzip-logo.png"
     ],
     "material": "10.5 oz 40% cotton / 35% modacrylic / 15% viscose / 8% aramid / 2% antistat FR fleece",
     "details": "Full-zip hood with adjustable drawcord, Vislon zip with Nomex tape, flame-resistant (meets NFPA 70E, ASTM F1506, UL classified to NFPA 2112), Force sweat-wicking, FastDry, #104982"
