@@ -91,6 +91,12 @@ const variantSizesBySku: Record<string, Record<string, string[]>> = {
     "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
     "Tall": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
   },
+  // FR Duck Insulated Jacket (Carhartt 101618), Dark Navy: Tall comes in L-3XL.
+  // Same price for both fits.
+  "MNFR-6": {
+    "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+    "Tall": ["L", "XL", "2XL", "3XL"],
+  },
   "MN-8": {
     "Short": ["M", "L", "XL", "2XL", "3XL", "4XL"],
     "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],

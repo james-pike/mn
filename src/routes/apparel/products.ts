@@ -563,7 +563,7 @@ export const allProducts = [
     "sku": "MNFR-6",
     "name": "Carhartt FR Duck Insulated Jacket - Navy",
     "category": "Flame Resistant",
-    "sizes": "S - 4XL",
+    "sizes": "S - 4XL / LT - 3XLT",
     "badge": "",
     "colors": [
       "#2c3e50"
