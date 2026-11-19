@@ -1,4 +1,4 @@
-import { component$, Slot, useSignal, useTask$, useVisibleTask$, $, useContextProvider, useStore, useComputed$, createContextId, isBrowser } from "@builder.io/qwik";
+import { component$, Slot, useSignal, useTask$, useVisibleTask$, $, sync$, useContextProvider, useStore, useComputed$, createContextId, isBrowser } from "@builder.io/qwik";
 import type { Signal } from "@builder.io/qwik";
 import { Modal, Accordion } from '@qwik-ui/headless';
 import {
@@ -1481,7 +1481,21 @@ export default component$(() => {
           </nav>
           <nav class="site-header__nav">
             {showSearch.value && (
-              <button class="site-header__search-btn" onClick$={() => {
+              <button class="site-header__search-btn" onClick$={[
+                // FIRST-TAP FOCUS FIX: iOS/iPadOS only raise the keyboard + caret
+                // for a focus() made synchronously inside the tap. A regular $()
+                // handler is lazy-loaded, so on the first tap its chunk is fetched
+                // before it runs and the focus lands after the gesture — the field
+                // opened without a caret and needed a second tap. sync$ runs
+                // inline with no fetch: reveal the field (same class the signal
+                // sets) and focus it here; the $() handler below does the rest.
+                sync$((_: Event, btn: HTMLElement) => {
+                  const header = btn.closest(".site-header");
+                  header?.classList.add("site-header--search-open");
+                  const input = header?.querySelector(".site-header__search-input") as HTMLInputElement | null;
+                  input?.focus({ preventScroll: true });
+                }),
+                $(() => {
                 // If the cart drawer is open, close it first.
                 cartOpen.value = false;
                 const header = document.querySelector(".site-header") as (HTMLElement & { __pin?: (() => void) | null }) | null;
@@ -1568,7 +1582,7 @@ export default component$(() => {
                 } else {
                   open();
                 }
-              }} aria-label="Search apparel">
+              })]} aria-label="Search apparel">
                 <span class="site-header__search-label">{t("search.placeholder", locale.value)}</span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
               </button>
