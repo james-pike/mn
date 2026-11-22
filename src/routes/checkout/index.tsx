@@ -16,7 +16,7 @@ import { Modal, Collapsible } from "@qwik-ui/headless";
 import { LocaleContext, t } from "../../i18n";
 import { colorName } from "../apparel/products";
 import { LoginTypeContext, useSubmitOrder } from "../layout";
-import { hidesPrices, poOptional, kitMissing, ELECTRICAL_SHIP_TO, ELECTRICAL_SUMMARY_ORDER } from "../../lib/lineup";
+import { hidesPrices, poOptional, kitMissing, fixedQtyFor, ELECTRICAL_SHIP_TO, ELECTRICAL_SUMMARY_ORDER } from "../../lib/lineup";
 import { ElectricalBrandPanel } from "../../components/kit-panel/kit-panel";
 
 // Provincial tax rates — mirrors the layout's table so the checkout total can
@@ -112,6 +112,8 @@ export default component$(() => {
       try {
         const saved = localStorage.getItem(`ce_cart_mn_${loginType.value || "clothing"}`);
         cart.items = saved ? (JSON.parse(saved) as CartItem[]) : [];
+        // Electrical: kit lines always carry the current fixed quantities.
+        for (const it of cart.items as any[]) { const fq = fixedQtyFor(loginType.value, it.sku); if (fq) it.quantity = fq; }
       } catch {
         cart.items = [];
       }
@@ -318,7 +320,7 @@ export default component$(() => {
                       <div key={`${item.name}-${item.size}`} class="cart-drawer__summary-item">
                         <span>
                           {item.color && item.color.startsWith("#") && <span class="cart-drawer__summary-swatch" style={{ background: item.color }} aria-hidden="true" />}
-                          {item.quantity}x {stripColorSuffix(item.name)}{(item.color || item.size) ? ` — ${item.color ? (item.color.startsWith("#") ? colorName(item.color, locale.value) : item.color) : ""}${item.color && item.size ? " / " : ""}${item.size || ""}` : ""}
+                          {item.quantity}x {stripColorSuffix(item.name)}{(item.color || item.size) ? ` — ${item.color ? (item.color.startsWith("#") ? colorName(item.color, loginType.value === "electrical" ? "en" : locale.value) : item.color) : ""}${item.color && item.size ? " / " : ""}${item.size || ""}` : ""}
                           {(item as any).logoPosition ? <span class="cart-drawer__summary-logo"> · Logo: {(item as any).logoPosition}{(item as any).logoStyle ? ` (${(item as any).logoStyle})` : ""}</span> : null}
                         </span>
                         {!hidesPrices(loginType.value) && <span>${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</span>}
@@ -457,7 +459,7 @@ export default component$(() => {
             )}
             {kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).length > 0 && (
               <div class="cart-drawer__error cart-drawer__kit-note" role="status">
-                Every order is the full kit (5 shirts, 5 pants, 1 hoodie, 1 cap). Still to add: {kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).join(", ")}.
+                {locale.value === "fr" ? "Chaque commande comprend l’ensemble complet (3 shirts, 4 pants, 2 hoodies, 1 cap). Il manque : " : "Every order is the full kit (3 shirts, 4 pants, 2 hoodies, 1 cap). Still to add: "}{kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).join(", ")}.
               </div>
             )}
             <div class="cart-drawer__footer">

@@ -33,9 +33,9 @@ export const isSkuInLineup = (
 // every order is the same kit — each product's quantity is fixed (adding it
 // again replaces its line; the cart has no +/- for it).
 export const ELECTRICAL_FIXED_QTY: Record<string, number> = {
-  "MN-36": 5, // Carhartt FR Rigby Pants
-  "MN-38": 5, // Carhartt FR Force Dearborn LS T-Shirt
-  "MN-40": 1, // Atlas Guardian FR/AR 1/4 Zip Hoodie
+  "MN-36": 4, // Carhartt FR Rigby Pants
+  "MN-38": 3, // Carhartt FR Force Dearborn LS T-Shirt
+  "MN-40": 2, // Atlas Guardian FR/AR 1/4 Zip Hoodie
   "MN-39": 1, // Flexfit Embroidered Cap
 };
 /** Logins that never see prices (cards, product page, cart, checkout, email). */
@@ -51,9 +51,9 @@ export const fixedQtyFor = (loginType: string | null | undefined, sku: string | 
 // Every Electrical order is the complete kit: all four items, at the fixed
 // quantities above. Short labels for the "still to add" note.
 export const ELECTRICAL_KIT_LABELS: Record<string, string> = {
-  "MN-36": "5 Pants",
-  "MN-38": "5 Shirts",
-  "MN-40": "1 Hoodie",
+  "MN-36": "4 Pants",
+  "MN-38": "3 Shirts",
+  "MN-40": "2 Hoodies",
   "MN-39": "1 Cap",
 };
 /** Kit items still missing from the cart (labels), or [] when complete / not a kit login. */

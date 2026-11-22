@@ -39,7 +39,7 @@ const PICKS: Record<string, Pick> = {
 };
 
 // Short labels for the bar ("5 T-shirts").
-const SHORT: Record<string, string> = { "MN-38": "shirts", "MN-40": "hoodie", "MN-36": "pants", "MN-39": "cap" };
+const SHORT: Record<string, string> = { "MN-38": "shirts", "MN-40": "hoodies", "MN-36": "pants", "MN-39": "cap" };
 // Order of the bar's kit list: shirts, pants, hoodie, cap.
 const BAR_ORDER = ["MN-38", "MN-36", "MN-40", "MN-39"];
 
@@ -59,6 +59,10 @@ function kitProducts() {
     .filter((p): p is (typeof allProducts)[number] => !!p);
 }
 // "Carhartt FR Rigby Pants - Dark Khaki" -> "Carhartt FR Rigby Pants"
+// EN/FR for the kit's own text (product names stay as-is).
+const L = (loc: string, en: string, fr: string) => (loc === "fr" ? fr : en);
+const FIT_FR: Record<string, string> = { Regular: "Régulier", Tall: "Grand" };
+const short = (_loc: string, sku: string) => SHORT[sku]; // kit item words stay English
 const baseName = (n: string) => n.replace(/\s+-\s+[^-]+$/, "");
 const cartKey = (lt: string | null | undefined) => `ce_cart_mn_${lt || "clothing"}`;
 // Feature bullets from the comma list; the "#code" goes on its own line.
@@ -70,38 +74,39 @@ const styleCode = (d: string | undefined) => (d || "").match(/#[A-Za-z0-9]+/)?.[
 /** Size pickers for one kit item (shared by the cards and the tablet PDP panel). */
 export const KitPickers = component$<{ sku: string; v: KitSel; label: string }>(({ sku, v, label }) => {
   const pk = PICKS[sku];
+  const loc = useContext(LocaleContext).value;
   return (
     <div class="kit-card__pick">
       {pk?.kind === "fit" && (
         <>
           <select aria-label={`${label} fit`} value={v.fit} onChange$={(_, el) => { v.fit = el.value; if (v.size && !pk.fits[el.value].includes(v.size)) v.size = undefined; }}>
-            {Object.keys(pk.fits).map((f) => <option key={f} value={f}>{f}</option>)}
+            {Object.keys(pk.fits).map((f) => <option key={f} value={f}>{loc === "fr" ? FIT_FR[f] ?? f : f}</option>)}
           </select>
           <select aria-label={`${label} size`} value={v.size ?? ""} onChange$={(_, el) => { v.size = el.value || undefined; }}>
-            <option value="">Size</option>
+            <option value="">{L(loc, "Size", "Taille")}</option>
             {pk.fits[v.fit || "Regular"].map((s) => <option key={s} value={s}>{s}</option>)}
           </select>
         </>
       )}
       {pk?.kind === "size" && (
         <select aria-label={`${label} size`} value={v.size ?? ""} onChange$={(_, el) => { v.size = el.value || undefined; }}>
-          <option value="">Size</option>
+          <option value="">{L(loc, "Size", "Taille")}</option>
           {pk.sizes.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
       )}
       {pk?.kind === "waistLength" && (
         <>
           <select aria-label={`${label} waist`} value={v.waist ?? ""} onChange$={(_, el) => { v.waist = el.value || undefined; }}>
-            <option value="">Waist</option>
+            <option value="">{L(loc, "Waist", "Taille")}</option>
             {pk.waists.map((w) => <option key={w} value={w}>{`W${w}`}</option>)}
           </select>
           <select aria-label={`${label} length`} value={v.length ?? ""} onChange$={(_, el) => { v.length = el.value || undefined; }}>
-            <option value="">Length</option>
+            <option value="">{L(loc, "Length", "Longueur")}</option>
             {pk.lengths.map((l) => <option key={l} value={l}>{`L${l}`}</option>)}
           </select>
         </>
       )}
-      {(!pk || pk.kind === "one") && <span class="kit-card__one">One Size</span>}
+      {(!pk || pk.kind === "one") && <span class="kit-card__one">{L(loc, "One Size", "Taille unique")}</span>}
     </div>
   );
 });
@@ -118,6 +123,7 @@ function sizeLabel(sku: string, v: KitSel | undefined): string {
 
 export const KitBuilder = component$(() => {
   const loginType = useContext(LoginTypeContext);
+  const locale = useContext(LocaleContext);
   const sel = useStore<Record<string, KitSel>>(
     Object.fromEntries(ELECTRICAL_SKUS.map((s) => [s, s === "MN-38" ? { fit: "Regular" } : {}])),
   );
@@ -193,6 +199,9 @@ export const KitBuilder = component$(() => {
     } catch (err) { console.error("addKit error:", err); }
   });
 
+  const loc = locale.value;
+  // Size text for the summary, with the fit word in the current language.
+  const szText = (sz: string) => sz.replace(" x ", " × "); // kit line stays English
   return (
     <div class="kit-builder">
       <div class="kit-builder__grid">
@@ -204,18 +213,18 @@ export const KitBuilder = component$(() => {
           const col = p.colors?.[0];
           return (
             <article class={`kit-card ${done ? "kit-card--done" : ""}`} key={p.sku} data-sku={p.sku}>
-              <Link href={`/${p.sku}/`} class="kit-card__media" aria-label={`${baseName(p.name)}: product page`}>
+              <Link href={`/${p.sku}/`} class="kit-card__media" aria-label={`${baseName(p.name)}: ${L(loc, "product page", "page du produit")}`}>
                 <img src={p.img} alt="" width="600" height="600" loading="eager" decoding="async" />
                 <span class="kit-card__qty">×{ELECTRICAL_FIXED_QTY[p.sku]}</span>
-                {done && <span class="kit-card__check" aria-label="Size chosen">✓</span>}
+                {done && <span class="kit-card__check" aria-label={L(loc, "Size chosen", "Taille choisie")}>✓</span>}
               </Link>
               <div class="kit-card__body">
                 <h3 class="kit-card__name"><Link href={`/${p.sku}/`} class="kit-card__name-btn">{baseName(p.name)}</Link></h3>
                 {col && <div class="kit-card__colour"><span class="kit-card__swatch" style={{ background: col }} />{colorName(col, "en")}</div>}
                 {/* Material line (shown on tablets, where list rows have room). */}
-                {(p as any).material && <p class="kit-card__spec"><strong>Material:</strong> {(p as any).material}</p>}
+                {(p as any).material && <p class="kit-card__spec"><strong>{L(loc, "Material:", "Matière :")}</strong> {(p as any).material}</p>}
                 {/* Size range (desktop + tablet; phones have no room). */}
-                {PICKS[p.sku]?.kind !== "one" && <p class="kit-card__range"><strong>Sizes:</strong> {p.sizes.replace(/\s*-\s*/g, " – ")}</p>}
+                {PICKS[p.sku]?.kind !== "one" && <p class="kit-card__range"><strong>{L(loc, "Sizes:", "Tailles :")}</strong> {p.sizes.replace(/\s*-\s*/g, " – ")}</p>}
                 <KitPickers sku={p.sku} v={v} label={baseName(p.name)} />
               </div>
             </article>
@@ -223,34 +232,34 @@ export const KitBuilder = component$(() => {
         })}
       </div>
 
-      <div class={`kit-bar ${inCartMatch ? "kit-bar--incart" : ""}`} role="region" aria-label="Electrical FR kit">
+      <div class={`kit-bar ${inCartMatch ? "kit-bar--incart" : ""}`} role="region" aria-label={L(loc, "Electrical FR kit", "Ensemble FR électrique")}>
         {inCartMatch ? (
           <>
             {/* Kit in the cart: summary of what's ordered + straight to checkout. */}
             <div class="kit-bar__info">
-              <span class="kit-bar__summary-title">Kit order</span>
+              <span class="kit-bar__summary-title">{L(loc, "Kit order", "Commande de l’ensemble")}</span>
               <span class="kit-bar__summary">
                 {BAR_ORDER.map((sku) => {
                   const sz = cartSizes[sku];
-                  return `${ELECTRICAL_FIXED_QTY[sku]} ${SHORT[sku]}${sz && sz !== "One Size" ? ` (${sz.replace(" x ", " × ")})` : ""}`;
+                  return `${ELECTRICAL_FIXED_QTY[sku]} ${short(loc, sku)}${sz && sz !== "One Size" ? ` (${szText(sz)})` : ""}`;
                 }).join(" · ")}
               </span>
             </div>
             <button type="button" class="btn btn--primary kit-bar__add kit-bar__checkout" onClick$={() => nav("/checkout/")}>
-              Checkout
+              {L(loc, "Checkout", "Passer à la caisse")}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
             </button>
           </>
         ) : (
           <>
             <div class="kit-bar__info">
-              <span class="kit-bar__list"><span class="kit-bar__label">Electrical FR kit:</span> {BAR_ORDER.map((sku) => `${ELECTRICAL_FIXED_QTY[sku]} ${SHORT[sku]}`).join(" · ")}</span>
+              <span class="kit-bar__list"><span class="kit-bar__label">{L(loc, "Electrical FR kit:", "Ensemble FR électrique :")}</span> {BAR_ORDER.map((sku) => `${ELECTRICAL_FIXED_QTY[sku]} ${short(loc, sku)}`).join(" · ")}</span>
               <span class={`kit-bar__status ${allReady ? "kit-bar__status--ok" : ""}`}>
-                {allReady ? (inCart.value ? "Sizes changed — update your kit order" : "All sizes chosen") : `Pick a size for each item · ${chosen} of ${needing.length}`}
+                {allReady ? (inCart.value ? L(loc, "Sizes changed — update your kit order", "Tailles modifiées — mettez à jour votre commande") : L(loc, "All sizes chosen", "Toutes les tailles choisies")) : L(loc, `Pick a size for each item · ${chosen} of ${needing.length}`, `Choisissez une taille pour chaque article · ${chosen} sur ${needing.length}`)}
               </span>
             </div>
             <button type="button" class="btn btn--primary kit-bar__add" disabled={!allReady} onClick$={addKit}>
-              {inCart.value ? "Update Kit Order" : "Add to Order"}
+              {inCart.value ? L(loc, "Update Kit Order", "Mettre à jour la commande") : L(loc, "Add to Order", "Ajouter à la commande")}
               {/* small white tote-bag icon, on the right */}
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 8.5h15l-1.2 12a1.5 1.5 0 0 1-1.5 1.35H7.2a1.5 1.5 0 0 1-1.5-1.35z"/><path d="M8.5 11V6.5a3.5 3.5 0 0 1 7 0V11"/></svg>
             </button>
@@ -296,7 +305,7 @@ export const ElectricalBrandPanel = component$(() => {
     cleanup(() => ro.disconnect());
   });
   return (
-  <aside class="mn-brand-panel" aria-label="Modern Niagara Electrical">
+  <aside class="mn-brand-panel" aria-label={L(locale.value, "Modern Niagara Electrical", "Modern Niagara Électricité")}>
     <div class="mn-brand-panel__lockup">
       <svg class="mn-brand-panel__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
@@ -311,13 +320,13 @@ export const ElectricalBrandPanel = component$(() => {
       <div class="mn-brand-panel__words">
         <span class="mn-brand-panel__w1">MODERN NIAGARA</span>
         <span class="mn-brand-panel__w2">BUILDING SERVICES</span>
-        <span class="mn-brand-panel__w3">APPAREL</span>
+        <span class="mn-brand-panel__w3">{L(locale.value, "APPAREL", "VÊTEMENTS")}</span>
       </div>
     </div>
-    <p class="mn-brand-panel__portal">Electrical FR Kit</p>
+    <p class="mn-brand-panel__portal">{L(locale.value, "Electrical FR Kit", "Ensemble FR électrique")}</p>
     {/* One line with dots on desktop; two per line on wide tablets. */}
     <p class="mn-brand-panel__kit">
-      <span>5 shirts</span><span>5 pants</span><span>1 hoodie</span><span>1 cap</span>
+      <span>3 shirts</span><span>4 pants</span><span>2 hoodies</span><span>1 cap</span>
     </p>
     <div class="mn-brand-panel__contact">
       <div class="mn-brand-panel__contact-main">
@@ -329,8 +338,8 @@ export const ElectricalBrandPanel = component$(() => {
           own toggle so there's one source of truth. */}
       <button type="button" class="mn-brand-panel__locale" aria-label={locale.value === "en" ? "Français" : "English"}
         onClick$={() => { (document.querySelector(".site-footer__locale") as HTMLElement | null)?.click(); }}>
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         {locale.value === "en" ? "FR" : "EN"}
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       </button>
     </div>
   </aside>

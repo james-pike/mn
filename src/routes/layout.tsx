@@ -23,6 +23,7 @@ import { sortColorsWhiteLast } from "./apparel/utils";
 import { CATEGORY_ICONS } from "../lib/categories";
 import { isSkuInLineup, hidesPrices, poOptional, fixedQtyFor, kitMissing, ELECTRICAL_SHIP_TO, ELECTRICAL_SKUS, ELECTRICAL_SUMMARY_ORDER } from "../lib/lineup";
 import { sendConfirmationEmail } from "../lib/orders";
+import { isApprovedElectricalName, ELECTRICAL_ROSTER_NOTE } from "../lib/electrical-roster";
 import type { OrderEmailData, PaymentMethod } from "../lib/orders";
 import { createCheckoutSession } from "../lib/stripe";
 
@@ -361,6 +362,15 @@ export const useSubmitOrder = routeAction$(
       if (check.rows.length === 0) {
         console.error("Order row not found after insert — order not confirmed", orderId);
         return fail(500, { message: "Order could not be confirmed. Please try again." });
+      }
+      // Electrical: flag orders from names not on the approved list (cm-admin
+      // shows the note on the order). The order itself still goes through.
+      if (lt === "electrical" && !isApprovedElectricalName(employee.name || "")) {
+        try {
+          await db.execute({ sql: "UPDATE orders SET notes = ? WHERE id = ?", args: [ELECTRICAL_ROSTER_NOTE, orderId as any] });
+        } catch (err) {
+          console.error("Could not flag unapproved Electrical name on order", orderId, err);
+        }
       }
       const seq = await db.execute({
         sql: "SELECT COUNT(*) AS n FROM orders WHERE vendor LIKE 'modernniagara%' AND id <= ?",
@@ -805,6 +815,9 @@ export default component$(() => {
         const saved = localStorage.getItem(cartStorageKey());
         if (saved) {
           cart.items = JSON.parse(saved) as CartItem[];
+          // Electrical: kit lines always carry the current fixed quantities
+          // (a cart saved before a kit change keeps its sizes, not old counts).
+          for (const it of cart.items as any[]) { const fq = fixedQtyFor(loginType.value, it.sku); if (fq) it.quantity = fq; }
         } else {
           cart.items = [];
         }
@@ -1614,8 +1627,8 @@ export default component$(() => {
                 only on desktop. */}
             {loginType.value === "electrical" && (
               <button type="button" class="site-header__lang-btn" onClick$={toggleLocale} aria-label={locale.value === "en" ? "Français" : "English"}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                 {locale.value === "en" ? "FR" : "EN"}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
               </button>
             )}
             <button class={`cart-btn ${cart.items.length > 0 ? "cart-btn--active" : ""}`} onClick$={() => { if (isCheckout.value) { try { sessionStorage.setItem("reopen-cart", "1"); } catch { /* ignore */ } nav("/"); return; } cartOpen.value = !cartOpen.value; if (cartOpen.value) menuOpen.value = false; if (!cartOpen.value) checkoutStep.value = "cart"; }}>
@@ -1959,27 +1972,27 @@ export default component$(() => {
                       {loginType.value === "electrical" && cart.items.some((it: any) => ELECTRICAL_SKUS.includes(it.sku)) && (
                         <tr class="cart-table__kit-row">
                           <td class="cart-table__product">
-                            <div class="cart-table__kit-name">Electrical FR Kit</div>
+                            <div class="cart-table__kit-name">{locale.value === "fr" ? "Ensemble FR électrique" : "Electrical FR Kit"}</div>
                             <ul class="cart-table__kit-items">
                               {[...cart.items].filter((it: any) => ELECTRICAL_SKUS.includes(it.sku))
                                 .sort((a: any, b: any) => ELECTRICAL_SUMMARY_ORDER.indexOf(a.sku) - ELECTRICAL_SUMMARY_ORDER.indexOf(b.sku))
                                 .map((it: any) => (
                                   <li key={it.sku}>
                                     {it.color && it.color.startsWith("#") && <span class="cart-table__swatch" style={{ background: it.color }} aria-hidden="true" />}
-                                    <span><strong>{it.quantity}×</strong> {stripColorSuffix(it.name)} — {it.color ? `${it.color.startsWith("#") ? colorName(it.color, locale.value) : it.color} / ` : ""}{it.size}</span>
+                                    <span><strong>{it.quantity}×</strong> {stripColorSuffix(it.name)} — {it.color ? `${it.color.startsWith("#") ? colorName(it.color, "en") : it.color} / ` : ""}{it.size}</span>
                                   </li>
                                 ))}
                             </ul>
                           </td>
                           <td class="cart-table__qty">
                             <div class="cart-table__qty-controls cart-table__qty-controls--fixed">
-                              <button class="cart-table__qty-btn" aria-label="Remove the Electrical FR Kit" title="Remove kit"
+                              <button class="cart-table__qty-btn" aria-label={locale.value === "fr" ? "Retirer l’ensemble FR électrique" : "Remove the Electrical FR Kit"} title={locale.value === "fr" ? "Retirer l’ensemble" : "Remove kit"}
                                 onClick$={async () => {
                                   cart.items = cart.items.filter((it: any) => !ELECTRICAL_SKUS.includes(it.sku));
                                   await saveCart();
                                   window.dispatchEvent(new CustomEvent("cart-updated"));
                                 }}>×</button>
-                              <span class="cart-table__kit-qty">1 kit</span>
+                              <span class="cart-table__kit-qty">{locale.value === "fr" ? "1 ensemble" : "1 kit"}</span>
                             </div>
                           </td>
                         </tr>
@@ -2048,7 +2061,7 @@ export default component$(() => {
                 </div>
                 {kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).length > 0 && (
                   <div class="cart-drawer__error cart-drawer__kit-note" role="status">
-                    Every order is the full kit (5 shirts, 5 pants, 1 hoodie, 1 cap). Still to add: {kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).join(", ")}.
+                    {locale.value === "fr" ? "Chaque commande comprend l’ensemble complet (3 shirts, 4 pants, 2 hoodies, 1 cap). Il manque : " : "Every order is the full kit (3 shirts, 4 pants, 2 hoodies, 1 cap). Still to add: "}{kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).join(", ")}.
                   </div>
                 )}
                 <div class="cart-drawer__footer">

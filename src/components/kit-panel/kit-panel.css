@@ -1260,3 +1260,7 @@ html body .kit-bar .kit-bar__status:not(.kit-bar__status--ok) { color: rgb(46, 1
   /* logo + kit summary up 12px together (top 48 → 36px); contact stays put */
   html body .home-catalog--electrical .mn-brand-panel { padding-top: 36px !important; }
 }
+@media (min-width: 1025px) {
+  /* "Electrical FR Kit" title: tighter tracking (0.16em → 0.1em) */
+  html body .home-catalog--electrical .mn-brand-panel .mn-brand-panel__portal { letter-spacing: 0.1em !important; }
+}

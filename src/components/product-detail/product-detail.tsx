@@ -787,7 +787,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
   const isFootwear = (c: string) => c === "Safety Boots" || c === "Safety Shoes" || c === "Footwear";
   const tabCategory = isFootwear(p.category) ? "Footwear" : p.category;
   const catHash = tabCategory.toLowerCase().replace(/\s+/g, "-");
-  const backLabel = loginType.value === "electrical" ? "Back to kit" : loginType.value === "tech" ? t("cat.Work Wear", locale.value) : t("nav.apparel", locale.value);
+  const backLabel = loginType.value === "electrical" ? (locale.value === "fr" ? "Retour à l’ensemble" : "Back to kit") : loginType.value === "tech" ? t("cat.Work Wear", locale.value) : t("nav.apparel", locale.value);
   const catLabel = categoryLabel(tabCategory, locale.value);
 
   return (
