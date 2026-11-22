@@ -21,7 +21,7 @@ import { allProducts, colorName, categoryLabel } from "./apparel/products";
 import { getGiftCard, giftContribution, deductGiftCard } from "../lib/giftcards";
 import { sortColorsWhiteLast } from "./apparel/utils";
 import { CATEGORY_ICONS } from "../lib/categories";
-import { isSkuInLineup } from "../lib/lineup";
+import { isSkuInLineup, hidesPrices, poOptional, fixedQtyFor, kitMissing, ELECTRICAL_SHIP_TO, ELECTRICAL_SKUS, ELECTRICAL_SUMMARY_ORDER } from "../lib/lineup";
 import { sendConfirmationEmail } from "../lib/orders";
 import type { OrderEmailData, PaymentMethod } from "../lib/orders";
 import { createCheckoutSession } from "../lib/stripe";
@@ -188,11 +188,29 @@ export const useSubmitOrder = routeAction$(
     if (!province || !PROVINCE_TAX[province]) {
       return fail(400, { message: "Please select a province before submitting the order." });
     }
-    if (!employee.address1?.trim() || !employee.city?.trim() || !employee.postal?.trim()) {
+    if (!employee.address1?.trim() || !employee.city?.trim() || (!employee.postal?.trim() && lt !== "electrical")) {
       return fail(400, { message: "A full shipping address (street, city, postal code) is required." });
     }
-    if (paymentMethod === "po" && !employee.po) {
+    if (paymentMethod === "po" && !employee.po && !poOptional(lt)) {
       return fail(400, { message: "A PO number is required for purchase-order checkout." });
+    }
+    // Electrical orders are a fixed kit: each product's quantity is set by the
+    // portal, whatever the browser sent.
+    for (const it of items as { sku?: string; quantity: number }[]) {
+      const fq = fixedQtyFor(lt, it.sku);
+      if (fq) it.quantity = fq;
+    }
+    // Electrical always ships to its one fixed address, whatever was sent.
+    if (lt === "electrical") {
+      employee.province = ELECTRICAL_SHIP_TO.province;
+      employee.address1 = ELECTRICAL_SHIP_TO.address1;
+      employee.city = ELECTRICAL_SHIP_TO.city;
+      employee.postal = ELECTRICAL_SHIP_TO.postal;
+    }
+    // ...and it must be the whole kit: all four items.
+    const missingKit = kitMissing(lt, (items as { sku?: string }[]).map((i) => i.sku));
+    if (missingKit.length) {
+      return fail(400, { message: `Every order must include the full kit. Still to add: ${missingKit.join(", ")}.` });
     }
     const taxRate = PROVINCE_TAX[province];
     const taxPct = +(taxRate * 100).toFixed(3);
@@ -380,6 +398,7 @@ export const useSubmitOrder = routeAction$(
         address1: employee.address1, city: employee.city, postal: employee.postal, po: employee.po,
       },
       items: items as any,
+      hidePrices: hidesPrices(lt),
       subtotal, taxPct, tax, total,
       payment: { method: paymentMethod, giftCardCode: giftCode || undefined, giftAmount, cardAmount },
     });
@@ -510,7 +529,7 @@ export const useSubmitOrder = routeAction$(
       province: z.string().length(2),
       address1: z.string().min(1).max(200),
       city: z.string().min(1).max(120),
-      postal: z.string().min(1).max(20),
+      postal: z.string().max(20), // required below for every login except Electrical (fixed ship-to)
       po: z.string().max(60).optional().default(""),
     }),
     items: z
@@ -757,7 +776,8 @@ export default component$(() => {
     if (!empFirstName.value.trim() || !empLastName.value.trim() || !empEmail.value.trim()
         || !empPhone.value.trim() || !empProvince.value) return false;
     if (!empAddress1.value.trim() || !empCity.value.trim() || !empPostal.value.trim()) return false;
-    if (payMethod.value === "po" && !empPO.value.trim()) return false;
+    if (payMethod.value === "po" && !empPO.value.trim() && !poOptional(loginType.value)) return false;
+    if (kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).length) return false; // Electrical: full kit only
     if (usesGift.value && giftBalance.value == null) return false;           // card not applied yet
     if (payMethod.value === "giftcard" && giftRemaining.value > 0) return false; // gift doesn't cover it
     return true;
@@ -812,7 +832,9 @@ export default component$(() => {
   });
 
   const updateQty = $(async (index: number, delta: number) => {
-    const newQty = cart.items[index].quantity + delta;
+    // Fixed-quantity items (Electrical kit) can only be removed, not changed.
+    if (fixedQtyFor(loginType.value, (cart.items[index] as any).sku) && delta > 0) return;
+    const newQty = fixedQtyFor(loginType.value, (cart.items[index] as any).sku) ? 0 : cart.items[index].quantity + delta;
     if (newQty < 1) {
       cart.items = cart.items.filter((_, i) => i !== index);
     } else {
@@ -827,7 +849,7 @@ export default component$(() => {
     // click that somehow gets through when the order can't be placed / is sending.
     if (!canPlaceOrder.value || submitting.value) return;
     formTouched.value = true;
-    const poRequired = payMethod.value === "po";
+    const poRequired = payMethod.value === "po" && !poOptional(loginType.value);
     if (!empFirstName.value || !empLastName.value || !empAddress1.value || !empCity.value || !empPostal.value || !empEmail.value || !empPhone.value || !empProvince.value || (poRequired && !empPO.value)) {
       formError.value = t("cart.error.required", locale.value);
       checkoutOpen.value = true;
@@ -855,7 +877,7 @@ export default component$(() => {
     const phoneDigits = empPhone.value.replace(/[^\d]/g, "");
     if (phoneDigits.length < 10 || phoneDigits.length > 15 || !/^[\d\s+()\-.]+$/.test(empPhone.value.trim())) fmtErrors.push(t("cart.error.phone", locale.value));
     // Canadian postal code — A1A 1A1 (optional space/hyphen).
-    if (!/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(empPostal.value.trim())) fmtErrors.push(t("cart.error.postal", locale.value));
+    if (loginType.value !== "electrical" && !/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(empPostal.value.trim())) fmtErrors.push(t("cart.error.postal", locale.value));
     if (fmtErrors.length) {
       formError.value = fmtErrors.join("\n");
       checkoutOpen.value = true;
@@ -1443,7 +1465,7 @@ export default component$(() => {
       </div>
 
       {(auth.value.loggedIn || (loginAction.value && !loginAction.value.failed) || isPaymentReturn.value) && <>
-      <header class={`site-header site-header--white ${tabsStuck.value ? "site-header--tabs-stuck" : ""} ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value || isCheckout.value ? "site-header--cart-open" : ""}`}>
+      <header class={`site-header site-header--white ${loginType.value === "electrical" ? "site-header--electrical" : ""} ${tabsStuck.value ? "site-header--tabs-stuck" : ""} ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value || isCheckout.value ? "site-header--cart-open" : ""}`}>
         <div class="site-header__inner">
           <Link
             href="/"
@@ -1587,9 +1609,17 @@ export default component$(() => {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
               </button>
             )}
-            {/* EN/FR toggle moved to the footer. */}
+            {/* EN/FR toggle moved to the footer. Electrical desktop: an FR/EN
+                button here beside the cart (no footer there); CSS shows it
+                only on desktop. */}
+            {loginType.value === "electrical" && (
+              <button type="button" class="site-header__lang-btn" onClick$={toggleLocale} aria-label={locale.value === "en" ? "Français" : "English"}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                {locale.value === "en" ? "FR" : "EN"}
+              </button>
+            )}
             <button class={`cart-btn ${cart.items.length > 0 ? "cart-btn--active" : ""}`} onClick$={() => { if (isCheckout.value) { try { sessionStorage.setItem("reopen-cart", "1"); } catch { /* ignore */ } nav("/"); return; } cartOpen.value = !cartOpen.value; if (cartOpen.value) menuOpen.value = false; if (!cartOpen.value) checkoutStep.value = "cart"; }}>
-              <span class="cart-btn__label cart-btn__label-full">{t("cart.mycart", locale.value)}</span>
+              <span class="cart-btn__label cart-btn__label-full">{loginType.value === "electrical" ? (locale.value === "fr" ? "Panier" : "Cart") : t("cart.mycart", locale.value)}</span>
               <span class="cart-btn__label-short">{t("cart.short", locale.value)}</span>
               {cartOpen.value && !isCheckout.value ? (
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
@@ -1712,7 +1742,18 @@ export default component$(() => {
                   {t("cat.Work Wear", locale.value)}
                 </Link>
               )}
-              {loginType.value !== "tech" && (() => {
+              {/* Electrical: no categories in the menu (a fixed 4-item kit; HOME returns to it). */}
+              {/* Electrical: the contact line lives here (phones have no footer content). */}
+              {loginType.value === "electrical" && (
+                <div class="nav-drawer__contact">
+                  <span class="nav-drawer__contact-label">Contact</span>
+                  <a href="mailto:info@mnbsapparel.ca" class="nav-drawer__contact-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
+                    info@mnbsapparel.ca
+                  </a>
+                </div>
+              )}
+              {loginType.value !== "tech" && loginType.value !== "electrical" && (() => {
                 // Derived from the portal-aware category list the catalog
                 // publishes to SecondaryBarContext (barVisibleCategories) — so the
                 // menu's categories always match the tab bar, and a portal with no
@@ -1842,7 +1883,7 @@ export default component$(() => {
             <Link href="/#hats" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Hats" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Hats", locale.value)}</Link>
             <Link href="/#swag" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "SWAG" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.SWAG", locale.value)}</Link>
             <Link href="/#new-hire-kit" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "New Hire Kit" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.New Hire Kit", locale.value)}</Link>
-            <Link class="site-footer__links-privacy" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>
+            {loginType.value !== "electrical" && <Link class="site-footer__links-privacy" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>}
           </nav>
           )}
           <div class="site-footer__contact-block">
@@ -1851,7 +1892,8 @@ export default component$(() => {
               <a href="mailto:info@mnbsapparel.ca">info@mnbsapparel.ca</a>
             </div>
             <div class="site-footer__legal-row">
-              <Link class="site-footer__privacy-link" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>
+              {/* Electrical footer: just the contact line (no Privacy Policy link). */}
+              {loginType.value !== "electrical" && <Link class="site-footer__privacy-link" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>}
               <button type="button" class="site-footer__locale locale-btn locale-btn--footer" onClick$={toggleLocale} aria-label="Toggle language">
                 <svg class="locale-btn__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
                 <span>{locale.value === "en" ? "Français" : "English"}</span>
@@ -1891,13 +1933,13 @@ export default component$(() => {
                     <tr>
                       <th class="cart-table__th-product">{t("cart.invoice.product", locale.value)}</th>
                       <th class="cart-table__th-qty">{t("cart.invoice.qty", locale.value)}</th>
-                      {loginType.value !== "tech" && <th class="cart-table__th-total"><span class="cart-table__th-qty-inline">{t("cart.invoice.qty", locale.value)} / </span>{t("cart.invoice.total", locale.value)}</th>}
+                      {!hidesPrices(loginType.value) && <th class="cart-table__th-total"><span class="cart-table__th-qty-inline">{t("cart.invoice.qty", locale.value)} / </span>{t("cart.invoice.total", locale.value)}</th>}
                     </tr>
                   </thead>
                 </table>
                 <div class="cart-drawer__empty">
                   <p>{t("cart.empty", locale.value)}</p>
-                  <Link href="/" class="cart-drawer__back-link" onClick$={() => (cartOpen.value = false)}>{t("cart.backtoapparel", locale.value)}</Link>
+                  <Link href="/" class="cart-drawer__back-link" onClick$={() => (cartOpen.value = false)}>{t(loginType.value === "electrical" ? "cart.backtokit" : "cart.backtoapparel", locale.value)}</Link>
                 </div>
               </div>
             ) : (
@@ -1908,11 +1950,41 @@ export default component$(() => {
                       <tr>
                         <th class="cart-table__th-product">{t("cart.invoice.product", locale.value)}</th>
                         <th class="cart-table__th-qty">{t("cart.invoice.qty", locale.value)}</th>
-                        {loginType.value !== "tech" && <th class="cart-table__th-total"><span class="cart-table__th-qty-inline">{t("cart.invoice.qty", locale.value)} / </span>{t("cart.invoice.total", locale.value)}</th>}
+                        {!hidesPrices(loginType.value) && <th class="cart-table__th-total"><span class="cart-table__th-qty-inline">{t("cart.invoice.qty", locale.value)} / </span>{t("cart.invoice.total", locale.value)}</th>}
                       </tr>
                     </thead>
                     <tbody>
-                      {cart.items.map((item, i) => (
+                      {/* Electrical: the kit is one cart entry — its four items listed
+                          inside, one × clears the whole kit. */}
+                      {loginType.value === "electrical" && cart.items.some((it: any) => ELECTRICAL_SKUS.includes(it.sku)) && (
+                        <tr class="cart-table__kit-row">
+                          <td class="cart-table__product">
+                            <div class="cart-table__kit-name">Electrical FR Kit</div>
+                            <ul class="cart-table__kit-items">
+                              {[...cart.items].filter((it: any) => ELECTRICAL_SKUS.includes(it.sku))
+                                .sort((a: any, b: any) => ELECTRICAL_SUMMARY_ORDER.indexOf(a.sku) - ELECTRICAL_SUMMARY_ORDER.indexOf(b.sku))
+                                .map((it: any) => (
+                                  <li key={it.sku}>
+                                    {it.color && it.color.startsWith("#") && <span class="cart-table__swatch" style={{ background: it.color }} aria-hidden="true" />}
+                                    <span><strong>{it.quantity}×</strong> {stripColorSuffix(it.name)} — {it.color ? `${it.color.startsWith("#") ? colorName(it.color, locale.value) : it.color} / ` : ""}{it.size}</span>
+                                  </li>
+                                ))}
+                            </ul>
+                          </td>
+                          <td class="cart-table__qty">
+                            <div class="cart-table__qty-controls cart-table__qty-controls--fixed">
+                              <button class="cart-table__qty-btn" aria-label="Remove the Electrical FR Kit" title="Remove kit"
+                                onClick$={async () => {
+                                  cart.items = cart.items.filter((it: any) => !ELECTRICAL_SKUS.includes(it.sku));
+                                  await saveCart();
+                                  window.dispatchEvent(new CustomEvent("cart-updated"));
+                                }}>×</button>
+                              <span class="cart-table__kit-qty">1 kit</span>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                      {cart.items.filter((it: any) => !(loginType.value === "electrical" && ELECTRICAL_SKUS.includes(it.sku))).map((item) => { const i = cart.items.indexOf(item); return (
                         <tr key={`${item.name}-${item.size}-${item.color}-${item.quantity}`}>
                           <td class="cart-table__product">
                             <div class="cart-table__product-row">
@@ -1930,17 +2002,24 @@ export default component$(() => {
                             </div>
                           </td>
                           <td class="cart-table__qty">
+                            {fixedQtyFor(loginType.value, (item as any).sku) ? (
+                              <div class="cart-table__qty-controls cart-table__qty-controls--fixed">
+                                <button class="cart-table__qty-btn" aria-label={`Remove ${item.name}`} title="Remove" onClick$={() => updateQty(i, -1)}>×</button>
+                                <span>{item.quantity}</span>
+                              </div>
+                            ) : (
                             <div class="cart-table__qty-controls">
                               <button class="cart-table__qty-btn" aria-label={`Decrease quantity of ${item.name}`} onClick$={() => updateQty(i, -1)}>-</button>
                               <span>{item.quantity}</span>
                               <button class="cart-table__qty-btn" aria-label={`Increase quantity of ${item.name}`} onClick$={() => updateQty(i, 1)}>+</button>
                             </div>
+                            )}
                           </td>
-                          {loginType.value !== "tech" && <td class="cart-table__total">${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</td>}
+                          {!hidesPrices(loginType.value) && <td class="cart-table__total">${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</td>}
                         </tr>
-                      ))}
+                      ); })}
                     </tbody>
-                    {loginType.value !== "tech" && (
+                    {!hidesPrices(loginType.value) && (
                       <tfoot>
                         <tr>
                           <td colSpan={2} class="cart-table__subtotal-label">{t("cart.invoice.subtotal", locale.value)}</td>
@@ -1967,9 +2046,14 @@ export default component$(() => {
                     )}
                   </table>
                 </div>
+                {kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).length > 0 && (
+                  <div class="cart-drawer__error cart-drawer__kit-note" role="status">
+                    Every order is the full kit (5 shirts, 5 pants, 1 hoodie, 1 cap). Still to add: {kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).join(", ")}.
+                  </div>
+                )}
                 <div class="cart-drawer__footer">
                   <span class="cart-drawer__total">
-                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{loginType.value !== "tech" && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
+                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{!hidesPrices(loginType.value) && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
                   </span>
                   <button
                     class="btn btn--primary cart-drawer__order-btn"

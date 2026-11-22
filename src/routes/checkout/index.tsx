@@ -16,6 +16,8 @@ import { Modal, Collapsible } from "@qwik-ui/headless";
 import { LocaleContext, t } from "../../i18n";
 import { colorName } from "../apparel/products";
 import { LoginTypeContext, useSubmitOrder } from "../layout";
+import { hidesPrices, poOptional, kitMissing, ELECTRICAL_SHIP_TO, ELECTRICAL_SUMMARY_ORDER } from "../../lib/lineup";
+import { ElectricalBrandPanel } from "../../components/kit-panel/kit-panel";
 
 // Provincial tax rates — mirrors the layout's table so the checkout total can
 // update live as soon as a province is picked (the server re-derives it too).
@@ -73,10 +75,12 @@ export default component$(() => {
   const empEmail = useSignal("");
   const empPhone = useSignal("");
   const empDept = useSignal("");
-  const empProvince = useSignal("");
-  const empAddress1 = useSignal("");
-  const empCity = useSignal("");
-  const empPostal = useSignal("");
+  // Electrical ships every order to one fixed address (lib/lineup.ts).
+  const fixedShip = loginType.value === "electrical" ? ELECTRICAL_SHIP_TO : null;
+  const empProvince = useSignal(fixedShip?.province ?? "");
+  const empAddress1 = useSignal(fixedShip?.address1 ?? "");
+  const empCity = useSignal(fixedShip?.city ?? "");
+  const empPostal = useSignal(fixedShip?.postal ?? "");
   const empPO = useSignal("");
 
   const cartCount = useComputed$(() => cart.items.reduce((sum, i) => sum + i.quantity, 0));
@@ -94,8 +98,9 @@ export default component$(() => {
   const canPlaceOrder = useComputed$(() => {
     if (!empFirstName.value.trim() || !empLastName.value.trim() || !empEmail.value.trim()
         || !empPhone.value.trim() || !empProvince.value) return false;
-    if (!empAddress1.value.trim() || !empCity.value.trim() || !empPostal.value.trim()) return false;
-    if (!empPO.value.trim()) return false;
+    if (!empAddress1.value.trim() || !empCity.value.trim() || (!empPostal.value.trim() && !fixedShip)) return false;
+    if (!empPO.value.trim() && !poOptional(loginType.value)) return false;
+    if (kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).length) return false; // Electrical: full kit only
     return true;
   });
 
@@ -139,7 +144,7 @@ export default component$(() => {
     if (!canPlaceOrder.value || submitting.value) return;
     formTouched.value = true;
     if (!empFirstName.value || !empLastName.value || !empAddress1.value || !empCity.value
-        || !empPostal.value || !empEmail.value || !empPhone.value || !empProvince.value || !empPO.value) {
+        || (!empPostal.value && !fixedShip) || !empEmail.value || !empPhone.value || !empProvince.value || (!empPO.value && !poOptional(loginType.value))) {
       formError.value = t("cart.error.required", locale.value);
       return;
     }
@@ -150,7 +155,7 @@ export default component$(() => {
     if (!emailRe.test(empEmail.value.trim())) fmtErrors.push(t("cart.error.email", locale.value));
     const phoneDigits = empPhone.value.replace(/[^\d]/g, "");
     if (phoneDigits.length < 10 || phoneDigits.length > 15 || !/^[\d\s+()\-.]+$/.test(empPhone.value.trim())) fmtErrors.push(t("cart.error.phone", locale.value));
-    if (!/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(empPostal.value.trim())) fmtErrors.push(t("cart.error.postal", locale.value));
+    if (!fixedShip && !/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(empPostal.value.trim())) fmtErrors.push(t("cart.error.postal", locale.value));
     if (fmtErrors.length) {
       formError.value = fmtErrors.join("\n");
       return;
@@ -267,6 +272,12 @@ export default component$(() => {
 
   return (
     <div class="modal-overlay checkout-page">
+      {/* Electrical (desktop): the branding panel stays on the left here too. */}
+      {loginType.value === "electrical" && (
+        <div class="home-catalog--electrical mn-checkout-panel">
+          <ElectricalBrandPanel />
+        </div>
+      )}
       <div class="drawer cart-drawer">
         <div class="cart-drawer__site-header">
           <Link href="/" class="site-header__logo">
@@ -286,7 +297,7 @@ export default component$(() => {
         {isEmpty ? (
           <div class="cart-drawer__empty">
             <p>{t("cart.empty", locale.value)}</p>
-            <Link href="/" class="cart-drawer__back-link">{t("cart.backtoapparel", locale.value)}</Link>
+            <Link href="/" class="cart-drawer__back-link">{t(loginType.value === "electrical" ? "cart.backtokit" : "cart.backtoapparel", locale.value)}</Link>
           </div>
         ) : (
           <>
@@ -297,21 +308,23 @@ export default component$(() => {
               </button>
               <Collapsible.Root class="cart-drawer__summary" bind:open={summaryOpen}>
                 <Collapsible.Trigger class="cart-drawer__checkout-title">
-                  {t("cart.ordersummary", locale.value)} — {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}
+                  {t("cart.ordersummary", locale.value)}{loginType.value !== "electrical" && <> — {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}</>}
                 </Collapsible.Trigger>
                 <Collapsible.Content>
                   <div class="cart-drawer__summary-list">
-                    {cart.items.map((item) => (
+                    {(loginType.value === "electrical"
+                      ? [...cart.items].sort((a: any, b: any) => ELECTRICAL_SUMMARY_ORDER.indexOf(a.sku) - ELECTRICAL_SUMMARY_ORDER.indexOf(b.sku))
+                      : cart.items).map((item) => (
                       <div key={`${item.name}-${item.size}`} class="cart-drawer__summary-item">
                         <span>
                           {item.color && item.color.startsWith("#") && <span class="cart-drawer__summary-swatch" style={{ background: item.color }} aria-hidden="true" />}
                           {item.quantity}x {stripColorSuffix(item.name)}{(item.color || item.size) ? ` — ${item.color ? (item.color.startsWith("#") ? colorName(item.color, locale.value) : item.color) : ""}${item.color && item.size ? " / " : ""}${item.size || ""}` : ""}
                           {(item as any).logoPosition ? <span class="cart-drawer__summary-logo"> · Logo: {(item as any).logoPosition}{(item as any).logoStyle ? ` (${(item as any).logoStyle})` : ""}</span> : null}
                         </span>
-                        {loginType.value !== "tech" && <span>${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</span>}
+                        {!hidesPrices(loginType.value) && <span>${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</span>}
                       </div>
                     ))}
-                    {loginType.value !== "tech" && (
+                    {!hidesPrices(loginType.value) && (
                       <>
                         <div class="cart-drawer__summary-item cart-drawer__summary-total">
                           <span>{t("cart.invoice.subtotal", locale.value)}</span>
@@ -351,6 +364,28 @@ export default component$(() => {
                     <input type="text" value={empLastName.value} onInput$={(_, el) => { empLastName.value = el.value; formError.value = ""; }} />
                   </div>
                 </div>
+                {fixedShip ? (
+                  /* Electrical: email + phone first, then the one fixed ship-to
+                     address (not editable). */
+                  <>
+                {/* Email + Phone share a row. */}
+                <div class="checkout-modal__row">
+                <div class={`checkout-modal__field ${formTouched.value && !empEmail.value ? "checkout-modal__field--error" : ""}`}>
+                  <label>{t("cart.email", locale.value)}</label>
+                  <input type="email" value={empEmail.value} onInput$={(_, el) => { empEmail.value = el.value; formError.value = ""; }} />
+                </div>
+                <div class={`checkout-modal__field ${formTouched.value && !empPhone.value ? "checkout-modal__field--error" : ""}`}>
+                  <label>{t("cart.phone", locale.value)}</label>
+                  <input type="tel" value={empPhone.value} onInput$={(_, el) => { empPhone.value = el.value; formError.value = ""; }} />
+                </div>
+                </div>
+                  <div class="checkout-modal__shipto">
+                    <span class="checkout-modal__shipto-label">{locale.value === "fr" ? "Livrer à" : "Ship to"}</span>
+                    <span class="checkout-modal__shipto-name">{fixedShip.label}</span>
+                  </div>
+                  </>
+                ) : (
+                <>
                 {/* Full shipping address — all required. */}
                 <div class={`checkout-modal__field ${formTouched.value && !empAddress1.value ? "checkout-modal__field--error" : ""}`}>
                   <label>{t("cart.address", locale.value)}</label>
@@ -385,6 +420,10 @@ export default component$(() => {
                   <input type="text" autoComplete="postal-code" value={empPostal.value} onInput$={(_, el) => { empPostal.value = el.value; formError.value = ""; }} />
                 </div>
                 </div>
+                </>
+                )}
+                {!fixedShip && (
+                <>
                 {/* Email + Phone share a row. */}
                 <div class="checkout-modal__row">
                 <div class={`checkout-modal__field ${formTouched.value && !empEmail.value ? "checkout-modal__field--error" : ""}`}>
@@ -396,9 +435,12 @@ export default component$(() => {
                   <input type="tel" value={empPhone.value} onInput$={(_, el) => { empPhone.value = el.value; formError.value = ""; }} />
                 </div>
                 </div>
+                </>
+                )}
               </div>
 
-              {/* ---- Payment method ---- */}
+              {/* ---- Payment method ---- (Electrical checks out without a PO) */}
+              {!poOptional(loginType.value) && (
               <div class="checkout-modal__pay">
                 <h3 class="checkout-modal__form-title">{t("pay.title", locale.value)}</h3>
                 {/* MN accepts purchase-order checkout only — no gift card or
@@ -408,14 +450,23 @@ export default component$(() => {
                   <input type="text" value={empPO.value} onInput$={(_, el) => (empPO.value = el.value)} />
                 </div>
               </div>
+              )}
             </div>
             {formError.value && (
               <div class="cart-drawer__error" role="alert">{formError.value}</div>
             )}
+            {kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).length > 0 && (
+              <div class="cart-drawer__error cart-drawer__kit-note" role="status">
+                Every order is the full kit (5 shirts, 5 pants, 1 hoodie, 1 cap). Still to add: {kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).join(", ")}.
+              </div>
+            )}
             <div class="cart-drawer__footer">
+              {/* Electrical: no item count (the kit is fixed). */}
+              {loginType.value === "electrical" ? <span class="cart-drawer__total" /> : (
               <span class="cart-drawer__total">
-                {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{loginType.value !== "tech" && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
+                {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{!hidesPrices(loginType.value) && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
               </span>
+              )}
               <button
                 class={`btn btn--primary cart-drawer__order-btn ${!canPlaceOrder.value ? "cart-drawer__order-btn--disabled" : ""}`}
                 disabled={!canPlaceOrder.value || submitting.value}

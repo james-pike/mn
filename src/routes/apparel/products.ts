@@ -362,7 +362,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-36",
-    "name": "Carhartt FR Rigby Pants - Dark Khaki",
+    "name": "Carhartt FR Rugged Flex Rigby Pants - Dark Khaki",
     "category": "Pants",
     "sizes": "W 30 - 52 / L 30 - 36",
     "badge": "",
@@ -881,7 +881,7 @@ const colorNames: Record<string, Record<string, string>> = {
   "#b0b0b0": { en: "Grey", fr: "Gris" },
   "#b6e021": { en: "Safety Green", fr: "Vert sécurité" },
   "#b8ad97": { en: "Khaki", fr: "Kaki" },
-  "#ab8f66": { en: "Dark Khaki", fr: "Kaki foncé" },
+  "#ab8f66": { en: "Khaki", fr: "Kaki" },
   "#b98b8b": { en: "Rose", fr: "Rose" },
   "#bf5700": { en: "Burnt Orange", fr: "Orange brûlé" },
   "#c2a878": { en: "Tan", fr: "Beige" },

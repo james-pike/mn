@@ -47,6 +47,8 @@ export interface OrderEmailData {
     po?: string;
   };
   items: OrderItem[];
+  /** Price-free email (Electrical portal): no per-line totals, subtotal, tax or total. */
+  hidePrices?: boolean;
   subtotal: number;
   taxPct: number;
   tax: number;
@@ -60,7 +62,7 @@ export interface OrderEmailData {
 }
 
 // Use the app's authoritative colour map (the same one the storefront/cart use)
-// so every hex resolves to its label — e.g. "#ab8f66" -> "Dark Khaki" — instead
+// so every hex resolves to its label — e.g. "#ab8f66" -> "Khaki" — instead
 // of leaking a raw hex code into the email. English labels for the email.
 const colorName = (hex: string) => colorLabel(hex, "en");
 
@@ -77,7 +79,7 @@ export function buildOrderEmailHtml(o: OrderEmailData): string {
       <td style="padding:6px 12px;border-bottom:1px solid #eee">${esc(i.name)}${i.code ? ` <span style="color:#999;font-size:12px">${esc(i.code)}</span>` : i.sku ? ` <span style="color:#999;font-size:12px">(${esc(i.sku)})</span>` : ""}${i.logoPosition ? `<br><span style="color:#999;font-size:12px">Logo: ${esc(i.logoPosition)}${i.logoStyle ? ` · ${esc(i.logoStyle)}` : ""}</span>` : ""}</td>
       <td style="padding:6px 12px;border-bottom:1px solid #eee">${i.color ? esc(i.color.startsWith("#") ? colorName(i.color) : i.color) + " / " : ""}${esc(i.size)}</td>
       <td style="padding:6px 12px;border-bottom:1px solid #eee;text-align:center">${i.quantity}</td>
-      <td style="padding:6px 12px;border-bottom:1px solid #eee;text-align:right">$${(((Number(i.price) || 0) * i.quantity)).toFixed(2)}</td>
+      ${o.hidePrices ? "" : `<td style="padding:6px 12px;border-bottom:1px solid #eee;text-align:right">$${(((Number(i.price) || 0) * i.quantity)).toFixed(2)}</td>`}
     </tr>`
   ).join("");
 
@@ -129,11 +131,11 @@ export function buildOrderEmailHtml(o: OrderEmailData): string {
               <th style="padding:8px 12px;text-align:left">Product</th>
               <th style="padding:8px 12px;text-align:left">Details</th>
               <th style="padding:8px 12px;text-align:center">Qty</th>
-              <th style="padding:8px 12px;text-align:right">Total</th>
+              ${o.hidePrices ? "" : `<th style="padding:8px 12px;text-align:right">Total</th>`}
             </tr>
           </thead>
           <tbody>${itemRows}</tbody>
-          <tfoot>
+          ${o.hidePrices ? "" : `<tfoot>
             <tr>
               <td colspan="3" style="padding:6px 12px;text-align:right">Subtotal</td>
               <td style="padding:6px 12px;text-align:right">$${o.subtotal.toFixed(2)}</td>
@@ -147,7 +149,7 @@ export function buildOrderEmailHtml(o: OrderEmailData): string {
               <td style="padding:10px 12px;text-align:right;font-weight:700;color:#39627c">$${o.total.toFixed(2)}</td>
             </tr>
             ${payRows.join("")}
-          </tfoot>
+          </tfoot>`}
         </table>
       </div>
     </div>

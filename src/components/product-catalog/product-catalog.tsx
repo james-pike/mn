@@ -72,7 +72,8 @@ export function swatchOrder(colors: readonly string[]): string[] {
 // Login lineups (Electrical SKUs, isSkuInLineup) live in lib/lineup.ts and the
 // HVAC rule in lib/hvac.ts, shared with the layout's menu drawer.
 export { ELECTRICAL_SKUS, isSkuInLineup } from "../../lib/lineup";
-import { ELECTRICAL_SKUS, ELECTRICAL_SKU_SET } from "../../lib/lineup";
+import { ELECTRICAL_SKUS, ELECTRICAL_SKU_SET, hidesPrices } from "../../lib/lineup";
+import { KitBuilder, ElectricalBrandPanel } from "../kit-panel/kit-panel";
 export { SAFETY_CATEGORIES, SAFETY_SKU_ORDER, isSafetyProduct } from "../../lib/hvac";
 import { isSafetyProduct, SAFETY_CATEGORIES, SAFETY_SKU_ORDER } from "../../lib/hvac";
 
@@ -218,7 +219,8 @@ const EAGER_CARDS = 8;
 const ProductCard = component$<{ item: Product; sku: string; index: number }>(({ item, sku, index }) => {
   const locale = useContext(LocaleContext);
   const loginType = useContext(LoginTypeContext);
-  const isTech = loginType.value === "tech";
+  // Price hidden on the card for logins that never see prices (Electrical).
+  const isTech = hidesPrices(loginType.value);
   const eager = index < EAGER_CARDS;
 
   const nav = useNavigate();
@@ -906,7 +908,19 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
 
   return (
     <section class={`home-catalog ${isElectrical.value ? "home-catalog--electrical" : ""} ${cls || ""}`}>
-      <div class="home-catalog__inner">
+      <div
+        class="home-catalog__inner"
+        onClick$={(e) => {
+          // Electrical product page: a click anywhere away from the product
+          // itself (photo column or details panel) — the branding panel, the
+          // grey space around/under the product — goes back to the kit. Links,
+          // buttons and form controls keep their own behaviour.
+          if (loginType.value !== "electrical" || !isPdp.value) return;
+          const t = e.target as HTMLElement;
+          if (t.closest("a, button, select, input, textarea, label, .product-image-row, .product-modal__details")) return;
+          nav("/");
+        }}
+      >
         <div class={`home-catalog__header ${tabsAtEnd.value ? "home-catalog__header--tabs-end" : ""}`}>
           <h2 class="home-catalog__title">{t("nav.apparel", locale.value)}</h2>
           {/* Catalog/list view mode removed — the gallery grid only. */}
@@ -1008,6 +1022,8 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
               needs its own node. */}
           <span class="home-catalog__seam" aria-hidden="true" />
         </div>
+        {/* Electrical (desktop + wide tablets): branding panel instead of the filter sidebar, on the gallery and product pages. */}
+        {loginType.value === "electrical" && <ElectricalBrandPanel />}
         <aside
           class={`home-catalog__filters${isPdp.value ? " home-catalog__filters--pdp-back" : ""}`}
           aria-label="Filter products"
@@ -1113,11 +1129,17 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
             <Slot />
           </div>
         ) : (
+          loginType.value === "electrical" ? (
+            /* Electrical: the gallery is the kit order form (sizes on each card,
+               inline details, one sticky Add Kit button). */
+            <KitBuilder />
+          ) : (
           <div class={`apparel-grid ${denseGrid.value ? "apparel-grid--dense" : ""} ${tabletCols.value === "list" ? "apparel-grid--list" : `apparel-grid--cols-${tabletCols.value}`}`}>
             {filtered.value.map((item, i) => (
               <ProductCard key={item.sku} item={item} sku={item.sku} index={i} />
             ))}
           </div>
+          )
         )}
       </div>
     </section>

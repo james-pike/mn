@@ -8,7 +8,8 @@ import { isSafetyProduct } from "./hvac";
 // (104982) — renamed off the old MNFR- prefix to match the catalog's MN- numbering.
 // The FR Dearborn LS Tee (100235) isn't in the catalog yet — add it to the DB,
 // then drop its SKU in here.
-// Display order: T-Shirts, Sweaters, Pants, Headwear (matches the sidebar).
+// Display order: T-Shirts, Sweaters, Pants, Headwear (desktop moves the pants
+// second with CSS — see kit-panel.css).
 export const ELECTRICAL_SKUS: string[] = ["MN-38", "MN-40", "MN-36", "MN-39"];
 export const ELECTRICAL_SKU_SET = new Set(ELECTRICAL_SKUS);
 
@@ -27,3 +28,49 @@ export const isSkuInLineup = (
   // Clothing / Service (default): everything except FR + Electrical-only SKUs.
   return category !== "Flame Resistant" && !ELECTRICAL_SKUS.includes(sku);
 };
+
+// Electrical portal ordering rules: no prices shown anywhere, no PO number, and
+// every order is the same kit — each product's quantity is fixed (adding it
+// again replaces its line; the cart has no +/- for it).
+export const ELECTRICAL_FIXED_QTY: Record<string, number> = {
+  "MN-36": 5, // Carhartt FR Rigby Pants
+  "MN-38": 5, // Carhartt FR Force Dearborn LS T-Shirt
+  "MN-40": 1, // Atlas Guardian FR/AR 1/4 Zip Hoodie
+  "MN-39": 1, // Flexfit Embroidered Cap
+};
+/** Logins that never see prices (cards, product page, cart, checkout, email). */
+export const hidesPrices = (loginType: string | null | undefined): boolean =>
+  loginType === "tech" || loginType === "electrical";
+/** Logins that check out without a PO number. */
+export const poOptional = (loginType: string | null | undefined): boolean =>
+  loginType === "electrical";
+/** Fixed order quantity for a SKU on this login, or null when it's free. */
+export const fixedQtyFor = (loginType: string | null | undefined, sku: string | undefined): number | null =>
+  loginType === "electrical" && sku ? ELECTRICAL_FIXED_QTY[sku] ?? null : null;
+
+// Every Electrical order is the complete kit: all four items, at the fixed
+// quantities above. Short labels for the "still to add" note.
+export const ELECTRICAL_KIT_LABELS: Record<string, string> = {
+  "MN-36": "5 Pants",
+  "MN-38": "5 Shirts",
+  "MN-40": "1 Hoodie",
+  "MN-39": "1 Cap",
+};
+/** Kit items still missing from the cart (labels), or [] when complete / not a kit login. */
+export const kitMissing = (loginType: string | null | undefined, skus: (string | undefined)[]): string[] =>
+  loginType === "electrical"
+    ? Object.keys(ELECTRICAL_FIXED_QTY).filter((s) => !skus.includes(s)).map((s) => ELECTRICAL_KIT_LABELS[s])
+    : [];
+
+// Electrical orders all ship to Modern Niagara Toronto (shown read-only at
+// checkout and enforced by the order action). Street address to be confirmed —
+// only the name is shown/sent for now.
+export const ELECTRICAL_SHIP_TO = {
+  label: "Modern Niagara Toronto",
+  address1: "Modern Niagara Toronto",
+  city: "Toronto",
+  province: "ON",
+  postal: "",
+};
+/** Electrical order-summary order: shirts, pants, hoodie, cap. */
+export const ELECTRICAL_SUMMARY_ORDER = ["MN-38", "MN-36", "MN-40", "MN-39"];

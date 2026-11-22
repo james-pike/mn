@@ -161,6 +161,7 @@ const translations = {
   "cart.title": { en: "MY CART", fr: "PANIER" },
   "cart.empty": { en: "Your cart is empty", fr: "Votre panier est vide" },
   "cart.backtoapparel": { en: "Back to Apparel", fr: "Retour aux vêtements" },
+  "cart.backtokit": { en: "Back to FR Kit", fr: "Retour à l’ensemble FR" },
   "cart.qty": { en: "Qty", fr: "Qté" },
   "cart.each": { en: "each", fr: "chacun" },
   "cart.item": { en: "item", fr: "article" },

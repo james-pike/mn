@@ -33319,3 +33319,39 @@
   html body .login-overlay .login-modal.login-modal--split { max-height: calc(var(--login-h, 100dvh) - 8px) !important; }
   html body .login-modal__stack.login-modal__stack { max-height: calc(var(--login-h, 100dvh) - 8px - 12px) !important; }
 }
+
+
+/* Electrical login, phones: the header wordmark text (MODERN NIAGARA / BUILDING SERVICES /
+   APPAREL) 1.2x bigger so it fills more of the header's height (40px -> 48px
+   of the 55px bar). Scaled as a block from its left edge so each line keeps
+   its tuned tracking; the pinwheel mark is unchanged. */
+@media (max-width: 600px) {
+  html body .site-header.site-header--electrical .site-header__logo .brand-cluster__words {
+    transform: scale(1.2);
+    transform-origin: left center;
+  }
+  html body .site-header.site-header--electrical .site-header__logo .brand-cluster__mark { margin-right: 2px; }
+}
+
+/* Electrical checkout: the fixed ship-to address block (read-only). */
+.checkout-modal__shipto {
+  grid-column: 1 / -1;
+  display: flex; flex-direction: column; gap: 2px;
+  margin: 4px 0 8px;
+  padding: 12px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+  background: #f7f8f9;
+  font-size: 0.95rem; line-height: 1.4; color: #3d434a;
+}
+.checkout-modal__shipto-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8e93; margin-bottom: 2px; }
+.checkout-modal__shipto-name { font-weight: 600; color: #1f2326; }
+
+/* Electrical cart: the kit as one entry. */
+.cart-table__kit-name { font-weight: 700; font-size: 1rem; margin-bottom: 6px; color: #1f2326; }
+.cart-table__kit-items { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 0.88rem; color: #3d434a; }
+.cart-table__kit-items li { display: flex; align-items: center; gap: 7px; }
+.cart-table__kit-items .cart-table__swatch { flex: 0 0 auto; }
+/* Electrical cart: "1 kit" needs more room than the single-digit qty box. */
+.cart-table__kit-row .cart-table__qty-controls { width: auto !important; min-width: 0 !important; overflow: visible !important; }
+.cart-table__kit-row .cart-table__kit-qty { width: auto !important; min-width: 0 !important; padding: 0 12px 0 4px; white-space: nowrap; }

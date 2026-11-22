@@ -46,6 +46,8 @@ async function fetchAndWrite() {
     // FR Force Dearborn (100235): abbreviate "Long Sleeve" to "LS" so the long
     // title fits on one line in the catalog card.
     "MN-38": { name: "Carhartt FR Force Dearborn LS T-Shirt - Navy" },
+    // Electrical kit pants: "Rugged Flex" in the name (mn2-only; the DB is shared with mn).
+    "MN-36": { name: "Carhartt FR Rugged Flex Rigby Pants - Dark Khaki" },
   };
 
   try {
@@ -166,7 +168,7 @@ const colorNames: Record<string, Record<string, string>> = {
   "#b0b0b0": { en: "Grey", fr: "Gris" },
   "#b6e021": { en: "Safety Green", fr: "Vert sécurité" },
   "#b8ad97": { en: "Khaki", fr: "Kaki" },
-  "#ab8f66": { en: "Dark Khaki", fr: "Kaki foncé" },
+  "#ab8f66": { en: "Khaki", fr: "Kaki" },
   "#b98b8b": { en: "Rose", fr: "Rose" },
   "#bf5700": { en: "Burnt Orange", fr: "Orange brûlé" },
   "#c2a878": { en: "Tan", fr: "Beige" },

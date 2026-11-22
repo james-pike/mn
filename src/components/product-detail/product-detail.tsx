@@ -5,6 +5,7 @@ import { LocaleContext, t } from "../../i18n";
 import { allProducts, colorName, categoryLabel } from "../../routes/apparel/products";
 import { expandSizes, sizeGroups, sortColorsWhiteLast } from "../../routes/apparel/utils";
 import { LoginTypeContext } from "../../routes/layout";
+import { hidesPrices, fixedQtyFor } from "../../lib/lineup";
 import { ELECTRICAL_SKUS, imageForColor, genderOf, swatchOrder, isSafetyProduct } from "../product-catalog/product-catalog";
 import { ProductImage } from "../product-image/product-image";
 import { LogoSlide } from "../logo-overlay/logo-slide";
@@ -389,7 +390,7 @@ const RelatedCard = component$<{
 export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) => {
   const locale = useContext(LocaleContext);
   const loginType = useContext(LoginTypeContext);
-  const hidePrice = loginType.value === "tech";
+  const hidePrice = hidesPrices(loginType.value);
   const inFrame = !!props.onClose$;
 
   // Reference props.sku directly inside computed/tasks so they re-track when the
@@ -612,6 +613,12 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
         ? lcfg!.positions.find((o) => o.id === selectedLogoPos.value)?.label ?? ""
         : "";
       const logoStyleLabel = selectedLogoStyle.value === "tone" ? "Tone on tone" : "Standard";
+      // Fixed-quantity kit item (Electrical): one line per product at its set
+      // quantity — adding it again replaces the earlier size/colour choice.
+      const fixedQty = fixedQtyFor(loginType.value, p.sku);
+      if (fixedQty) {
+        for (let k = items.length - 1; k >= 0; k--) if (items[k].sku === p.sku) items.splice(k, 1);
+      }
       const existing = items.find(
         (i: any) => i.name === p.name && i.size === sizeVal && i.color === selectedColor.value
           && (!logoActiveCart || (i.logoPosition === logoPosLabel && i.logoStyle === logoStyleLabel))
@@ -644,7 +651,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
           category: p.category,
           size: sizeVal,
           color: colorVal,
-          quantity: selectedQty.value,
+          quantity: fixedQty ?? selectedQty.value,
           price: p.price,
           img: colorImg,
         };
@@ -780,7 +787,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
   const isFootwear = (c: string) => c === "Safety Boots" || c === "Safety Shoes" || c === "Footwear";
   const tabCategory = isFootwear(p.category) ? "Footwear" : p.category;
   const catHash = tabCategory.toLowerCase().replace(/\s+/g, "-");
-  const backLabel = loginType.value === "tech" ? t("cat.Work Wear", locale.value) : t("nav.apparel", locale.value);
+  const backLabel = loginType.value === "electrical" ? "Back to kit" : loginType.value === "tech" ? t("cat.Work Wear", locale.value) : t("nav.apparel", locale.value);
   const catLabel = categoryLabel(tabCategory, locale.value);
 
   return (
@@ -795,6 +802,8 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
             <svg class="pdp-breadcrumb__arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
             <span>{backLabel}</span>
           </Link>
+          {/* Electrical: just "Back to kit" (no category / SKU — there are no categories). */}
+          {loginType.value !== "electrical" && <>
           <Link href={`/#${catHash}`} class="pdp-breadcrumb__link pdp-breadcrumb__cat">
             {tabCategory === "New Hire Kit" ? (
               <>
@@ -804,6 +813,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
             ) : catLabel}
           </Link>
           <span class="pdp-breadcrumb__sku">{p.sku}</span>
+          </>}
           {hasMultipleImgs && (
             <button
               class="pdp-breadcrumb__view"
@@ -1121,13 +1131,22 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
             )}
             <div class="product-modal__field product-modal__qty-group">
               <label class="product-modal__label">{t("modal.quantity", locale.value)}</label>
+              {fixedQtyFor(loginType.value, p.sku) ? (
+                <div class="product-modal__qty product-modal__qty--fixed">
+                  <span class="product-modal__qty-val">{fixedQtyFor(loginType.value, p.sku)}</span>
+                </div>
+              ) : (
               <div class="product-modal__qty">
                 <button class="product-modal__qty-btn" aria-label="Decrease quantity" onClick$={() => { if (selectedQty.value > 1) selectedQty.value--; }}>-</button>
                 <span class="product-modal__qty-val">{selectedQty.value}</span>
                 <button class="product-modal__qty-btn" aria-label="Increase quantity" onClick$={() => (selectedQty.value++)}>+</button>
               </div>
+              )}
             </div>
             </div>
+            {/* Electrical: no Add to Cart / kit note here — the kit is ordered from the
+                gallery, and "Back to kit" in the breadcrumb bar returns to it. */}
+            {!fixedQtyFor(loginType.value, p.sku) && (
             <div class="product-modal__actions">
               <button
                 class={`btn btn--primary product-modal__add product-modal__add--branded ${added.value ? "product-modal__add--added" : ""}`}
@@ -1154,6 +1173,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
                 </span>
               </button>
             </div>
+            )}
           </div>
         </div>
       </div>
@@ -1188,6 +1208,9 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
           ? allProducts.filter((r) => r.sku !== p.sku && inLineup(r)).slice(0, 8)
           : (useCat ? sameCat : allApparel).slice(0, 8);
         const headingSuffix = isElectrical ? t("login.portal.electrical", locale.value) : useCat ? catLabel : t("nav.apparel", locale.value);
+        // Electrical is a fixed 4-item kit ordered from the gallery — no
+        // "More Electrical" row under its product pages.
+        if (isElectrical) return null;
         return (
           <div class="related-items">
             <h3 class="related-items__title">{t("product.more", locale.value)} {headingSuffix}</h3>
