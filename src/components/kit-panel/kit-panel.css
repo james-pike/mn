@@ -1256,3 +1256,7 @@ html body .kit-bar .kit-bar__status:not(.kit-bar__status--ok) { color: rgb(46, 1
 @media (min-width: 1025px) {
   html body .site-header.site-header--electrical .cart-btn { min-width: 0 !important; width: auto !important; padding: 0 18px !important; }
 }
+@media (min-width: 1025px) {
+  /* logo + kit summary up 12px together (top 48 → 36px); contact stays put */
+  html body .home-catalog--electrical .mn-brand-panel { padding-top: 36px !important; }
+}
