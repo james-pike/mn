@@ -6,6 +6,7 @@ import { allProducts, colorName, categoryLabel } from "../../routes/apparel/prod
 import { expandSizes, sizeGroups, sortColorsWhiteLast } from "../../routes/apparel/utils";
 import { LoginTypeContext } from "../../routes/layout";
 import { hidesPrices, fixedQtyFor } from "../../lib/lineup";
+import { readKitSel, writeKitSel } from "../../lib/kit-selection";
 import { ELECTRICAL_SKUS, imageForColor, genderOf, swatchOrder, isSafetyProduct } from "../product-catalog/product-catalog";
 import { ProductImage } from "../product-image/product-image";
 import { LogoSlide } from "../logo-overlay/logo-slide";
@@ -411,6 +412,9 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
   const selectedVariant = useSignal("");
   // Live logo overlay (products in LOGO_PRODUCTS): the chosen logo
   // position + style drive a CSS overlay instead of loading a new image.
+  // Electrical kit: did the person pick a size on this page? (Only then is it
+  // saved back to the kit card — the page's own default "L" never is.)
+  const kitTouched = useSignal(false);
   const selectedLogoPos = useSignal<LogoPosition | "">("");
   const selectedLogoStyle = useSignal<LogoStyle>("tone");
   const added = useSignal(false);
@@ -740,6 +744,47 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
     }
   });
 
+  // Electrical kit items: open on the size already chosen for this item (on its
+  // kit card or an earlier visit), and save any size picked here back to it.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track, cleanup }) => {
+    const sku = track(() => product.value?.sku);
+    kitTouched.value = false;
+    if (loginType.value !== "electrical" || !sku || !ELECTRICAL_SKUS.includes(sku)) return;
+    const p = product.value!;
+    const sv = readKitSel()[sku];
+    if (sv) {
+      if (waistLengthSkus.has(sku)) {
+        if (sv.waist) selectedWaist.value = sv.waist;
+        if (sv.length) selectedLength.value = sv.length;
+      } else {
+        const vm = getVariantMap(p);
+        if (vm && sv.fit && vm[sv.fit]) {
+          selectedVariant.value = sv.fit;
+          if (sv.size && vm[sv.fit].includes(sv.size)) selectedSize.value = sv.size;
+        } else if (!vm && sv.size && expandSizes(p.sizes).includes(sv.size)) {
+          selectedSize.value = sv.size;
+        }
+      }
+    }
+    const mark = (e: Event) => { if ((e.target as HTMLElement)?.closest?.(".product-modal__details")) kitTouched.value = true; };
+    document.addEventListener("click", mark, true);
+    document.addEventListener("change", mark, true);
+    cleanup(() => { document.removeEventListener("click", mark, true); document.removeEventListener("change", mark, true); });
+  });
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    const size = track(() => selectedSize.value);
+    const fit = track(() => selectedVariant.value);
+    const waist = track(() => selectedWaist.value);
+    const length = track(() => selectedLength.value);
+    const touched = track(() => kitTouched.value);
+    const sku = product.value?.sku;
+    if (!touched || loginType.value !== "electrical" || !sku || !ELECTRICAL_SKUS.includes(sku)) return;
+    if (waistLengthSkus.has(sku)) writeKitSel(sku, { waist, length });
+    else writeKitSel(sku, { fit: fit || undefined, size: size && size !== "W/L" ? size : undefined });
+  });
+
   if (!product.value) {
     return (
       <div class="apparel-catalog" id="products">
@@ -949,6 +994,14 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
                   </button>
                 ))}
               </div>
+            )}
+            {/* Electrical (desktop): "Back to kit" sits right under the photo column
+                (the bottom breadcrumb bar is hidden there). */}
+            {loginType.value === "electrical" && (
+              <Link href="/" class="pdp-back-under-image">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+                <span>{backLabel}</span>
+              </Link>
             )}
           </div>
           <div class="product-modal__details">

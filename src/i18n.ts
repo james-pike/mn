@@ -264,6 +264,12 @@ const translations = {
     en: "Your order has been sent for processing and you will receive an order confirmation email.",
     fr: "Votre commande a été envoyée pour traitement et vous recevrez un courriel de confirmation de commande.",
   },
+  // Electrical login's wording ("a confirmation email", no second "order").
+  "order.text.electrical": {
+    en: "Thank you for your order! It has been sent for processing and you will receive a confirmation email.",
+    fr: "Merci pour votre commande! Elle a été envoyée pour traitement et vous recevrez un courriel de confirmation.",
+  },
+  "order.title.electrical": { en: "Order Submitted!", fr: "Commande envoyée!" },
   "order.continue": { en: "Home", fr: "Accueil" },
 
   // Categories (used in apparel chips & product cards)

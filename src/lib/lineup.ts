@@ -63,14 +63,16 @@ export const kitMissing = (loginType: string | null | undefined, skus: (string |
     : [];
 
 // Electrical orders all ship to Modern Niagara Toronto (shown read-only at
-// checkout and enforced by the order action). Street address to be confirmed —
-// only the name is shown/sent for now.
+// checkout and enforced by the order action). The "Attn" rides in address1 so
+// it reaches the order record and the confirmation email.
 export const ELECTRICAL_SHIP_TO = {
-  label: "Modern Niagara Toronto",
-  address1: "Modern Niagara Toronto",
-  city: "Toronto",
+  label: "Modern Niagara Building Services",
+  attn: "Attn: Laurie Sousa",
+  street: "8125 Highway 50",
+  address1: "8125 Highway 50 (Attn: Laurie Sousa)",
+  city: "Vaughan",
   province: "ON",
-  postal: "",
+  postal: "L4H 4S6",
 };
 /** Electrical order-summary order: shirts, pants, hoodie, cap. */
 export const ELECTRICAL_SUMMARY_ORDER = ["MN-38", "MN-36", "MN-40", "MN-39"];

@@ -15,6 +15,7 @@ import { expandSizes } from "../../routes/apparel/utils";
 import { LoginTypeContext } from "../../routes/layout";
 import { LocaleContext } from "../../i18n";
 import { ELECTRICAL_SKUS, ELECTRICAL_FIXED_QTY } from "../../lib/lineup";
+import { readKitSel, writeKitSel } from "../../lib/kit-selection";
 import "./kit-panel.css";
 
 // Size choices per kit item — the same options the product pages offer.
@@ -128,6 +129,7 @@ export const KitBuilder = component$(() => {
     Object.fromEntries(ELECTRICAL_SKUS.map((s) => [s, s === "MN-38" ? { fit: "Regular" } : {}])),
   );
   const added = useSignal(false);
+  const selLoaded = useSignal(false);
   const inCart = useSignal(false);
   // Sizes of the kit currently in the cart (sku -> cart size string).
   const cartSizes = useStore<Record<string, string>>({});
@@ -147,6 +149,20 @@ export const KitBuilder = component$(() => {
       else if (i.variant) { v.fit = i.variant; v.size = String(i.size).replace(` ${i.variant}`, ""); }
       else if (i.size && i.size !== "One Size") v.size = i.size;
     }
+    // Sizes picked on a product page (or earlier on these cards) win over the
+    // cart's, as the most recent choice — kept only if still valid options.
+    const saved = readKitSel();
+    for (const sku of ELECTRICAL_SKUS) {
+      const sv = saved[sku]; const v = sel[sku]; const pk = PICKS[sku];
+      if (!sv || !v || !pk) continue;
+      if (pk.kind === "fit" && sv.fit && pk.fits[sv.fit]) { v.fit = sv.fit; v.size = sv.size && pk.fits[sv.fit].includes(sv.size) ? sv.size : undefined; }
+      else if (pk.kind === "size" && sv.size && pk.sizes.includes(sv.size)) v.size = sv.size;
+      else if (pk.kind === "waistLength") {
+        if (sv.waist && pk.waists.includes(sv.waist)) v.waist = sv.waist;
+        if (sv.length && pk.lengths.includes(sv.length)) v.length = sv.length;
+      }
+    }
+    selLoaded.value = true;
     const sync = () => {
       const c = readCart();
       inCart.value = ELECTRICAL_SKUS.every((s) => c.some((i) => i.sku === s));
@@ -164,6 +180,15 @@ export const KitBuilder = component$(() => {
   // The kit in the cart matches what's picked here -> the bar becomes the
   // order summary with a Checkout button.
   const inCartMatch = inCart.value && allReady && ELECTRICAL_SKUS.every((sku) => cartSizes[sku] === sizeLabel(sku, sel[sku]));
+
+  // Mirror the cards' picks into the shared store, so the product pages open
+  // on the same sizes.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    track(() => JSON.stringify(sel));
+    if (!track(() => selLoaded.value)) return; // not before the saved picks are applied
+    for (const sku of ELECTRICAL_SKUS) if (sel[sku]) writeKitSel(sku, { ...sel[sku] });
+  });
 
   const addKit = $(() => {
     const items = kitProducts();
@@ -258,10 +283,12 @@ export const KitBuilder = component$(() => {
                 {allReady ? (inCart.value ? L(loc, "Sizes changed — update your kit order", "Tailles modifiées — mettez à jour votre commande") : L(loc, "All sizes chosen", "Toutes les tailles choisies")) : L(loc, `Pick a size for each item · ${chosen} of ${needing.length}`, `Choisissez une taille pour chaque article · ${chosen} sur ${needing.length}`)}
               </span>
             </div>
-            <button type="button" class="btn btn--primary kit-bar__add" disabled={!allReady} onClick$={addKit}>
-              {inCart.value ? L(loc, "Update Kit Order", "Mettre à jour la commande") : L(loc, "Add to Order", "Ajouter à la commande")}
-              {/* small white tote-bag icon, on the right */}
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 8.5h15l-1.2 12a1.5 1.5 0 0 1-1.5 1.35H7.2a1.5 1.5 0 0 1-1.5-1.35z"/><path d="M8.5 11V6.5a3.5 3.5 0 0 1 7 0V11"/></svg>
+            {/* Always "Checkout →": enabled once every size is picked; it saves the
+                kit to the cart (replacing any earlier kit) and goes to checkout. */}
+            <button type="button" class="btn btn--primary kit-bar__add kit-bar__checkout" disabled={!allReady}
+              onClick$={async () => { await addKit(); nav("/checkout/"); }}>
+              {L(loc, "Checkout", "Passer à la caisse")}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
             </button>
           </>
         )}

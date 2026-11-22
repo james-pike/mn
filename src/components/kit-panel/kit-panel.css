@@ -1264,3 +1264,166 @@ html body .kit-bar .kit-bar__status:not(.kit-bar__status--ok) { color: rgb(46, 1
   /* "Electrical FR Kit" title: tighter tracking (0.16em → 0.1em) */
   html body .home-catalog--electrical .mn-brand-panel .mn-brand-panel__portal { letter-spacing: 0.1em !important; }
 }
+
+/* Electrical desktop cards: colour swatch and size range share one line
+   (colour left, sizes right), both a touch smaller so they fit. */
+@media (min-width: 1025px) {
+  html body .kit-builder .kit-card__body { flex-direction: row !important; flex-wrap: wrap !important; align-items: center; column-gap: 10px; }
+  html body .kit-builder .kit-card__body > * { flex: 0 0 100%; }
+  html body .kit-builder .kit-card__body > .kit-card__colour { flex: 0 0 auto !important; font-size: 13.5px !important; white-space: nowrap; }
+  html body .kit-builder .kit-card__body > .kit-card__range { flex: 0 1 auto !important; margin-left: auto !important; margin-top: 0 !important; margin-bottom: 0 !important; font-size: 13.5px !important; white-space: nowrap; text-align: right; }
+}
+@media (min-width: 1025px) {
+  /* scale with the window so colour + sizes stay on one line on narrower desktops */
+  html body .kit-builder .kit-card__body > .kit-card__colour,
+  html body .kit-builder .kit-card__body > .kit-card__range { font-size: clamp(11px, 0.86vw, 13.5px) !important; }
+  html body .kit-builder .kit-card__body { column-gap: 8px; }
+}
+
+/* Electrical checkout: the Ship To box looks like the input fields (same
+   fill, border, radius, text size and padding). */
+@media (min-width: 1025px) {
+  html body:has(.mn-brand-panel) .checkout-page .checkout-modal__shipto {
+    background-color: #f4f4f1 !important;
+    border: 1px solid rgb(200, 200, 194) !important;
+    border-radius: 6px !important;
+    padding: 10px 14px !important;
+    font-size: 15.84px !important;
+  }
+}
+
+/* Electrical checkout (desktop): Place Order sits on the left, under the
+   order details, instead of the right under the summary. */
+@media (min-width: 1025px) {
+  html body:has(.mn-brand-panel) .checkout-page .cart-drawer__footer { justify-content: flex-start !important; gap: 10px; }
+  html body:has(.mn-brand-panel) .checkout-page .cart-drawer__footer .cart-drawer__total:empty { display: none; }
+  html body:has(.mn-brand-panel) .checkout-page .cart-drawer__footer .cart-drawer__order-btn { order: 1; margin-left: 0 !important; }
+  html body:has(.mn-brand-panel) .checkout-page .cart-drawer__footer .checkout-sample-btn { order: 2; margin: 0 !important; }
+}
+@media (min-width: 1025px) {
+  /* Electrical checkout: Place Order with squarer corners */
+  html body:has(.mn-brand-panel) .checkout-page .cart-drawer__footer .cart-drawer__order-btn { border-radius: 3px !important; }
+}
+/* Electrical order-success modal: narrower Home button */
+html body:has(.site-header--electrical) .order-confirm .order-confirm__btn { padding-left: 28px !important; padding-right: 28px !important; min-width: 0 !important; width: auto !important; }
+@media (min-width: 1025px) {
+  /* colour + sizes line a touch larger (still one line) */
+  html body .kit-builder .kit-card__body > .kit-card__colour,
+  html body .kit-builder .kit-card__body > .kit-card__range { font-size: clamp(11.5px, 0.94vw, 14.5px) !important; }
+}
+@media (min-width: 1025px) {
+  /* sizes on the left, colour on the right; sized so the pants fit on one line */
+  html body .kit-builder .kit-card__body > .kit-card__colour,
+  html body .kit-builder .kit-card__body > .kit-card__range { font-size: clamp(11.25px, 0.9vw, 14.5px) !important; }
+  html body .kit-builder .kit-card__body { column-gap: 6px; }
+  html body .kit-builder .kit-card__body > .kit-card__range { order: 1; margin-left: 0 !important; text-align: left; }
+  html body .kit-builder .kit-card__body > .kit-card__colour { order: 2; margin-left: auto !important; }
+  html body .kit-builder .kit-card__body > .kit-card__pick,
+  html body .kit-builder .kit-card__body > .kit-card__one { order: 3; }
+}
+@media (min-width: 1025px) {
+  /* one-size cap has no sizes line: its colour stays on the left */
+  html body .kit-builder .kit-card__body:not(:has(> .kit-card__range)) > .kit-card__colour { margin-left: 0 !important; }
+}
+
+/* Electrical header: the logout button lights up in the logo's two reds on
+   hover (split diagonally like the pinwheel's red quarter), icon in white. */
+html body .site-header.site-header--electrical .logout-btn:hover,
+html body .site-header.site-header--electrical .logout-btn:focus-visible {
+  background: linear-gradient(135deg, #d43950 0 50%, #ae1f2a 50% 100%) !important;
+  color: #ffffff !important;
+}
+html body .site-header.site-header--electrical .logout-btn:hover svg,
+html body .site-header.site-header--electrical .logout-btn:focus-visible svg { color: #ffffff !important; stroke: #ffffff !important; }
+@media (min-width: 1025px) {
+  /* a little more space between paired size pickers (fit + size, waist + length) */
+  html body .kit-builder .kit-card__pick { gap: 10px !important; }
+}
+
+/* Desktop cards: no "Sizes:" range line (the size pickers sit right below);
+   the colour swatch takes its place on the left. */
+@media (min-width: 1025px) {
+  html body .kit-builder .kit-card__body > .kit-card__range { display: none !important; }
+  html body .kit-builder .kit-card__body > .kit-card__colour { margin-left: 0 !important; }
+}
+
+/* Desktop sidebar: a little more space between the pinwheel and the wordmark. */
+@media (min-width: 1025px) {
+  html body .home-catalog--electrical .mn-brand-panel .mn-brand-panel__lockup { gap: 30px !important; }
+}
+
+/* Desktop: a touch of depth. The branding panel gets a faint dot texture
+   (like the page margins, much subtler) over a barely-there top-to-bottom
+   tint, and soft shadows lift the panel, the kit cards and the kit bar off the
+   grey. No shadow above the panel, so it still joins the header corner cleanly. */
+@media (min-width: 1025px) {
+  html body .home-catalog--electrical .mn-brand-panel {
+    background-color: #ffffff !important;
+    background-image:
+      radial-gradient(circle, rgba(27, 31, 39, 0.075) 1px, transparent 1.4px),
+      linear-gradient(to bottom, #ffffff 0%, #fbfbfa 100%) !important;
+    background-size: 16px 16px, 100% 100% !important;
+    background-position: 8px 8px, 0 0 !important;
+    box-shadow: 6px 0 18px -12px rgba(16, 24, 40, 0.18), 0 10px 18px -14px rgba(16, 24, 40, 0.16) !important;
+  }
+  html body .kit-builder .kit-card {
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 4px 12px -6px rgba(16, 24, 40, 0.08) !important;
+  }
+  html body .kit-builder .kit-bar {
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 6px 16px -8px rgba(16, 24, 40, 0.10) !important;
+  }
+}
+@media (min-width: 1025px) {
+  /* colour line alone now — back to a comfortable size */
+  html body .kit-builder .kit-card__body > .kit-card__colour { font-size: 14px !important; }
+}
+
+/* Desktop: a very subtle grey gradient mixed into the white frame. Lightest
+   where the header meets the panel (top-left), easing to a faint cool grey
+   down the panel and out along the header to the right. */
+@media (min-width: 1025px) {
+  html body .home-catalog--electrical .mn-brand-panel {
+    background-image:
+      radial-gradient(circle, rgba(27, 31, 39, 0.075) 1px, transparent 1.4px),
+      linear-gradient(to bottom, #ffffff 0%, #f8f9fa 45%, #f0f1f3 100%) !important;
+  }
+  html body:has(.mn-brand-panel) .site-header.site-header--electrical {
+    background:
+      linear-gradient(to right,
+        transparent 0 var(--mn-panel-l, 0px),
+        rgba(0, 0, 0, 0.08) var(--mn-panel-l, 0px) calc(var(--mn-panel-l, 0px) + 1px),
+        transparent calc(var(--mn-panel-l, 0px) + 1px) calc(var(--mn-panel-r, 22%) - 1px),
+        rgba(0, 0, 0, 0.08) calc(var(--mn-panel-r, 22%) - 1px) var(--mn-panel-r, 22%),
+        transparent var(--mn-panel-r, 22%)),
+      linear-gradient(to right,
+        #f0f0ee 0 var(--mn-panel-l, 0px),
+        #ffffff var(--mn-panel-l, 0px) var(--mn-panel-r, 22%),
+        #fdfdfd var(--mn-panel-r, 22%),
+        #f1f2f4 100%) !important;
+  }
+}
+/* Electrical order-success modal: squarer corners (card and Home button) */
+html body:has(.site-header--electrical) .modal.order-confirm { border-radius: 4px !important; }
+html body:has(.site-header--electrical) .order-confirm .order-confirm__btn { border-radius: 3px !important; }
+/* Electrical cart: Checkout button with squarer corners (matches Place Order) */
+html body:has(.site-header--electrical) .cart-drawer .cart-drawer__order-btn { border-radius: 3px !important; }
+
+/* Electrical PDP (desktop): "Back to kit" under the photo column instead of a
+   breadcrumb bar below the whole product area. */
+.pdp-back-under-image { display: none; }
+@media (min-width: 1025px) {
+  html body .home-catalog--electrical .pdp-breadcrumb { display: none !important; }
+  html body .home-catalog--electrical .pdp-back-under-image {
+    display: inline-flex; align-items: center; gap: 6px;
+    align-self: flex-start;
+    margin: 12px 0 4px 6px;
+    font-size: 1rem; color: #24292e; text-decoration: none;
+  }
+  html body .home-catalog--electrical .pdp-back-under-image:hover { color: #2e698e; }
+}
+@media (min-width: 1025px) {
+  /* photo column has no fill of its own (the photo keeps its white card), so
+     "Back to kit" under it sits on whatever is behind — no white band */
+  html body .home-catalog--electrical .product-image-row { background: transparent !important; }
+  html body .home-catalog--electrical .pdp-back-under-image { background: transparent !important; }
+}

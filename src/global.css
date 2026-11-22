@@ -33355,3 +33355,7 @@
 /* Electrical cart: "1 kit" needs more room than the single-digit qty box. */
 .cart-table__kit-row .cart-table__qty-controls { width: auto !important; min-width: 0 !important; overflow: visible !important; }
 .cart-table__kit-row .cart-table__kit-qty { width: auto !important; min-width: 0 !important; padding: 0 12px 0 4px; white-space: nowrap; }
+/* Electrical checkout: the Ship To label sits above its box like the other
+   field labels; the box spans the full row. */
+.checkout-modal__field--shipto { grid-column: 1 / -1; }
+.checkout-modal__field--shipto .checkout-modal__shipto { margin: 0; }

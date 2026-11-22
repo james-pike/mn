@@ -272,6 +272,23 @@ export default component$(() => {
 
   const isEmpty = cartHydrated.value && cart.items.length === 0;
 
+  // Electrical: clicking anywhere outside the order-success card closes it —
+  // the same as Home (back to the kit, with the now-empty cart).
+  // A capture-phase window listener, because the modal stops click
+  // propagation on its own (full-screen) dialog element.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track, cleanup }) => {
+    track(() => orderSubmitted.value);
+    if (!orderSubmitted.value || loginType.value !== "electrical") return;
+    const onClick = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      if (!t.closest("dialog") || t.closest(".order-confirm")) return;
+      window.location.href = "/";
+    };
+    window.addEventListener("click", onClick, true);
+    cleanup(() => window.removeEventListener("click", onClick, true));
+  });
+
   return (
     <div class="modal-overlay checkout-page">
       {/* Electrical (desktop): the branding panel stays on the left here too. */}
@@ -381,9 +398,14 @@ export default component$(() => {
                   <input type="tel" value={empPhone.value} onInput$={(_, el) => { empPhone.value = el.value; formError.value = ""; }} />
                 </div>
                 </div>
-                  <div class="checkout-modal__shipto">
-                    <span class="checkout-modal__shipto-label">{locale.value === "fr" ? "Livrer à" : "Ship to"}</span>
-                    <span class="checkout-modal__shipto-name">{fixedShip.label}</span>
+                  <div class="checkout-modal__field checkout-modal__field--shipto">
+                    <label>{locale.value === "fr" ? "Livrer à" : "Ship to"}</label>
+                    <div class="checkout-modal__shipto">
+                      <span class="checkout-modal__shipto-name">{fixedShip.label}</span>
+                      <span>{fixedShip.attn}</span>
+                      <span>{fixedShip.street}</span>
+                      <span>{fixedShip.city}, {fixedShip.province} {fixedShip.postal}</span>
+                    </div>
                   </div>
                   </>
                 ) : (
@@ -508,8 +530,8 @@ export default component$(() => {
               </svg>
               <svg class="order-confirm__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
             </div>
-            <h2 class="order-confirm__title">{t("order.title", locale.value)}</h2>
-            <p class="order-confirm__text">{t("order.text", locale.value)}</p>
+            <h2 class="order-confirm__title">{t(loginType.value === "electrical" ? "order.title.electrical" : "order.title", locale.value)}</h2>
+            <p class="order-confirm__text">{t(loginType.value === "electrical" ? "order.text.electrical" : "order.text", locale.value)}</p>
             {/* Plain <a> (full page load) so the app re-mounts and every signal
                 (cart, this modal flag) resets cleanly. */}
             <a href="/" class="btn btn--primary order-confirm__btn">{t("order.continue", locale.value)}</a>

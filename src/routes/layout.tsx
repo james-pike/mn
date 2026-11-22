@@ -1188,6 +1188,28 @@ export default component$(() => {
     prevPath.value = p;
   }, { strategy: 'document-ready' });
 
+  // Electrical: with the cart open, a click anywhere outside it (the branding
+  // panel, the grey space, the kit behind) just closes the cart. Header buttons
+  // keep working. Capture phase, so the click doesn't also act on what's behind.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track, cleanup }) => {
+    track(() => cartOpen.value);
+    if (!cartOpen.value || loginType.value !== "electrical") return;
+    const onClick = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      if (!t?.closest || t.closest(".site-header")) return;
+      // Inside the cart card stays open; its grey surround (the drawer element
+      // itself) counts as outside.
+      const d = t.closest(".cart-drawer");
+      if (d && t !== d) return;
+      e.preventDefault();
+      e.stopPropagation();
+      cartOpen.value = false;
+    };
+    window.addEventListener("click", onClick, true);
+    cleanup(() => window.removeEventListener("click", onClick, true));
+  }, { strategy: 'document-ready' });
+
   // Lock scroll when cart is open
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
@@ -2089,11 +2111,11 @@ export default component$(() => {
             <div class="order-confirm__badge" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
             </div>
-            <h2 class="order-confirm__title">{t("order.title", locale.value)}</h2>
+            <h2 class="order-confirm__title">{t(loginType.value === "electrical" ? "order.title.electrical" : "order.title", locale.value)}</h2>
             {orderNum.value && (
               <p class="order-confirm__order">{locale.value === "fr" ? "Commande" : "Order"} #{orderNum.value}</p>
             )}
-            <p class="order-confirm__text">{t("order.text", locale.value)}</p>
+            <p class="order-confirm__text">{t(loginType.value === "electrical" ? "order.text.electrical" : "order.text", locale.value)}</p>
             {/* Plain <a> (full page load), not <Link>: this modal lives in the
                 persistent layout, so an SPA nav would leave orderSubmitted=true
                 and the success modal stuck open. A real navigation re-mounts the
