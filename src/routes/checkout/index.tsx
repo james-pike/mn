@@ -311,6 +311,42 @@ export default component$(() => {
 
   const isEmpty = cartHydrated.value && cart.items.length === 0;
 
+  // Electrical: clicking away from the checkout card — the branding sidebar, the
+  // grey space around/below it — goes back to the kit (home). Header buttons and
+  // everything inside the card work as normal.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ cleanup }) => {
+    if (loginType.value !== "electrical") return;
+    const onClick = (e: MouseEvent) => {
+      if (orderSubmitted.value || submitting.value || showError.value) return;
+      const t = e.target as HTMLElement;
+      if (!t?.closest) return;
+      if (t.closest(".cart-drawer, .site-header, dialog, .nav-drawer")) return;
+      if (t.closest("a, button, input, select, textarea, label")) return;
+      e.preventDefault();
+      nav("/");
+    };
+    window.addEventListener("click", onClick, true);
+    cleanup(() => window.removeEventListener("click", onClick, true));
+  });
+
+  // Electrical, tablets + phones: the checkout starts exactly where the header
+  // ends (the header height differs by device), so nothing hides under it.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ cleanup }) => {
+    if (loginType.value !== "electrical") return;
+    const set = () => {
+      const h = document.querySelector(".site-header") as HTMLElement | null;
+      if (h) document.documentElement.style.setProperty("--mn-co-top", `${Math.round(h.getBoundingClientRect().bottom)}px`);
+    };
+    set();
+    const ro = new ResizeObserver(set);
+    const h = document.querySelector(".site-header");
+    if (h) ro.observe(h);
+    window.addEventListener("resize", set);
+    cleanup(() => { ro.disconnect(); window.removeEventListener("resize", set); });
+  });
+
   // Electrical: clicking anywhere outside the order-success card closes it —
   // the same as Home (back to the kit, with the now-empty cart).
   // A capture-phase window listener, because the modal stops click
@@ -360,6 +396,14 @@ export default component$(() => {
         ) : (
           <>
             <div class="cart-drawer__details-step">
+              {/* Electrical: "Back to FR Kit" above the order summary (no cart, so
+                  no "Back to Cart"). */}
+              {loginType.value === "electrical" && (
+                <Link href="/" class="checkout-back-kit">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+                  <span>{t("cart.backtokit", locale.value)}</span>
+                </Link>
+              )}
               {/* Electrical has no cart (no cart buttons anywhere), so no "Back to Cart". */}
               {loginType.value !== "electrical" && (
               <button class="cart-drawer__back-btn" onClick$={() => { try { sessionStorage.setItem("reopen-cart", "1"); } catch { /* ignore */ } nav("/"); }}>

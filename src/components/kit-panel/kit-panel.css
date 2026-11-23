@@ -1298,7 +1298,6 @@ html body .kit-bar .kit-bar__status:not(.kit-bar__status--ok) { color: rgb(46, 1
   html body:has(.mn-brand-panel) .checkout-page .cart-drawer__footer { justify-content: flex-start !important; gap: 10px; }
   html body:has(.mn-brand-panel) .checkout-page .cart-drawer__footer .cart-drawer__total:empty { display: none; }
   html body:has(.mn-brand-panel) .checkout-page .cart-drawer__footer .cart-drawer__order-btn { order: 1; margin-left: 0 !important; }
-  html body:has(.mn-brand-panel) .checkout-page .cart-drawer__footer .checkout-sample-btn { order: 2; margin: 0 !important; }
 }
 @media (min-width: 1025px) {
   /* Electrical checkout: Place Order with squarer corners */
@@ -1834,3 +1833,27 @@ html body .checkout-page--electrical .checkout-modal__shipto { background-color:
     background-image: linear-gradient(to right, #2a7fc3 0 25%, #42a1d9 25% 50%, #2a7fc3 50% 75%, #42a1d9 75% 100%) !important;
   }
 }
+
+/* Electrical checkout, tablets + phones: start right under the header
+   (measured), so the Order Summary line is never hidden behind it. */
+@media (max-width: 1024px) {
+  html body .checkout-page.checkout-page--electrical { top: var(--mn-co-top, 0px) !important; }
+}
+@media (min-width: 1000px) and (max-width: 1024px) {
+  /* wide tablets: the checkout card is fixed-position too — same start */
+  html body .checkout-page.checkout-page--electrical .cart-drawer { top: var(--mn-co-top, 0px) !important; }
+}
+/* Electrical tablets: the header wordmark a little larger (logo mark unchanged). */
+@media (min-width: 601px) and (max-width: 1024px) {
+  html body .site-header.site-header--electrical .site-header__logo .brand-cluster__words { transform: scale(1.1); transform-origin: left center; }
+}
+
+/* Electrical checkout: "Back to FR Kit" link above the order summary (where
+   "Back to Cart" sits on the other logins), spanning the top of the card. */
+.checkout-back-kit {
+  display: inline-flex; align-items: center; gap: 6px;
+  grid-column: 1 / -1; justify-self: start; align-self: start;
+  padding: 14px 18px 4px;
+  font-size: 0.95rem; color: #2e698e; text-decoration: none;
+}
+.checkout-back-kit:hover { text-decoration: underline; }
