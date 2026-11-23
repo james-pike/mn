@@ -1250,6 +1250,1340 @@ export const allProducts = [
     "portals": [
       "gift"
     ]
+  },
+  {
+    "sku": "MN-54",
+    "name": "Men's Adidas Spacer Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#272629",
+      "#222942",
+      "#ececec",
+      "#69686d",
+      "#d2d9e1",
+      "#a0998d"
+    ],
+    "price": 80,
+    "img": "/gift/A588/black-front.webp",
+    "imgs": [
+      "/gift/A588/black-front.webp",
+      "/gift/A588/black-side.webp",
+      "/gift/A588/black-back.webp",
+      "/gift/A588/collegiate-navy-front.webp",
+      "/gift/A588/collegiate-navy-side.webp",
+      "/gift/A588/collegiate-navy-back.webp",
+      "/gift/A588/core-white-front.webp",
+      "/gift/A588/core-white-side.webp",
+      "/gift/A588/core-white-back.webp",
+      "/gift/A588/grey-five-front.webp",
+      "/gift/A588/grey-five-side.webp",
+      "/gift/A588/grey-five-back.webp",
+      "/gift/A588/halo-blue-front.webp",
+      "/gift/A588/halo-blue-side.webp",
+      "/gift/A588/halo-blue-back.webp",
+      "/gift/A588/silver-pebble-front.webp",
+      "/gift/A588/silver-pebble-side.webp",
+      "/gift/A588/silver-pebble-back.webp"
+    ],
+    "material": "5.8 oz./yd² (US), 10 oz/L yd (CA) 100% recycled polyester",
+    "details": "Spacer knit construction, Contrast silicone logo on right sleeve, #A588",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-55",
+    "name": "Men's Adidas Performance Polo",
+    "category": "Polos",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#efeef1",
+      "#272629",
+      "#144f42",
+      "#d01b25",
+      "#074297",
+      "#878589",
+      "#5c2538",
+      "#272b41",
+      "#8fbbdb"
+    ],
+    "price": 65,
+    "img": "/gift/A230/white-front.webp",
+    "imgs": [
+      "/gift/A230/white-front.webp",
+      "/gift/A230/white-side.webp",
+      "/gift/A230/white-back.webp",
+      "/gift/A230/black-front.webp",
+      "/gift/A230/black-side.webp",
+      "/gift/A230/black-back.webp",
+      "/gift/A230/collegiate-green-front.webp",
+      "/gift/A230/collegiate-green-side.webp",
+      "/gift/A230/collegiate-green-back.webp",
+      "/gift/A230/collegiate-red-front.webp",
+      "/gift/A230/collegiate-red-side.webp",
+      "/gift/A230/collegiate-red-back.webp",
+      "/gift/A230/collegiate-royal-front.webp",
+      "/gift/A230/collegiate-royal-side.webp",
+      "/gift/A230/collegiate-royal-back.webp",
+      "/gift/A230/grey-three-front.webp",
+      "/gift/A230/grey-three-side.webp",
+      "/gift/A230/grey-three-back.webp",
+      "/gift/A230/maroon-front.webp",
+      "/gift/A230/maroon-side.webp",
+      "/gift/A230/maroon-back.webp",
+      "/gift/A230/navy-front.webp",
+      "/gift/A230/navy-side.webp",
+      "/gift/A230/navy-back.webp",
+      "/gift/A230/team-light-blue-front.webp",
+      "/gift/A230/team-light-blue-side.webp",
+      "/gift/A230/team-light-blue-back.webp"
+    ],
+    "material": "3.8 oz./yd² (US), 6.3 oz./L yd (CA), 100% recycled polyester",
+    "details": "Hydrophilic finish, Ribbed-knit collar, Three-button placket, Contrast heat-transfer logo on right sleeve, The preferred decoration method is heat transfer due to the lightweight fabric, #A230",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-56",
+    "name": "Women's Adidas Spacer Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#272629",
+      "#222942",
+      "#ececec",
+      "#69686d",
+      "#d2d9e1",
+      "#a0998d"
+    ],
+    "price": 80,
+    "img": "/gift/A589/black-front.webp",
+    "imgs": [
+      "/gift/A589/black-front.webp",
+      "/gift/A589/black-side.webp",
+      "/gift/A589/black-back.webp",
+      "/gift/A589/collegiate-navy-front.webp",
+      "/gift/A589/collegiate-navy-side.webp",
+      "/gift/A589/collegiate-navy-back.webp",
+      "/gift/A589/core-white-front.webp",
+      "/gift/A589/core-white-side.webp",
+      "/gift/A589/core-white-back.webp",
+      "/gift/A589/grey-five-front.webp",
+      "/gift/A589/grey-five-side.webp",
+      "/gift/A589/grey-five-back.webp",
+      "/gift/A589/halo-blue-front.webp",
+      "/gift/A589/halo-blue-side.webp",
+      "/gift/A589/halo-blue-back.webp",
+      "/gift/A589/silver-pebble-front.webp",
+      "/gift/A589/silver-pebble-side.webp",
+      "/gift/A589/silver-pebble-back.webp"
+    ],
+    "material": "5.8 oz./yd² (US), 10 oz/L yd (CA), 100% recycled polyester",
+    "details": "Spacer knit construction, Contrast silicone logo on right sleeve, #A589",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-57",
+    "name": "Men's Adidas Ultimate365 Solid Polo",
+    "category": "Polos",
+    "sizes": "XS - 4XL",
+    "badge": "",
+    "colors": [
+      "#efeef1",
+      "#272629",
+      "#bfdac9",
+      "#a2c1df",
+      "#00965f",
+      "#878589",
+      "#5a94ac",
+      "#b40728",
+      "#dc2f32",
+      "#202946",
+      "#1d2f6d"
+    ],
+    "price": 75,
+    "img": "/gift/A514/white-front.webp",
+    "imgs": [
+      "/gift/A514/white-front.webp",
+      "/gift/A514/white-side.webp",
+      "/gift/A514/white-back.webp",
+      "/gift/A514/black-front.webp",
+      "/gift/A514/black-side.webp",
+      "/gift/A514/black-back.webp",
+      "/gift/A514/clear-mint-front.webp",
+      "/gift/A514/clear-mint-side.webp",
+      "/gift/A514/clear-mint-back.webp",
+      "/gift/A514/clear-sky-front.webp",
+      "/gift/A514/clear-sky-side.webp",
+      "/gift/A514/clear-sky-back.webp",
+      "/gift/A514/court-green-front.webp",
+      "/gift/A514/court-green-side.webp",
+      "/gift/A514/court-green-back.webp",
+      "/gift/A514/grey-three-front.webp",
+      "/gift/A514/grey-three-side.webp",
+      "/gift/A514/grey-three-back.webp",
+      "/gift/A514/hazy-blue-front.webp",
+      "/gift/A514/hazy-blue-side.webp",
+      "/gift/A514/hazy-blue-back.webp",
+      "/gift/A514/power-red-front.webp",
+      "/gift/A514/power-red-side.webp",
+      "/gift/A514/power-red-back.webp",
+      "/gift/A514/real-coral-front.webp",
+      "/gift/A514/real-coral-side.webp",
+      "/gift/A514/real-coral-back.webp",
+      "/gift/A514/team-navy-blue-front.webp",
+      "/gift/A514/team-navy-blue-side.webp",
+      "/gift/A514/team-navy-blue-back.webp",
+      "/gift/A514/team-royal-blue-front.webp",
+      "/gift/A514/team-royal-blue-side.webp",
+      "/gift/A514/team-royal-blue-back.webp"
+    ],
+    "material": "6.7 oz./yd² (US), 11 oz/L yd (CA), 88/12 recycled polyester/elastane",
+    "details": "Moisture-management properties, Self-collar, Three-button placket, Open hem sleeve, Contrast silicone logo on right sleeve, #A514",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-58",
+    "name": "Men's Adidas Ultimate365 Lightweight Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "XS - 4XL",
+    "badge": "",
+    "colors": [
+      "#efeef1",
+      "#272629",
+      "#7c7a7c",
+      "#222942",
+      "#074297",
+      "#878589",
+      "#b40728"
+    ],
+    "price": 65,
+    "img": "/gift/A401/white-front.webp",
+    "imgs": [
+      "/gift/A401/white-front.webp",
+      "/gift/A401/white-side.webp",
+      "/gift/A401/white-back.webp",
+      "/gift/A401/black-front.webp",
+      "/gift/A401/black-side.webp",
+      "/gift/A401/black-back.webp",
+      "/gift/A401/black-heather-front.webp",
+      "/gift/A401/black-heather-side.webp",
+      "/gift/A401/black-heather-back.webp",
+      "/gift/A401/collegiate-navy-front.webp",
+      "/gift/A401/collegiate-navy-side.webp",
+      "/gift/A401/collegiate-navy-back.webp",
+      "/gift/A401/collegiate-royal-front.webp",
+      "/gift/A401/collegiate-royal-side.webp",
+      "/gift/A401/collegiate-royal-back.webp",
+      "/gift/A401/grey-three-front.webp",
+      "/gift/A401/grey-three-side.webp",
+      "/gift/A401/grey-three-back.webp",
+      "/gift/A401/power-red-front.webp",
+      "/gift/A401/power-red-side.webp",
+      "/gift/A401/power-red-back.webp"
+    ],
+    "material": "6.1 oz./yd² (US), 10.1 oz./L yd (CA), 100% recycled polyester",
+    "details": "Hydrophilic finish, Self-mock collar, cuffs, and bottom hem, Contrast silicone logo on left sleeve, #A401",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-59",
+    "name": "Women's Adidas Performance Polo",
+    "category": "Polos",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#efeef1",
+      "#272629",
+      "#144f42",
+      "#d01b25",
+      "#074297",
+      "#878589",
+      "#272b41",
+      "#8fbbdb"
+    ],
+    "price": 65,
+    "img": "/gift/A231/white-front.webp",
+    "imgs": [
+      "/gift/A231/white-front.webp",
+      "/gift/A231/white-side.webp",
+      "/gift/A231/white-back.webp",
+      "/gift/A231/black-front.webp",
+      "/gift/A231/black-side.webp",
+      "/gift/A231/black-back.webp",
+      "/gift/A231/collegiate-green-front.webp",
+      "/gift/A231/collegiate-green-side.webp",
+      "/gift/A231/collegiate-green-back.webp",
+      "/gift/A231/collegiate-red-front.webp",
+      "/gift/A231/collegiate-red-side.webp",
+      "/gift/A231/collegiate-red-back.webp",
+      "/gift/A231/collegiate-royal-front.webp",
+      "/gift/A231/collegiate-royal-side.webp",
+      "/gift/A231/collegiate-royal-back.webp",
+      "/gift/A231/grey-three-front.webp",
+      "/gift/A231/grey-three-side.webp",
+      "/gift/A231/grey-three-back.webp",
+      "/gift/A231/navy-front.webp",
+      "/gift/A231/navy-side.webp",
+      "/gift/A231/navy-back.webp",
+      "/gift/A231/team-light-blue-front.webp",
+      "/gift/A231/team-light-blue-side.webp",
+      "/gift/A231/team-light-blue-back.webp"
+    ],
+    "material": "3.8 oz./yd² (US), 6.3 oz./L yd (CA), 100% recycled polyester",
+    "details": "Hydrophilic finish, Self-fabric collar, Three-button placket, Contrast heat-transfer logo on right hip, The preferred decoration method is heat transfer due to lightweight fabric, #A231",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-60",
+    "name": "Men's Adidas Wind Resistant Full-Zip Jacket",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#313134"
+    ],
+    "price": 95,
+    "img": "/gift/A267/black-black-front.webp",
+    "imgs": [
+      "/gift/A267/black-black-front.webp",
+      "/gift/A267/black-black-side.webp",
+      "/gift/A267/black-black-back.webp"
+    ],
+    "material": "7.2 oz./yd² (US), 12 oz/L yd (CA), 94/6 recycled polyester/elastane plain weave",
+    "details": "Durable water-repellent finish, Soft shell stretch fabric, Half elastic cuffs, Two front zip pockets, 3-stripes on right arm, Contrast silicone logo on back neck, #A267",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-61",
+    "name": "Women's Adidas Wind Resistant Full-Zip Jacket",
+    "category": "Jackets",
+    "sizes": "XS - 3XL",
+    "badge": "",
+    "colors": [
+      "#313134"
+    ],
+    "price": 95,
+    "img": "/gift/A268/black-black-front.webp",
+    "imgs": [
+      "/gift/A268/black-black-front.webp",
+      "/gift/A268/black-black-side.webp",
+      "/gift/A268/black-black-back.webp"
+    ],
+    "material": "7.2 oz./yd² (US), 12 oz/L yd (CA), 94/6 recycled polyester/elastane plain weave",
+    "details": "Durable water-repellent finish, Soft shell stretch fabric, Half elastic cuffs, Two front zip pockets, 3-stripes on right arm, Contrast silicone logo on right hip, #A268",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-62",
+    "name": "Men's Adidas Textured Stripe Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#efeef1",
+      "#272629",
+      "#282d4a"
+    ],
+    "price": 80,
+    "img": "/gift/A708/white-front.webp",
+    "imgs": [
+      "/gift/A708/white-front.webp",
+      "/gift/A708/white-side.webp",
+      "/gift/A708/white-back.webp",
+      "/gift/A708/black-front.webp",
+      "/gift/A708/black-side.webp",
+      "/gift/A708/black-back.webp",
+      "/gift/A708/dark-blue-front.webp",
+      "/gift/A708/dark-blue-side.webp",
+      "/gift/A708/dark-blue-back.webp"
+    ],
+    "material": "6.4 oz./yd² (US), 10.6 oz/L yd (CA), 86/14 recycled polyester/elastane",
+    "details": "Jacquard texture, Textured stripe outlook, Regular fit, Contrast heat-transfer logo on right sleeve, #A708",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-63",
+    "name": "Men's Adidas Elevated Fleece Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "XS - 4XL",
+    "badge": "",
+    "colors": [
+      "#ececec",
+      "#272629",
+      "#222942"
+    ],
+    "price": 80,
+    "img": "/gift/A721/core-white-front.webp",
+    "imgs": [
+      "/gift/A721/core-white-front.webp",
+      "/gift/A721/core-white-side.webp",
+      "/gift/A721/core-white-back.webp",
+      "/gift/A721/black-front.webp",
+      "/gift/A721/black-side.webp",
+      "/gift/A721/black-back.webp",
+      "/gift/A721/collegiate-navy-front.webp",
+      "/gift/A721/collegiate-navy-side.webp",
+      "/gift/A721/collegiate-navy-back.webp"
+    ],
+    "material": "7.1 oz./yd², 70/30 BCI cotton/recycled polyester",
+    "details": "Regular fit, Hand pockets, Silicone logo on left sleeve, #A721",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-64",
+    "name": "Men's Adidas Blended Printed Polo",
+    "category": "Polos",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#efeef1",
+      "#272629",
+      "#b1bed2",
+      "#475067"
+    ],
+    "price": 85,
+    "img": "/gift/A702/white-front.webp",
+    "imgs": [
+      "/gift/A702/white-front.webp",
+      "/gift/A702/white-side.webp",
+      "/gift/A702/white-back.webp",
+      "/gift/A702/black-front.webp",
+      "/gift/A702/black-side.webp",
+      "/gift/A702/black-back.webp",
+      "/gift/A702/blue-dawn-melange-front.webp",
+      "/gift/A702/blue-dawn-melange-side.webp",
+      "/gift/A702/blue-dawn-melange-back.webp",
+      "/gift/A702/preloved-ink-front.webp",
+      "/gift/A702/preloved-ink-side.webp",
+      "/gift/A702/preloved-ink-back.webp"
+    ],
+    "material": "5.6 oz./yd², 74/19/7 recycled polyester/cotton/elastane",
+    "details": "Regular fit, Micro print, Self-collar, Concealed collar button to prevent curling, Contrast embroidered logo on right sleeve, #A702",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-65",
+    "name": "Men's Adidas Club Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#272629",
+      "#222942",
+      "#878589"
+    ],
+    "price": 85,
+    "img": "/gift/A598/black-front.webp",
+    "imgs": [
+      "/gift/A598/black-front.webp",
+      "/gift/A598/black-side.webp",
+      "/gift/A598/black-back.webp",
+      "/gift/A598/collegiate-navy-front.webp",
+      "/gift/A598/collegiate-navy-side.webp",
+      "/gift/A598/collegiate-navy-back.webp",
+      "/gift/A598/grey-three-front.webp",
+      "/gift/A598/grey-three-side.webp",
+      "/gift/A598/grey-three-back.webp"
+    ],
+    "material": "5.3 oz./yd² (US), 8.8 oz/L yd (CA), 65/35 BCI cotton/recycled polyester",
+    "details": "Regular fit, Mock collar, Self-fabric cuffs and hem, Contrast silicone logo on right sleeve, #A598",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-66",
+    "name": "Men's Adidas Ultimate365 Diamond Dot Print Polo",
+    "category": "Polos",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#424347",
+      "#cde3f5",
+      "#b9babe",
+      "#374463"
+    ],
+    "price": 75,
+    "img": "/gift/A498/black-white-grey-three-front.webp",
+    "imgs": [
+      "/gift/A498/black-white-grey-three-front.webp",
+      "/gift/A498/black-white-grey-three-side.webp",
+      "/gift/A498/black-white-grey-three-back.webp",
+      "/gift/A498/glow-blue-white-navy-front.webp",
+      "/gift/A498/glow-blue-white-navy-side.webp",
+      "/gift/A498/glow-blue-white-navy-back.webp",
+      "/gift/A498/grey-three-white-navy-front.webp",
+      "/gift/A498/grey-three-white-navy-side.webp",
+      "/gift/A498/grey-three-white-navy-back.webp",
+      "/gift/A498/navy-blue-white-grey-three-front.webp",
+      "/gift/A498/navy-blue-white-grey-three-side.webp",
+      "/gift/A498/navy-blue-white-grey-three-back.webp"
+    ],
+    "material": "7.1 oz./yd² (US), 11.85 oz/L yd (CA), 84/16 recycled polyester/elastane",
+    "details": "Moisture-management properties, Hydrophilic finish, All over diamond dot print, Self-collar, Three-button placket, Contrast silicone logo on right sleeve, #A498",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-67",
+    "name": "Men's Adidas 3-Stripes Double-Knit Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#212123",
+      "#b1aeb0",
+      "#22314d",
+      "#0d59af"
+    ],
+    "price": 65,
+    "img": "/gift/A482/black-grey-two-front.webp",
+    "imgs": [
+      "/gift/A482/black-grey-two-front.webp",
+      "/gift/A482/black-grey-two-side.webp",
+      "/gift/A482/black-grey-two-back.webp",
+      "/gift/A482/grey-three-white-front.webp",
+      "/gift/A482/grey-three-white-side.webp",
+      "/gift/A482/grey-three-white-back.webp",
+      "/gift/A482/team-navy-blue-grey-two-front.webp",
+      "/gift/A482/team-navy-blue-grey-two-side.webp",
+      "/gift/A482/team-navy-blue-grey-two-back.webp",
+      "/gift/A482/team-royal-grey-two-front.webp",
+      "/gift/A482/team-royal-grey-two-side.webp",
+      "/gift/A482/team-royal-grey-two-back.webp"
+    ],
+    "material": "7.2 oz./yd² (US), 12 oz./L yd (CA), 100% recycled polyester",
+    "details": "Waffle texture knit construction, Moisture-management properties, Self-mock collar, Open hem sleeves, Bold 3-stripes on right chest, Contrast silicone logo on left hip, #A482",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-68",
+    "name": "Men's Adidas 3-Stripes Chest Polo",
+    "category": "Polos",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#f1f2f6",
+      "#2b2a2f",
+      "#23314c",
+      "#df2a36",
+      "#0f479a",
+      "#6a686d"
+    ],
+    "price": 70,
+    "img": "/gift/A324/white-black-front.webp",
+    "imgs": [
+      "/gift/A324/white-black-front.webp",
+      "/gift/A324/white-black-side.webp",
+      "/gift/A324/white-black-back.webp",
+      "/gift/A324/black-white-front.webp",
+      "/gift/A324/black-white-side.webp",
+      "/gift/A324/black-white-back.webp",
+      "/gift/A324/collegiate-navy-white-front.webp",
+      "/gift/A324/collegiate-navy-white-side.webp",
+      "/gift/A324/collegiate-navy-white-back.webp",
+      "/gift/A324/collegiate-red-black-front.webp",
+      "/gift/A324/collegiate-red-black-side.webp",
+      "/gift/A324/collegiate-red-black-back.webp",
+      "/gift/A324/collegiate-royal-grey-three-front.webp",
+      "/gift/A324/collegiate-royal-grey-three-side.webp",
+      "/gift/A324/collegiate-royal-grey-three-back.webp",
+      "/gift/A324/grey-five-black-front.webp",
+      "/gift/A324/grey-five-black-side.webp",
+      "/gift/A324/grey-five-black-back.webp"
+    ],
+    "material": "5.3 oz./yd² (US), 8.8 oz./L yd (CA), 100% recycled polyester jersey",
+    "details": "Hydrophilic finish, Self-fabric collar, Three-button placket, 3-stripes print on right chest, Open hem sleeve, Contrast silicone logo on left sleeve, #A324",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-69",
+    "name": "Men's Adidas Ultimate365 Elevated Hoodie",
+    "category": "Jackets",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#efeef1",
+      "#272629",
+      "#222942",
+      "#c5d5e4"
+    ],
+    "price": 110,
+    "img": "/gift/A2009/white-front.webp",
+    "imgs": [
+      "/gift/A2009/white-front.webp",
+      "/gift/A2009/white-side.webp",
+      "/gift/A2009/white-back.webp",
+      "/gift/A2009/black-front.webp",
+      "/gift/A2009/black-side.webp",
+      "/gift/A2009/black-back.webp",
+      "/gift/A2009/collegiate-navy-front.webp",
+      "/gift/A2009/collegiate-navy-side.webp",
+      "/gift/A2009/collegiate-navy-back.webp",
+      "/gift/A2009/crystal-sky-front.webp",
+      "/gift/A2009/crystal-sky-side.webp",
+      "/gift/A2009/crystal-sky-back.webp"
+    ],
+    "material": "6.5 oz./yd², 88/12 recycled polyester/elastane",
+    "details": "Soft textured fabric, Self-fabric cuffs and hem, Contrast heat-transfer logo on left sleeve, #A2009",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-70",
+    "name": "Women's Adidas Lightweight Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "XS - 3XL",
+    "badge": "",
+    "colors": [
+      "#efeef1",
+      "#272629",
+      "#7c7a7c",
+      "#222942",
+      "#074297",
+      "#878589",
+      "#b40728"
+    ],
+    "price": 65,
+    "img": "/gift/A400/white-front.webp",
+    "imgs": [
+      "/gift/A400/white-front.webp",
+      "/gift/A400/white-side.webp",
+      "/gift/A400/white-back.webp",
+      "/gift/A400/black-front.webp",
+      "/gift/A400/black-side.webp",
+      "/gift/A400/black-back.webp",
+      "/gift/A400/black-heather-front.webp",
+      "/gift/A400/black-heather-side.webp",
+      "/gift/A400/black-heather-back.webp",
+      "/gift/A400/collegiate-navy-front.webp",
+      "/gift/A400/collegiate-navy-side.webp",
+      "/gift/A400/collegiate-navy-back.webp",
+      "/gift/A400/collegiate-royal-front.webp",
+      "/gift/A400/collegiate-royal-side.webp",
+      "/gift/A400/collegiate-royal-back.webp",
+      "/gift/A400/grey-three-front.webp",
+      "/gift/A400/grey-three-side.webp",
+      "/gift/A400/grey-three-back.webp",
+      "/gift/A400/power-red-front.webp",
+      "/gift/A400/power-red-side.webp",
+      "/gift/A400/power-red-back.webp"
+    ],
+    "material": "6.1 oz./yd² (US), 10.1 oz./L yd (CA), 100% recycled polyester",
+    "details": "Hydrophilic finish, Self-mock collar, cuffs, and bottom hem, Contrast silicone logo on left sleeve, #A400",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-71",
+    "name": "Men's Adidas Textured Stripe Polo",
+    "category": "Polos",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#efeef1",
+      "#272629",
+      "#e24847",
+      "#3d60be",
+      "#282d4a"
+    ],
+    "price": 75,
+    "img": "/gift/A704/white-front.webp",
+    "imgs": [
+      "/gift/A704/white-front.webp",
+      "/gift/A704/white-side.webp",
+      "/gift/A704/white-back.webp",
+      "/gift/A704/black-front.webp",
+      "/gift/A704/black-side.webp",
+      "/gift/A704/black-back.webp",
+      "/gift/A704/bright-red-front.webp",
+      "/gift/A704/bright-red-side.webp",
+      "/gift/A704/bright-red-back.webp",
+      "/gift/A704/bright-royal-front.webp",
+      "/gift/A704/bright-royal-side.webp",
+      "/gift/A704/bright-royal-back.webp",
+      "/gift/A704/dark-blue-front.webp",
+      "/gift/A704/dark-blue-side.webp",
+      "/gift/A704/dark-blue-back.webp"
+    ],
+    "material": "6.4 oz./yd² (US), 10.7 oz/L yd (CA), 86/14 recycled polyester/elastane",
+    "details": "Jacquard texture, Textured stripe outlook, Regular fit, Self-collar, Three-button placket, Contrast heat-transfer logo on right sleeve, #A704",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-72",
+    "name": "Men's Adidas 3-Stripes Quarter-Zip Sweater Pullover",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#515153",
+      "#797e91",
+      "#659dd3",
+      "#a3a4a6"
+    ],
+    "price": 80,
+    "img": "/gift/A554/black-melange-front.webp",
+    "imgs": [
+      "/gift/A554/black-melange-front.webp",
+      "/gift/A554/black-melange-side.webp",
+      "/gift/A554/black-melange-back.webp",
+      "/gift/A554/collegiate-navy-melange-front.webp",
+      "/gift/A554/collegiate-navy-melange-side.webp",
+      "/gift/A554/collegiate-navy-melange-back.webp",
+      "/gift/A554/focus-blue-melange-front.webp",
+      "/gift/A554/focus-blue-melange-side.webp",
+      "/gift/A554/focus-blue-melange-back.webp",
+      "/gift/A554/grey-three-melange-front.webp",
+      "/gift/A554/grey-three-melange-side.webp",
+      "/gift/A554/grey-three-melange-back.webp"
+    ],
+    "material": "6.5 oz./yd² (US), 10.85 oz/L yd (CA), 53/47 cotton/recycled polyester",
+    "details": "Moisture-management properties, Stand-up collar, Tonal 3-stripes on right sleeve, Contrast silicone logo on back neck, #A554",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-73",
+    "name": "Women's Adidas Fleece Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "XS - 3XL",
+    "badge": "",
+    "colors": [
+      "#f5f5f7",
+      "#272629"
+    ],
+    "price": 100,
+    "img": "/gift/A601/alumina-front.webp",
+    "imgs": [
+      "/gift/A601/alumina-front.webp",
+      "/gift/A601/alumina-side.webp",
+      "/gift/A601/alumina-back.webp",
+      "/gift/A601/black-front.webp",
+      "/gift/A601/black-side.webp",
+      "/gift/A601/black-back.webp"
+    ],
+    "material": "6 oz./yd², 100% recycled polyester fleece on main body",
+    "details": "89/11 recycled polyester/elastane woven front yoke, Regular fit, Stand-up collar, Drop shoulders, Front zippered pockets, Self-fabric cuffs and hem, Contrast heat-transfer logo on right collar, #A601",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-74",
+    "name": "Men's Adidas Space Dyed Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#515153",
+      "#797e91",
+      "#cac9c8"
+    ],
+    "price": 80,
+    "img": "/gift/A593/black-melange-front.webp",
+    "imgs": [
+      "/gift/A593/black-melange-front.webp",
+      "/gift/A593/black-melange-side.webp",
+      "/gift/A593/black-melange-back.webp",
+      "/gift/A593/collegiate-navy-melange-front.webp",
+      "/gift/A593/collegiate-navy-melange-side.webp",
+      "/gift/A593/collegiate-navy-melange-back.webp",
+      "/gift/A593/grey-one-heather-front.webp",
+      "/gift/A593/grey-one-heather-side.webp",
+      "/gift/A593/grey-one-heather-back.webp"
+    ],
+    "material": "4.9 oz./yd² (US), 8.2 oz/L yd (CA), 100% recycled polyester mesh",
+    "details": "Regular fit, Stand-up collar, Self-fabric cuffs and hem, Contrast silicone logo on right sleeve, #A593",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-75",
+    "name": "Women's Adidas Ultimate365 Solid Polo",
+    "category": "Polos",
+    "sizes": "XS - 3XL",
+    "badge": "",
+    "colors": [
+      "#efeef1",
+      "#272629",
+      "#bfdac9",
+      "#a2c1df",
+      "#00965f",
+      "#878589",
+      "#b40728",
+      "#202946",
+      "#1d2f6d"
+    ],
+    "price": 75,
+    "img": "/gift/A515/white-front.webp",
+    "imgs": [
+      "/gift/A515/white-front.webp",
+      "/gift/A515/white-side.webp",
+      "/gift/A515/white-back.webp",
+      "/gift/A515/black-front.webp",
+      "/gift/A515/black-side.webp",
+      "/gift/A515/black-back.webp",
+      "/gift/A515/clear-mint-front.webp",
+      "/gift/A515/clear-mint-side.webp",
+      "/gift/A515/clear-mint-back.webp",
+      "/gift/A515/clear-sky-front.webp",
+      "/gift/A515/clear-sky-side.webp",
+      "/gift/A515/clear-sky-back.webp",
+      "/gift/A515/court-green-front.webp",
+      "/gift/A515/court-green-side.webp",
+      "/gift/A515/court-green-back.webp",
+      "/gift/A515/grey-three-front.webp",
+      "/gift/A515/grey-three-side.webp",
+      "/gift/A515/grey-three-back.webp",
+      "/gift/A515/power-red-front.webp",
+      "/gift/A515/power-red-side.webp",
+      "/gift/A515/power-red-back.webp",
+      "/gift/A515/team-navy-blue-front.webp",
+      "/gift/A515/team-navy-blue-side.webp",
+      "/gift/A515/team-navy-blue-back.webp",
+      "/gift/A515/team-royal-blue-front.webp",
+      "/gift/A515/team-royal-blue-side.webp",
+      "/gift/A515/team-royal-blue-back.webp"
+    ],
+    "material": "6.7 oz./yd² (US), 11 oz/L yd (CA), 88/12 recycled polyester/elastane",
+    "details": "Moisture-management properties, Self-collar, Four-button placket, Open hem sleeve, Scooped bottom hem, Contrast silicone logo on right hip, #A515",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-76",
+    "name": "Men's Adidas Blended Polo",
+    "category": "Polos",
+    "sizes": "XS - 4XL",
+    "badge": "",
+    "colors": [
+      "#242527",
+      "#b1bed2",
+      "#797e91",
+      "#a3a4a6"
+    ],
+    "price": 80,
+    "img": "/gift/A590/solid-black-front.webp",
+    "imgs": [
+      "/gift/A590/solid-black-front.webp",
+      "/gift/A590/solid-black-side.webp",
+      "/gift/A590/solid-black-back.webp",
+      "/gift/A590/blue-dawn-melange-front.webp",
+      "/gift/A590/blue-dawn-melange-side.webp",
+      "/gift/A590/blue-dawn-melange-back.webp",
+      "/gift/A590/collegiate-navy-melange-front.webp",
+      "/gift/A590/collegiate-navy-melange-side.webp",
+      "/gift/A590/collegiate-navy-melange-back.webp",
+      "/gift/A590/grey-three-melange-front.webp",
+      "/gift/A590/grey-three-melange-side.webp",
+      "/gift/A590/grey-three-melange-back.webp"
+    ],
+    "material": "5.6 oz./yd² (US), 9.3 oz/L yd (CA) 74/19/7 recycled polyester/BCI cotton/elastane",
+    "details": "Self-collar, Two-button placket, Tonal embroidered logo on right sleeve, #A590",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-77",
+    "name": "Men's Adidas Ultimate365 Cozy Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#efeef1",
+      "#272629",
+      "#10484a",
+      "#222942",
+      "#a0978b"
+    ],
+    "price": 100,
+    "img": "/gift/A2020/white-front.webp",
+    "imgs": [
+      "/gift/A2020/white-front.webp",
+      "/gift/A2020/white-side.webp",
+      "/gift/A2020/white-back.webp",
+      "/gift/A2020/black-front.webp",
+      "/gift/A2020/black-side.webp",
+      "/gift/A2020/black-back.webp",
+      "/gift/A2020/aurora-ivy-front.webp",
+      "/gift/A2020/aurora-ivy-side.webp",
+      "/gift/A2020/aurora-ivy-back.webp",
+      "/gift/A2020/collegiate-navy-front.webp",
+      "/gift/A2020/collegiate-navy-side.webp",
+      "/gift/A2020/collegiate-navy-back.webp",
+      "/gift/A2020/putty-beige-front.webp",
+      "/gift/A2020/putty-beige-side.webp",
+      "/gift/A2020/putty-beige-back.webp"
+    ],
+    "material": "7 oz./yd² (US), 11.7 oz/L yd (CA), 100% recycled polyester fleece on main body",
+    "details": "Woven overlay on chest, Regular fit, Knit design, Tonal embroidered logo on back yoke (White colorway has contrast logo), #A2020",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-78",
+    "name": "Men's Adidas Space Dyed Polo",
+    "category": "Polos",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#515153",
+      "#797e91",
+      "#cac9c8"
+    ],
+    "price": 75,
+    "img": "/gift/A591/black-melange-front.webp",
+    "imgs": [
+      "/gift/A591/black-melange-front.webp",
+      "/gift/A591/black-melange-side.webp",
+      "/gift/A591/black-melange-back.webp",
+      "/gift/A591/collegiate-navy-melange-front.webp",
+      "/gift/A591/collegiate-navy-melange-side.webp",
+      "/gift/A591/collegiate-navy-melange-back.webp",
+      "/gift/A591/grey-one-heather-front.webp",
+      "/gift/A591/grey-one-heather-side.webp",
+      "/gift/A591/grey-one-heather-back.webp"
+    ],
+    "material": "4.9 oz./yd² (US), 8.2 oz/L yd (CA), 100% recycled polyester mesh",
+    "details": "Regular fit, Three-button placket, Contrast silicone logo on right sleeve, #A591",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-79",
+    "name": "Women's Adidas Textured Stripe Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "XS - 3XL",
+    "badge": "",
+    "colors": [
+      "#efeef1",
+      "#272629",
+      "#282d4a"
+    ],
+    "price": 80,
+    "img": "/gift/A709/white-front.webp",
+    "imgs": [
+      "/gift/A709/white-front.webp",
+      "/gift/A709/white-side.webp",
+      "/gift/A709/white-back.webp",
+      "/gift/A709/black-front.webp",
+      "/gift/A709/black-side.webp",
+      "/gift/A709/black-back.webp",
+      "/gift/A709/dark-blue-front.webp",
+      "/gift/A709/dark-blue-side.webp",
+      "/gift/A709/dark-blue-back.webp"
+    ],
+    "material": "6.4 oz./yd² (US), 10.6 oz/L yd (CA), 86/14 recycled polyester/elastane",
+    "details": "Jacquard texture, Textured stripe outlook, Regular fit, Contrast heat-transfer logo on right sleeve, #A709",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-80",
+    "name": "Men's Adidas Puffer Full-Zip Vest",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#272629",
+      "#69686d",
+      "#202946"
+    ],
+    "price": 100,
+    "img": "/gift/A572/black-front.webp",
+    "imgs": [
+      "/gift/A572/black-front.webp",
+      "/gift/A572/black-side.webp",
+      "/gift/A572/black-back.webp",
+      "/gift/A572/grey-five-front.webp",
+      "/gift/A572/grey-five-side.webp",
+      "/gift/A572/grey-five-back.webp",
+      "/gift/A572/team-navy-blue-front.webp",
+      "/gift/A572/team-navy-blue-side.webp",
+      "/gift/A572/team-navy-blue-back.webp"
+    ],
+    "material": "2 oz./yd² (US), 3.3 oz/L yd (CA), 100% recycled polyester",
+    "details": "3.4 oz /yd² (US), 5.67 oz/L yd (CA), 100% recycled polyester synthetic fill, Baffle construction, 3-stripes on back, Contrast heat-transfer logo on right collar, #A572",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-81",
+    "name": "Men's Adidas Textured Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#272629",
+      "#222942"
+    ],
+    "price": 90,
+    "img": "/gift/A295/black-front.webp",
+    "imgs": [
+      "/gift/A295/black-front.webp",
+      "/gift/A295/black-side.webp",
+      "/gift/A295/black-back.webp",
+      "/gift/A295/collegiate-navy-front.webp",
+      "/gift/A295/collegiate-navy-side.webp",
+      "/gift/A295/collegiate-navy-back.webp"
+    ],
+    "material": "8.1 oz./yd² (US), 13.5 oz/L yd (CA), 91/9 recycled polyester/elastane interlock",
+    "details": "Hydrophilic finish, Self-mock collar, cuffs, and bottom hem, Textured front body, Solid jersey sleeves and back, Right arm zippered pocket, Contrast silicone logo on left sleeve, #A295",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-82",
+    "name": "Women's Adidas Textured Stripe Polo",
+    "category": "Polos",
+    "sizes": "XS - 3XL",
+    "badge": "",
+    "colors": [
+      "#efeef1",
+      "#272629",
+      "#282d4a"
+    ],
+    "price": 75,
+    "img": "/gift/A707/white-front.webp",
+    "imgs": [
+      "/gift/A707/white-front.webp",
+      "/gift/A707/white-side.webp",
+      "/gift/A707/white-back.webp",
+      "/gift/A707/black-front.webp",
+      "/gift/A707/black-side.webp",
+      "/gift/A707/black-back.webp",
+      "/gift/A707/dark-blue-front.webp",
+      "/gift/A707/dark-blue-side.webp",
+      "/gift/A707/dark-blue-back.webp"
+    ],
+    "material": "6.4 oz./yd² (US), 10.7 oz/L yd (CA), 86/14 recycled polyester/elastane",
+    "details": "Jacquard texture, Textured stripe outlook, Regular fit, Self-collar, Three-button placket, Contrast heat-transfer logo on right sleeve, #A707",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-83",
+    "name": "Women's Adidas Space Dyed Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "XS - 3XL",
+    "badge": "",
+    "colors": [
+      "#515153",
+      "#797e91",
+      "#cac9c8"
+    ],
+    "price": 80,
+    "img": "/gift/A594/black-melange-front.webp",
+    "imgs": [
+      "/gift/A594/black-melange-front.webp",
+      "/gift/A594/black-melange-side.webp",
+      "/gift/A594/black-melange-back.webp",
+      "/gift/A594/collegiate-navy-melange-front.webp",
+      "/gift/A594/collegiate-navy-melange-side.webp",
+      "/gift/A594/collegiate-navy-melange-back.webp",
+      "/gift/A594/grey-one-heather-front.webp",
+      "/gift/A594/grey-one-heather-side.webp",
+      "/gift/A594/grey-one-heather-back.webp"
+    ],
+    "material": "4.9 oz./yd² (US), 8.2 oz/L yd (CA), 100% recycled polyester mesh",
+    "details": "Regular fit, Stand-up collar, Back pleat, Contrast silicone logo on right hip, #A594",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-85",
+    "name": "Men's Adidas Heathered Polo",
+    "category": "Polos",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#515153",
+      "#797e91",
+      "#738ec5",
+      "#c9c8cd"
+    ],
+    "price": 70,
+    "img": "/gift/A582/black-melange-front.webp",
+    "imgs": [
+      "/gift/A582/black-melange-front.webp",
+      "/gift/A582/black-melange-side.webp",
+      "/gift/A582/black-melange-back.webp",
+      "/gift/A582/collegiate-navy-melange-front.webp",
+      "/gift/A582/collegiate-navy-melange-side.webp",
+      "/gift/A582/collegiate-navy-melange-back.webp",
+      "/gift/A582/collegiate-royal-melange-front.webp",
+      "/gift/A582/collegiate-royal-melange-side.webp",
+      "/gift/A582/collegiate-royal-melange-back.webp",
+      "/gift/A582/grey-two-melange-front.webp",
+      "/gift/A582/grey-two-melange-side.webp",
+      "/gift/A582/grey-two-melange-back.webp"
+    ],
+    "material": "5.1 oz./yd² (US), 8.3 oz/L yd (CA), 100% recycled polyester",
+    "details": "Self-collar, Three-button placket, Contrast silicone logo on right sleeve, #A582",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-86",
+    "name": "Women's Adidas Heathered Polo",
+    "category": "Polos",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#515153",
+      "#797e91"
+    ],
+    "price": 70,
+    "img": "/gift/A583/black-melange-front.webp",
+    "imgs": [
+      "/gift/A583/black-melange-front.webp",
+      "/gift/A583/black-melange-side.webp",
+      "/gift/A583/black-melange-back.webp",
+      "/gift/A583/collegiate-navy-melange-front.webp",
+      "/gift/A583/collegiate-navy-melange-side.webp",
+      "/gift/A583/collegiate-navy-melange-back.webp"
+    ],
+    "material": "5.1 oz./yd² (US), 8.3 oz/L yd (CA), 100% recycled polyester",
+    "details": "Self-collar, Three-button placket, Contrast silicone logo on right hip, #A583",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-87",
+    "name": "Women's Adidas Space Dyed Polo",
+    "category": "Polos",
+    "sizes": "XS - 3XL",
+    "badge": "",
+    "colors": [
+      "#515153",
+      "#797e91",
+      "#cac9c8"
+    ],
+    "price": 75,
+    "img": "/gift/A592/black-melange-front.webp",
+    "imgs": [
+      "/gift/A592/black-melange-front.webp",
+      "/gift/A592/black-melange-side.webp",
+      "/gift/A592/black-melange-back.webp",
+      "/gift/A592/collegiate-navy-melange-front.webp",
+      "/gift/A592/collegiate-navy-melange-side.webp",
+      "/gift/A592/collegiate-navy-melange-back.webp",
+      "/gift/A592/grey-one-heather-front.webp",
+      "/gift/A592/grey-one-heather-side.webp",
+      "/gift/A592/grey-one-heather-back.webp"
+    ],
+    "material": "4.9 oz./yd² (US), 8.2 oz/L yd (CA), 100% recycled polyester mesh",
+    "details": "Regular fit, Four-button placket, Back pleat, Shaped hem, Contrast silicone logo on right hip, #A592",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-88",
+    "name": "Men's Adidas Lightweight Quarter-Zip Hooded Pullover",
+    "category": "Jackets",
+    "sizes": "XS - 4XL",
+    "badge": "",
+    "colors": [
+      "#272629",
+      "#222942",
+      "#878589"
+    ],
+    "price": 90,
+    "img": "/gift/A596/black-front.webp",
+    "imgs": [
+      "/gift/A596/black-front.webp",
+      "/gift/A596/black-side.webp",
+      "/gift/A596/black-back.webp",
+      "/gift/A596/collegiate-navy-front.webp",
+      "/gift/A596/collegiate-navy-side.webp",
+      "/gift/A596/collegiate-navy-back.webp",
+      "/gift/A596/grey-three-front.webp",
+      "/gift/A596/grey-three-side.webp",
+      "/gift/A596/grey-three-back.webp"
+    ],
+    "material": "6.8 oz./yd² (US),11.4 oz/L yd (CA), 91/9 recycled polyester/elastane",
+    "details": "Regular fit, Three-piece hood, Contrast heat-transfer logo on center chest, #A596",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-89",
+    "name": "Men's Adidas Club Quarter-Zip Vest",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#272629",
+      "#222942"
+    ],
+    "price": 75,
+    "img": "/gift/A599/black-front.webp",
+    "imgs": [
+      "/gift/A599/black-front.webp",
+      "/gift/A599/black-side.webp",
+      "/gift/A599/black-back.webp",
+      "/gift/A599/collegiate-navy-front.webp",
+      "/gift/A599/collegiate-navy-side.webp",
+      "/gift/A599/collegiate-navy-back.webp"
+    ],
+    "material": "5.3 oz./yd² (US), 8.8 oz/L yd (CA), 65/35 BCI cotton/recycled polyester",
+    "details": "Regular fit, Mock collar, Self-fabric hem, Silicone logo on back yoke, #A599",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-90",
+    "name": "Men's Adidas Half-Zip Hooded Anorak",
+    "category": "Jackets",
+    "sizes": "XS - 4XL",
+    "badge": "",
+    "colors": [
+      "#272629",
+      "#343b55"
+    ],
+    "price": 95,
+    "img": "/gift/A607/black-front.webp",
+    "imgs": [
+      "/gift/A607/black-front.webp",
+      "/gift/A607/black-side.webp",
+      "/gift/A607/black-back.webp",
+      "/gift/A607/crew-navy-front.webp",
+      "/gift/A607/crew-navy-side.webp",
+      "/gift/A607/crew-navy-back.webp"
+    ],
+    "material": "5.3 oz./yd² (US), 8.8 oz/L yd (CA), 65/35 cotton/recycled polyester single jersey main body",
+    "details": "89/11 recycled polyester/elastane woven front yoke, Regular fit, Half-zip with hood, Front pockets, Drawcord adjustable hem, Tonal silicone logo on right hip, #A607",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-91",
+    "name": "Women's Adidas Blended Polo",
+    "category": "Polos",
+    "sizes": "XS - 3XL",
+    "badge": "",
+    "colors": [
+      "#242527",
+      "#797e91",
+      "#a3a4a6"
+    ],
+    "price": 80,
+    "img": "/gift/A690/solid-black-front.webp",
+    "imgs": [
+      "/gift/A690/solid-black-front.webp",
+      "/gift/A690/solid-black-side.webp",
+      "/gift/A690/solid-black-back.webp",
+      "/gift/A690/collegiate-navy-melange-front.webp",
+      "/gift/A690/collegiate-navy-melange-side.webp",
+      "/gift/A690/collegiate-navy-melange-back.webp",
+      "/gift/A690/grey-three-melange-front.webp",
+      "/gift/A690/grey-three-melange-side.webp",
+      "/gift/A690/grey-three-melange-back.webp"
+    ],
+    "material": "5.6 oz./yd² (US), 9.3 oz/L yd (CA) 74/19/7 recycled polyester/BCI cotton/elastane",
+    "details": "Regular fit, Self-collar, Two-button placket, Hi-low hem, Side vents, Tonal embroidered logo on right hip, #A690",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-92",
+    "name": "Men's Adidas 3-Stripes Puffer Full-Zip Jacket",
+    "category": "Jackets",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#272629"
+    ],
+    "price": 120,
+    "img": "/gift/A570/black-front.webp",
+    "imgs": [
+      "/gift/A570/black-front.webp",
+      "/gift/A570/black-side.webp",
+      "/gift/A570/black-back.webp"
+    ],
+    "material": "2 oz./yd² (US), 3.3 oz./L yd (CA), 100% recycled polyester",
+    "details": "3.4 oz./yd², 100% recycled polyester synthetic fill, Baffle construction, 3-stripes on sides, Contrast heat-transfer logo on right collar, #A570",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-93",
+    "name": "Men's Adidas Ultimate365 Wind Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#272629",
+      "#222942"
+    ],
+    "price": 120,
+    "img": "/gift/A2027/black-front.webp",
+    "imgs": [
+      "/gift/A2027/black-front.webp",
+      "/gift/A2027/black-side.webp",
+      "/gift/A2027/black-back.webp",
+      "/gift/A2027/collegiate-navy-front.webp",
+      "/gift/A2027/collegiate-navy-side.webp",
+      "/gift/A2027/collegiate-navy-back.webp"
+    ],
+    "material": "5.6 oz./yd², 100% recycled polyester",
+    "details": "Regular fit, Durable water-repellent finish, Wind-resistant, Contrast heat-transfer logo on left chest, #A2027",
+    "portals": [
+      "gift"
+    ]
   }
 ];
 
@@ -1370,6 +2704,63 @@ const colorNames: Record<string, Record<string, string>> = {
   "#103f33": { en: "Dark Myrtle / Slate Sky", fr: "Myrte foncé / Ciel ardoise" }, // Puma Golf (gift)
   "#242a39": { en: "Deep Navy / White Glow", fr: "Marine profond / Blanc éclat" }, // Puma Golf (gift)
   "#666668": { en: "Slate Sky / Ash Grey", fr: "Ciel ardoise / Gris cendré" }, // Puma Golf (gift)
+  "#f5f5f7": { en: "Alumina", fr: "Alumine" }, // Adidas (gift)
+  "#10484a": { en: "Aurora Ivy", fr: "Lierre aurore" }, // Adidas (gift)
+  "#272629": { en: "Black", fr: "Noir" }, // Adidas (gift)
+  "#7c7a7c": { en: "Black Heather", fr: "Noir chiné" }, // Adidas (gift)
+  "#515153": { en: "Black Melange", fr: "Noir chiné" }, // Adidas (gift)
+  "#313134": { en: "Black / Black", fr: "Noir / Noir" }, // Adidas (gift)
+  "#212123": { en: "Black / Grey Two", fr: "Noir / Gris deux" }, // Adidas (gift)
+  "#2b2a2f": { en: "Black / White", fr: "Noir / Blanc" }, // Adidas (gift)
+  "#424347": { en: "Black / White / Grey Three", fr: "Noir / Blanc / Gris trois" }, // Adidas (gift)
+  "#b1bed2": { en: "Blue Dawn Melange", fr: "Blue Dawn chiné" }, // Adidas (gift)
+  "#e24847": { en: "Bright Red", fr: "Rouge vif" }, // Adidas (gift)
+  "#3d60be": { en: "Bright Royal", fr: "Bleu royal vif" }, // Adidas (gift)
+  "#bfdac9": { en: "Clear Mint", fr: "Menthe clair" }, // Adidas (gift)
+  "#a2c1df": { en: "Clear Sky", fr: "Ciel clair" }, // Adidas (gift)
+  "#144f42": { en: "Collegiate Green", fr: "Vert collégial" }, // Adidas (gift)
+  "#222942": { en: "Collegiate Navy", fr: "Marine collégial" }, // Adidas (gift)
+  "#676e81": { en: "Collegiate Navy Heather / Carbon", fr: "Marine collégial chiné / Carbone" }, // Adidas (gift)
+  "#797e91": { en: "Collegiate Navy Melange", fr: "Marine collégial chiné" }, // Adidas (gift)
+  "#23314c": { en: "Collegiate Navy / White", fr: "Marine collégial / Blanc" }, // Adidas (gift)
+  "#d01b25": { en: "Collegiate Red", fr: "Rouge collégial" }, // Adidas (gift)
+  "#df2a36": { en: "Collegiate Red / Black", fr: "Rouge collégial / Noir" }, // Adidas (gift)
+  "#074297": { en: "Collegiate Royal", fr: "Bleu royal collégial" }, // Adidas (gift)
+  "#738ec5": { en: "Collegiate Royal Melange", fr: "Bleu royal collégial chiné" }, // Adidas (gift)
+  "#0f479a": { en: "Collegiate Royal / Grey Three", fr: "Bleu royal collégial / Gris trois" }, // Adidas (gift)
+  "#ececec": { en: "Core White", fr: "Blanc essentiel" }, // Adidas (gift)
+  "#00965f": { en: "Court Green", fr: "Vert court" }, // Adidas (gift)
+  "#343b55": { en: "Crew Navy", fr: "Marine équipage" }, // Adidas (gift)
+  "#c5d5e4": { en: "Crystal Sky", fr: "Ciel cristal" }, // Adidas (gift)
+  "#282d4a": { en: "Dark Blue", fr: "Bleu foncé" }, // Adidas (gift)
+  "#659dd3": { en: "Focus Blue Melange", fr: "Bleu focus chiné" }, // Adidas (gift)
+  "#cde3f5": { en: "Glow Blue / White / Navy", fr: "Bleu éclat / Blanc / Marine" }, // Adidas (gift)
+  "#69686d": { en: "Grey Five", fr: "Gris cinq" }, // Adidas (gift)
+  "#6a686d": { en: "Grey Five / Black", fr: "Gris cinq / Noir" }, // Adidas (gift)
+  "#cac9c8": { en: "Grey One Heather", fr: "Gris un chiné" }, // Adidas (gift)
+  "#878589": { en: "Grey Three", fr: "Gris trois" }, // Adidas (gift)
+  "#a3a4a6": { en: "Grey Three Melange", fr: "Gris trois chiné" }, // Adidas (gift)
+  "#b1aeb0": { en: "Grey Three / White", fr: "Gris trois / Blanc" }, // Adidas (gift)
+  "#b9babe": { en: "Grey Three / White / Navy", fr: "Gris trois / Blanc / Marine" }, // Adidas (gift)
+  "#c9c8cd": { en: "Grey Two Melange", fr: "Gris deux chiné" }, // Adidas (gift)
+  "#d2d9e1": { en: "Halo Blue", fr: "Bleu halo" }, // Adidas (gift)
+  "#5a94ac": { en: "Hazy Blue", fr: "Bleu brume" }, // Adidas (gift)
+  "#5c2538": { en: "Maroon", fr: "Bordeaux" }, // Adidas (gift)
+  "#272b41": { en: "Navy", fr: "Marine" }, // Adidas (gift)
+  "#374463": { en: "Navy Blue / White / Grey Three", fr: "Bleu marine / Blanc / Gris trois" }, // Adidas (gift)
+  "#b40728": { en: "Power Red", fr: "Rouge puissance" }, // Adidas (gift)
+  "#475067": { en: "Preloved Ink", fr: "Encre vécue" }, // Adidas (gift)
+  "#a0978b": { en: "Putty Beige", fr: "Beige mastic" }, // Adidas (gift)
+  "#dc2f32": { en: "Real Coral", fr: "Corail vrai" }, // Adidas (gift)
+  "#a0998d": { en: "Silver Pebble", fr: "Galet argenté" }, // Adidas (gift)
+  "#242527": { en: "Solid Black", fr: "Noir uni" }, // Adidas (gift)
+  "#8fbbdb": { en: "Team Light Blue", fr: "Bleu clair équipe" }, // Adidas (gift)
+  "#202946": { en: "Team Navy Blue", fr: "Bleu marine équipe" }, // Adidas (gift)
+  "#22314d": { en: "Team Navy Blue / Grey Two", fr: "Bleu marine équipe / Gris deux" }, // Adidas (gift)
+  "#1d2f6d": { en: "Team Royal Blue", fr: "Bleu royal équipe" }, // Adidas (gift)
+  "#0d59af": { en: "Team Royal / Grey Two", fr: "Bleu royal équipe / Gris deux" }, // Adidas (gift)
+  "#efeef1": { en: "White", fr: "Blanc" }, // Adidas (gift)
+  "#f1f2f6": { en: "White / Black", fr: "Blanc / Noir" }, // Adidas (gift)
 };
 export function colorName(hex: string, locale: Locale): string {
   return colorNames[hex]?.[locale] || hex;

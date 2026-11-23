@@ -30,11 +30,21 @@ const cardImgNorm = (color: string) =>
   (CARD_IMG_NAME_ALIAS[color.toLowerCase()] ?? colorName(color, "en"))
     .toLowerCase()
     .replace(/[^a-z0-9]/g, "");
+// True when image `src` depicts the colour with normalised name `norm`. Plain
+// substring match, except an image that belongs to a LONGER sibling colour whose
+// name contains this one ("Black" vs "Black Heather") is not claimed by the
+// shorter name.
+export function imgMatchesColor(src: string, norm: string, allNorms: string[]): boolean {
+  const n = src.toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (!n.includes(norm)) return false;
+  return !allNorms.some((o) => o.length > norm.length && o.includes(norm) && n.includes(o));
+}
 export function imageForColor(item: Product, color: string): string {
   const imgs = (item.imgs && item.imgs.length ? item.imgs : [item.img]) as string[];
   const norm = cardImgNorm(color);
   if (norm) {
-    const hit = imgs.find((src) => src.toLowerCase().replace(/[^a-z0-9]/g, "").includes(norm));
+    const allNorms = item.colors.map(cardImgNorm);
+    const hit = imgs.find((src) => imgMatchesColor(src, norm, allNorms));
     if (hit) return hit;
   }
   return item.img;
@@ -146,7 +156,7 @@ function sizesOf(p: Product): string[] {
 // up as a filter (the facet list is BRAND_LIST ∩ brands-present).
 const BRAND_LIST = [
   // Clothing brands first...
-  "Puma", "Atlas", "Carhartt", "Coal Harbour", "Flexfit", "FootJoy", "Gildan",
+  "Puma", "Adidas", "Atlas", "Carhartt", "Coal Harbour", "Flexfit", "FootJoy", "Gildan",
   "Travis Mathew", "Under Armour",
   // ...then non-clothing brands (bags, golf, towels, tech, headwear).
   "Nexgen", "Nomad", "Srixon", "Titleist", "Tranzip", "Cap America",

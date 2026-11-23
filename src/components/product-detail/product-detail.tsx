@@ -7,7 +7,7 @@ import { expandSizes, sizeGroups, sortColorsWhiteLast } from "../../routes/appar
 import { LoginTypeContext } from "../../routes/layout";
 import { hidesPrices, fixedQtyFor } from "../../lib/lineup";
 import { readKitSel, writeKitSel } from "../../lib/kit-selection";
-import { ELECTRICAL_SKUS, imageForColor, genderOf, swatchOrder, isSafetyProduct } from "../product-catalog/product-catalog";
+import { ELECTRICAL_SKUS, imageForColor, imgMatchesColor, genderOf, swatchOrder, isSafetyProduct } from "../product-catalog/product-catalog";
 import { ProductImage } from "../product-image/product-image";
 import { LogoSlide } from "../logo-overlay/logo-slide";
 import { getLogoConfig, logoAsset, type LogoPosition, type LogoStyle, type LogoBox } from "../../data/logo-placements";
@@ -432,12 +432,11 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
     const p = product.value;
     if (!p) return map; // null while navigating away from a product route
     const imgs = (p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[];
+    const allNorms = p.colors.map(imgNorm);
     for (const color of p.colors) {
       const norm = imgNorm(color);
       if (!norm) continue;
-      const idx = imgs.findIndex((src) =>
-        src.toLowerCase().replace(/[^a-z0-9]/g, "").includes(norm),
-      );
+      const idx = imgs.findIndex((src) => imgMatchesColor(src, norm, allNorms));
       if (idx >= 0) map[color] = idx;
     }
     return map;
@@ -454,11 +453,8 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
     const color = selectedColor.value;
     if (color && Object.keys(cmap).length > 1) {
       const norm = imgNorm(color);
-      const filtered = norm
-        ? all.filter((src) =>
-            src.toLowerCase().replace(/[^a-z0-9]/g, "").includes(norm),
-          )
-        : [];
+      const allNorms = p.colors.map(imgNorm);
+      const filtered = norm ? all.filter((src) => imgMatchesColor(src, norm, allNorms)) : [];
       if (filtered.length) return filtered;
     }
     return all;
@@ -642,9 +638,8 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
         if (selectedColor.value) {
           const all = (p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[];
           const norm = imgNorm(selectedColor.value);
-          const match = norm
-            ? all.find((s) => s.toLowerCase().replace(/[^a-z0-9]/g, "").includes(norm))
-            : null;
+          const allNorms = p.colors.map(imgNorm);
+          const match = norm ? all.find((s) => imgMatchesColor(s, norm, allNorms)) : null;
           if (match) colorImg = match;
         }
         // Prefer the composited logo thumbnail when we have one.
