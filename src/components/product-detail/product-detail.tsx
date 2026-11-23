@@ -1248,9 +1248,10 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
         // Guardian FR/AR hoodies, category "Sweaters") leaked into the Service
         // carousel even though it's off-lineup.
         const inLineup = (r: (typeof allProducts)[number]) =>
-          isHvac ? isSafetyProduct(r.sku) : isElectrical
+          loginType.value === "gift" ? !!(r as { portals?: string[] }).portals?.includes("gift")
+          : isHvac ? isSafetyProduct(r.sku) : isElectrical
             ? ELECTRICAL_SKUS.includes(r.sku)
-            : !ELECTRICAL_SKUS.includes(r.sku) && r.category !== "Flame Resistant";
+            : !ELECTRICAL_SKUS.includes(r.sku) && r.category !== "Flame Resistant" && !(r as { portals?: string[] }).portals?.includes("gift");
         const sameCat = allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && inLineup(r) && r.category === p.category);
         const allApparel = allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && inLineup(r) && visible.includes(r.category));
         // Use the SKU's own category only when it has enough siblings to fill a
@@ -1260,7 +1261,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
         const related = isElectrical
           ? allProducts.filter((r) => r.sku !== p.sku && inLineup(r)).slice(0, 8)
           : (useCat ? sameCat : allApparel).slice(0, 8);
-        const headingSuffix = isElectrical ? t("login.portal.electrical", locale.value) : useCat ? catLabel : t("nav.apparel", locale.value);
+        const headingSuffix = isElectrical ? t("login.portal.electrical", locale.value) : useCat ? catLabel : t(loginType.value === "gift" ? "nav.milestone" : "nav.apparel", locale.value);
         // Electrical is a fixed 4-item kit ordered from the gallery — no
         // "More Electrical" row under its product pages.
         if (isElectrical) return null;

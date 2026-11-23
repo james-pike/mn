@@ -146,7 +146,7 @@ function sizesOf(p: Product): string[] {
 // up as a filter (the facet list is BRAND_LIST ∩ brands-present).
 const BRAND_LIST = [
   // Clothing brands first...
-  "Atlas", "Carhartt", "Coal Harbour", "Flexfit", "FootJoy", "Gildan",
+  "Puma", "Atlas", "Carhartt", "Coal Harbour", "Flexfit", "FootJoy", "Gildan",
   "Travis Mathew", "Under Armour",
   // ...then non-clothing brands (bags, golf, towels, tech, headwear).
   "Nexgen", "Nomad", "Srixon", "Titleist", "Tranzip", "Cap America",
@@ -635,6 +635,10 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
         .slice()
         .sort((a, b) => rank(a.sku) - rank(b.sku));
     }
+    if (loginType.value === "gift") {
+      // Milestone Awards: only the DB products flagged portals ∋ "gift".
+      return allProducts.filter((p) => (p as { portals?: string[] }).portals?.includes("gift"));
+    }
     if (isTech.value) return allProducts.filter((p) => p.category === "Work Wear");
     if (isSafety.value) {
       const rank = (sku: string) => {
@@ -651,7 +655,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     const isFootwear = (c: string) => c === "Safety Boots" || c === "Safety Shoes" || c === "Footwear";
     const clothing = allProducts
       // Exclude FR items and the Electrical-only SKUs from the full (Service) catalog.
-      .filter((p) => p.category !== "Flame Resistant" && !ELECTRICAL_SKU_SET.has(p.sku))
+      .filter((p) => p.category !== "Flame Resistant" && !ELECTRICAL_SKU_SET.has(p.sku) && !(p as { portals?: string[] }).portals?.includes("gift"))
       .map((p) => (isFootwear(p.category) ? { ...p, category: "Footwear" } : p));
     // Order the "All" grid to follow the sidebar/tab category order, so the
     // display matches the sidebar. Stable sort keeps each category's products in
@@ -925,7 +929,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
         }}
       >
         <div class={`home-catalog__header ${tabsAtEnd.value ? "home-catalog__header--tabs-end" : ""}`}>
-          <h2 class="home-catalog__title">{t("nav.apparel", locale.value)}</h2>
+          <h2 class="home-catalog__title">{t(loginType.value === "gift" ? "nav.milestone" : "nav.apparel", locale.value)}</h2>
           {/* Catalog/list view mode removed — the gallery grid only. */}
           <div class="home-catalog__sidebar-search">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>

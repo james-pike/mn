@@ -181,6 +181,24 @@ const colorNames: Record<string, Record<string, string>> = {
   "#e8863b": { en: "Orange", fr: "Orange" },
   "#f2efe6": { en: "Natural", fr: "Naturel" },
   "#ff6a13": { en: "Orange", fr: "Orange" },
+  "#edecf1": { en: "White Glow", fr: "Blanc éclat" }, // Puma Golf (gift)
+  "#1b1c1f": { en: "Puma Black", fr: "Noir Puma" }, // Puma Golf (gift)
+  "#7c1c28": { en: "Dark Crimson", fr: "Cramoisi foncé" }, // Puma Golf (gift)
+  "#134034": { en: "Dark Myrtle", fr: "Myrte foncé" }, // Puma Golf (gift)
+  "#222838": { en: "Deep Navy", fr: "Marine profond" }, // Puma Golf (gift)
+  "#1b3e97": { en: "Festive Royal", fr: "Bleu royal festif" }, // Puma Golf (gift)
+  "#68686a": { en: "Slate Sky", fr: "Ciel ardoise" }, // Puma Golf (gift)
+  "#a70e27": { en: "Strong Red", fr: "Rouge vif" }, // Puma Golf (gift)
+  "#ede9e6": { en: "Warm White Heather", fr: "Blanc chaud chiné" }, // Puma Golf (gift)
+  "#292627": { en: "Puma Black Heather", fr: "Noir Puma chiné" }, // Puma Golf (gift)
+  "#2b313f": { en: "Deep Navy Heather", fr: "Marine profond chiné" }, // Puma Golf (gift)
+  "#6e6d6e": { en: "Slate Sky Heather", fr: "Ciel ardoise chiné" }, // Puma Golf (gift)
+  "#fa762a": { en: "Rickie Orange", fr: "Orange Rickie" }, // Puma Golf (gift)
+  "#1a1a1e": { en: "Puma Black / Slate Sky", fr: "Noir Puma / Ciel ardoise" }, // Puma Golf (gift)
+  "#791323": { en: "Dark Crimson / Slate Sky", fr: "Cramoisi foncé / Ciel ardoise" }, // Puma Golf (gift)
+  "#103f33": { en: "Dark Myrtle / Slate Sky", fr: "Myrte foncé / Ciel ardoise" }, // Puma Golf (gift)
+  "#242a39": { en: "Deep Navy / White Glow", fr: "Marine profond / Blanc éclat" }, // Puma Golf (gift)
+  "#666668": { en: "Slate Sky / Ash Grey", fr: "Ciel ardoise / Gris cendré" }, // Puma Golf (gift)
 };
 export function colorName(hex: string, locale: Locale): string {
   return colorNames[hex]?.[locale] || hex;

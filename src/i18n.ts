@@ -16,6 +16,7 @@ const translations = {
   "nav.back": { en: "Back", fr: "Retour" },
   "nav.menu": { en: "Menu", fr: "Menu" },
   "nav.apparel": { en: "Apparel", fr: "Vêtements" },
+  "nav.milestone": { en: "Milestone Awards", fr: "Récompenses d’étape" },
   "nav.shirts": { en: "Shirts", fr: "Chandails" },
   "nav.polos": { en: "Polos", fr: "Polos" },
   "nav.hoodies": { en: "Hoodies", fr: "Kangourous" },

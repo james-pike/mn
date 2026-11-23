@@ -14817,7 +14817,7 @@
      once past ~1600px the content column caps at 1600px, so wide desktop monitors
      get their side margins back (about an inch near ~1800px, more beyond). */
   @media (min-width: 100rem) {
-    :root { --site-max: 1600px; }
+    :root { --site-max: 1760px; }
     /* Bring the sticky header bar in to the same width as the content column. */
     .site-header { max-width: var(--site-max); margin-inline: auto; }
   }
@@ -30105,7 +30105,7 @@
        near full-width on laptops, and once the viewport passes the 1600px cap the
        content plateaus and wide desktop monitors get real side margins. Matches
        reference's content width (slightly narrower than the old 1728px). */
-    :root { --site-max: min(calc(100vw - 2rem), 1600px); }
+    :root { --site-max: min(calc(100vw - 2rem), 1760px); }
     /* Bring the sticky header bar in to the same width as the content column. */
     .site-header { max-width: var(--site-max); margin-inline: auto; }
   }

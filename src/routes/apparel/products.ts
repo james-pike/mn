@@ -369,7 +369,7 @@ export const allProducts = [
     "colors": [
       "#ab8f66"
     ],
-    "price": 159.99,
+    "price": 149.95,
     "img": "/sku/104204-darkkhaki.png",
     "imgs": [
       "/sku/104204-darkkhaki.png"
@@ -474,7 +474,7 @@ export const allProducts = [
     "colors": [
       "#2c3e50"
     ],
-    "price": 124.99,
+    "price": 112.95,
     "img": "/sku/100235-navy.png",
     "imgs": [
       "/sku/100235-navy.png",
@@ -782,7 +782,7 @@ export const allProducts = [
     "colors": [
       "#2c3e50"
     ],
-    "price": 165,
+    "price": 158,
     "img": "/sku/atlas-guardian-fr-ar-quarter-zip-navy.png",
     "imgs": [
       "/sku/atlas-guardian-fr-ar-quarter-zip-navy.png"
@@ -791,6 +791,464 @@ export const allProducts = [
     "details": "Flame-resistant and arc-rated (FR/AR) protection — ATPV 18 cal (CAT 2), CSA Z96-22 Class 1 Level 2 hi-visibility, Atlas Ultravis 4\" segmented reflective striping, Detachable hood and plastic FR zipper, PFAS-free with guaranteed flame resistance for the life of the garment, #4014NB",
     "portals": [
       "electrical"
+    ]
+  },
+  {
+    "sku": "MN-42",
+    "name": "Men's Puma Golf Icon Polo 2.0",
+    "category": "Polos",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#1b3e97",
+      "#edecf1",
+      "#1b1c1f",
+      "#7c1c28",
+      "#134034",
+      "#222838",
+      "#68686a",
+      "#a70e27"
+    ],
+    "price": 59.99,
+    "img": "/gift/631055/festive-royal-front.webp",
+    "imgs": [
+      "/gift/631055/white-glow-front.webp",
+      "/gift/631055/white-glow-back.webp",
+      "/gift/631055/puma-black-front.webp",
+      "/gift/631055/puma-black-side.webp",
+      "/gift/631055/puma-black-back.webp",
+      "/gift/631055/dark-crimson-front.webp",
+      "/gift/631055/dark-crimson-side.webp",
+      "/gift/631055/dark-crimson-back.webp",
+      "/gift/631055/dark-myrtle-front.webp",
+      "/gift/631055/dark-myrtle-side.webp",
+      "/gift/631055/dark-myrtle-back.webp",
+      "/gift/631055/deep-navy-front.webp",
+      "/gift/631055/deep-navy-side.webp",
+      "/gift/631055/deep-navy-back.webp",
+      "/gift/631055/festive-royal-front.webp",
+      "/gift/631055/festive-royal-side.webp",
+      "/gift/631055/festive-royal-back.webp",
+      "/gift/631055/slate-sky-front.webp",
+      "/gift/631055/slate-sky-side.webp",
+      "/gift/631055/slate-sky-back.webp",
+      "/gift/631055/strong-red-front.webp",
+      "/gift/631055/strong-red-side.webp",
+      "/gift/631055/strong-red-back.webp"
+    ],
+    "material": "4.42 oz./yd², 76/19/5 recycled polyester/polyester/spandex",
+    "details": "Bio-based moisture-management, Solid self-collar twin-needle edge stitching, Forward shoulder seam, Three button placket with contrast top button thread, Side vents with contrast fabric tape and bar tacks, Hem finished with a 1\" turnback and double-needle topstitching, Sleek silicone heat transfer cat branding at center back, #631055",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-43",
+    "name": "Men's Puma Pebble Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#1b1c1f",
+      "#222838"
+    ],
+    "price": 89.99,
+    "img": "/gift/638595/puma-black-front.webp",
+    "imgs": [
+      "/gift/638595/puma-black-front.webp",
+      "/gift/638595/puma-black-back.webp",
+      "/gift/638595/deep-navy-back.webp"
+    ],
+    "material": "7.7 oz./yd², 100% recycled polyester",
+    "details": "Diamond shaped quilted fabric with textual interest and soft hand feel, Moisture-management, Self-faced collar and interior center back seam with locker loop, 1/4 zip design with reverse coil zipper, Side vents with tape and bar tacks, 1\" hem turnback with twin needle coverstitch, Premium embroidered cat branding at sleeve hem, #638595",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-44",
+    "name": "Men's Puma Golf Icon Heather Polo 2.0",
+    "category": "Polos",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#ede9e6",
+      "#292627",
+      "#2b313f"
+    ],
+    "price": 59.99,
+    "img": "/gift/631057/warm-white-heather-front.webp",
+    "imgs": [
+      "/gift/631057/warm-white-heather-front.webp",
+      "/gift/631057/warm-white-heather-side.webp",
+      "/gift/631057/puma-black-heather-side.webp",
+      "/gift/631057/puma-black-heather-back.webp",
+      "/gift/631057/deep-navy-heather-front.webp",
+      "/gift/631057/deep-navy-heather-side.webp",
+      "/gift/631057/deep-navy-heather-back.webp"
+    ],
+    "material": "4.42 oz./yd², 76/19/5 recycled polyester/polyester/spandex",
+    "details": "Heather fabric, Bio-based moisture-management, Solid self-collar twin-needle edge stitching, Forward shoulder seam, Three button placket with contrast top button thread, Side vents with contrast fabric tape and bar tacks, Hem finished with a 1\" turnback and double-needle topstitching, Sleek silicone heat transfer cat branding at center back, #631057",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-46",
+    "name": "Men's Puma Golf Pebble Hooded Pullover",
+    "category": "Jackets",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#222838"
+    ],
+    "price": 89.99,
+    "img": "/gift/638594/deep-navy-front.webp",
+    "imgs": [
+      "/gift/638594/deep-navy-front.webp",
+      "/gift/638594/deep-navy-side.webp",
+      "/gift/638594/deep-navy-back.webp"
+    ],
+    "material": "7.7 oz./yd², 100% recycled polyester",
+    "details": "Diamond shaped quilted fabric with textual interest and soft hand feel, Moisture-management, Three-piece self-fabric hood with crossover neckline, Raglan sleeve construction with double needle coverstitching, 1\" hem turnback with twin needle coverstitch, Premium embroidered cat branding at sleeve hem, #638594",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-47",
+    "name": "Men's Puma Golf Icon 2.0 Quarter-Zip",
+    "category": "Jackets",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#edecf1",
+      "#1b1c1f",
+      "#222838",
+      "#68686a"
+    ],
+    "price": 79.99,
+    "img": "/gift/631059/white-glow-front.webp",
+    "imgs": [
+      "/gift/631059/white-glow-front.webp",
+      "/gift/631059/white-glow-side.webp",
+      "/gift/631059/white-glow-back.webp",
+      "/gift/631059/puma-black-front.webp",
+      "/gift/631059/puma-black-side.webp",
+      "/gift/631059/puma-black-back.webp",
+      "/gift/631059/deep-navy-front.webp",
+      "/gift/631059/deep-navy-side.webp",
+      "/gift/631059/deep-navy-back.webp",
+      "/gift/631059/slate-sky-front.webp",
+      "/gift/631059/slate-sky-side.webp",
+      "/gift/631059/slate-sky-back.webp"
+    ],
+    "material": "4.42 oz./yd², 76/19/5 recycled polyester/polyester/spandex",
+    "details": "Bio-based moisture-management, Mechanical peaching for a soft hand feel, 2\" collar with self-interior facing, Zipper garage at both top and bottom for smooth operation and irritation-free wear, Forward shoulder seam, 1\" hem turnback with double needle coverstitch, Sleek silicone heat transfer cat branding at center back, #631059",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-49",
+    "name": "Men's Puma Golf Pure 2.0 Quarter-Zip",
+    "category": "Jackets",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#103f33",
+      "#1a1a1e",
+      "#791323",
+      "#242a39",
+      "#666668"
+    ],
+    "price": 94.99,
+    "img": "/gift/628858/dark-myrtle-slate-sky-front.webp",
+    "imgs": [
+      "/gift/628858/puma-black-slate-sky-front.webp",
+      "/gift/628858/puma-black-slate-sky-side.webp",
+      "/gift/628858/puma-black-slate-sky-back.webp",
+      "/gift/628858/dark-crimson-slate-sky-front.webp",
+      "/gift/628858/dark-crimson-slate-sky-side.webp",
+      "/gift/628858/dark-crimson-slate-sky-back.webp",
+      "/gift/628858/dark-myrtle-slate-sky-front.webp",
+      "/gift/628858/dark-myrtle-slate-sky-side.webp",
+      "/gift/628858/dark-myrtle-slate-sky-back.webp",
+      "/gift/628858/deep-navy-white-glow-front.webp",
+      "/gift/628858/deep-navy-white-glow-side.webp",
+      "/gift/628858/deep-navy-white-glow-back.webp",
+      "/gift/628858/slate-sky-ash-grey-front.webp",
+      "/gift/628858/slate-sky-ash-grey-side.webp",
+      "/gift/628858/slate-sky-ash-grey-back.webp"
+    ],
+    "material": "5.9 oz./yd², 94/6 recycled polyester/spandex",
+    "details": "Four-way stretch, Bio-based moisture-management, Mechanical peaching for a soft hand feel, 2' collar with contrast interior facing, Zipper garage at both top and bottom for smooth operation and irritation-free wear, Seamless side panel, Forward shoulder seam, 1' hem turnback with double needle coverstitch, Sleek silicone heat transfer cat branding at center back, #628858",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-48",
+    "name": "Women's Puma Golf Icon Polo 2.0",
+    "category": "Polos",
+    "sizes": "S - 2XL",
+    "badge": "",
+    "colors": [
+      "#a70e27",
+      "#edecf1",
+      "#1b1c1f",
+      "#7c1c28",
+      "#134034",
+      "#222838",
+      "#1b3e97",
+      "#68686a"
+    ],
+    "price": 59.99,
+    "img": "/gift/631050/strong-red-front.webp",
+    "imgs": [
+      "/gift/631050/white-glow-front.webp",
+      "/gift/631050/white-glow-side.webp",
+      "/gift/631050/white-glow-back.webp",
+      "/gift/631050/puma-black-front.webp",
+      "/gift/631050/puma-black-side.webp",
+      "/gift/631050/puma-black-back.webp",
+      "/gift/631050/dark-crimson-front.webp",
+      "/gift/631050/dark-crimson-side.webp",
+      "/gift/631050/dark-crimson-back.webp",
+      "/gift/631050/dark-myrtle-front.webp",
+      "/gift/631050/dark-myrtle-side.webp",
+      "/gift/631050/dark-myrtle-back.webp",
+      "/gift/631050/deep-navy-front.webp",
+      "/gift/631050/deep-navy-side.webp",
+      "/gift/631050/deep-navy-back.webp",
+      "/gift/631050/festive-royal-front.webp",
+      "/gift/631050/festive-royal-side.webp",
+      "/gift/631050/festive-royal-back.webp",
+      "/gift/631050/slate-sky-front.webp",
+      "/gift/631050/slate-sky-side.webp",
+      "/gift/631050/slate-sky-back.webp",
+      "/gift/631050/strong-red-front.webp",
+      "/gift/631050/strong-red-side.webp",
+      "/gift/631050/strong-red-back.webp"
+    ],
+    "material": "4.42 oz./yd², 76/19/5 recycled polyester/polyester/spandex",
+    "details": "Bio-based moisture-management, Mechanical peaching for a soft hand feel, Self-fabric crossed V-neck sleek, feminine neckline, Forward shoulder seam, Side seam vent with bartack reinforcement, Sleek silicone heat transfer cat branding at front hem, #631050",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-45",
+    "name": "Men's Puma Golf Pure 2.0 Polo",
+    "category": "Polos",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#1b3e97",
+      "#edecf1",
+      "#1b1c1f",
+      "#7c1c28",
+      "#134034",
+      "#222838",
+      "#fa762a",
+      "#68686a",
+      "#a70e27"
+    ],
+    "price": 69.99,
+    "img": "/gift/629948/festive-royal-front.webp",
+    "imgs": [
+      "/gift/629948/white-glow-front.webp",
+      "/gift/629948/white-glow-side.webp",
+      "/gift/629948/white-glow-back.webp",
+      "/gift/629948/puma-black-front.webp",
+      "/gift/629948/puma-black-side.webp",
+      "/gift/629948/puma-black-back.webp",
+      "/gift/629948/dark-crimson-front.webp",
+      "/gift/629948/dark-crimson-side.webp",
+      "/gift/629948/dark-crimson-back.webp",
+      "/gift/629948/dark-myrtle-front.webp",
+      "/gift/629948/dark-myrtle-side.webp",
+      "/gift/629948/dark-myrtle-back.webp",
+      "/gift/629948/deep-navy-front.webp",
+      "/gift/629948/deep-navy-side.webp",
+      "/gift/629948/deep-navy-back.webp",
+      "/gift/629948/festive-royal-front.webp",
+      "/gift/629948/festive-royal-side.webp",
+      "/gift/629948/festive-royal-back.webp",
+      "/gift/629948/rickie-orange-front.webp",
+      "/gift/629948/rickie-orange-side.webp",
+      "/gift/629948/rickie-orange-back.webp",
+      "/gift/629948/slate-sky-front.webp",
+      "/gift/629948/slate-sky-side.webp",
+      "/gift/629948/slate-sky-back.webp",
+      "/gift/629948/strong-red-front.webp",
+      "/gift/629948/strong-red-side.webp",
+      "/gift/629948/strong-red-back.webp"
+    ],
+    "material": "4.13 oz./yd², 100% recycled polyester",
+    "details": "Interlock fabric structure with superior softness, shape retention, and coverage, Moisture-management, Solid self-collar with plastic collar stays sewn into the underside, Forward shoulder seam, Three-button placket with contrast top button thread, Hem finished with a 1' turnback and double-needle topstitching, 40+ UPF protection, Sleek silicone heat transfer cat branding at center back, #629948",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-50",
+    "name": "Women's Puma Golf Pure 2.0 Polo",
+    "category": "Polos",
+    "sizes": "S - 2XL",
+    "badge": "",
+    "colors": [
+      "#edecf1",
+      "#1b1c1f",
+      "#7c1c28",
+      "#134034",
+      "#222838",
+      "#1b3e97",
+      "#fa762a",
+      "#68686a"
+    ],
+    "price": 69.99,
+    "img": "/gift/629944/white-glow-front.webp",
+    "imgs": [
+      "/gift/629944/white-glow-front.webp",
+      "/gift/629944/white-glow-side.webp",
+      "/gift/629944/white-glow-back.webp",
+      "/gift/629944/puma-black-front.webp",
+      "/gift/629944/puma-black-side.webp",
+      "/gift/629944/puma-black-back.webp",
+      "/gift/629944/dark-crimson-front.webp",
+      "/gift/629944/dark-crimson-side.webp",
+      "/gift/629944/dark-crimson-back.webp",
+      "/gift/629944/dark-myrtle-front.webp",
+      "/gift/629944/dark-myrtle-side.webp",
+      "/gift/629944/dark-myrtle-back.webp",
+      "/gift/629944/deep-navy-front.webp",
+      "/gift/629944/deep-navy-side.webp",
+      "/gift/629944/deep-navy-back.webp",
+      "/gift/629944/festive-royal-front.webp",
+      "/gift/629944/festive-royal-side.webp",
+      "/gift/629944/festive-royal-back.webp",
+      "/gift/629944/rickie-orange-front.webp",
+      "/gift/629944/rickie-orange-side.webp",
+      "/gift/629944/rickie-orange-back.webp",
+      "/gift/629944/slate-sky-front.webp",
+      "/gift/629944/slate-sky-side.webp",
+      "/gift/629944/slate-sky-back.webp"
+    ],
+    "material": "4.13 oz./yd², 100% recycled polyester",
+    "details": "Interlock fabric structure with superior softness, shape retention, and coverage, Moisture-management, Five-button placket with premium button detailing, No true side seam for ergonomic fit, Ergonomic shoulder panel, Curved hem with 1/2\" hem turnback offers a flattering fit and stays tucked or untucked with ease, 40+ UPF protection, Sleek silicone heat transfer cat branding at front hem, #629944",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-51",
+    "name": "Women's Puma Golf Pure 2.0 Quarter-Zip Pullover",
+    "category": "Jackets",
+    "sizes": "S - 2XL",
+    "badge": "",
+    "colors": [
+      "#edecf1",
+      "#1b1c1f",
+      "#7c1c28",
+      "#134034",
+      "#222838",
+      "#68686a"
+    ],
+    "price": 89.99,
+    "img": "/gift/629449/white-glow-front.webp",
+    "imgs": [
+      "/gift/629449/white-glow-front.webp",
+      "/gift/629449/white-glow-side.webp",
+      "/gift/629449/white-glow-back.webp",
+      "/gift/629449/puma-black-front.webp",
+      "/gift/629449/puma-black-side.webp",
+      "/gift/629449/puma-black-back.webp",
+      "/gift/629449/dark-crimson-front.webp",
+      "/gift/629449/dark-crimson-side.webp",
+      "/gift/629449/dark-crimson-back.webp",
+      "/gift/629449/dark-myrtle-front.webp",
+      "/gift/629449/dark-myrtle-side.webp",
+      "/gift/629449/dark-myrtle-back.webp",
+      "/gift/629449/deep-navy-front.webp",
+      "/gift/629449/deep-navy-side.webp",
+      "/gift/629449/deep-navy-back.webp",
+      "/gift/629449/slate-sky-front.webp",
+      "/gift/629449/slate-sky-side.webp",
+      "/gift/629449/slate-sky-back.webp"
+    ],
+    "material": "5.9 oz./yd², 94/6 recycled polyester/spandex",
+    "details": "Four-way stretch, Bio-based moisture-management, Mechanical peaching for a soft hand feel, No true side seam for ergonomic fit, Raglan sleeve construction, Curved hem with 1\" hem turnback with double needle coverstitch, Premium embroidered cat branding at front hem, #629449",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-52",
+    "name": "Women's Puma Golf Icon Heather Polo",
+    "category": "Polos",
+    "sizes": "S - 2XL",
+    "badge": "",
+    "colors": [
+      "#ede9e6",
+      "#292627",
+      "#2b313f",
+      "#6e6d6e"
+    ],
+    "price": 59.99,
+    "img": "/gift/631051/warm-white-heather-front.webp",
+    "imgs": [
+      "/gift/631051/warm-white-heather-front.webp",
+      "/gift/631051/warm-white-heather-side.webp",
+      "/gift/631051/warm-white-heather-back.webp",
+      "/gift/631051/puma-black-heather-front.webp",
+      "/gift/631051/puma-black-heather-side.webp",
+      "/gift/631051/puma-black-heather-back.webp",
+      "/gift/631051/deep-navy-heather-front.webp",
+      "/gift/631051/deep-navy-heather-side.webp",
+      "/gift/631051/deep-navy-heather-back.webp",
+      "/gift/631051/slate-sky-heather-front.webp",
+      "/gift/631051/slate-sky-heather-side.webp",
+      "/gift/631051/slate-sky-heather-back.webp"
+    ],
+    "material": "4.42 oz./yd², 76/19/5 recycled polyester/polyester/spandex",
+    "details": "Heather fabric, Bio-based moisture-management, Mechanical peaching for a soft hand feel, Self-fabric crossed V-neck sleek, feminine neckline, Forward shoulder seam, Side seam vent with bartack reinforcement, Sleek silicone heat transfer cat branding at front hem, #631051",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-53",
+    "name": "Women's Puma Golf Icon 2.0 Full-Zip",
+    "category": "Jackets",
+    "sizes": "S - 2XL",
+    "badge": "",
+    "colors": [
+      "#edecf1",
+      "#1b1c1f",
+      "#222838",
+      "#68686a"
+    ],
+    "price": 79.99,
+    "img": "/gift/631052/white-glow-front.webp",
+    "imgs": [
+      "/gift/631052/white-glow-front.webp",
+      "/gift/631052/white-glow-side.webp",
+      "/gift/631052/white-glow-back.webp",
+      "/gift/631052/puma-black-front.webp",
+      "/gift/631052/puma-black-side.webp",
+      "/gift/631052/puma-black-back.webp",
+      "/gift/631052/deep-navy-front.webp",
+      "/gift/631052/deep-navy-side.webp",
+      "/gift/631052/deep-navy-back.webp",
+      "/gift/631052/slate-sky-front.webp",
+      "/gift/631052/slate-sky-side.webp",
+      "/gift/631052/slate-sky-back.webp"
+    ],
+    "material": "4.42 oz./yd², 76/19/5 recycled polyester/polyester/spandex",
+    "details": "Heather fabric, Bio-based moisture-management, Mechanical peaching for a soft hand feel, #3 reverse coil zipper with a self-fabric split chin guard, Set-in sleeves with 3-needle coverstitching, 2' drop-tail hem, Sleek silicone heat transfer cat branding at front hem, #631052",
+    "portals": [
+      "gift"
     ]
   }
 ];
@@ -894,6 +1352,24 @@ const colorNames: Record<string, Record<string, string>> = {
   "#e8863b": { en: "Orange", fr: "Orange" },
   "#f2efe6": { en: "Natural", fr: "Naturel" },
   "#ff6a13": { en: "Orange", fr: "Orange" },
+  "#edecf1": { en: "White Glow", fr: "Blanc éclat" }, // Puma Golf (gift)
+  "#1b1c1f": { en: "Puma Black", fr: "Noir Puma" }, // Puma Golf (gift)
+  "#7c1c28": { en: "Dark Crimson", fr: "Cramoisi foncé" }, // Puma Golf (gift)
+  "#134034": { en: "Dark Myrtle", fr: "Myrte foncé" }, // Puma Golf (gift)
+  "#222838": { en: "Deep Navy", fr: "Marine profond" }, // Puma Golf (gift)
+  "#1b3e97": { en: "Festive Royal", fr: "Bleu royal festif" }, // Puma Golf (gift)
+  "#68686a": { en: "Slate Sky", fr: "Ciel ardoise" }, // Puma Golf (gift)
+  "#a70e27": { en: "Strong Red", fr: "Rouge vif" }, // Puma Golf (gift)
+  "#ede9e6": { en: "Warm White Heather", fr: "Blanc chaud chiné" }, // Puma Golf (gift)
+  "#292627": { en: "Puma Black Heather", fr: "Noir Puma chiné" }, // Puma Golf (gift)
+  "#2b313f": { en: "Deep Navy Heather", fr: "Marine profond chiné" }, // Puma Golf (gift)
+  "#6e6d6e": { en: "Slate Sky Heather", fr: "Ciel ardoise chiné" }, // Puma Golf (gift)
+  "#fa762a": { en: "Rickie Orange", fr: "Orange Rickie" }, // Puma Golf (gift)
+  "#1a1a1e": { en: "Puma Black / Slate Sky", fr: "Noir Puma / Ciel ardoise" }, // Puma Golf (gift)
+  "#791323": { en: "Dark Crimson / Slate Sky", fr: "Cramoisi foncé / Ciel ardoise" }, // Puma Golf (gift)
+  "#103f33": { en: "Dark Myrtle / Slate Sky", fr: "Myrte foncé / Ciel ardoise" }, // Puma Golf (gift)
+  "#242a39": { en: "Deep Navy / White Glow", fr: "Marine profond / Blanc éclat" }, // Puma Golf (gift)
+  "#666668": { en: "Slate Sky / Ash Grey", fr: "Ciel ardoise / Gris cendré" }, // Puma Golf (gift)
 };
 export function colorName(hex: string, locale: Locale): string {
   return colorNames[hex]?.[locale] || hex;

@@ -25,10 +25,10 @@ export const isSkuInLineup = (
     return !!product.portals?.includes("electrical") || ELECTRICAL_SKUS.includes(sku);
   if (loginType === "tech") return category === "Work Wear";
   if (loginType === "hvac") return isSafetyProduct(sku); // HVAC login: the FR-workwear lineup
-  // Gift login: for now the same lineup as Service (falls through below).
-  // Give it its own rule here when its product list is decided.
-  // Clothing / Service (default): everything except FR + Electrical-only SKUs.
-  return category !== "Flame Resistant" && !ELECTRICAL_SKUS.includes(sku);
+  // Gift (Milestone Awards): ONLY products flagged portals ∋ "gift" (DB-driven).
+  if (loginType === "gift") return !!product.portals?.includes("gift");
+  // Clothing / Service (default): everything except FR, Electrical-only and Gift-only SKUs.
+  return category !== "Flame Resistant" && !ELECTRICAL_SKUS.includes(sku) && !product.portals?.includes("gift");
 };
 
 // Electrical portal ordering rules: no prices shown anywhere, no PO number, and
