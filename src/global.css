@@ -33420,3 +33420,9 @@
   html body .site-header .site-header__logo .brand-cluster__mark,
   html body .site-header.site-header--electrical .site-header__logo .brand-cluster__mark { width: 52px !important; height: 52px !important; }
 }
+/* Phones: the wordmark is scaled up visually (transform), which doesn't take
+   layout space — reserve the extra width so the opened search bar stops short
+   of the text instead of running into it. */
+@media (max-width: 600px) {
+  html body .site-header .site-header__logo .brand-cluster__words { margin-right: 32px !important; }
+}
