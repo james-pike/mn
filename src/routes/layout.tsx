@@ -1597,10 +1597,7 @@ export default component$(() => {
                 // header settle via the scroll listener), THEN open the search once
                 // it's pinned. In every other state nothing repositions, so we open
                 // synchronously (keeps the mobile keyboard opening on the first tap).
-                // 8px threshold (as below): at the top of / the catalog already
-                // sits under the bar and stickyPos's +2 fudge would scroll the
-                // page ~2px on every open — the brief header shift on phones.
-                const needsReposition = !!catalog && loc.url.pathname === "/" && window.scrollY < stickyPos - 8;
+                const needsReposition = !!catalog && loc.url.pathname === "/" && window.scrollY < stickyPos - 1;
                 const open = () => {
                   searchOpen.value = true;
                   header?.classList.add("site-header--search-open");
