@@ -157,7 +157,7 @@
 /* Desktop + wide tablets: branding panel replaces the filter sidebar.
    (From 1000px — where the catalog becomes the sidebar | content grid.) */
 .mn-brand-panel { display: none; }
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   html body .home-catalog--electrical:not(:has(.home-catalog__filters--pdp-back)) .home-catalog__inner { grid-template-columns: minmax(300px, 28%) 1fr !important; }
   html body .home-catalog--electrical .home-catalog__filters:not(.home-catalog__filters--pdp-back) { display: none !important; }
   html body .home-catalog--electrical .mn-brand-panel {
@@ -432,7 +432,7 @@
 /* Wide tablets (1000–1024px): branding panel on the left like desktop, the
    kit list in the column to its right (later than the tablet full-width rules,
    so it wins). The page is still a single screen. */
-@media (min-width: 1000px) and (max-width: 1024px) {
+@media (min-width: 1000px) and (max-width: 1024px) and (min-height: 100000px) /* wide-tablet panel layout retired: wide tablets use the narrow-tablet rows */ {
   html body .home-catalog--electrical:not(:has(.home-catalog__filters--pdp-back)) .home-catalog__inner { grid-template-columns: minmax(240px, 30%) minmax(0, 1fr) !important; }
   html body .home-catalog__inner > .kit-builder { grid-column: 2 !important; grid-row: 3 / span 2; }
   html body .home-catalog--electrical .mn-brand-panel { padding: 40px 18px 24px; grid-row: 3 / span 2; }
@@ -447,11 +447,11 @@
 
 /* Product pages (desktop + wide tablets): keep the branding panel on the left
    like the kit page, the product in the column beside it. */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   html body .home-catalog--electrical:has(.home-catalog__filters--pdp-back) .home-catalog__inner { grid-template-columns: minmax(300px, 28%) minmax(0, 1fr) !important; }
   html body .home-catalog--electrical .home-catalog__pdp-main { grid-column: 2 !important; grid-row: 3 / span 2; }
 }
-@media (min-width: 1000px) and (max-width: 1024px) {
+@media (min-width: 1000px) and (max-width: 1024px) and (min-height: 100000px) /* wide-tablet panel layout retired: wide tablets use the narrow-tablet rows */ {
   html body .home-catalog--electrical:has(.home-catalog__filters--pdp-back) .home-catalog__inner { grid-template-columns: minmax(240px, 30%) minmax(0, 1fr) !important; }
 }
 
@@ -466,7 +466,7 @@
 
 /* Electrical footer on desktop + wide tablets: no logo (the branding panel
    already carries it) — just the contact line and language toggle. */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   html body:has(.site-header--electrical) .site-footer .site-footer__brand { display: none !important; }
 }
 
@@ -483,7 +483,7 @@ html body .home-catalog--electrical .pdp-breadcrumb {
 /* Desktop + wide tablets: pages that show the branding panel (kit + product
    pages) drop the header logo — the panel already carries it. Checkout (no
    panel) keeps it. Space kept so the header doesn't shift. */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   html body:has(.mn-brand-panel) .site-header.site-header--electrical .site-header__logo { visibility: hidden !important; }
 }
 
@@ -491,11 +491,11 @@ html body .home-catalog--electrical .pdp-breadcrumb {
    shows): no footer content — the panel has the contact line and language
    switch. Only the footer's colour stripe stays at the bottom. The kit area
    fills down to it. Checkout (no panel) keeps its footer. */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   html body:has(.mn-brand-panel) .site-footer { padding: 0 !important; min-height: 6px; background: none !important; border: 0 !important; }
   html body:has(.mn-brand-panel) .site-footer .site-footer__inner { display: none !important; }
 }
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   .kit-builder { min-height: calc(100dvh - 73px - 14px); }
   .mn-brand-panel__locale {
     align-self: center; margin-top: 10px;
@@ -504,23 +504,23 @@ html body .home-catalog--electrical .pdp-breadcrumb {
     background: #fafaf9; font: inherit; font-size: 0.85rem; color: #3d434a; cursor: pointer;
   }
 }
-@media (min-width: 1000px) and (max-width: 1024px) {
+@media (min-width: 1000px) and (max-width: 1024px) and (min-height: 100000px) /* wide-tablet panel layout retired: wide tablets use the narrow-tablet rows */ {
   html body .home-catalog--electrical .kit-builder { height: calc(100dvh - 65px - 28px); }
 }
 
 /* Desktop + wide tablets: kit and product pages fill the screen, so the colour
    stripe always sits at the very bottom (product pages are short). */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   html body .home-catalog--electrical .home-catalog__inner { min-height: calc(100dvh - 73px - 6px); }
 }
-@media (min-width: 1000px) and (max-width: 1024px) {
+@media (min-width: 1000px) and (max-width: 1024px) and (min-height: 100000px) /* wide-tablet panel layout retired: wide tablets use the narrow-tablet rows */ {
   html body .home-catalog--electrical .home-catalog__inner { min-height: calc(100dvh - 65px - 28px); }
   html body .home-catalog--electrical .kit-builder { height: calc(100dvh - 65px - 50px); }
 }
 
 /* Desktop + wide tablets: tighter gaps around the products and the branding
    panel (was 10px around/between cards, 12px under the kit bar). */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   .kit-builder__grid { gap: 6px !important; padding: 4px 4px 6px !important; }
   .kit-bar { margin: 0 4px 4px !important; }
   html body .home-catalog--electrical .mn-brand-panel { margin-right: 0 !important; }
@@ -542,7 +542,7 @@ html body .home-catalog--electrical .pdp-breadcrumb {
   .kit-card__one { font-size: 1rem; }
 }
 /* Wide tablets (beside the branding panel): slightly smaller to fit. */
-@media (min-width: 1000px) and (max-width: 1024px) {
+@media (min-width: 1000px) and (max-width: 1024px) and (min-height: 100000px) /* wide-tablet panel layout retired: wide tablets use the narrow-tablet rows */ {
   .kit-card__name { font-size: 1.35rem !important; }
   .kit-card__spec { font-size: 0.9rem; }
 }
@@ -583,7 +583,7 @@ html body .home-catalog--electrical .pdp-breadcrumb {
 
 /* Wide tablets: same as desktop — panel full height on the left (the header
    there is 65px), header only over the products. */
-@media (min-width: 1000px) and (max-width: 1024px) {
+@media (min-width: 1000px) and (max-width: 1024px) and (min-height: 100000px) /* wide-tablet panel layout retired: wide tablets use the narrow-tablet rows */ {
   html body .home-catalog--electrical .mn-brand-panel {
     margin-top: -65px;
     position: relative;
@@ -593,7 +593,7 @@ html body .home-catalog--electrical .pdp-breadcrumb {
 }
 /* Desktop + wide tablets (electrical kit/product pages): the header is white,
    like the product cards and the other containers. */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   html body:has(.mn-brand-panel) .site-header.site-header--electrical,
   html body:has(.mn-brand-panel) .site-header.site-header--electrical .site-header__inner {
     background: #ffffff !important;
@@ -601,11 +601,11 @@ html body .home-catalog--electrical .pdp-breadcrumb {
   }
   html body:has(.mn-brand-panel) .site-header.site-header--electrical { border-bottom: 1px solid rgba(0, 0, 0, 0.08); }
 }
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   html body:has(.mn-brand-panel) .site-header.site-header--electrical .logout-btn,
   html body:has(.mn-brand-panel) .site-header.site-header--electrical .logout-form { background: #ffffff !important; }
 }
-@media (min-width: 1000px) and (max-width: 1024px) {
+@media (min-width: 1000px) and (max-width: 1024px) and (min-height: 100000px) /* wide-tablet panel layout retired: wide tablets use the narrow-tablet rows */ {
   .kit-bar__list { font-size: 0.9rem !important; }
   .kit-bar__status { font-size: 0.85rem !important; }
 }
@@ -634,7 +634,7 @@ html body .home-catalog--electrical .pdp-breadcrumb {
 /* Desktop + wide tablets: the branding panel already lists the kit, so the
    kit bar drops its "Electrical FR kit: 5 shirts · …" line — just the status
    and the button. */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   .kit-bar__list { display: none !important; }
   .kit-bar__status { font-size: 1rem !important; }
 }
@@ -651,7 +651,7 @@ html body .home-catalog--electrical .pdp-breadcrumb {
 /* Branding panel kit list: inline with dots on desktop, two per line on wide
    tablets. */
 .mn-brand-panel__kit span + span::before { content: " · "; }
-@media (min-width: 1000px) and (max-width: 1024px) {
+@media (min-width: 1000px) and (max-width: 1024px) and (min-height: 100000px) /* wide-tablet panel layout retired: wide tablets use the narrow-tablet rows */ {
   /* Two per line, evenly balanced: "5 shirts · 5 pants" / "1 hoodie · 1 cap". */
   .mn-brand-panel__kit { line-height: 1.5; }
   .mn-brand-panel__kit span:nth-child(2)::after { content: "\A"; white-space: pre; }
@@ -676,7 +676,7 @@ html body .home-catalog--electrical .pdp-breadcrumb {
    then the three wordmark lines at ONE size, left-aligned as a block (the
    block itself centred), tight tracking: MODERN NIAGARA bold, BUILDING
    SERVICES grey, APPAREL medium. Sized so BUILDING SERVICES fills the panel. */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   .mn-brand-panel__words { align-items: flex-start !important; text-align: left; gap: 0 !important; line-height: 1.04 !important; }
   .mn-brand-panel__w1, .mn-brand-panel__w2, .mn-brand-panel__w3 {
     font-size: min(2.1rem, 9.2cqi) !important;
@@ -690,7 +690,7 @@ html body .home-catalog--electrical .pdp-breadcrumb {
 
 /* Branding panel: the "ELECTRICAL FR KIT" + kit-list block sits centred
    between the logo and the contact area (equal auto space above and below). */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   .mn-brand-panel__portal { margin-top: auto !important; }
   .mn-brand-panel__contact { margin-top: auto !important; }
   .mn-brand-panel__lockup { margin-bottom: 24px; }
@@ -700,7 +700,7 @@ html body .home-catalog--electrical .pdp-breadcrumb {
 /* Electrical product page (desktop + wide tablets): the expanded image fills
    the product column beside the branding panel — anchored to that column, not
    offset for the (narrower) shared sidebar — and the image fits inside it. */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   html body .home-catalog--electrical .home-catalog__pdp-main { position: relative; }
   html body .home-catalog--electrical .product-fullscreen {
     position: absolute !important;
@@ -719,7 +719,7 @@ html body .home-catalog--electrical .pdp-breadcrumb {
 html body .home-catalog--electrical .pdp-breadcrumb { justify-content: flex-start !important; }
 html body .home-catalog--electrical .pdp-breadcrumb__back { margin-left: 0 !important; margin-right: auto !important; }
 html body .home-catalog--electrical .pdp-breadcrumb { align-self: stretch !important; width: auto !important; margin-left: 0 !important; margin-right: 0 !important; }
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   /* Product column runs the full height beside the panel (so the expanded
      image's backdrop covers the whole column). */
   html body .home-catalog--electrical .home-catalog__pdp-main { align-self: stretch !important; }
@@ -727,13 +727,13 @@ html body .home-catalog--electrical .pdp-breadcrumb { align-self: stretch !impor
 @media (min-width: 1025px) {
   html body .home-catalog--electrical .home-catalog__pdp-main { min-height: calc(50dvh + 240px); }
 }
-@media (min-width: 1000px) and (max-width: 1024px) {
+@media (min-width: 1000px) and (max-width: 1024px) and (min-height: 100000px) /* wide-tablet panel layout retired: wide tablets use the narrow-tablet rows */ {
   html body .home-catalog--electrical .home-catalog__pdp-main { min-height: calc(100dvh - 65px - 28px); }
 }
 @media (min-width: 1025px) {
   html body .home-catalog--electrical .home-catalog__pdp-main > .apparel-catalog { min-height: calc(50dvh + 240px); }
 }
-@media (min-width: 1000px) and (max-width: 1024px) {
+@media (min-width: 1000px) and (max-width: 1024px) and (min-height: 100000px) /* wide-tablet panel layout retired: wide tablets use the narrow-tablet rows */ {
   html body .home-catalog--electrical .home-catalog__pdp-main > .apparel-catalog { min-height: calc(100dvh - 65px - 28px); }
 }
 
@@ -794,7 +794,7 @@ html body:has(.site-header--electrical) .site-footer::after {
 
 /* Branding panel (desktop + wide tablets): logo mark and wordmark a little
    smaller. */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   html body .home-catalog--electrical .mn-brand-panel .mn-brand-panel__mark { width: min(100px, 30cqi) !important; height: min(100px, 30cqi) !important; }
   html body .home-catalog--electrical .mn-brand-panel .mn-brand-panel__w1,
   html body .home-catalog--electrical .mn-brand-panel .mn-brand-panel__w2,
@@ -809,7 +809,7 @@ html body:has(.site-header--electrical) .site-footer::after {
 
 /* Desktop panel (narrower now): "ELECTRICAL FR KIT" scales to stay on one
    line, and the kit list sits on two balanced lines like wide tablets. */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   html body .home-catalog--electrical .mn-brand-panel .mn-brand-panel__portal { font-size: min(1.05rem, 5.4cqi) !important; letter-spacing: 0.16em !important; white-space: nowrap; }
   .mn-brand-panel__kit { line-height: 1.5; }
   .mn-brand-panel__kit span:nth-child(2)::after { content: "\A"; white-space: pre; }
@@ -818,7 +818,7 @@ html body:has(.site-header--electrical) .site-footer::after {
 
 /* Electrical product page (desktop + wide tablets): text a little larger to
    use the space — title, material, feature list, option labels. */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   html body .home-catalog--electrical .product-modal__details { font-size: 1.12em; }
   html body .home-catalog--electrical .product-modal__details h1,
   html body .home-catalog--electrical .product-modal__details h2,
@@ -827,7 +827,7 @@ html body:has(.site-header--electrical) .site-footer::after {
   html body .home-catalog--electrical .product-modal__details p { font-size: 1.05rem !important; }
   html body .home-catalog--electrical .product-modal__label { font-size: 0.9rem !important; }
 }
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   html body .home-catalog--electrical .product-modal__details [class*="material"] { font-size: 1.05rem !important; }
   html body .home-catalog--electrical .product-modal__details select { font-size: 1rem !important; height: 40px !important; min-width: 92px; }
 }
@@ -855,10 +855,10 @@ html body .kit-bar .kit-bar__checkout { min-width: 0 !important; width: auto !im
 
 /* Desktop + wide tablets: horizontal gaps between the products match the 4px
    space above them. */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   .kit-builder__grid { column-gap: 4px !important; row-gap: 4px !important; padding: 4px 4px 4px !important; }
 }
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   .kit-builder__grid { padding-left: 2px !important; }
   .kit-bar { margin-left: 2px !important; }
 }
@@ -867,11 +867,11 @@ html body .kit-bar .kit-bar__checkout { min-width: 0 !important; width: auto !im
    products — below the header, between cards, panel to first card, around
    the kit bar, and at the right edge. (The grid sits 2px from the panel via
    the layout's own column gap, so its left padding is 4px.) */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   .kit-builder__grid { gap: 6px !important; padding: 6px 6px 0 4px !important; }
   .kit-bar { margin: 6px 6px 6px 4px !important; }
 }
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   /* +1px: the header's 1px bottom border sits in the top gap. */
   .kit-builder__grid { padding-top: 7px !important; }
 }
@@ -879,7 +879,7 @@ html body .kit-bar .kit-bar__checkout { min-width: 0 !important; width: auto !im
 
 /* Desktop + wide tablets: the header uses the footer's light blue-grey
    (#dfe2e6) instead of white. */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   html body:has(.mn-brand-panel) .site-header.site-header--electrical,
   html body:has(.mn-brand-panel) .site-header.site-header--electrical .site-header__inner,
   html body:has(.mn-brand-panel) .site-header.site-header--electrical .logout-btn,
@@ -891,7 +891,7 @@ html body .kit-bar .kit-bar__checkout { min-width: 0 !important; width: auto !im
 
 /* Branding panel: contact centred at the bottom; the FR/EN language button
    sits in the panel's top-right corner. */
-@media (min-width: 1000px) {
+@media (min-width: 1025px) { /* was 1000px: no branding panel on wide tablets */
   html body .home-catalog--electrical .mn-brand-panel { position: relative; }
   html body .home-catalog--electrical .mn-brand-panel .mn-brand-panel__contact { align-items: center !important; text-align: center; }
   .mn-brand-panel__contact-main { display: flex; flex-direction: column; gap: 6px; align-items: center; }
@@ -1434,4 +1434,381 @@ html body:has(.site-header--electrical) .cart-drawer .cart-drawer__order-btn { b
   html body:has(.mn-brand-panel) .checkout-page .checkout-modal__field input,
   html body:has(.mn-brand-panel) .checkout-page .checkout-modal__field select,
   html body:has(.mn-brand-panel) .checkout-page .checkout-modal__shipto { background-color: rgb(248, 249, 251) !important; }
+}
+
+/* Electrical (every screen size): no Cart button in the header — the kit
+   bar's Checkout button is the way to order. */
+html body .site-header.site-header--electrical .cart-btn { display: none !important; }
+
+/* Electrical logout hover: the logo's pinwheel — eight triangles meeting in
+   the centre, alternating the logo's two reds (instead of a two-tone split). */
+html body .site-header.site-header--electrical .logout-btn:hover,
+html body .site-header.site-header--electrical .logout-btn:focus-visible {
+  background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%20preserveAspectRatio%3D%27none%27%3E%3Cpolygon%20points%3D%2750%2C50%2050%2C0%20100%2C0%27%20fill%3D%27%23d43950%27/%3E%3Cpolygon%20points%3D%2750%2C50%20100%2C0%20100%2C50%27%20fill%3D%27%23ae1f2a%27/%3E%3Cpolygon%20points%3D%2750%2C50%20100%2C50%20100%2C100%27%20fill%3D%27%23d43950%27/%3E%3Cpolygon%20points%3D%2750%2C50%20100%2C100%2050%2C100%27%20fill%3D%27%23ae1f2a%27/%3E%3Cpolygon%20points%3D%2750%2C50%2050%2C100%200%2C100%27%20fill%3D%27%23d43950%27/%3E%3Cpolygon%20points%3D%2750%2C50%200%2C100%200%2C50%27%20fill%3D%27%23ae1f2a%27/%3E%3Cpolygon%20points%3D%2750%2C50%200%2C50%200%2C0%27%20fill%3D%27%23d43950%27/%3E%3Cpolygon%20points%3D%2750%2C50%200%2C0%2050%2C0%27%20fill%3D%27%23ae1f2a%27/%3E%3C/svg%3E") center / 100% 100% no-repeat, #ae1f2a !important;
+}
+/* Electrical logout hover: a diagonal gradient, bottom-left → centre →
+   top-right: darker red, lighter red, darker red. */
+html body .site-header.site-header--electrical .logout-btn:hover,
+html body .site-header.site-header--electrical .logout-btn:focus-visible {
+  background: linear-gradient(to top right, #ae1f2a 0%, #d43950 50%, #ae1f2a 100%) !important;
+}
+
+/* Kit bar: the sizes picked so far, in the space between the status and the
+   Order Kit button. */
+.kit-bar__picked { flex: 1 1 auto; min-width: 0; margin: 0 14px 0 auto; text-align: right; font-size: 0.95rem; font-weight: 600; color: #2c313c; }
+@media (max-width: 1024px) { .kit-bar__picked { display: none; } }
+
+/* Electrical desktop: the layout runs the full width of the window — no side
+   margins (header, panel + products, footer stripe). */
+@media (min-width: 1025px) {
+  html:has(.site-header--electrical) { --site-max: 100%; }
+}
+@media (min-width: 1025px) {
+  /* size pickers scale with the window so "Regular" / "Length" never clip on
+     narrower desktops (full-width layout) */
+  html body .kit-builder .kit-card__pick select {
+    font-size: clamp(13px, 1.12vw, 17px) !important;
+    padding-left: clamp(6px, 0.7vw, 12px) !important;
+    padding-right: clamp(18px, 1.6vw, 26px) !important;
+    min-width: 0;
+  }
+}
+
+/* Wide tablets (1000–1024px, branding panel shown): logo + wordmark and the
+   kit summary sit together as one group, centred in the space above the
+   contact line (no big gap between them), and the kit title is larger. */
+@media (min-width: 1000px) and (max-width: 1024px) and (min-height: 100000px) /* wide-tablet panel layout retired: wide tablets use the narrow-tablet rows */ {
+  html body .home-catalog--electrical .mn-brand-panel {
+    justify-content: flex-start !important;
+    padding-top: 40px !important;
+    padding-bottom: 28px !important;
+  }
+  html body .home-catalog--electrical .mn-brand-panel > * { margin-top: 0 !important; margin-bottom: 0 !important; }
+  html body .home-catalog--electrical .mn-brand-panel .mn-brand-panel__lockup { margin-top: auto !important; gap: 20px !important; }
+  html body .home-catalog--electrical .mn-brand-panel .mn-brand-panel__portal {
+    margin-top: 52px !important; margin-bottom: 8px !important;
+    font-size: 19px !important; letter-spacing: 0.1em !important;
+  }
+  html body .home-catalog--electrical .mn-brand-panel .mn-brand-panel__kit { font-size: 17px !important; }
+  html body .home-catalog--electrical .mn-brand-panel .mn-brand-panel__contact { margin-top: auto !important; padding-top: 0 !important; }
+}
+
+/* Size pickers: a little narrower on tablets and phones, with more space
+   between paired pickers on phones. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  html body .kit-builder .kit-card__pick select { flex: 0 0 172px !important; width: 172px !important; max-width: 172px !important; }
+}
+@media (max-width: 600px) {
+  html body .kit-builder .kit-card__pick { gap: 10px !important; }
+  html body .kit-builder .kit-card__pick select { flex: 0 0 104px !important; width: 104px !important; max-width: 104px !important; }
+}
+
+/* Narrow phones: the kit bar's status line and button text a touch smaller
+   and tighter, so "Pick a size for each item · 1 of 3" stays on one line. */
+@media (max-width: 400px) {
+  html body .kit-builder .kit-bar .kit-bar__status { font-size: 12.5px !important; letter-spacing: -0.01em !important; white-space: nowrap; }
+  html body .kit-builder .kit-bar .kit-bar__add { font-size: 14.5px !important; letter-spacing: 0 !important; padding-left: 16px !important; padding-right: 16px !important; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* more space between paired size pickers on tablets */
+  html body .kit-builder .kit-card__pick { gap: 14px !important; }
+}
+@media (max-width: 600px) {
+  /* phones: pickers up to 104px but shrink to fit narrow screens (320px) */
+  html body .kit-builder .kit-card__pick { min-width: 0; max-width: 100%; }
+  html body .kit-builder .kit-card__pick select { flex: 0 1 104px !important; width: auto !important; min-width: 0 !important; max-width: 104px !important; }
+}
+
+/* Electrical phones: a thinner blue stripe at the bottom (6px -> 3px). */
+@media (max-width: 600px) {
+  html body:has(.site-header--electrical) .site-footer { min-height: 3px !important; }
+  html body:has(.site-header--electrical) .site-footer::after { height: 3px !important; }
+}
+
+/* Electrical wide tablets: no logo in the footer (as on narrow tablets) —
+   just the contact email and the language button. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  html body:has(.site-header--electrical) .site-footer .site-footer__brand { display: none !important; }
+}
+
+/* Electrical wide tablets (900–1024px): a taller header (65px -> 78px), with
+   the logo a little larger to suit it. */
+@media (min-width: 900px) and (max-width: 1024px) {
+  html body .site-header.site-header--electrical .site-header__inner { min-height: 78px !important; height: 78px !important; align-items: center; }
+  html body .site-header.site-header--electrical .site-header__logo .brand-cluster__mark { width: 60px !important; height: 60px !important; }
+  html body .site-header.site-header--electrical .logout-btn,
+  html body .site-header.site-header--electrical .hamburger-btn { height: 78px !important; }
+}
+
+/* Electrical tablets: colour (left) and "Sizes:" range (right) share one
+   line, spaced apart; material line below, then the pickers. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  html body .kit-builder .kit-card__body { display: flex !important; flex-direction: row !important; flex-wrap: wrap !important; align-items: center; column-gap: 12px; }
+  html body .kit-builder .kit-card__body > * { flex: 0 0 100%; }
+  html body .kit-builder .kit-card__body > .kit-card__name { order: 0; }
+  html body .kit-builder .kit-card__body > .kit-card__colour { order: 1; flex: 0 0 auto !important; }
+  html body .kit-builder .kit-card__body > .kit-card__range { order: 2; flex: 0 1 auto !important; margin: 0 0 0 auto !important; text-align: right; white-space: nowrap; }
+  html body .kit-builder .kit-card__body > .kit-card__spec { order: 3; }
+  html body .kit-builder .kit-card__body > .kit-card__pick,
+  html body .kit-builder .kit-card__body > .kit-card__one { order: 4; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* size range without the "Sizes:" label (the pickers make it obvious) */
+  html body .kit-builder .kit-card__range strong { display: none !important; }
+  /* pickers line up with the text again (no indent) */
+  html body .kit-builder .kit-card__body > .kit-card__pick { margin-left: 0 !important; justify-content: flex-start; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  html body .kit-builder .kit-card__body { justify-content: flex-start !important; }
+}
+
+/* Electrical header wordmark (phones + tablets): "MODERN NIAGARA" sized down
+   so it's no wider than "BUILDING SERVICES" below it. */
+@media (max-width: 400px) {
+  html body .site-header.site-header--electrical .site-header__logo .brand-cluster__word:first-child { font-size: 12.85px !important; }
+}
+@media (min-width: 401px) and (max-width: 600px) {
+  html body .site-header.site-header--electrical .site-header__logo .brand-cluster__word:first-child { font-size: 13.15px !important; }
+}
+@media (min-width: 601px) and (max-width: 899px) {
+  html body .site-header.site-header--electrical .site-header__logo .brand-cluster__word:first-child { font-size: 14.8px !important; }
+}
+@media (min-width: 900px) and (max-width: 1024px) {
+  html body .site-header.site-header--electrical .site-header__logo .brand-cluster__word:first-child { font-size: 15.75px !important; }
+}
+@media (min-width: 360px) and (max-width: 600px) {
+  html body .site-header.site-header--electrical .site-header__logo .brand-cluster__word:first-child { font-size: 13.2px !important; }
+}
+@media (min-width: 360px) and (max-width: 389px) {
+  html body .site-header.site-header--electrical .site-header__logo .brand-cluster__word:first-child { font-size: 12.95px !important; }
+}
+
+/* Electrical tablets: the FR/EN button moves into the header (beside logout)
+   and the footer goes — only its thin blue stripe stays at the bottom. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  html body .site-header.site-header--electrical .site-header__lang-btn {
+    display: inline-flex !important; align-items: center; gap: 7px;
+    align-self: stretch; height: auto; padding: 0 16px;
+    border: 0; background: transparent; color: #24292e;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer; pointer-events: auto;
+  }
+  html body:has(.site-header--electrical) .site-footer { padding: 0 !important; min-height: 3px !important; background: none !important; border: 0 !important; box-shadow: none !important; }
+  html body:has(.site-header--electrical) .site-footer .site-footer__inner { display: none !important; }
+}
+
+/* ===== Electrical tablets: 2 x 2 grid (replaces the 4-rows list) ==========
+   Header + the four cards (photo on top, details below) + the kit bar fill
+   the screen exactly, down to the thin blue stripe (no footer on tablets). */
+@media (min-width: 601px) and (max-width: 1024px) {
+  html body .home-catalog--electrical { --mn-tab-hdr: 71px; }
+  html body .home-catalog--electrical .kit-builder {
+    height: calc(100dvh - var(--mn-tab-hdr) - 3px) !important; min-height: 0 !important;
+    display: flex !important; flex-direction: column !important;
+  }
+  html body .kit-builder .kit-builder__grid {
+    flex: 1 1 auto !important; min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important; padding: 10px 10px 0 !important; align-items: stretch !important;
+  }
+  html body .kit-builder .kit-card {
+    display: flex !important; flex-direction: column !important;
+    min-height: 0 !important; height: auto !important;
+  }
+  html body .kit-builder .kit-card__media {
+    flex: 1 1 auto !important; min-height: 0 !important; height: auto !important;
+    width: 100% !important; aspect-ratio: auto !important; border-right: 0 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+  html body .kit-builder .kit-card__media img { width: 100% !important; height: 100% !important; object-fit: contain !important; }
+  html body .kit-builder .kit-card__body {
+    flex: 0 0 auto !important; width: auto !important;
+    padding: 12px 16px 14px !important; align-content: flex-start !important; row-gap: 6px;
+  }
+  /* balanced type: titles a step down, details a step up */
+  html body .kit-builder .kit-card__name { font-size: 1.12rem !important; line-height: 1.25 !important; margin: 0 0 2px !important; }
+  html body .kit-builder .kit-card__colour,
+  html body .kit-builder .kit-card__range { font-size: 0.98rem !important; }
+  html body .kit-builder .kit-card__spec {
+    display: block !important; font-size: 0.95rem !important; margin: 0 !important;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  html body .kit-builder .kit-card__range { display: block !important; }
+  html body .kit-builder .kit-card__pick { margin-top: 4px !important; }
+  html body .kit-builder .kit-bar { flex: 0 0 auto !important; margin: 10px !important; }
+}
+@media (min-width: 900px) and (max-width: 1024px) {
+  html body .home-catalog--electrical { --mn-tab-hdr: 78px; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* tablet header FR/EN button: globe icon on the left of the text */
+  html body .site-header.site-header--electrical .site-header__lang-btn svg { order: -1; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* stripe-only footer: no bottom margin, so the page ends at the stripe */
+  html body:has(.site-header--electrical) .site-footer { margin-bottom: 0 !important; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* product titles a touch larger */
+  html body .kit-builder .kit-card__name { font-size: 1.22rem !important; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* 2x2 cards: pickers up to 172px but shrink to fit the card (no overflow) */
+  html body .kit-builder .kit-card__pick { min-width: 0; max-width: 100%; flex-wrap: nowrap; }
+  html body .kit-builder .kit-card__pick select { flex: 0 1 172px !important; width: auto !important; min-width: 0 !important; max-width: 172px !important; }
+}
+/* Size pickers: room to the right of the dropdown arrow again (it sat almost
+   on the edge after the pickers were narrowed). */
+@media (max-width: 600px) {
+  html body .kit-builder .kit-card__pick select { padding-left: 8px !important; padding-right: 10px !important; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  html body .kit-builder .kit-card__pick select { padding-left: 10px !important; padding-right: 12px !important; }
+}
+
+/* Tablets: a product's details open in place of the four cards (close button
+   top-right; tapping outside the details closes it). */
+.kit-detail { display: none; }
+@media (min-width: 601px) and (max-width: 1024px) {
+  html body .kit-builder.kit-builder--detail .kit-builder__grid { display: none !important; }
+  html body .kit-builder.kit-builder--detail .kit-detail {
+    display: flex; flex: 1 1 auto; min-height: 0;
+    padding: 10px 10px 0;
+  }
+  html body .kit-builder .kit-detail__inner {
+    position: relative; flex: 1 1 auto; min-height: 0; overflow: auto;
+    background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+  }
+  html body .kit-builder .kit-detail__inner .apparel-catalog { min-height: 0 !important; height: 100%; position: static !important; }
+  html body .kit-builder .kit-detail__inner .product-detail__close {
+    position: absolute; top: 10px; right: 10px; z-index: 5;
+    width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(0, 0, 0, 0.12); border-radius: 3px; background: #ffffff; color: #24292e; cursor: pointer;
+  }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* the product view fits its space — no inner scrollbar */
+  html body .kit-builder .kit-detail__inner { overflow: hidden !important; }
+  html body .kit-builder .kit-detail__inner .apparel-catalog,
+  html body .kit-builder .kit-detail__inner .product-detail,
+  html body .kit-builder .kit-detail__inner .product-modal__layout { height: auto !important; min-height: 0 !important; max-height: 100%; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* tablet cards: no material line (it's in the product view) */
+  html body .kit-builder .kit-card__body > .kit-card__spec { display: none !important; }
+}
+
+/* Spelled-out sizes ("Medium", "X-Small") fit: a little less arrow padding on
+   desktop, and slightly smaller picker text on the narrowest phones. */
+@media (min-width: 1025px) {
+  html body .kit-builder .kit-card__pick select { padding-right: clamp(10px, 0.9vw, 14px) !important; }
+}
+@media (max-width: 359px) {
+  html body .kit-builder .kit-card__pick select { font-size: 14px !important; }
+}
+
+/* Tablets: tighter gaps and padding around the 2 x 2 cards. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  html body .kit-builder .kit-builder__grid { gap: 7px !important; padding: 7px 7px 0 !important; }
+  html body .kit-builder .kit-card__body { padding: 10px 14px 12px !important; }
+  html body .kit-builder .kit-bar { margin: 7px !important; }
+  html body .kit-builder.kit-builder--detail .kit-detail { padding: 7px 7px 0 !important; }
+}
+/* Phones: tighter gaps and padding around the product rows. */
+@media (max-width: 600px) {
+  html body .kit-builder .kit-builder__grid { gap: 4px !important; padding: 4px 4px 6px !important; }
+  html body .kit-builder .kit-card__body { padding: 6px 8px !important; }
+}
+
+/* Electrical order-success badge: the brand diamond (pinwheel tilted onto its
+   point, triangles fading in, check on top) on every device — tablets and
+   phones were showing the older round green disc. */
+@media (max-width: 1024px) {
+  html body:has(.site-header--electrical) .order-confirm__badge {
+    width: 72px !important; height: 72px !important;
+    margin: 0 auto 1.25rem !important;
+    border-radius: 0 !important; background: none !important; box-shadow: none !important; overflow: visible !important;
+  }
+  html body:has(.site-header--electrical) .order-confirm__pinwheel {
+    display: block !important; width: 100% !important; height: 100% !important;
+    transform: rotate(45deg) scale(0.72) !important;
+  }
+  html body:has(.site-header--electrical) .order-confirm__pinwheel polygon { opacity: 0; animation: oc-tri-fade 0.5s ease-out forwards; }
+  html body:has(.site-header--electrical) .order-confirm__check { width: 34px !important; height: 34px !important; }
+}
+/* ...with the same build as desktop / production: triangles fade in one after
+   another around the pinwheel, then the white check settles into the centre. */
+@media (max-width: 1024px) {
+  html body:has(.site-header--electrical) .order-confirm__pinwheel polygon:nth-child(8) { animation-delay: 0.05s !important; }
+  html body:has(.site-header--electrical) .order-confirm__pinwheel polygon:nth-child(1) { animation-delay: 0.11s !important; }
+  html body:has(.site-header--electrical) .order-confirm__pinwheel polygon:nth-child(2) { animation-delay: 0.17s !important; }
+  html body:has(.site-header--electrical) .order-confirm__pinwheel polygon:nth-child(3) { animation-delay: 0.23s !important; }
+  html body:has(.site-header--electrical) .order-confirm__pinwheel polygon:nth-child(4) { animation-delay: 0.29s !important; }
+  html body:has(.site-header--electrical) .order-confirm__pinwheel polygon:nth-child(5) { animation-delay: 0.35s !important; }
+  html body:has(.site-header--electrical) .order-confirm__pinwheel polygon:nth-child(6) { animation-delay: 0.41s !important; }
+  html body:has(.site-header--electrical) .order-confirm__pinwheel polygon:nth-child(7) { animation-delay: 0.47s !important; }
+  html body:has(.site-header--electrical) .order-confirm__check {
+    width: 34px !important; height: 34px !important;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35)) !important;
+    animation: oc-check-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.62s forwards !important;
+  }
+}
+
+/* Electrical checkout, tablets + phones: less space between the order summary
+   and the order details below it (was ~36px). */
+@media (max-width: 1024px) {
+  html body .checkout-page--electrical .cart-drawer__summary { padding-bottom: 8px !important; }
+  html body .checkout-page--electrical .checkout-modal__form { padding-top: 12px !important; }
+}
+/* Tablets: more room between paired fields (first / last name, email / phone). */
+@media (min-width: 601px) and (max-width: 1024px) {
+  html body .checkout-page--electrical .checkout-modal__row { column-gap: 24px !important; }
+}
+
+/* Electrical checkout: Place Order on the left (under the order details) on
+   tablets and phones too, and its icon after the text. */
+@media (max-width: 1024px) {
+  html body .checkout-page--electrical .cart-drawer__footer { justify-content: flex-start !important; gap: 10px; }
+  html body .checkout-page--electrical .cart-drawer__footer .cart-drawer__total:empty { display: none !important; }
+  html body .checkout-page--electrical .cart-drawer__footer .cart-drawer__order-btn { order: -1; margin-left: 0 !important; margin-right: auto; border-radius: 3px !important; }
+}
+html body .checkout-page--electrical .cart-drawer__order-btn { display: inline-flex; align-items: center; gap: 8px; }
+html body .checkout-page--electrical .cart-drawer__order-btn svg { order: 2; }
+/* Phones: Place Order on one line, icon after the text. */
+@media (max-width: 600px) {
+  html body .checkout-page--electrical .cart-drawer__footer .cart-drawer__order-btn {
+    display: inline-flex !important; flex-direction: row !important; align-items: center; gap: 8px;
+    white-space: nowrap !important; width: auto !important; min-width: 0; flex: 0 0 auto !important;
+    padding-left: 18px !important; padding-right: 18px !important;
+  }
+  html body .checkout-page--electrical .cart-drawer__order-btn svg { order: 2 !important; flex: 0 0 auto; }
+}
+@media (max-width: 600px) {
+  /* phones: a little more room between paired checkout fields */
+  html body .checkout-page--electrical .checkout-modal__row { column-gap: 14px !important; }
+}
+/* Phones: the order-success box sits a little below the header (not flush
+   against it), so it reads as a floating modal with all four corners showing. */
+@media (max-width: 600px) {
+  html body:has(.site-header--electrical) .modal.order-confirm { margin-top: 24px !important; }
+}
+
+/* Electrical phones + tablets: the header in the same light grey as the
+   desktop header/sidebar (white easing to a faint cool grey), not the bluish
+   grey bar. */
+@media (max-width: 1024px) {
+  html body .site-header.site-header--electrical,
+  html body .site-header.site-header--electrical .site-header__inner {
+    background: linear-gradient(to right, #fdfdfd 0%, #f6f7f8 55%, #f1f2f4 100%) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+  }
+  html body .site-header.site-header--electrical .logout-btn,
+  html body .site-header.site-header--electrical .logout-form,
+  html body .site-header.site-header--electrical .hamburger-btn { background: transparent !important; }
+}
+@media (max-width: 600px) {
+  /* phones: cards aren't links (no product page) */
+  html body .kit-builder .kit-card__media, html body .kit-builder .kit-card__name-btn { cursor: default; }
 }

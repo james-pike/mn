@@ -360,10 +360,13 @@ export default component$(() => {
         ) : (
           <>
             <div class="cart-drawer__details-step">
+              {/* Electrical has no cart (no cart buttons anywhere), so no "Back to Cart". */}
+              {loginType.value !== "electrical" && (
               <button class="cart-drawer__back-btn" onClick$={() => { try { sessionStorage.setItem("reopen-cart", "1"); } catch { /* ignore */ } nav("/"); }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
                 {t("cart.backtocart", locale.value)}
               </button>
+              )}
               <Collapsible.Root class="cart-drawer__summary" bind:open={summaryOpen}>
                 <Collapsible.Trigger class="cart-drawer__checkout-title">
                   {t("cart.ordersummary", locale.value)}{loginType.value !== "electrical" && <> — {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}</>}

@@ -68,7 +68,7 @@ export const kitMissing = (loginType: string | null | undefined, skus: (string |
 // checkout and enforced by the order action). The "Attn" rides in address1 so
 // it reaches the order record and the confirmation email.
 export const ELECTRICAL_SHIP_TO = {
-  label: "Modern Niagara Building Services",
+  label: "Modern Niagara Building Services - Toronto",
   attn: "Attn: Laurie Sousa",
   street: "8125 Highway 50",
   address1: "8125 Highway 50 (Attn: Laurie Sousa)",

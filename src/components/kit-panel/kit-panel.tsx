@@ -16,6 +16,7 @@ import { LoginTypeContext } from "../../routes/layout";
 import { LocaleContext } from "../../i18n";
 import { ELECTRICAL_SKUS, ELECTRICAL_FIXED_QTY } from "../../lib/lineup";
 import { readKitSel, writeKitSel } from "../../lib/kit-selection";
+import { ProductDetailPanel } from "../product-detail/product-detail";
 import "./kit-panel.css";
 
 // Size choices per kit item — the same options the product pages offer.
@@ -63,6 +64,10 @@ function kitProducts() {
 // EN/FR for the kit's own text (product names stay as-is).
 const L = (loc: string, en: string, fr: string) => (loc === "fr" ? fr : en);
 const FIT_FR: Record<string, string> = { Regular: "Régulier", Tall: "Grand" };
+// Size pickers spell out the basic sizes (there's room): S -> Small, etc.
+// Display only — the stored size stays "S", "M", "L"...
+const SIZE_WORDS: Record<string, string> = { XS: "X-Small", S: "Small", M: "Medium", L: "Large", XL: "X-Large" };
+const sizeWord = (loc: string, s: string) => (loc === "fr" ? s : SIZE_WORDS[s] ?? s);
 const short = (_loc: string, sku: string) => SHORT[sku]; // kit item words stay English
 const baseName = (n: string) => n.replace(/\s+-\s+[^-]+$/, "");
 const cartKey = (lt: string | null | undefined) => `ce_cart_mn_${lt || "clothing"}`;
@@ -85,14 +90,14 @@ export const KitPickers = component$<{ sku: string; v: KitSel; label: string }>(
           </select>
           <select aria-label={`${label} size`} value={v.size ?? ""} onChange$={(_, el) => { v.size = el.value || undefined; }}>
             <option value="">{L(loc, "Size", "Taille")}</option>
-            {pk.fits[v.fit || "Regular"].map((s) => <option key={s} value={s}>{s}</option>)}
+            {pk.fits[v.fit || "Regular"].map((s) => <option key={s} value={s}>{sizeWord(loc, s)}</option>)}
           </select>
         </>
       )}
       {pk?.kind === "size" && (
         <select aria-label={`${label} size`} value={v.size ?? ""} onChange$={(_, el) => { v.size = el.value || undefined; }}>
           <option value="">{L(loc, "Size", "Taille")}</option>
-          {pk.sizes.map((s) => <option key={s} value={s}>{s}</option>)}
+          {pk.sizes.map((s) => <option key={s} value={s}>{sizeWord(loc, s)}</option>)}
         </select>
       )}
       {pk?.kind === "waistLength" && (
@@ -129,6 +134,8 @@ export const KitBuilder = component$(() => {
     Object.fromEntries(ELECTRICAL_SKUS.map((s) => [s, s === "MN-38" ? { fit: "Regular" } : {}])),
   );
   const added = useSignal(false);
+  // Tablets: the product opened in place of the four cards (null = cards shown).
+  const openSku = useSignal<string | null>(null);
   const selLoaded = useSignal(false);
   const inCart = useSignal(false);
   // Sizes of the kit currently in the cart (sku -> cart size string).
@@ -151,6 +158,7 @@ export const KitBuilder = component$(() => {
     }
     // Sizes picked on a product page (or earlier on these cards) win over the
     // cart's, as the most recent choice — kept only if still valid options.
+    const applySaved = () => {
     const saved = readKitSel();
     for (const sku of ELECTRICAL_SKUS) {
       const sv = saved[sku]; const v = sel[sku]; const pk = PICKS[sku];
@@ -162,7 +170,12 @@ export const KitBuilder = component$(() => {
         if (sv.length && pk.lengths.includes(sv.length)) v.length = sv.length;
       }
     }
+    };
+    applySaved();
     selLoaded.value = true;
+    // A size picked in the tablet product view (or another tab) shows on the card.
+    window.addEventListener("kit-sel-updated", applySaved);
+    cleanup(() => window.removeEventListener("kit-sel-updated", applySaved));
     const sync = () => {
       const c = readCart();
       inCart.value = ELECTRICAL_SKUS.every((s) => c.some((i) => i.sku === s));
@@ -179,7 +192,46 @@ export const KitBuilder = component$(() => {
   const allReady = chosen === needing.length;
   // The kit in the cart matches what's picked here -> the bar becomes the
   // order summary with a Checkout button.
-  const inCartMatch = inCart.value && allReady && ELECTRICAL_SKUS.every((sku) => cartSizes[sku] === sizeLabel(sku, sel[sku]));
+  // The bar no longer switches to a separate "Kit order" summary once the kit is
+  // in the cart (it flashed on Order Kit, just before checkout): it always shows
+  // the picked sizes + the Order Kit button.
+  const inCartMatch = false as boolean;
+
+  // Tablets (601–1024px): tapping a product's photo or name opens its details
+  // in place of the four cards (no separate page); tapping anywhere outside the
+  // details — or the close button — goes back to the cards. Capture phase so
+  // the card's own link never navigates.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ cleanup }) => {
+    const isTablet = () => window.innerWidth >= 601 && window.innerWidth <= 1024;
+    const onClick = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      if (!t?.closest) return;
+      // Phones: the cards don't open a product page at all — tapping the photo
+      // or name does nothing (sizes are picked right on the card).
+      if (window.innerWidth <= 600) {
+        if (t.closest(".kit-card__media, .kit-card__name")) { e.preventDefault(); e.stopPropagation(); }
+        return;
+      }
+      if (!isTablet()) return;
+      if (openSku.value) {
+        if (t.closest(".site-header")) return;
+        // Inside the product view, only the photo column, the details and its
+        // controls stay open; its empty white space closes it like outside.
+        if (t.closest(".kit-detail__inner") && t.closest(".product-image-row, .product-modal__details, .product-detail__close, button, a, select, input, label")) return;
+        e.preventDefault(); e.stopPropagation();
+        openSku.value = null;
+        return;
+      }
+      const link = t.closest(".kit-card__media, .kit-card__name") as HTMLElement | null;
+      const card = link?.closest(".kit-card") as HTMLElement | null;
+      if (!link || !card?.dataset.sku) return;
+      e.preventDefault(); e.stopPropagation();
+      openSku.value = card.dataset.sku;
+    };
+    window.addEventListener("click", onClick, true);
+    cleanup(() => window.removeEventListener("click", onClick, true));
+  });
 
   // Mirror the cards' picks into the shared store, so the product pages open
   // on the same sizes.
@@ -228,7 +280,14 @@ export const KitBuilder = component$(() => {
   // Size text for the summary, with the fit word in the current language.
   const szText = (sz: string) => sz.replace(" x ", " × "); // kit line stays English
   return (
-    <div class="kit-builder">
+    <div class={`kit-builder ${openSku.value ? "kit-builder--detail" : ""}`}>
+      {openSku.value && (
+        <div class="kit-detail">
+          <div class="kit-detail__inner">
+            <ProductDetailPanel sku={openSku.value} onClose$={() => { openSku.value = null; }} />
+          </div>
+        </div>
+      )}
       <div class="kit-builder__grid">
         {items.map((p) => {
           const pk = PICKS[p.sku]; const v = sel[p.sku];
@@ -271,8 +330,7 @@ export const KitBuilder = component$(() => {
               </span>
             </div>
             <button type="button" class="btn btn--primary kit-bar__add kit-bar__checkout" onClick$={() => nav("/checkout/")}>
-              {L(loc, "Checkout", "Passer à la caisse")}
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+              {L(loc, "Order FR Kit", "Commander")}
             </button>
           </>
         ) : (
@@ -280,15 +338,25 @@ export const KitBuilder = component$(() => {
             <div class="kit-bar__info">
               <span class="kit-bar__list"><span class="kit-bar__label">{L(loc, "Electrical FR kit:", "Ensemble FR électrique :")}</span> {BAR_ORDER.map((sku) => `${ELECTRICAL_FIXED_QTY[sku]} ${short(loc, sku)}`).join(" · ")}</span>
               <span class={`kit-bar__status ${allReady ? "kit-bar__status--ok" : ""}`}>
-                {allReady ? (inCart.value ? L(loc, "Sizes changed — update your kit order", "Tailles modifiées — mettez à jour votre commande") : L(loc, "All sizes chosen", "Toutes les tailles choisies")) : L(loc, `Pick a size for each item · ${chosen} of ${needing.length}`, `Choisissez une taille pour chaque article · ${chosen} sur ${needing.length}`)}
+                {allReady ? L(loc, "All sizes chosen", "Toutes les tailles choisies") : L(loc, `Pick a size for each item · ${chosen} of ${needing.length}`, `Choisissez une taille pour chaque article · ${chosen} sur ${needing.length}`)}
               </span>
             </div>
-            {/* Always "Checkout →": enabled once every size is picked; it saves the
+            {/* The sizes chosen so far, listed in the bar's empty space as they're
+                picked (the one-size cap joins once the rest are chosen). */}
+            {chosen > 0 && (
+              <span class="kit-bar__picked">
+                {BAR_ORDER.filter((sku) => (PICKS[sku]?.kind === "one" ? allReady : isReady(sku, sel[sku])))
+                  .map((sku) => {
+                    const sz = sizeLabel(sku, sel[sku]);
+                    return `${ELECTRICAL_FIXED_QTY[sku]} ${short(loc, sku)}${sz && sz !== "One Size" ? ` (${szText(sz)})` : ""}`;
+                  }).join(" · ")}
+              </span>
+            )}
+            {/* Always "Order FR Kit": enabled once every size is picked; it saves the
                 kit to the cart (replacing any earlier kit) and goes to checkout. */}
             <button type="button" class="btn btn--primary kit-bar__add kit-bar__checkout" disabled={!allReady}
               onClick$={async () => { await addKit(); nav("/checkout/"); }}>
-              {L(loc, "Checkout", "Passer à la caisse")}
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+              {L(loc, "Order FR Kit", "Commander")}
             </button>
           </>
         )}
