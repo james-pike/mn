@@ -1876,3 +1876,27 @@ html body .checkout-page--electrical .checkout-modal__shipto { background-color:
   /* wide tablets: the header wordmark a bit larger again to fill the taller bar */
   html body .site-header.site-header--electrical .site-header__logo .brand-cluster__words { transform: scale(1.2); transform-origin: left center; }
 }
+
+/* Electrical desktop: the sidebar's dot texture carries on up through the
+   header corner above it (that strip was plain). Both dot layers are pinned to
+   the window (background-attachment: fixed) so their grids line up exactly
+   and read as one continuous column. */
+.site-header__panel-dots { display: none; }
+@media (min-width: 1025px) {
+  html body:has(.mn-brand-panel) .site-header.site-header--electrical .site-header__panel-dots {
+    display: block; position: absolute; top: 0; bottom: 0;
+    left: var(--mn-panel-l, 0px);
+    width: calc(var(--mn-panel-r, 22%) - var(--mn-panel-l, 0px));
+    pointer-events: none; z-index: 1;
+    background-image: radial-gradient(circle, rgba(27, 31, 39, 0.075) 1px, transparent 1.4px);
+    background-size: 16px 16px; background-position: 8px 8px; background-attachment: fixed;
+  }
+  html body .home-catalog--electrical .mn-brand-panel {
+    background-attachment: fixed, scroll !important;
+    background-position: 8px 8px, 0 0 !important;
+  }
+  /* no dot texture on the page background around/below the layout */
+  html:has(.site-header--electrical),
+  html body:has(.site-header--electrical) { background-image: none !important; }
+  html body:has(.site-header--electrical) .dot-pattern::before { display: none !important; }
+}

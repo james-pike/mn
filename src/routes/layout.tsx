@@ -1531,6 +1531,8 @@ export default component$(() => {
 
       {(auth.value.loggedIn || (loginAction.value && !loginAction.value.failed) || isPaymentReturn.value) && <>
       <header class={`site-header site-header--white ${loginType.value === "electrical" ? "site-header--electrical" : ""} ${tabsStuck.value ? "site-header--tabs-stuck" : ""} ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value || isCheckout.value ? "site-header--cart-open" : ""}`}>
+        {/* Electrical desktop: the sidebar's dot texture continued over the header corner. */}
+        {loginType.value === "electrical" && <span class="site-header__panel-dots" aria-hidden="true" />}
         <div class="site-header__inner">
           <Link
             href="/"
