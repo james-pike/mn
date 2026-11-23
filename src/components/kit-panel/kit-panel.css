@@ -1812,3 +1812,25 @@ html body .checkout-page--electrical .cart-drawer__order-btn svg { order: 2; }
   /* phones: cards aren't links (no product page) */
   html body .kit-builder .kit-card__media, html body .kit-builder .kit-card__name-btn { cursor: default; }
 }
+
+/* Electrical checkout (all sizes): fields + Ship To box in the off-white grey
+   (rgb 240,240,238 — the checkout field colour on tablets/phones), not the
+   near-white desktop shade. */
+html body .checkout-page--electrical .checkout-modal__field input,
+html body .checkout-page--electrical .checkout-modal__field select,
+html body .checkout-page--electrical .checkout-modal__shipto { background-color: rgb(240, 240, 238) !important; }
+@media (min-width: 1025px) {
+  html body:has(.mn-brand-panel) .checkout-page.checkout-page--electrical .checkout-modal__field input,
+  html body:has(.mn-brand-panel) .checkout-page.checkout-page--electrical .checkout-modal__field select,
+  html body:has(.mn-brand-panel) .checkout-page.checkout-page--electrical .checkout-modal__shipto { background-color: rgb(240, 240, 238) !important; }
+}
+
+/* Electrical phones: an even thinner bottom stripe (3px -> 2px) with 4 blue
+   segments instead of 8. */
+@media (max-width: 600px) {
+  html body:has(.site-header--electrical) .site-footer { min-height: 2px !important; }
+  html body:has(.site-header--electrical) .site-footer::after {
+    height: 2px !important;
+    background-image: linear-gradient(to right, #2a7fc3 0 25%, #42a1d9 25% 50%, #2a7fc3 50% 75%, #42a1d9 75% 100%) !important;
+  }
+}

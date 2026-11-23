@@ -65,13 +65,13 @@ export const kitMissing = (loginType: string | null | undefined, skus: (string |
     : [];
 
 // Electrical orders all ship to Modern Niagara Toronto (shown read-only at
-// checkout and enforced by the order action). The "Attn" rides in address1 so
-// it reaches the order record and the confirmation email.
+// checkout and enforced by the order action). "Attn" shows on the checkout's
+// Ship To only — the order / confirmation email carry just the street.
 export const ELECTRICAL_SHIP_TO = {
   label: "Modern Niagara Building Services - Toronto",
   attn: "Attn: Laurie Sousa",
   street: "8125 Highway 50",
-  address1: "8125 Highway 50 (Attn: Laurie Sousa)",
+  address1: "8125 Highway 50",
   city: "Vaughan",
   province: "ON",
   postal: "L4H 4S6",
