@@ -25,6 +25,8 @@ export const isSkuInLineup = (
     return !!product.portals?.includes("electrical") || ELECTRICAL_SKUS.includes(sku);
   if (loginType === "tech") return category === "Work Wear";
   if (loginType === "hvac") return isSafetyProduct(sku); // HVAC login: the FR-workwear lineup
+  // Gift login: for now the same lineup as Service (falls through below).
+  // Give it its own rule here when its product list is decided.
   // Clothing / Service (default): everything except FR + Electrical-only SKUs.
   return category !== "Flame Resistant" && !ELECTRICAL_SKUS.includes(sku);
 };

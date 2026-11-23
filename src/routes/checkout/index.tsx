@@ -15,7 +15,7 @@ import type { DocumentHead } from "@builder.io/qwik-city";
 import { Modal, Collapsible } from "@qwik-ui/headless";
 import { LocaleContext, t } from "../../i18n";
 import { colorName } from "../apparel/products";
-import { LoginTypeContext, useSubmitOrder } from "../layout";
+import { LoginTypeContext, useSubmitOrder, checkGiftCardBalance } from "../layout";
 import { hidesPrices, poOptional, kitMissing, fixedQtyFor, ELECTRICAL_SHIP_TO, ELECTRICAL_SUMMARY_ORDER } from "../../lib/lineup";
 import { ElectricalBrandPanel } from "../../components/kit-panel/kit-panel";
 
@@ -83,11 +83,39 @@ export default component$(() => {
   const empPostal = useSignal(fixedShip?.postal ?? "");
   const empPO = useSignal("");
 
+  // Gift login: Wills-style payment — gift card, gift card + credit card
+  // (Stripe covers the balance), credit card, or PO. Other logins stay PO-only.
+  const isGift = loginType.value === "gift";
+  const payMethod = useSignal<"po" | "giftcard" | "giftcard_card" | "card">(isGift ? "giftcard" : "po");
+  const giftCode = useSignal("");
+  const giftBalance = useSignal<number | null>(null); // null = not yet checked
+  const giftChecking = useSignal(false);
+  const giftError = useSignal("");
+  const usesGift = useComputed$(() => payMethod.value === "giftcard" || payMethod.value === "giftcard_card");
+  const checkGiftCard = $(async () => {
+    giftError.value = "";
+    if (!giftCode.value.trim()) { giftError.value = t("pay.gift.enter", locale.value); return; }
+    giftChecking.value = true;
+    try {
+      const v = await checkGiftCardBalance(giftCode.value.trim());
+      if (v?.valid) giftBalance.value = Number(v.balance) || 0;
+      else { giftBalance.value = null; giftError.value = t("pay.gift.invalid", locale.value); }
+    } catch {
+      giftBalance.value = null; giftError.value = t("pay.gift.invalid", locale.value);
+    } finally { giftChecking.value = false; }
+  });
+
   const cartCount = useComputed$(() => cart.items.reduce((sum, i) => sum + i.quantity, 0));
   const subtotal = useComputed$(() => cart.items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0));
   const taxRate = useComputed$(() => taxRateFor(empProvince.value));
   const taxAmount = useComputed$(() => (taxRate.value === undefined ? undefined : subtotal.value * taxRate.value));
   const orderTotal = useComputed$(() => subtotal.value + (taxAmount.value ?? 0));
+  // Gift card: how much it covers, what's left for a credit card, and what
+  // stays on the card afterwards.
+  const giftCovers = useComputed$(() => (giftBalance.value == null ? 0 : Math.min(giftBalance.value, orderTotal.value)));
+  const giftRemaining = useComputed$(() => Math.max(0, +(orderTotal.value - giftCovers.value).toFixed(2)));
+  const giftLeftover = useComputed$(() => Math.max(0, +((giftBalance.value ?? 0) - giftCovers.value).toFixed(2)));
+  const goesToCard = useComputed$(() => payMethod.value === "card" || (payMethod.value === "giftcard_card" && giftRemaining.value > 0));
   const taxLabel = useComputed$(() => {
     if (taxRate.value === undefined) return t("cart.invoice.tax", locale.value);
     const pct = +(taxRate.value * 100).toFixed(3);
@@ -99,7 +127,9 @@ export default component$(() => {
     if (!empFirstName.value.trim() || !empLastName.value.trim() || !empEmail.value.trim()
         || !empPhone.value.trim() || !empProvince.value) return false;
     if (!empAddress1.value.trim() || !empCity.value.trim() || (!empPostal.value.trim() && !fixedShip)) return false;
-    if (!empPO.value.trim() && !poOptional(loginType.value)) return false;
+    if (payMethod.value === "po" && !empPO.value.trim() && !poOptional(loginType.value)) return false;
+    if (usesGift.value && giftBalance.value == null) return false;             // card not applied yet
+    if (payMethod.value === "giftcard" && giftRemaining.value > 0) return false; // gift doesn't cover it
     if (kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).length) return false; // Electrical: full kit only
     return true;
   });
@@ -146,7 +176,7 @@ export default component$(() => {
     if (!canPlaceOrder.value || submitting.value) return;
     formTouched.value = true;
     if (!empFirstName.value || !empLastName.value || !empAddress1.value || !empCity.value
-        || (!empPostal.value && !fixedShip) || !empEmail.value || !empPhone.value || !empProvince.value || (!empPO.value && !poOptional(loginType.value))) {
+        || (!empPostal.value && !fixedShip) || !empEmail.value || !empPhone.value || !empProvince.value || (payMethod.value === "po" && !empPO.value && !poOptional(loginType.value))) {
       formError.value = t("cart.error.required", locale.value);
       return;
     }
@@ -175,7 +205,8 @@ export default component$(() => {
 
     const device: "mobile" | "tablet" | "desktop" = window.innerWidth <= 600 ? "mobile" : window.innerWidth <= 1024 ? "tablet" : "desktop";
     const orderData = {
-      paymentMethod: "po" as const,
+      paymentMethod: payMethod.value,
+      ...(usesGift.value ? { giftCardCode: giftCode.value.trim() } : {}),
       device,
       employee: {
         name: `${empFirstName.value} ${empLastName.value}`,
@@ -227,12 +258,13 @@ export default component$(() => {
         v = null;
         console.error(`Order submit threw (attempt ${attempt}/${MAX_TRIES}):`, err);
       }
-      if (v?.success === true) break;
+      // A card order answers with a Stripe link instead of success — also final.
+      if (v?.success === true || v?.redirectUrl) break;
       console.error(`Order not confirmed (attempt ${attempt}/${MAX_TRIES}):`, v ?? lastNetworkErr);
       if (attempt < MAX_TRIES) await new Promise((r) => setTimeout(r, 1500 * attempt));
     }
 
-    if (v?.success !== true) {
+    if (v?.success !== true && !v?.redirectUrl) {
       let msg = "";
       if (lastNetworkErr) {
         msg = (lastNetworkErr as Error)?.message || t("cart.error.network", locale.value);
@@ -257,8 +289,15 @@ export default component$(() => {
       return;
     }
 
+    // Card / gift + card (Gift login): the server created a Stripe Checkout
+    // session — hand off to Stripe. The cart is cleared on return (success page).
+    if (v?.redirectUrl) {
+      window.location.href = v.redirectUrl;
+      return;
+    }
+
     // Order saved. Clear the cart, tell the rest of the app, and show the
-    // confirmation. (mn2 is PO-only, so there's never a Stripe redirect.)
+    // confirmation.
     orderNum.value = v?.orderNumber || "";
     try {
       localStorage.removeItem(`ce_cart_mn_${loginType.value || "clothing"}`);
@@ -290,7 +329,7 @@ export default component$(() => {
   });
 
   return (
-    <div class="modal-overlay checkout-page">
+    <div class={`modal-overlay checkout-page checkout-page--${loginType.value || "service"}`}>
       {/* Electrical (desktop): the branding panel stays on the left here too. */}
       {loginType.value === "electrical" && (
         <div class="home-catalog--electrical mn-checkout-panel">
@@ -464,7 +503,77 @@ export default component$(() => {
               </div>
 
               {/* ---- Payment method ---- (Electrical checks out without a PO) */}
-              {!poOptional(loginType.value) && (
+              {isGift ? (
+                <>
+              <div class="checkout-modal__pay">
+                <h3 class="checkout-modal__form-title">{t("pay.title", locale.value)}</h3>
+                <div class="checkout-modal__pay-options">
+                  {([
+                    // Gift (Milestone Awards): no PO — gift card, gift card + credit
+                    // card when the balance falls short, or credit card alone.
+                    { key: "giftcard", label: t("pay.giftcard", locale.value) },
+                    { key: "giftcard_card", label: t("pay.giftcard_card", locale.value) },
+                    { key: "card", label: t("pay.card", locale.value) },
+                  ] as const).map((opt) => (
+                    <button
+                      key={opt.key}
+                      type="button"
+                      class={`checkout-modal__pay-opt ${payMethod.value === opt.key ? "active" : ""}`}
+                      onClick$={() => { payMethod.value = opt.key; formError.value = ""; }}
+                    >
+                      <span class="checkout-modal__pay-radio" />
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+
+
+                {/* Gift card code + balance — for the gift methods. */}
+                {usesGift.value && (
+                  <div class="checkout-modal__gift">
+                    <div class="checkout-modal__gift-row">
+                      <div class={`checkout-modal__field ${giftError.value ? "checkout-modal__field--error" : ""}`}>
+                        <label>{t("pay.gift.label", locale.value)}</label>
+                        <input
+                          type="text"
+                          value={giftCode.value}
+                          placeholder={t("pay.gift.placeholder", locale.value)}
+                          onInput$={(_, el) => { giftCode.value = el.value; giftBalance.value = null; giftError.value = ""; }}
+                        />
+                      </div>
+                      <button type="button" class="btn checkout-modal__gift-apply" onClick$={checkGiftCard} disabled={giftChecking.value}>
+                        {giftChecking.value ? t("pay.gift.checking", locale.value) : t("pay.gift.apply", locale.value)}
+                      </button>
+                    </div>
+                    {giftError.value && <div class="checkout-modal__gift-msg checkout-modal__gift-msg--err">{giftError.value}</div>}
+                    {giftBalance.value != null && !giftError.value && (
+                      <div class="checkout-modal__gift-summary">
+                        <div><span>{t("pay.gift.balance", locale.value)}</span><span>${giftBalance.value.toFixed(2)}</span></div>
+                        <div><span>{t("pay.gift.applied", locale.value)}</span><span>-${giftCovers.value.toFixed(2)}</span></div>
+                        <div class="checkout-modal__gift-remaining">
+                          {giftRemaining.value > 0 ? (
+                            <>
+                              <span>{t("pay.gift.balance.due", locale.value)}</span>
+                              <span>${giftRemaining.value.toFixed(2)}</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>{t("pay.gift.card.remaining", locale.value)}</span>
+                              <span>${giftLeftover.value.toFixed(2)}</span>
+                            </>
+                          )}
+                        </div>
+                        {giftRemaining.value > 0 && payMethod.value === "giftcard" && (
+                          <div class="checkout-modal__gift-msg checkout-modal__gift-msg--err">{t("pay.gift.short", locale.value)}</div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+                </>
+              ) : (
+              !poOptional(loginType.value) && (
               <div class="checkout-modal__pay">
                 <h3 class="checkout-modal__form-title">{t("pay.title", locale.value)}</h3>
                 {/* MN accepts purchase-order checkout only — no gift card or
@@ -474,6 +583,7 @@ export default component$(() => {
                   <input type="text" value={empPO.value} onInput$={(_, el) => (empPO.value = el.value)} />
                 </div>
               </div>
+              )
               )}
             </div>
             {formError.value && (
@@ -504,7 +614,7 @@ export default component$(() => {
                 ) : (
                   <>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-                    {t("cart.createorder", locale.value)}
+                    {isGift && goesToCard.value ? t("cart.continuepayment", locale.value) : t("cart.createorder", locale.value)}
                   </>
                 )}
               </button>

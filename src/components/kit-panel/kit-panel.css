@@ -1427,3 +1427,11 @@ html body:has(.site-header--electrical) .cart-drawer .cart-drawer__order-btn { b
   html body .home-catalog--electrical .product-image-row { background: transparent !important; }
   html body .home-catalog--electrical .pdp-back-under-image { background: transparent !important; }
 }
+
+/* Electrical checkout: fields + Ship To box in the same cool grey as the
+   Service checkout fields (was a warm, yellowish off-white). */
+@media (min-width: 1025px) {
+  html body:has(.mn-brand-panel) .checkout-page .checkout-modal__field input,
+  html body:has(.mn-brand-panel) .checkout-page .checkout-modal__field select,
+  html body:has(.mn-brand-panel) .checkout-page .checkout-modal__shipto { background-color: rgb(248, 249, 251) !important; }
+}

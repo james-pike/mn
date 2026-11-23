@@ -24,12 +24,16 @@ export function normalizeCode(code: string): string {
   return code.trim().toUpperCase().replace(/\s+/g, "");
 }
 
+// Gift cards are per company (gift_cards.vendor); this site only accepts
+// Modern Niagara's, so another brand's code (e.g. a Wills card) can't be used here.
+export const GIFT_CARD_VENDOR = "modernniagara";
+
 export async function getGiftCard(db: Client, code: string): Promise<GiftCard | null> {
   const c = normalizeCode(code);
   if (!c) return null;
   const r = await db.execute({
-    sql: "SELECT code, balance, initial_balance, active FROM gift_cards WHERE code = ?",
-    args: [c],
+    sql: "SELECT code, balance, initial_balance, active FROM gift_cards WHERE code = ? AND vendor = ?",
+    args: [c, GIFT_CARD_VENDOR],
   });
   const row = r.rows[0] as any;
   if (!row) return null;
@@ -63,8 +67,8 @@ export async function deductGiftCard(db: Client, code: string, amount: number): 
   const r = await db.execute({
     sql: `UPDATE gift_cards
           SET balance = ROUND(balance - ?, 2), updated_at = datetime('now')
-          WHERE code = ? AND active = 1 AND ROUND(balance * 100) >= ?`,
-    args: [amount, c, cents],
+          WHERE code = ? AND vendor = ? AND active = 1 AND ROUND(balance * 100) >= ?`,
+    args: [amount, c, GIFT_CARD_VENDOR, cents],
   });
   return (r.rowsAffected ?? 0) > 0;
 }

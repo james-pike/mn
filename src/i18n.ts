@@ -195,7 +195,7 @@ const translations = {
   "pay.giftcard_card": { en: "Gift card + credit card", fr: "Carte-cadeau + carte de crédit" },
   "pay.card": { en: "Credit card", fr: "Carte de crédit" },
   "pay.gift.label": { en: "Gift card code", fr: "Code de carte-cadeau" },
-  "pay.gift.placeholder": { en: "e.g. WT-GC-000123", fr: "p. ex. WT-GC-000123" },
+  "pay.gift.placeholder": { en: "e.g. MN-GC-000123", fr: "p. ex. MN-GC-000123" },
   "pay.gift.apply": { en: "Apply", fr: "Appliquer" },
   "pay.gift.checking": { en: "Checking…", fr: "Vérification…" },
   "pay.gift.enter": { en: "Enter a gift card code.", fr: "Entrez un code de carte-cadeau." },

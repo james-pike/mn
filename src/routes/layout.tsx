@@ -80,11 +80,11 @@ export const useLocaleLoader = routeLoader$(({ cookie }) => {
   return (saved === "fr" ? "fr" : "en") as Locale;
 });
 
-export type LoginType = "service" | "electrical" | "hvac" | null;
+export type LoginType = "service" | "electrical" | "hvac" | "gift" | null;
 
 export function getLoginType(cookie: Cookie): LoginType {
   const val = cookie.get(AUTH_COOKIE)?.value;
-  if (val === "service" || val === "electrical" || val === "hvac") return val;
+  if (val === "service" || val === "electrical" || val === "hvac" || val === "gift") return val;
   // backward compat: the old clothing/authenticated logins map to the full
   // Service catalog.
   if (val === "clothing" || val === "authenticated") return "service";
@@ -114,7 +114,10 @@ export const useLogin = routeAction$(
     const servicePw = env.get("SERVICE_PASSWORD") || env.get("VITE_SERVICE_PASSWORD");
     // HVAC: its own password (HVAC_PASSWORD) unlocks the FR-workwear lineup.
     const hvacPw = env.get("HVAC_PASSWORD") || env.get("VITE_HVAC_PASSWORD");
-    if (!electricalPw && !servicePw && !hvacPw) {
+    // Gift: its own portal (GIFT_PASSWORD, or gift_password as set in Cloudflare).
+    // Same look as Service; its lineup is set in lib/lineup.ts.
+    const giftPw = env.get("GIFT_PASSWORD") || env.get("gift_password") || env.get("VITE_GIFT_PASSWORD");
+    if (!electricalPw && !servicePw && !hvacPw && !giftPw) {
       return fail(500, { message: "Login not configured" });
     }
 
@@ -122,6 +125,7 @@ export const useLogin = routeAction$(
       servicePw && password === servicePw ? "service"
       : hvacPw && password === hvacPw ? "hvac"
       : electricalPw && password === electricalPw ? "electrical"
+      : giftPw && password === giftPw ? "gift"
       : null;
     if (!granted) {
       return fail(401, { message: "Invalid password" });
@@ -172,7 +176,7 @@ export const useSubmitOrder = routeAction$(
     const lt = getLoginType(cookie);
     // Electrical orders are tagged to their own vendor bucket; Service uses the
     // main Modern Niagara vendor.
-    const vendor = lt === "electrical" ? "modernniagara-electrical" : lt === "hvac" ? "modernniagara-hvac" : "modernniagara";
+    const vendor = lt === "electrical" ? "modernniagara-electrical" : lt === "hvac" ? "modernniagara-hvac" : lt === "gift" ? "modernniagara-gift" : "modernniagara";
     // Read from non-prefixed names first, fall back to VITE_* for backward compat.
     // Both are safe at runtime — env.get() reads server env, never bundles.
     const tursoUrl = env.get("TURSO_URL") || env.get("VITE_TURSO_URL");
@@ -191,6 +195,10 @@ export const useSubmitOrder = routeAction$(
     }
     if (!employee.address1?.trim() || !employee.city?.trim() || (!employee.postal?.trim() && lt !== "electrical")) {
       return fail(400, { message: "A full shipping address (street, city, postal code) is required." });
+    }
+    // Gift (Milestone Awards) pays by gift card and/or credit card — no PO.
+    if (lt === "gift" && paymentMethod === "po") {
+      return fail(400, { message: "Please pay with a gift card or credit card." });
     }
     if (paymentMethod === "po" && !employee.po && !poOptional(lt)) {
       return fail(400, { message: "A PO number is required for purchase-order checkout." });

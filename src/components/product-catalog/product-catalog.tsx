@@ -1039,7 +1039,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
           {!isSingleCat.value && (
             <nav class="home-catalog__catnav" aria-label="Collections">
               <div class="home-catalog__catnav-head">
-                <div class="home-catalog__catnav-title">{isElectrical.value ? t("login.portal.electrical", locale.value) : isSafety.value ? `${t("filter.collections", locale.value)} - HVAC` : t("filter.collections", locale.value)}</div>
+                <div class="home-catalog__catnav-title">{isElectrical.value ? t("login.portal.electrical", locale.value) : loginType.value === "gift" ? (locale.value === "fr" ? "Récompenses d’étape" : "Milestone Awards") : isSafety.value ? `${t("filter.collections", locale.value)} - HVAC` : t("filter.collections", locale.value)}</div>
               </div>
               {visibleCategories.value.map((cat) => (
                 <button

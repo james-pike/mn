@@ -33359,3 +33359,14 @@
    field labels; the box spans the full row. */
 .checkout-modal__field--shipto { grid-column: 1 / -1; }
 .checkout-modal__field--shipto .checkout-modal__shipto { margin: 0; }
+
+/* Service + Gift checkout: Place Order sits on the left, under the order
+   details (not under the summary), with squarer corners. */
+.checkout-page--service .cart-drawer__footer,
+.checkout-page--gift .cart-drawer__footer { justify-content: flex-start !important; gap: 16px; }
+.checkout-page--service .cart-drawer__footer .cart-drawer__order-btn,
+.checkout-page--gift .cart-drawer__footer .cart-drawer__order-btn { order: -1; margin-left: 0 !important; border-radius: 3px !important; }
+/* Gift checkout: payment options only as wide as an input column, not the
+   whole form width. */
+.checkout-page--gift .checkout-modal__pay-options { align-items: flex-start; }
+.checkout-page--gift .checkout-modal__pay-opt { width: 290px !important; max-width: 100%; }
