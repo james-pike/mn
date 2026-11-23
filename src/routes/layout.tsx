@@ -1265,29 +1265,47 @@ export default component$(() => {
     const onResize = () => { if (!typing()) setH(); };
     const onRotate = () => setTimeout(setH, 250);
     const vv = window.visualViewport;
-    const nudge = () => {
+    // The keyboard opens in several viewport resize/scroll steps; lifting the
+    // card on each one made it hop. So wait until they stop (~140ms quiet) and
+    // lift it ONCE, in one smooth move (same fix as tm). One fallback covers a
+    // keyboard that never fires resize. Leaving the field drops it right back.
+    const apply = () => {
       const card = document.querySelector(".login-modal--split") as HTMLElement | null;
       const btn = document.querySelector(".login-modal__submit") as HTMLElement | null;
       if (!card || !btn || !vv) return;
       if (!typing() || !card.contains(document.activeElement)) { card.style.transform = ""; return; }
       const lifted = new DOMMatrix(getComputedStyle(card).transform).m42; // current lift (<= 0)
       const hidden = btn.getBoundingClientRect().bottom - lifted - (vv.offsetTop + vv.height - 12);
-      card.style.transition = "transform 0.2s ease";
-      card.style.transform = hidden > 0 ? `translateY(${-Math.ceil(hidden)}px)` : "";
+      const target = hidden > 0 ? -Math.ceil(hidden) : 0;
+      if (Math.abs(target - lifted) < 2) return; // already there — no extra move
+      card.style.transition = "transform 0.22s ease-out";
+      card.style.transform = target ? `translateY(${target}px)` : "";
     };
-    const onFocusOut = () => setTimeout(nudge, 60);
+    let settleTimer = 0, fallbackTimer = 0;
+    const nudge = () => {
+      window.clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(apply, 140);
+    };
+    const onFocusIn = () => {
+      nudge();
+      window.clearTimeout(fallbackTimer);
+      fallbackTimer = window.setTimeout(apply, 650);
+    };
+    const onFocusOut = () => setTimeout(apply, 60);
     window.addEventListener("resize", onResize);
     window.addEventListener("orientationchange", onRotate);
     vv?.addEventListener("resize", nudge);
     vv?.addEventListener("scroll", nudge);
-    document.addEventListener("focusin", nudge);
+    document.addEventListener("focusin", onFocusIn);
     document.addEventListener("focusout", onFocusOut);
     cleanup(() => {
       window.removeEventListener("resize", onResize);
       window.removeEventListener("orientationchange", onRotate);
       vv?.removeEventListener("resize", nudge);
       vv?.removeEventListener("scroll", nudge);
-      document.removeEventListener("focusin", nudge);
+      document.removeEventListener("focusin", onFocusIn);
+      window.clearTimeout(settleTimer);
+      window.clearTimeout(fallbackTimer);
       document.removeEventListener("focusout", onFocusOut);
       root.style.removeProperty("--login-h");
     });
