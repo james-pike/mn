@@ -311,25 +311,6 @@ export default component$(() => {
 
   const isEmpty = cartHydrated.value && cart.items.length === 0;
 
-  // Electrical: clicking away from the checkout card — the branding sidebar, the
-  // grey space around/below it — goes back to the kit (home). Header buttons and
-  // everything inside the card work as normal.
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ cleanup }) => {
-    if (loginType.value !== "electrical") return;
-    const onClick = (e: MouseEvent) => {
-      if (orderSubmitted.value || submitting.value || showError.value) return;
-      const t = e.target as HTMLElement;
-      if (!t?.closest) return;
-      if (t.closest(".cart-drawer, .site-header, dialog, .nav-drawer")) return;
-      if (t.closest("a, button, input, select, textarea, label")) return;
-      e.preventDefault();
-      nav("/");
-    };
-    window.addEventListener("click", onClick, true);
-    cleanup(() => window.removeEventListener("click", onClick, true));
-  });
-
   // Electrical, tablets + phones: the checkout starts exactly where the header
   // ends (the header height differs by device), so nothing hides under it.
   // eslint-disable-next-line qwik/no-use-visible-task
