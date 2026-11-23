@@ -8,13 +8,16 @@ const KEY = "mn_kit_sel";
 export function readKitSel(): Record<string, KitSel> {
   try { return JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch { return {}; }
 }
-export function writeKitSel(sku: string, v: KitSel) {
+/** Save one item's sizes. `silent` skips the "kit-sel-updated" event — used
+ *  when the kit cards mirror their own picks (announcing those made the cards
+ *  re-read half-written storage and snap other items back to old sizes). */
+export function writeKitSel(sku: string, v: KitSel, silent = false) {
   try {
     const all = readKitSel();
     const clean: KitSel = {};
     for (const k of ["size", "fit", "waist", "length"] as const) if (v[k]) clean[k] = v[k];
     all[sku] = clean;
     localStorage.setItem(KEY, JSON.stringify(all));
-    window.dispatchEvent(new CustomEvent("kit-sel-updated"));
+    if (!silent) window.dispatchEvent(new CustomEvent("kit-sel-updated"));
   } catch { /* storage unavailable */ }
 }

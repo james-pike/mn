@@ -239,7 +239,7 @@ export const KitBuilder = component$(() => {
   useVisibleTask$(({ track }) => {
     track(() => JSON.stringify(sel));
     if (!track(() => selLoaded.value)) return; // not before the saved picks are applied
-    for (const sku of ELECTRICAL_SKUS) if (sel[sku]) writeKitSel(sku, { ...sel[sku] });
+    for (const sku of ELECTRICAL_SKUS) if (sel[sku]) writeKitSel(sku, { ...sel[sku] }, true);
   });
 
   const addKit = $(() => {
