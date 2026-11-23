@@ -33426,3 +33426,10 @@
 @media (max-width: 600px) {
   html body .site-header.site-header--search-open .site-header__search { flex: 0 1 75% !important; margin-left: auto !important; }
 }
+
+/* Service product cards on phones: 3 colour dots, then a "+" if there are more. */
+.product-card__color-more--phone { display: none; }
+@media (max-width: 600px) {
+  .product-card__colors--svc .product-card__color-dot:nth-of-type(n+4) { display: none !important; }
+  .product-card__colors--svc .product-card__color-more--phone { display: inline-flex; }
+}

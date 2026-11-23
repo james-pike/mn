@@ -450,8 +450,11 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
               const white = visible.find((c) => c.toLowerCase() === "#ffffff");
               if (white && !dots.includes(white)) dots = [...visible.slice(0, MAX_DOTS - 1), white];
               const extra = all.length - dots.length;
+              // Service login on phones: only 3 dots (CSS hides the 4th + 5th), so
+              // the "+" chip also shows when there are 4-5 colours there.
+              const svc = loginType.value === "service";
               return visible.length > 0 ? (
-                <div class="product-card__colors">
+                <div class={`product-card__colors${svc ? " product-card__colors--svc" : ""}`}>
                   {dots.map((c) => (
                     <span
                       key={c}
@@ -488,8 +491,8 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
                       }}
                     />
                   ))}
-                  {extra > 0 && (
-                    <span class="product-card__color-more" aria-label={`+${extra} more colours`}>+{extra}</span>
+                  {(extra > 0 || (svc && all.length > 3)) && (
+                    <span class={`product-card__color-more${extra > 0 ? "" : " product-card__color-more--phone"}`} aria-label="More colours">+</span>
                   )}
                   {(hoverColorName.value || singleColorName) && (
                     <span ref={colorNameRef} class={`product-card__color-name${singleColorName ? "" : " product-card__color-name--overlay"}`}>{hoverColorName.value || singleColorName}</span>
