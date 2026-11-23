@@ -1534,7 +1534,7 @@ html body .site-header.site-header--electrical .logout-btn:focus-visible {
    the logo a little larger to suit it. */
 @media (min-width: 900px) and (max-width: 1024px) {
   html body .site-header.site-header--electrical .site-header__inner { min-height: 78px !important; height: 78px !important; align-items: center; }
-  html body .site-header.site-header--electrical .site-header__logo .brand-cluster__mark { width: 60px !important; height: 60px !important; }
+  /* (logo mark size on wide tablets: shared rule in global.css, all logins) */
   html body .site-header.site-header--electrical .logout-btn,
   html body .site-header.site-header--electrical .hamburger-btn { height: 78px !important; }
 }
@@ -1871,4 +1871,8 @@ html body .checkout-page--electrical .checkout-modal__shipto { background-color:
 @media (min-width: 601px) and (max-width: 1024px) {
   /* tablet header: a little more space between the logo mark and the wordmark */
   html body .site-header.site-header--electrical .site-header__logo .brand-cluster__words { margin-left: 8px !important; }
+}
+@media (min-width: 900px) and (max-width: 1024px) {
+  /* wide tablets: the header wordmark a bit larger again to fill the taller bar */
+  html body .site-header.site-header--electrical .site-header__logo .brand-cluster__words { transform: scale(1.2); transform-origin: left center; }
 }

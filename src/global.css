@@ -33390,3 +33390,33 @@
 @media (min-width: 601px) and (max-width: 1024px) {
   html body .login-modal--split .login-card .login-card__cover.login-card__cover { padding-top: 50px !important; padding-bottom: 0 !important; }
 }
+
+/* All logins (as on Electrical), phones + tablets: header wordmark sizing —
+   "MODERN NIAGARA" no wider than "BUILDING SERVICES", the wordmark scaled to
+   fill the bar, a little space after the logo mark. */
+@media (max-width: 600px) {
+  html body .site-header .site-header__logo .brand-cluster__words { transform: scale(1.2); transform-origin: left center; }
+  html body .site-header .site-header__logo .brand-cluster__mark { margin-right: 2px; }
+  html body .site-header .site-header__logo .brand-cluster__word:first-child { font-size: 13.2px !important; }
+}
+@media (max-width: 389px) {
+  html body .site-header .site-header__logo .brand-cluster__word:first-child { font-size: 12.95px !important; }
+}
+@media (max-width: 359px) {
+  html body .site-header .site-header__logo .brand-cluster__word:first-child { font-size: 12.85px !important; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  html body .site-header .site-header__logo .brand-cluster__words { transform: scale(1.1); transform-origin: left center; margin-left: 8px !important; }
+}
+@media (min-width: 601px) and (max-width: 899px) {
+  html body .site-header .site-header__logo .brand-cluster__word:first-child { font-size: 14.8px !important; }
+}
+@media (min-width: 900px) and (max-width: 1024px) {
+  html body .site-header .site-header__logo .brand-cluster__words { transform: scale(1.2); }
+  html body .site-header .site-header__logo .brand-cluster__word:first-child { font-size: 15.75px !important; }
+}
+@media (min-width: 900px) and (max-width: 1024px) {
+  /* wide tablets, all logins: logo mark a touch smaller (in line with other sizes) */
+  html body .site-header .site-header__logo .brand-cluster__mark,
+  html body .site-header.site-header--electrical .site-header__logo .brand-cluster__mark { width: 52px !important; height: 52px !important; }
+}
