@@ -145,9 +145,11 @@ export const useLogin = routeAction$(
   }),
 );
 
-export const useLogout = routeAction$(async (_, { cookie }) => {
+export const useLogout = routeAction$(async (_, { cookie, redirect }) => {
   cookie.delete(AUTH_COOKIE, { path: "/" });
-  return { success: true };
+  // Always land on the home page (which shows the login gate), whatever page
+  // the logout button was pressed on.
+  throw redirect(303, "/");
 });
 
 // Look up a gift card's balance from the checkout form (before submitting), so
@@ -624,7 +626,10 @@ export default component$(() => {
   // land un-recognised for that one request — which used to drop them onto the
   // login wall instead of their confirmation. These pages must show regardless
   // of auth, so exempt them from the login gate.
-  const isPaymentReturn = useComputed$(() => loc.url.pathname.includes("/checkout/"));
+  // Only the Stripe return pages (/checkout/success/, /checkout/cancelled/) skip
+  // the login gate — NOT the checkout page itself (that let a logged-out visitor
+  // see a checkout, e.g. after logging out from it).
+  const isPaymentReturn = useComputed$(() => /^\/checkout\/(success|cancelled)\b/.test(loc.url.pathname));
   // True only on the dedicated /checkout page. The cart drawer stays mounted
   // (cartOpen) but is hidden here, so its overlay keeps covering the page
   // during the cart → checkout nav — no flash of the PDP underneath.
@@ -633,7 +638,6 @@ export default component$(() => {
     return p === "/checkout" || p === "/checkout/";
   });
   const loginAction = useLogin();
-  const logoutAction = useLogout();
   const orderAction = useSubmitOrder();
 
   const showLogin = useSignal(false);
@@ -1691,12 +1695,12 @@ export default component$(() => {
                 </>
               )}
             </button>
-            <Form action={logoutAction} reloadDocument class="logout-form">
+            <form method="post" action="/logout/" class="logout-form">
               <button type="submit" class="logout-btn" aria-label={t("login.logout", locale.value)}>
                 <span class="logout-btn__label">{t("login.logout", locale.value)}</span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
               </button>
-            </Form>
+            </form>
             {/* Search field lives INSIDE the nav, BEFORE the hamburger. On tablet
                 it absolutely overlays the nav (the buttons stay visibility:hidden
                 to hold the width → no shift); on mobile it's an in-flow flex
@@ -1789,12 +1793,12 @@ export default component$(() => {
               </button>
               {/* Logout rides the right end of the orange strip (moved out of a
                   separate footer). */}
-              <Form action={logoutAction} reloadDocument class="nav-drawer__header-logout-form">
+              <form method="post" action="/logout/" class="nav-drawer__header-logout-form">
                 <button type="submit" class="nav-drawer__header-logout" aria-label={t("login.logout", locale.value)}>
                   <span>{t("login.logout", locale.value)}</span>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </button>
-              </Form>
+              </form>
             </div>
             <div class="nav-drawer__links">
               {loginType.value === "tech" && (
