@@ -33320,6 +33320,20 @@
   html body .login-modal__stack.login-modal__stack { max-height: calc(var(--login-h, 100dvh) - 8px - 12px) !important; }
 }
 
+/* Narrow desktops (1025–1366px): the header lockup kept its full desktop size
+   (64px mark, 23.8px wordmark) right down to 1025px, which crowded the bar and
+   left APPAREL sitting on the header's bottom edge. Scale both down a little
+   here; wider desktops are unchanged. */
+@media (min-width: 1025px) and (max-width: 1366px) {
+  html body:not(#cm):not(#mn) .site-header .site-header__logo .brand-cluster__mark {
+    width: 54px !important;
+    height: 54px !important;
+  }
+  html body:not(#cm):not(#mn) .site-header .site-header__logo .brand-cluster__word {
+    font-size: 20px !important;
+    line-height: 1.02 !important;
+  }
+}
 
 /* Electrical login, phones: the header wordmark text (MODERN NIAGARA / BUILDING SERVICES /
    APPAREL) 1.2x bigger so it fills more of the header's height (40px -> 48px

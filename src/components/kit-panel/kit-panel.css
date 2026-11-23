@@ -1857,3 +1857,18 @@ html body .checkout-page--electrical .checkout-modal__shipto { background-color:
   font-size: 0.95rem; color: #2e698e; text-decoration: none;
 }
 .checkout-back-kit:hover { text-decoration: underline; }
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* tablet product view: no grey strips beside the photo — it fills its column */
+  html body .kit-builder .kit-detail__inner .apparel-catalog { background: #ffffff !important; padding: 0 !important; }
+  html body .kit-builder .kit-detail__inner .product-detail,
+  html body .kit-builder .kit-detail__inner .product-modal__layout { padding: 0 !important; margin: 0 !important; column-gap: 0 !important; gap: 0 !important; }
+  html body .kit-builder .kit-detail__inner .product-image-row { padding: 0 !important; margin: 0 !important; border: 0 !important; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* ...and no hairline frame drawn around the photo */
+  html body .kit-builder .kit-detail__inner .product-carousel::after { box-shadow: none !important; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* tablet header: a little more space between the logo mark and the wordmark */
+  html body .site-header.site-header--electrical .site-header__logo .brand-cluster__words { margin-left: 8px !important; }
+}
