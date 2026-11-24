@@ -834,7 +834,10 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       return SAFETY_CATEGORIES.filter((c) => ALWAYS_SHOW.has(c) || present.has(c));
     }
     // Milestone Awards: no Office Welcome Kit tab.
-    if (loginType.value === "gift") return CLOTHING_CATEGORIES.filter((c) => c !== "New Hire Kit");
+    // Milestone Awards: no Office Welcome Kit tab; Sweaters (quarter-zips/hoodies)
+    // gets its own tab right after Jackets.
+    if (loginType.value === "gift")
+      return CLOTHING_CATEGORIES.filter((c) => c !== "New Hire Kit").flatMap((c) => (c === "Jackets" ? ["Jackets", "Sweaters"] : [c]));
     return CLOTHING_CATEGORIES;
   });
 

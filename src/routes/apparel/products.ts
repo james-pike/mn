@@ -869,7 +869,7 @@ export const allProducts = [
   {
     "sku": "MN-43",
     "name": "Men's Puma Pebble Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
@@ -920,7 +920,7 @@ export const allProducts = [
   {
     "sku": "MN-46",
     "name": "Men's Puma Golf Pebble Hooded Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
@@ -942,7 +942,7 @@ export const allProducts = [
   {
     "sku": "MN-47",
     "name": "Men's Puma Golf Icon 2.0 Quarter-Zip",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
@@ -976,7 +976,7 @@ export const allProducts = [
   {
     "sku": "MN-49",
     "name": "Men's Puma Golf Pure 2.0 Quarter-Zip",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
@@ -1168,7 +1168,7 @@ export const allProducts = [
   {
     "sku": "MN-51",
     "name": "Women's Puma Golf Pure 2.0 Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "S - 2XL",
     "badge": "",
     "colors": [
@@ -1278,7 +1278,7 @@ export const allProducts = [
   {
     "sku": "MN-54",
     "name": "Men's Adidas Spacer Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
@@ -1374,7 +1374,7 @@ export const allProducts = [
   {
     "sku": "MN-56",
     "name": "Women's Adidas Spacer Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
@@ -1478,7 +1478,7 @@ export const allProducts = [
   {
     "sku": "MN-58",
     "name": "Men's Adidas Ultimate365 Lightweight Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "XS - 4XL",
     "badge": "",
     "colors": [
@@ -1618,7 +1618,7 @@ export const allProducts = [
   {
     "sku": "MN-62",
     "name": "Men's Adidas Textured Stripe Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
@@ -1648,7 +1648,7 @@ export const allProducts = [
   {
     "sku": "MN-63",
     "name": "Men's Adidas Elevated Fleece Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "XS - 4XL",
     "badge": "",
     "colors": [
@@ -1712,7 +1712,7 @@ export const allProducts = [
   {
     "sku": "MN-65",
     "name": "Men's Adidas Club Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
@@ -1776,7 +1776,7 @@ export const allProducts = [
   {
     "sku": "MN-67",
     "name": "Men's Adidas 3-Stripes Double-Knit Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
@@ -1852,7 +1852,7 @@ export const allProducts = [
   {
     "sku": "MN-69",
     "name": "Men's Adidas Ultimate365 Elevated Hoodie",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
@@ -1886,7 +1886,7 @@ export const allProducts = [
   {
     "sku": "MN-70",
     "name": "Women's Adidas Lightweight Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "XS - 3XL",
     "badge": "",
     "colors": [
@@ -1970,7 +1970,7 @@ export const allProducts = [
   {
     "sku": "MN-72",
     "name": "Men's Adidas 3-Stripes Quarter-Zip Sweater Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
@@ -2004,7 +2004,7 @@ export const allProducts = [
   {
     "sku": "MN-73",
     "name": "Women's Adidas Fleece Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "XS - 3XL",
     "badge": "",
     "colors": [
@@ -2030,7 +2030,7 @@ export const allProducts = [
   {
     "sku": "MN-74",
     "name": "Men's Adidas Space Dyed Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
@@ -2148,7 +2148,7 @@ export const allProducts = [
   {
     "sku": "MN-77",
     "name": "Men's Adidas Ultimate365 Cozy Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
@@ -2216,7 +2216,7 @@ export const allProducts = [
   {
     "sku": "MN-79",
     "name": "Women's Adidas Textured Stripe Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "XS - 3XL",
     "badge": "",
     "colors": [
@@ -2276,7 +2276,7 @@ export const allProducts = [
   {
     "sku": "MN-81",
     "name": "Men's Adidas Textured Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
@@ -2332,7 +2332,7 @@ export const allProducts = [
   {
     "sku": "MN-83",
     "name": "Women's Adidas Space Dyed Quarter-Zip Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "XS - 3XL",
     "badge": "",
     "colors": [
@@ -2452,7 +2452,7 @@ export const allProducts = [
   {
     "sku": "MN-88",
     "name": "Men's Adidas Lightweight Quarter-Zip Hooded Pullover",
-    "category": "Jackets",
+    "category": "Sweaters",
     "sizes": "XS - 4XL",
     "badge": "",
     "colors": [
