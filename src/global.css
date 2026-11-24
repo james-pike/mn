@@ -33433,3 +33433,10 @@
   .product-card__colors--svc .product-card__color-dot:nth-of-type(n+4) { display: none !important; }
   .product-card__colors--svc .product-card__color-more--phone { display: inline-flex; }
 }
+
+/* Desktop product cards: slightly larger title + size/gender line (there's room). */
+@media (min-width: 1025px) {
+  .product-card .product-card__name { font-size: 0.94rem; }
+  .product-card .product-card__sizes,
+  .product-card .product-card__gender { font-size: 0.88rem; }
+}
