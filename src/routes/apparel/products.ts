@@ -18,7 +18,11 @@ export const allProducts = [
       "/gildan/navy.webp"
     ],
     "material": "100% US cotton, 18 singles, 6 oz/yd² ",
-    "details": "Classic fit, rib collar, taped neck and shoulders, tear-away label, no optical brighteners for consistent dye adherence, #2000 / #2000T"
+    "details": "Classic fit, rib collar, taped neck and shoulders, tear-away label, no optical brighteners for consistent dye adherence, #2000 / #2000T",
+    "portals": [
+      "service",
+      "gift"
+    ]
   },
   {
     "sku": "MN-31",
@@ -35,7 +39,11 @@ export const allProducts = [
       "/2400.jpg"
     ],
     "material": "100% U.S. cotton, 18 singles, 10.1 oz/L yd (CA)",
-    "details": "Classic fit, Classic width rib collar, Taped neck and shoulders, Rib cuffs, Tear away label, #2400"
+    "details": "Classic fit, Classic width rib collar, Taped neck and shoulders, Rib cuffs, Tear away label, #2400",
+    "portals": [
+      "service",
+      "gift"
+    ]
   },
   {
     "sku": "MN-2",
@@ -52,7 +60,11 @@ export const allProducts = [
       "/K126-model.png"
     ],
     "material": "100% cotton jersey, 6.75 oz heavyweight",
-    "details": "Loose fit with dropped shoulders, rib-knit crewneck, side-seam construction, left-chest pocket with Carhartt patch, tagless neck label, #K126"
+    "details": "Loose fit with dropped shoulders, rib-knit crewneck, side-seam construction, left-chest pocket with Carhartt patch, tagless neck label, #K126",
+    "portals": [
+      "service",
+      "gift"
+    ]
   },
   {
     "sku": "MN-20",
