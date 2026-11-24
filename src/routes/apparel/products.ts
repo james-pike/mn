@@ -341,7 +341,11 @@ export const allProducts = [
       "/sku/i8502-navy-side.webp"
     ],
     "material": "Poly/spandex blend with performance mesh back",
-    "details": "Mid-profile structured trucker cap, shapeable pre-curved visor, UV protection, moisture wicking, 110 Technology® sweatband, adjustable plastic snapback, grey under visor, #i8502"
+    "details": "Mid-profile structured trucker cap, shapeable pre-curved visor, UV protection, moisture wicking, 110 Technology® sweatband, adjustable plastic snapback, grey under visor, #i8502",
+    "portals": [
+      "service",
+      "gift"
+    ]
   },
   {
     "sku": "MN-6",
@@ -358,7 +362,11 @@ export const allProducts = [
       "/sku/toque.png"
     ],
     "material": "100% acrylic rib knit",
-    "details": "Stretchy thick knit, fold-up cuff with Carhartt patch, one-size-fits-most, #A18"
+    "details": "Stretchy thick knit, fold-up cuff with Carhartt patch, one-size-fits-most, #A18",
+    "portals": [
+      "service",
+      "gift"
+    ]
   },
   {
     "sku": "MN-36",

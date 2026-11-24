@@ -13,6 +13,15 @@ import { isSafetyProduct } from "./hvac";
 export const ELECTRICAL_SKUS: string[] = ["MN-38", "MN-40", "MN-36", "MN-39"];
 export const ELECTRICAL_SKU_SET = new Set(ELECTRICAL_SKUS);
 
+// Gift-ONLY products (portals ∋ "gift" but not "service") stay out of the Service
+// catalog; a product tagged ["service","gift"] (e.g. the MN hats) shows in both.
+export const isGiftOnly = (p: { portals?: string[] }): boolean =>
+  !!p.portals?.includes("gift") && !p.portals.includes("service");
+
+// Milestone Awards (gift) relabels the SWAG category as "Accessories".
+export const portalCatKey = (loginType: string | null | undefined, cat: string): string | null =>
+  loginType === "gift" && cat === "SWAG" ? "cat.Accessories" : null;
+
 // Is a SKU part of the given login's catalogue lineup? Mirrors `baseProducts` in
 // the product catalog, as a pure function the route guard and menu reuse —
 // keeping direct-URL access in lockstep with what each login can browse.
@@ -28,7 +37,7 @@ export const isSkuInLineup = (
   // Gift (Milestone Awards): ONLY products flagged portals ∋ "gift" (DB-driven).
   if (loginType === "gift") return !!product.portals?.includes("gift");
   // Clothing / Service (default): everything except FR, Electrical-only and Gift-only SKUs.
-  return category !== "Flame Resistant" && !ELECTRICAL_SKUS.includes(sku) && !product.portals?.includes("gift");
+  return category !== "Flame Resistant" && !ELECTRICAL_SKUS.includes(sku) && !isGiftOnly(product);
 };
 
 // Electrical portal ordering rules: no prices shown anywhere, no PO number, and

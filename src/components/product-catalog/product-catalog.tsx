@@ -82,7 +82,7 @@ export function swatchOrder(colors: readonly string[]): string[] {
 // Login lineups (Electrical SKUs, isSkuInLineup) live in lib/lineup.ts and the
 // HVAC rule in lib/hvac.ts, shared with the layout's menu drawer.
 export { ELECTRICAL_SKUS, isSkuInLineup } from "../../lib/lineup";
-import { ELECTRICAL_SKUS, ELECTRICAL_SKU_SET, hidesPrices } from "../../lib/lineup";
+import { ELECTRICAL_SKUS, ELECTRICAL_SKU_SET, hidesPrices, isGiftOnly, portalCatKey } from "../../lib/lineup";
 import { KitBuilder, ElectricalBrandPanel } from "../kit-panel/kit-panel";
 export { SAFETY_CATEGORIES, SAFETY_SKU_ORDER, isSafetyProduct } from "../../lib/hvac";
 import { isSafetyProduct, SAFETY_CATEGORIES, SAFETY_SKU_ORDER } from "../../lib/hvac";
@@ -665,7 +665,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     const isFootwear = (c: string) => c === "Safety Boots" || c === "Safety Shoes" || c === "Footwear";
     const clothing = allProducts
       // Exclude FR items and the Electrical-only SKUs from the full (Service) catalog.
-      .filter((p) => p.category !== "Flame Resistant" && !ELECTRICAL_SKU_SET.has(p.sku) && !(p as { portals?: string[] }).portals?.includes("gift"))
+      .filter((p) => p.category !== "Flame Resistant" && !ELECTRICAL_SKU_SET.has(p.sku) && !isGiftOnly(p as { portals?: string[] }))
       .map((p) => (isFootwear(p.category) ? { ...p, category: "Footwear" } : p));
     // Order the "All" grid to follow the sidebar/tab category order, so the
     // display matches the sidebar. Stable sort keeps each category's products in
@@ -828,6 +828,8 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       const present = new Set(baseProducts.value.map((p) => p.category));
       return SAFETY_CATEGORIES.filter((c) => ALWAYS_SHOW.has(c) || present.has(c));
     }
+    // Milestone Awards: no Office Welcome Kit tab.
+    if (loginType.value === "gift") return CLOTHING_CATEGORIES.filter((c) => c !== "New Hire Kit");
     return CLOTHING_CATEGORIES;
   });
 
@@ -982,11 +984,11 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                 <span class="apparel-titlebar__tab-icon" dangerouslySetInnerHTML={CATEGORY_ICONS[cat]} />
                 {cat === "All" ? t("apparel.all", locale.value) : (
                   <>
-                    <span class="apparel-titlebar__tab-short">{categoryLabel(cat, locale.value)}</span>
+                    <span class="apparel-titlebar__tab-short">{portalCatKey(loginType.value, cat) ? t(portalCatKey(loginType.value, cat) as any, locale.value) : categoryLabel(cat, locale.value)}</span>
                     {/* Tablet-only label: shorter for "New Hire Kit" (Office Kit)
                         so it fits the tablet tab row; same as short elsewhere. */}
-                    <span class="apparel-titlebar__tab-tablet">{categoryLabel(cat, locale.value)}</span>
-                    <span class="apparel-titlebar__tab-full">{FULL_CAT_KEYS[cat] ? t(FULL_CAT_KEYS[cat] as any, locale.value) : categoryLabel(cat, locale.value)}</span>
+                    <span class="apparel-titlebar__tab-tablet">{portalCatKey(loginType.value, cat) ? t(portalCatKey(loginType.value, cat) as any, locale.value) : categoryLabel(cat, locale.value)}</span>
+                    <span class="apparel-titlebar__tab-full">{portalCatKey(loginType.value, cat) ? t(portalCatKey(loginType.value, cat) as any, locale.value) : FULL_CAT_KEYS[cat] ? t(FULL_CAT_KEYS[cat] as any, locale.value) : categoryLabel(cat, locale.value)}</span>
                   </>
                 )}
               </button>
@@ -1068,7 +1070,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                   <span class="home-catalog__catnav-label">
                     {cat === "All"
                       ? t("apparel.all", locale.value)
-                      : (FULL_CAT_KEYS[cat] ? t(FULL_CAT_KEYS[cat] as any, locale.value) : categoryLabel(cat, locale.value))}
+                      : (portalCatKey(loginType.value, cat) ? t(portalCatKey(loginType.value, cat) as any, locale.value) : FULL_CAT_KEYS[cat] ? t(FULL_CAT_KEYS[cat] as any, locale.value) : categoryLabel(cat, locale.value))}
                   </span>
                   <span class="home-catalog__catnav-count">{categoryCounts.value[cat] ?? 0}</span>
                 </button>

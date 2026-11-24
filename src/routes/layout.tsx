@@ -21,7 +21,7 @@ import { allProducts, colorName, categoryLabel } from "./apparel/products";
 import { getGiftCard, giftContribution, deductGiftCard } from "../lib/giftcards";
 import { sortColorsWhiteLast } from "./apparel/utils";
 import { CATEGORY_ICONS } from "../lib/categories";
-import { isSkuInLineup, hidesPrices, poOptional, fixedQtyFor, kitMissing, ELECTRICAL_SHIP_TO, ELECTRICAL_SKUS, ELECTRICAL_SUMMARY_ORDER } from "../lib/lineup";
+import { isSkuInLineup, portalCatKey, hidesPrices, poOptional, fixedQtyFor, kitMissing, ELECTRICAL_SHIP_TO, ELECTRICAL_SKUS, ELECTRICAL_SUMMARY_ORDER } from "../lib/lineup";
 import { sendConfirmationEmail } from "../lib/orders";
 import { isApprovedElectricalName, ELECTRICAL_ROSTER_NOTE } from "../lib/electrical-roster";
 import type { OrderEmailData, PaymentMethod } from "../lib/orders";
@@ -1831,7 +1831,7 @@ export default component$(() => {
                 // categoryLabel), so the two can never drift apart.
                 const NAV_CATS = barVisibleCategories.value
                   .filter((cat) => cat !== "All")
-                  .map((cat) => ({ cat, icon: CATEGORY_ICONS[cat] || "", label: categoryLabel(cat, locale.value) }));
+                  .map((cat) => ({ cat, icon: CATEGORY_ICONS[cat] || "", label: portalCatKey(loginType.value, cat) ? t(portalCatKey(loginType.value, cat) as any, locale.value) : categoryLabel(cat, locale.value) }));
                 const catMatches = (pCat: string, tabCat: string) =>
                   tabCat === "Footwear"
                     ? (pCat === "Safety Boots" || pCat === "Safety Shoes")
@@ -1948,8 +1948,8 @@ export default component$(() => {
             <Link href="/#shirts" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Shirts" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Shirts", locale.value)}</Link>
             <Link href="/#jackets" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Jackets" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Jackets", locale.value)}</Link>
             <Link href="/#hats" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "Hats" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.Hats", locale.value)}</Link>
-            <Link href="/#swag" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "SWAG" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.SWAG", locale.value)}</Link>
-            <Link href="/#new-hire-kit" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "New Hire Kit" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.New Hire Kit", locale.value)}</Link>
+            <Link href="/#swag" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "SWAG" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{portalCatKey(loginType.value, "SWAG") ? t("cat.Accessories", locale.value) : t("cat.SWAG", locale.value)}</Link>
+            {loginType.value !== "gift" && <Link href="/#new-hire-kit" onClick$={(e) => { if (loc.url.pathname === "/") { e.preventDefault(); } window.dispatchEvent(new CustomEvent("select-category", { detail: "New Hire Kit" })); const headerH = stickyTop(); const catalog = document.querySelector('.home-catalog'); if (catalog) { const top = catalog.getBoundingClientRect().top + window.scrollY - headerH + 2; window.scrollTo({ top, behavior: 'instant' }); } }}>{t("cat.New Hire Kit", locale.value)}</Link>}
             {loginType.value !== "electrical" && <Link class="site-footer__links-privacy" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>}
           </nav>
           )}

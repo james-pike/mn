@@ -5,7 +5,7 @@ import { LocaleContext, t } from "../../i18n";
 import { allProducts, colorName, categoryLabel } from "../../routes/apparel/products";
 import { expandSizes, sizeGroups, sortColorsWhiteLast } from "../../routes/apparel/utils";
 import { LoginTypeContext } from "../../routes/layout";
-import { hidesPrices, fixedQtyFor } from "../../lib/lineup";
+import { hidesPrices, fixedQtyFor, isGiftOnly } from "../../lib/lineup";
 import { readKitSel, writeKitSel } from "../../lib/kit-selection";
 import { ELECTRICAL_SKUS, imageForColor, imgMatchesColor, genderOf, swatchOrder, isSafetyProduct } from "../product-catalog/product-catalog";
 import { ProductImage } from "../product-image/product-image";
@@ -1246,7 +1246,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
           loginType.value === "gift" ? !!(r as { portals?: string[] }).portals?.includes("gift")
           : isHvac ? isSafetyProduct(r.sku) : isElectrical
             ? ELECTRICAL_SKUS.includes(r.sku)
-            : !ELECTRICAL_SKUS.includes(r.sku) && r.category !== "Flame Resistant" && !(r as { portals?: string[] }).portals?.includes("gift");
+            : !ELECTRICAL_SKUS.includes(r.sku) && r.category !== "Flame Resistant" && !isGiftOnly(r as { portals?: string[] });
         const sameCat = allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && inLineup(r) && r.category === p.category);
         const allApparel = allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && inLineup(r) && visible.includes(r.category));
         // Use the SKU's own category only when it has enough siblings to fill a
