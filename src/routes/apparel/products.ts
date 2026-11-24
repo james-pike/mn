@@ -809,7 +809,7 @@ export const allProducts = [
       "#68686a",
       "#a70e27"
     ],
-    "price": 59.99,
+    "price": 54,
     "img": "/gift/631055/festive-royal-front.webp",
     "imgs": [
       "/gift/631055/white-glow-front.webp",
@@ -852,7 +852,7 @@ export const allProducts = [
       "#1b1c1f",
       "#222838"
     ],
-    "price": 89.99,
+    "price": 81,
     "img": "/gift/638595/puma-black-front.webp",
     "imgs": [
       "/gift/638595/puma-black-front.webp",
@@ -876,7 +876,7 @@ export const allProducts = [
       "#292627",
       "#2b313f"
     ],
-    "price": 59.99,
+    "price": 54,
     "img": "/gift/631057/warm-white-heather-front.webp",
     "imgs": [
       "/gift/631057/warm-white-heather-front.webp",
@@ -902,7 +902,7 @@ export const allProducts = [
     "colors": [
       "#222838"
     ],
-    "price": 89.99,
+    "price": 81,
     "img": "/gift/638594/deep-navy-front.webp",
     "imgs": [
       "/gift/638594/deep-navy-front.webp",
@@ -927,7 +927,7 @@ export const allProducts = [
       "#222838",
       "#68686a"
     ],
-    "price": 79.99,
+    "price": 72,
     "img": "/gift/631059/white-glow-front.webp",
     "imgs": [
       "/gift/631059/white-glow-front.webp",
@@ -962,7 +962,7 @@ export const allProducts = [
       "#242a39",
       "#666668"
     ],
-    "price": 94.99,
+    "price": 85,
     "img": "/gift/628858/dark-myrtle-slate-sky-front.webp",
     "imgs": [
       "/gift/628858/puma-black-slate-sky-front.webp",
@@ -1003,7 +1003,7 @@ export const allProducts = [
       "#1b3e97",
       "#68686a"
     ],
-    "price": 59.99,
+    "price": 54,
     "img": "/gift/631050/strong-red-front.webp",
     "imgs": [
       "/gift/631050/white-glow-front.webp",
@@ -1054,7 +1054,7 @@ export const allProducts = [
       "#68686a",
       "#a70e27"
     ],
-    "price": 69.99,
+    "price": 63,
     "img": "/gift/629948/festive-royal-front.webp",
     "imgs": [
       "/gift/629948/white-glow-front.webp",
@@ -1107,7 +1107,7 @@ export const allProducts = [
       "#fa762a",
       "#68686a"
     ],
-    "price": 69.99,
+    "price": 63,
     "img": "/gift/629944/white-glow-front.webp",
     "imgs": [
       "/gift/629944/white-glow-front.webp",
@@ -1155,7 +1155,7 @@ export const allProducts = [
       "#222838",
       "#68686a"
     ],
-    "price": 89.99,
+    "price": 81,
     "img": "/gift/629449/white-glow-front.webp",
     "imgs": [
       "/gift/629449/white-glow-front.webp",
@@ -1195,7 +1195,7 @@ export const allProducts = [
       "#2b313f",
       "#6e6d6e"
     ],
-    "price": 59.99,
+    "price": 54,
     "img": "/gift/631051/warm-white-heather-front.webp",
     "imgs": [
       "/gift/631051/warm-white-heather-front.webp",
@@ -1229,7 +1229,7 @@ export const allProducts = [
       "#222838",
       "#68686a"
     ],
-    "price": 79.99,
+    "price": 72,
     "img": "/gift/631052/white-glow-front.webp",
     "imgs": [
       "/gift/631052/white-glow-front.webp",
@@ -1265,7 +1265,7 @@ export const allProducts = [
       "#d2d9e1",
       "#a0998d"
     ],
-    "price": 80,
+    "price": 72,
     "img": "/gift/A588/black-front.webp",
     "imgs": [
       "/gift/A588/black-front.webp",
@@ -1310,7 +1310,7 @@ export const allProducts = [
       "#272b41",
       "#8fbbdb"
     ],
-    "price": 65,
+    "price": 59,
     "img": "/gift/A230/white-front.webp",
     "imgs": [
       "/gift/A230/white-front.webp",
@@ -1361,7 +1361,7 @@ export const allProducts = [
       "#d2d9e1",
       "#a0998d"
     ],
-    "price": 80,
+    "price": 72,
     "img": "/gift/A589/black-front.webp",
     "imgs": [
       "/gift/A589/black-front.webp",
@@ -1408,7 +1408,7 @@ export const allProducts = [
       "#202946",
       "#1d2f6d"
     ],
-    "price": 75,
+    "price": 68,
     "img": "/gift/A514/white-front.webp",
     "imgs": [
       "/gift/A514/white-front.webp",
@@ -1466,7 +1466,7 @@ export const allProducts = [
       "#878589",
       "#b40728"
     ],
-    "price": 65,
+    "price": 59,
     "img": "/gift/A401/white-front.webp",
     "imgs": [
       "/gift/A401/white-front.webp",
@@ -1513,7 +1513,7 @@ export const allProducts = [
       "#272b41",
       "#8fbbdb"
     ],
-    "price": 65,
+    "price": 59,
     "img": "/gift/A231/white-front.webp",
     "imgs": [
       "/gift/A231/white-front.webp",
@@ -1556,7 +1556,7 @@ export const allProducts = [
     "colors": [
       "#313134"
     ],
-    "price": 95,
+    "price": 86,
     "img": "/gift/A267/black-black-front.webp",
     "imgs": [
       "/gift/A267/black-black-front.webp",
@@ -1578,7 +1578,7 @@ export const allProducts = [
     "colors": [
       "#313134"
     ],
-    "price": 95,
+    "price": 86,
     "img": "/gift/A268/black-black-front.webp",
     "imgs": [
       "/gift/A268/black-black-front.webp",
@@ -1602,7 +1602,7 @@ export const allProducts = [
       "#272629",
       "#282d4a"
     ],
-    "price": 80,
+    "price": 72,
     "img": "/gift/A708/white-front.webp",
     "imgs": [
       "/gift/A708/white-front.webp",
@@ -1632,7 +1632,7 @@ export const allProducts = [
       "#272629",
       "#222942"
     ],
-    "price": 80,
+    "price": 72,
     "img": "/gift/A721/core-white-front.webp",
     "imgs": [
       "/gift/A721/core-white-front.webp",
@@ -1663,7 +1663,7 @@ export const allProducts = [
       "#b1bed2",
       "#475067"
     ],
-    "price": 85,
+    "price": 77,
     "img": "/gift/A702/white-front.webp",
     "imgs": [
       "/gift/A702/white-front.webp",
@@ -1696,7 +1696,7 @@ export const allProducts = [
       "#222942",
       "#878589"
     ],
-    "price": 85,
+    "price": 77,
     "img": "/gift/A598/black-front.webp",
     "imgs": [
       "/gift/A598/black-front.webp",
@@ -1727,7 +1727,7 @@ export const allProducts = [
       "#b9babe",
       "#374463"
     ],
-    "price": 75,
+    "price": 68,
     "img": "/gift/A498/black-white-grey-three-front.webp",
     "imgs": [
       "/gift/A498/black-white-grey-three-front.webp",
@@ -1761,7 +1761,7 @@ export const allProducts = [
       "#22314d",
       "#0d59af"
     ],
-    "price": 65,
+    "price": 59,
     "img": "/gift/A482/black-grey-two-front.webp",
     "imgs": [
       "/gift/A482/black-grey-two-front.webp",
@@ -1797,7 +1797,7 @@ export const allProducts = [
       "#0f479a",
       "#6a686d"
     ],
-    "price": 70,
+    "price": 63,
     "img": "/gift/A324/white-black-front.webp",
     "imgs": [
       "/gift/A324/white-black-front.webp",
@@ -1837,7 +1837,7 @@ export const allProducts = [
       "#222942",
       "#c5d5e4"
     ],
-    "price": 110,
+    "price": 99,
     "img": "/gift/A2009/white-front.webp",
     "imgs": [
       "/gift/A2009/white-front.webp",
@@ -1874,7 +1874,7 @@ export const allProducts = [
       "#878589",
       "#b40728"
     ],
-    "price": 65,
+    "price": 59,
     "img": "/gift/A400/white-front.webp",
     "imgs": [
       "/gift/A400/white-front.webp",
@@ -1918,7 +1918,7 @@ export const allProducts = [
       "#3d60be",
       "#282d4a"
     ],
-    "price": 75,
+    "price": 68,
     "img": "/gift/A704/white-front.webp",
     "imgs": [
       "/gift/A704/white-front.webp",
@@ -1955,7 +1955,7 @@ export const allProducts = [
       "#659dd3",
       "#a3a4a6"
     ],
-    "price": 80,
+    "price": 72,
     "img": "/gift/A554/black-melange-front.webp",
     "imgs": [
       "/gift/A554/black-melange-front.webp",
@@ -1987,7 +1987,7 @@ export const allProducts = [
       "#f5f5f7",
       "#272629"
     ],
-    "price": 100,
+    "price": 90,
     "img": "/gift/A601/alumina-front.webp",
     "imgs": [
       "/gift/A601/alumina-front.webp",
@@ -2014,7 +2014,7 @@ export const allProducts = [
       "#797e91",
       "#cac9c8"
     ],
-    "price": 80,
+    "price": 72,
     "img": "/gift/A593/black-melange-front.webp",
     "imgs": [
       "/gift/A593/black-melange-front.webp",
@@ -2050,7 +2050,7 @@ export const allProducts = [
       "#202946",
       "#1d2f6d"
     ],
-    "price": 75,
+    "price": 68,
     "img": "/gift/A515/white-front.webp",
     "imgs": [
       "/gift/A515/white-front.webp",
@@ -2099,7 +2099,7 @@ export const allProducts = [
       "#797e91",
       "#a3a4a6"
     ],
-    "price": 80,
+    "price": 72,
     "img": "/gift/A590/solid-black-front.webp",
     "imgs": [
       "/gift/A590/solid-black-front.webp",
@@ -2134,7 +2134,7 @@ export const allProducts = [
       "#222942",
       "#a0978b"
     ],
-    "price": 100,
+    "price": 90,
     "img": "/gift/A2020/white-front.webp",
     "imgs": [
       "/gift/A2020/white-front.webp",
@@ -2170,7 +2170,7 @@ export const allProducts = [
       "#797e91",
       "#cac9c8"
     ],
-    "price": 75,
+    "price": 68,
     "img": "/gift/A591/black-melange-front.webp",
     "imgs": [
       "/gift/A591/black-melange-front.webp",
@@ -2200,7 +2200,7 @@ export const allProducts = [
       "#272629",
       "#282d4a"
     ],
-    "price": 80,
+    "price": 72,
     "img": "/gift/A709/white-front.webp",
     "imgs": [
       "/gift/A709/white-front.webp",
@@ -2230,7 +2230,7 @@ export const allProducts = [
       "#69686d",
       "#202946"
     ],
-    "price": 100,
+    "price": 90,
     "img": "/gift/A572/black-front.webp",
     "imgs": [
       "/gift/A572/black-front.webp",
@@ -2259,7 +2259,7 @@ export const allProducts = [
       "#272629",
       "#222942"
     ],
-    "price": 90,
+    "price": 81,
     "img": "/gift/A295/black-front.webp",
     "imgs": [
       "/gift/A295/black-front.webp",
@@ -2286,7 +2286,7 @@ export const allProducts = [
       "#272629",
       "#282d4a"
     ],
-    "price": 75,
+    "price": 68,
     "img": "/gift/A707/white-front.webp",
     "imgs": [
       "/gift/A707/white-front.webp",
@@ -2316,7 +2316,7 @@ export const allProducts = [
       "#797e91",
       "#cac9c8"
     ],
-    "price": 80,
+    "price": 72,
     "img": "/gift/A594/black-melange-front.webp",
     "imgs": [
       "/gift/A594/black-melange-front.webp",
@@ -2347,7 +2347,7 @@ export const allProducts = [
       "#738ec5",
       "#c9c8cd"
     ],
-    "price": 70,
+    "price": 63,
     "img": "/gift/A582/black-melange-front.webp",
     "imgs": [
       "/gift/A582/black-melange-front.webp",
@@ -2379,7 +2379,7 @@ export const allProducts = [
       "#515153",
       "#797e91"
     ],
-    "price": 70,
+    "price": 63,
     "img": "/gift/A583/black-melange-front.webp",
     "imgs": [
       "/gift/A583/black-melange-front.webp",
@@ -2406,7 +2406,7 @@ export const allProducts = [
       "#797e91",
       "#cac9c8"
     ],
-    "price": 75,
+    "price": 68,
     "img": "/gift/A592/black-melange-front.webp",
     "imgs": [
       "/gift/A592/black-melange-front.webp",
@@ -2436,7 +2436,7 @@ export const allProducts = [
       "#222942",
       "#878589"
     ],
-    "price": 90,
+    "price": 81,
     "img": "/gift/A596/black-front.webp",
     "imgs": [
       "/gift/A596/black-front.webp",
@@ -2465,7 +2465,7 @@ export const allProducts = [
       "#272629",
       "#222942"
     ],
-    "price": 75,
+    "price": 68,
     "img": "/gift/A599/black-front.webp",
     "imgs": [
       "/gift/A599/black-front.webp",
@@ -2491,7 +2491,7 @@ export const allProducts = [
       "#272629",
       "#343b55"
     ],
-    "price": 95,
+    "price": 86,
     "img": "/gift/A607/black-front.webp",
     "imgs": [
       "/gift/A607/black-front.webp",
@@ -2518,7 +2518,7 @@ export const allProducts = [
       "#797e91",
       "#a3a4a6"
     ],
-    "price": 80,
+    "price": 72,
     "img": "/gift/A690/solid-black-front.webp",
     "imgs": [
       "/gift/A690/solid-black-front.webp",
@@ -2546,7 +2546,7 @@ export const allProducts = [
     "colors": [
       "#272629"
     ],
-    "price": 120,
+    "price": 108,
     "img": "/gift/A570/black-front.webp",
     "imgs": [
       "/gift/A570/black-front.webp",
@@ -2569,7 +2569,7 @@ export const allProducts = [
       "#272629",
       "#222942"
     ],
-    "price": 120,
+    "price": 108,
     "img": "/gift/A2027/black-front.webp",
     "imgs": [
       "/gift/A2027/black-front.webp",
