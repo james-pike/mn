@@ -647,7 +647,10 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     }
     if (loginType.value === "gift") {
       // Milestone Awards: only the DB products flagged portals ∋ "gift".
-      return allProducts.filter((p) => (p as { portals?: string[] }).portals?.includes("gift"));
+      // Apparel first; the shared Service add-ons (Headwear, Accessories) go last.
+      const gift = allProducts.filter((p) => (p as { portals?: string[] }).portals?.includes("gift"));
+      const last = (c: string) => c === "Hats" || c === "SWAG";
+      return [...gift.filter((p) => !last(p.category)), ...gift.filter((p) => last(p.category))];
     }
     if (isTech.value) return allProducts.filter((p) => p.category === "Work Wear");
     if (isSafety.value) {
