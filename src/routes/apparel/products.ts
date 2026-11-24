@@ -779,7 +779,11 @@ export const allProducts = [
       "/towel/white.webp"
     ],
     "material": "Microfibre Waffle",
-    "details": "Absorbent microfibre waffle towel, Includes carabiner clip for attachment to golf or duffel bag, Hangs folded or fully open, 18\" x 18\""
+    "details": "Absorbent microfibre waffle towel, Includes carabiner clip for attachment to golf or duffel bag, Hangs folded or fully open, 18\" x 18\"",
+    "portals": [
+      "service",
+      "gift"
+    ]
   },
   {
     "sku": "MN-40",
