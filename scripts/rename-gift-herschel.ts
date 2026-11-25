@@ -3,11 +3,12 @@ import { config } from "dotenv";
 
 config({ path: new URL("../.env", import.meta.url).pathname });
 
-// Gift portal: drop "Classic" from the crossbody tote title (the $100 gym bag keeps it).
+// Gift portal: the two Herschel bags keep "Classic" in their full names (product
+// page, cart). The catalog CARD titles drop it — see CARD_TITLE in product-catalog.tsx.
 // Usage: tsx scripts/rename-gift-herschel.ts
 const NAMES: [string, string][] = [
-  ["MN-146", "Herschel Recycled Crossbody Tote"],
-  ["MN-151", "Herschel Recycled Classic Gym Bag"], // "Classic" restored on request
+  ["MN-146", "Herschel Recycled Classic Crossbody Tote"],
+  ["MN-151", "Herschel Recycled Classic Gym Bag"],
 ];
 async function main() {
   const url = process.env.TURSO_URL || process.env.VITE_TURSO_URL;

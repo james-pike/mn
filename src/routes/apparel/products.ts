@@ -902,7 +902,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-146",
-    "name": "Herschel Recycled Crossbody Tote",
+    "name": "Herschel Recycled Classic Crossbody Tote",
     "category": "Bags",
     "sizes": "One Size",
     "badge": "",
