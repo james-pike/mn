@@ -164,7 +164,7 @@ export const CARD_TITLE: Record<string, string> = {
 };
 
 // Milestone Awards (gift login) category tabs, in sidebar order.
-const GIFT_CATEGORIES = ["All", "Fleece", "Jackets", "Polos", "Bags"];
+const GIFT_CATEGORIES = ["All", "Fleece", "Polos", "Jackets", "Bags"];
 
 // Brands carried, in sidebar display order. A brand must be listed here to show
 // up as a filter (the facet list is BRAND_LIST ∩ brands-present).
@@ -689,7 +689,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     }
     if (loginType.value === "gift") {
       // Milestone Awards: only the DB products flagged portals ∋ "gift", grouped
-      // by the gift tab order (Fleece, Jackets, Polos, Bags); within a category
+      // by the gift tab order (Fleece, Polos, Jackets, Bags); within a category
       // the DB sort_order (the order the lineup was supplied in) is kept.
       const gift = allProducts.filter((p) => (p as { portals?: string[] }).portals?.includes("gift"));
       const rank = (c: string) => {
