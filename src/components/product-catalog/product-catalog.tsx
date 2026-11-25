@@ -154,13 +154,7 @@ function sizesOf(p: Product): string[] {
 }
 // Shorter titles shown on the catalog card only (product page = full DB name).
 export const CARD_TITLE: Record<string, string> = {
-  "MN-152": "Nike Club Sleeve Swoosh Full Zip Hoodie", // Nike Club Fleece … Full Zip Hoodie
-  "MN-153": "Nike Club Sleeve Swoosh Hoodie", // Nike Club Fleece … Pullover Hoodie
-  "MN-147": "Nike Club Sleeve Swoosh 1/2 Zip", // Women's Nike Club Fleece Sleeve Swoosh 1/2 Zip
-  "MN-148": "Nike Club Sleeve Swoosh 1/2 Zip", // Men's Nike Club Fleece Sleeve Swoosh 1/2 Zip
-  "MN-149": "Nike Therma-FIT 1/4 Zip Hoodie", // Nike Therma-FIT 1/4 Zip Fleece Hoodie
-  "MN-155": "North Face AIM Full Zip Jacket", // Men's North Face AIM Full Zip Fleece Jacket
-  "MN-156": "North Face AIM Full Zip Jacket", // Women's North Face AIM Full Zip Fleece Jacket
+  "MN-153": "Nike Club Fleece Sleeve Swoosh Hoodie", // Nike Club Fleece … Pullover Hoodie
   "MN-146": "Herschel Recycled Crossbody Tote", // Herschel Recycled Classic Crossbody Tote
   "MN-151": "Herschel Recycled Gym Bag", // Herschel Recycled Classic Gym Bag
 };
