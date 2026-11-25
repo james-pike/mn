@@ -33607,3 +33607,36 @@ html:has(.site-header--gift) .related-carousel__slide .product-card { min-width:
 html:has(.site-header--gift) .related-carousel__slide .product-card__name {
   min-width: 0; overflow: hidden; text-overflow: ellipsis;
 }
+
+/* Product cards: the bottom-row price is only used by the gift portal on desktop. */
+.product-card__price-bottom { display: none; }
+/* Gift portal, desktop: price moves to the card's bottom-right corner; the
+   Men's/Women's + size range sit centred in the bottom row; the title gets the
+   full card width. Swatches | gender+sizes | price as three flex zones. */
+@media (min-width: 1025px) {
+  html:has(.site-header--gift) .product-card .product-card__name-row .product-card__price-group { display: none; }
+  html:has(.site-header--gift) .product-card .product-card__price-bottom { display: flex; align-items: baseline; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row {
+    display: grid;
+    /* side columns never narrower than their content (no overlap), and share any
+       spare room equally so the middle (gender + sizes) sits centred */
+    grid-template-columns: minmax(max-content, 1fr) auto auto minmax(max-content, 1fr);
+    column-gap: 8px; align-items: center;
+  }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > :first-child { grid-column: 1; justify-self: start; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__gender { grid-column: 2; margin: 0; justify-self: end; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__sizes { grid-column: 3; justify-self: start; text-align: left; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__colors-text { display: none; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__price-bottom { grid-column: 4; justify-self: end; flex: none; }
+}
+
+/* Gift portal, desktop: card size text (and the Men's/Women's beside it) a touch
+   smaller with tighter letter spacing. */
+@media (min-width: 1025px) {
+  html:has(.site-header--gift) .product-card .product-card__sizes,
+  html:has(.site-header--gift) .product-card .product-card__sizes-line,
+  html:has(.site-header--gift) .product-card .product-card__gender { font-size: 0.92rem; letter-spacing: -0.25px; }
+}
+/* Gift portal: no colour name beside a single swatch (one-colour products) —
+   the non-overlay .product-card__color-name is only used for that case. */
+html:has(.site-header--gift) .product-card .product-card__color-name:not(.product-card__color-name--overlay) { display: none; }

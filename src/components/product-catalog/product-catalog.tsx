@@ -560,6 +560,21 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
                 </span>
               );
             })()}
+            {/* Gift portal, desktop: the price sits in this row's bottom-right
+                corner (CSS hides the title-row price there and shows this one). */}
+            {loginType.value === "gift" && !isTech && (() => {
+              const p = Number(item.price) || 0;
+              const dollars = Math.floor(p);
+              const cents = Math.round((p - dollars) * 100).toString().padStart(2, "0");
+              return (
+                <span class="product-card__price-bottom">
+                  <span class="product-card__price">
+                    ${dollars}
+                    {cents !== "00" && <span class="product-card__price-cents">.{cents}</span>}
+                  </span>
+                </span>
+              );
+            })()}
           </div>
         )}
       </div>

@@ -362,6 +362,21 @@ const RelatedCard = component$<{
                 <span key={grp} class="product-card__sizes-line">{grp}</span>
               ))}
             </span>
+            {/* Gift portal, desktop: price in the bottom-right corner (see the
+                catalog card / .product-card__price-bottom in global.css). */}
+            {loginTypeCard.value === "gift" && !hidePrice && (() => {
+              const pr = Number(item.price) || 0;
+              const dollars = Math.floor(pr);
+              const cents = Math.round((pr - dollars) * 100).toString().padStart(2, "0");
+              return (
+                <span class="product-card__price-bottom">
+                  <span class="product-card__price">
+                    ${dollars}
+                    {cents !== "00" && <span class="product-card__price-cents">.{cents}</span>}
+                  </span>
+                </span>
+              );
+            })()}
           </div>
         )}
       </div>
