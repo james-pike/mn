@@ -1136,7 +1136,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
               <div class="home-catalog__catnav-head">
                 <div class="home-catalog__catnav-title">{isElectrical.value ? t("login.portal.electrical", locale.value) : loginType.value === "gift" ? (locale.value === "fr" ? "Récompenses d’étape" : "Milestone Awards") : isSafety.value ? `${t("filter.collections", locale.value)} - HVAC` : t("filter.collections", locale.value)}</div>
                 {loginType.value === "gift" && (
-                  <svg class="gift-side__trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <svg class="gift-side__trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
                     <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
                     <path d="M4 22h16" />
