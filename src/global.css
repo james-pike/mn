@@ -33653,3 +33653,9 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
 @media (min-width: 1101px) {
   html:has(.site-header--gift) .product-card .product-card__name-row { min-height: calc(1.08rem * 1.45); align-items: center; }
 }
+
+/* Gift portal, desktop: card titles a touch lighter (700 -> 600, softer ink) so
+   they read less heavy and take a little less width (long ones shrink less). */
+@media (min-width: 1025px) {
+  html:has(.site-header--gift) .product-card .product-card__name { font-weight: 600; color: #2b2f34; }
+}
