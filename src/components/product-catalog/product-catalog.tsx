@@ -165,6 +165,19 @@ export const CARD_TITLE: Record<string, string> = {
   "MN-151": "Herschel Recycled Gym Bag", // Herschel Recycled Classic Gym Bag
 };
 
+// Gift portal cards: the brand is shown on its own small line above the title,
+// so it's taken out of the card title ("Nike Club …" -> "Club …"). Matches the
+// brand as written in the name ("North Face" for The North Face).
+export function stripBrand(title: string, brand: string | null): string {
+  if (!brand) return title;
+  const names = [brand, brand.replace(/^The\s+/i, "")];
+  for (const n of names) {
+    const re = new RegExp(`(^|\\s)${n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(\\s|$)`, "i");
+    if (re.test(title)) return title.replace(re, " ").replace(/\s+/g, " ").trim();
+  }
+  return title;
+}
+
 // Milestone Awards (gift login) category tabs, in sidebar order.
 const GIFT_CATEGORIES = ["All", "Fleece", "Jackets", "Polos", "Bags"];
 
@@ -192,7 +205,7 @@ const BRAND_BY_SKU: Record<string, string> = {
   "MN-155": "The North Face", // gift: titled "North Face AIM …" (no "The")
   "MN-156": "The North Face",
 };
-function brandOf(p: Product): string | null {
+export function brandOf(p: Product): string | null {
   if (BRAND_BY_SKU[p.sku]) return BRAND_BY_SKU[p.sku];
   const n = p.name.toLowerCase();
   for (const b of BRAND_LIST) if (n.includes(b.toLowerCase())) return b;
@@ -447,6 +460,8 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
   // Gift portal: shorter catalog-card titles for a few long names (the product
   // page keeps the full name).
   if (CARD_TITLE[item.sku]) displayName = CARD_TITLE[item.sku];
+  const cardBrand = loginType.value === "gift" ? brandOf(item) : null;
+  if (cardBrand) displayName = stripBrand(displayName, cardBrand);
 
   return (
     <div
@@ -498,6 +513,7 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
         )}
       </div>
       <div class="product-card__info">
+        {cardBrand && <div class="product-card__brand">{cardBrand}</div>}
         <div class="product-card__name-row">
           <div class="product-card__name" ref={nameRef}>
             {(() => {

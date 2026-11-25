@@ -33737,3 +33737,12 @@ html:has(.site-header--gift) .product-modal__color { border-radius: 3px; }
   html:has(.site-header--gift) .home-catalog__filters .home-catalog__catnav-head .home-catalog__catnav-title { font-size: 0.87rem; }
   html:has(.site-header--gift) .home-catalog__filters { top: 64px; max-height: calc(100vh - 64px); }
 }
+
+/* Gift portal cards: brand on its own small line above the (brand-less) title. */
+html:has(.site-header--gift) .product-card__brand {
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  color: #6b7076; line-height: 1.2; margin: 0 0 1px;
+}
+@media (min-width: 1000px) {
+  html:has(.site-header--gift) .product-card__brand { font-size: 0.74rem; }
+}

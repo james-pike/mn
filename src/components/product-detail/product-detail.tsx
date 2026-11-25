@@ -7,7 +7,7 @@ import { expandSizes, sizeGroups, sortColorsWhiteLast } from "../../routes/appar
 import { LoginTypeContext } from "../../routes/layout";
 import { hidesPrices, fixedQtyFor, isGiftOnly } from "../../lib/lineup";
 import { readKitSel, writeKitSel } from "../../lib/kit-selection";
-import { ELECTRICAL_SKUS, imageForColor, imgMatchesColor, genderOf, swatchOrder, isSafetyProduct, CARD_TITLE } from "../product-catalog/product-catalog";
+import { ELECTRICAL_SKUS, imageForColor, imgMatchesColor, genderOf, swatchOrder, isSafetyProduct, CARD_TITLE, brandOf, stripBrand } from "../product-catalog/product-catalog";
 import { ProductImage } from "../product-image/product-image";
 import { LogoSlide } from "../logo-overlay/logo-slide";
 import { getLogoConfig, logoAsset, type LogoPosition, type LogoStyle, type LogoBox } from "../../data/logo-placements";
@@ -247,6 +247,8 @@ const RelatedCard = component$<{
   }
   displayName = displayName.trim();
   if (CARD_TITLE[item.sku]) displayName = CARD_TITLE[item.sku]; // shorter card-only title
+  const cardBrand = loginTypeCard.value === "gift" ? brandOf(item) : null;
+  if (cardBrand) displayName = stripBrand(displayName, cardBrand);
   const g = genderOf(item);
   const MAX_DOTS = 5;
   let dots = visible.slice(0, MAX_DOTS);
@@ -284,6 +286,7 @@ const RelatedCard = component$<{
         )}
       </div>
       <div class="product-card__info">
+        {cardBrand && <div class="product-card__brand">{cardBrand}</div>}
         <div class="product-card__name-row">
           <div class="product-card__name">
             <span class="product-card__name-text">{displayName}</span>
