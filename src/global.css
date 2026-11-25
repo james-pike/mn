@@ -14821,7 +14821,7 @@
     /* Bring the sticky header bar in to the same width as the content column. */
     .site-header { max-width: var(--site-max); margin-inline: auto; }
     /* Gift portal (Milestone Awards): a touch narrower than the shared 1760px cap. */
-    html:has(.site-header--gift) { --site-max: min(100vw, 1640px); }
+    html:has(.site-header--gift) { --site-max: min(100vw, 1720px); }
   }
 
   @media (min-width: 1025px) {
