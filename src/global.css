@@ -33679,3 +33679,6 @@ html:has(.site-header--gift) .cart-drawer .cart-drawer__footer { padding-bottom:
    rendering in Arial). :where() keeps this lower than any button rule that sets
    its own font. */
 :where(html:has(.site-header--gift)) :where(button, input, select, textarea) { font-family: inherit; }
+
+/* Gift portal: product-page colour swatches a little less rounded (6 -> 3px). */
+html:has(.site-header--gift) .product-modal__color { border-radius: 3px; }
