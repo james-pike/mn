@@ -33589,7 +33589,7 @@
   html:has(.site-header--gift) .product-card .product-card__color-more { font-size: 0.95rem; }
   /* Titles start larger (0.94 -> 1.08rem); the card's fit-to-one-line script
      still shrinks a long title until it fits, so only short ones grow. */
-  html:has(.site-header--gift) .product-card .product-card__name { font-size: 1.08rem; }
+  html:has(.site-header--gift) .product-card .product-card__name { font-size: 1.02rem; }
 }
 
 /* Gift portal, desktop: slightly narrower sidebar (1/6 of the row = 273px at
@@ -33651,11 +33651,5 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
    reserve the full-size title line (1.08rem x 1.45) so the swatch + price lines
    stay level across a row. */
 @media (min-width: 1101px) {
-  html:has(.site-header--gift) .product-card .product-card__name-row { min-height: calc(1.08rem * 1.45); align-items: center; }
-}
-
-/* Gift portal, desktop: card titles a touch lighter (700 -> 600, softer ink) so
-   they read less heavy and take a little less width (long ones shrink less). */
-@media (min-width: 1025px) {
-  html:has(.site-header--gift) .product-card .product-card__name { font-weight: 600; color: #2b2f34; }
+  html:has(.site-header--gift) .product-card .product-card__name-row { min-height: calc(1.02rem * 1.45); align-items: center; }
 }
