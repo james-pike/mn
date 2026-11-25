@@ -33682,3 +33682,11 @@ html:has(.site-header--gift) .cart-drawer .cart-drawer__footer { padding-bottom:
 
 /* Gift portal: product-page colour swatches a little less rounded (6 -> 3px). */
 html:has(.site-header--gift) .product-modal__color { border-radius: 3px; }
+
+/* Gift portal, desktop: small trophy at the right end of the MILESTONE AWARDS band. */
+@media (min-width: 1025px) {
+  html:has(.site-header--gift) .home-catalog__filters .home-catalog__catnav-head { align-items: center; }
+  .gift-side__trophy { width: 20px; height: 20px; flex: none; color: #2e698e; margin: 0 4px 0 6px; } /* centred over the count badges */
+  html:has(.site-header--gift) .home-catalog__filters .home-catalog__catnav-head .home-catalog__catnav-title { white-space: nowrap; padding-right: 0; flex: 1 1 auto; min-width: 0; font-size: 0.95rem; letter-spacing: -0.2px; }
+}
+@media (max-width: 1024px) { .gift-side__trophy { display: none; } }
