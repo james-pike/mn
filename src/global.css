@@ -33670,3 +33670,6 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
   html:has(.site-header--gift) .cart-drawer__checkout-title { font-size: 0.95rem; }
   html:has(.site-header--gift) .cart-drawer__summary-item { font-size: 1rem; padding: 6px 0; }
 }
+/* Gift portal checkout: more room below the Place Order button. */
+html:has(.site-header--gift) .checkout-page .cart-drawer__footer,
+html:has(.site-header--gift) .cart-drawer .cart-drawer__footer { padding-bottom: 28px !important; }
