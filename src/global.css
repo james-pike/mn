@@ -33582,7 +33582,9 @@
   html:has(.site-header--gift) .product-card .product-card__color-dot { width: 19px; height: 19px; }
   html:has(.site-header--gift) .product-card .product-card__sizes,
   html:has(.site-header--gift) .product-card .product-card__sizes-line,
-  html:has(.site-header--gift) .product-card .product-card__gender { font-size: 1.04rem; }
+  html:has(.site-header--gift) .product-card .product-card__gender { font-size: 0.98rem; }
+  /* A touch less space between the title and the swatch/size line (6.3 -> 4.5px). */
+  html:has(.site-header--gift) .product-card .product-card__name-row { margin-bottom: 4.5px; }
   html:has(.site-header--gift) .product-card .product-card__color-name { font-size: 1rem; }
   html:has(.site-header--gift) .product-card .product-card__color-more { font-size: 0.95rem; }
   /* Titles start larger (0.94 -> 1.08rem); the card's fit-to-one-line script
