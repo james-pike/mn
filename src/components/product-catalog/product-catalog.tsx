@@ -347,6 +347,12 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
         px -= step;
         el.style.fontSize = `${px}px`;
       }
+      // Gift portal: a title that needed fitting gets a touch smaller still, so
+      // it doesn't run right up to the price.
+      if (row?.classList.contains("product-card__name-row--wide")) {
+        px = Math.max(min, parseFloat(getComputedStyle(el).fontSize) * 0.985);
+        el.style.fontSize = `${px}px`;
+      }
       if (el.scrollWidth > el.clientWidth + 0.5) {
         // Can't fit even at the floor: wrap instead. Explicit "normal" because the
         // CSS now starts titles on one line (see .product-card__name in global.css).
