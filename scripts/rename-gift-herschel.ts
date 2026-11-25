@@ -3,11 +3,11 @@ import { config } from "dotenv";
 
 config({ path: new URL("../.env", import.meta.url).pathname });
 
-// Gift portal: drop "Classic" from the two Herschel bag titles.
+// Gift portal: drop "Classic" from the crossbody tote title (the $100 gym bag keeps it).
 // Usage: tsx scripts/rename-gift-herschel.ts
 const NAMES: [string, string][] = [
   ["MN-146", "Herschel Recycled Crossbody Tote"],
-  ["MN-151", "Herschel Recycled Gym Bag"],
+  ["MN-151", "Herschel Recycled Classic Gym Bag"], // "Classic" restored on request
 ];
 async function main() {
   const url = process.env.TURSO_URL || process.env.VITE_TURSO_URL;

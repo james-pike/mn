@@ -1029,7 +1029,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-151",
-    "name": "Herschel Recycled Gym Bag",
+    "name": "Herschel Recycled Classic Gym Bag",
     "category": "Bags",
     "sizes": "27L",
     "badge": "",
