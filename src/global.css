@@ -33647,3 +33647,13 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
   html:has(.site-header--gift) .product-card .product-card__name-row.product-card__name-row--wide { margin-left: -2.5px; margin-right: -2.5px; }
   html:has(.site-header--gift) .product-card .product-card__name-row .product-card__name { flex: 1 1 auto; max-width: none; width: 100%; }
 }
+
+/* Gift portal, desktop: tighter card text block — less air around the title
+   line, between the swatch line and the price, and under the price. */
+@media (min-width: 1025px) {
+  html:has(.site-header--gift) .product-card .product-card__name { line-height: 1.3; }
+  html:has(.site-header--gift) .product-card .product-card__name-row { margin-bottom: 2px; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row { row-gap: 2px; }
+  html:has(.site-header--gift) .product-card .product-card__price-bottom .product-card__price { line-height: 1.2; }
+  html:has(.site-header--gift) .product-card .product-card__info { padding-bottom: 4px; }
+}
