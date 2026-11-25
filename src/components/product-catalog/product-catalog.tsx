@@ -319,6 +319,7 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
     if (!el) return;
     const fit = () => {
       el.style.fontSize = "";
+      el.style.letterSpacing = "";
       el.style.whiteSpace = "nowrap";
       el.style.overflow = "hidden";
       // Gift portal: a title that doesn't fit at the normal width gets a slightly
@@ -326,6 +327,17 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
       const row = el.parentElement;
       row?.classList.remove("product-card__name-row--wide");
       if (loginType.value === "gift" && el.scrollWidth > el.clientWidth + 0.5) row?.classList.add("product-card__name-row--wide");
+      // Gift portal: tighten the letter spacing first (up to ~0.05em more), and
+      // only shrink the text if the title still doesn't fit.
+      if (loginType.value === "gift" && el.scrollWidth > el.clientWidth + 0.5) {
+        const ls0 = parseFloat(getComputedStyle(el).letterSpacing) || 0;
+        const floor = ls0 - parseFloat(getComputedStyle(el).fontSize) * 0.05;
+        let ls = ls0;
+        while (el.scrollWidth > el.clientWidth + 0.5 && ls > floor) {
+          ls -= 0.1;
+          el.style.letterSpacing = `${ls}px`;
+        }
+      }
       const base = parseFloat(getComputedStyle(el).fontSize);
       let px = base;
       const min = base * 0.62;
