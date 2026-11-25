@@ -5,7 +5,7 @@ import { allProducts, categoryLabel, colorName } from "../../routes/apparel/prod
 import { CLOTHING_CATEGORIES, CATEGORY_ICONS } from "../../lib/categories";
 import type { Product } from "../../routes/apparel/products";
 import { sizeGroups, sortColorsWhiteLast } from "../../routes/apparel/utils";
-import { stickyTop, LoginTypeContext } from "../../routes/layout";
+import { stickyTop, LoginTypeContext, checkGiftCardBalance } from "../../routes/layout";
 import { SecondaryBarContext } from "../../context/secondary-bar";
 import { getLogoConfig } from "../../data/logo-placements";
 
@@ -243,6 +243,55 @@ function scrollProductsBelowBar() {
 // lazy-loads on scroll — the "All" tab is 80+ products, and eager-loading all of
 // them would mean 80+ requests / megabytes of photos on first paint.
 const EAGER_CARDS = 8;
+
+// Gift portal sidebar: check a gift card's balance before shopping (same lookup
+// the checkout uses). Desktop sidebar only.
+const GiftBalanceCheck = component$(() => {
+  const locale = useContext(LocaleContext);
+  const code = useSignal("");
+  const busy = useSignal(false);
+  const result = useSignal<{ ok: boolean; balance?: number; name?: string } | null>(null);
+  const fr = locale.value === "fr";
+  const check = $(async () => {
+    const c = code.value.trim();
+    if (!c) { result.value = { ok: false }; return; }
+    busy.value = true;
+    try {
+      const v = await checkGiftCardBalance(c);
+      result.value = v?.valid
+        ? { ok: true, balance: Number(v.balance) || 0, name: `${v.firstName || ""} ${v.lastName || ""}`.trim() }
+        : { ok: false };
+    } catch {
+      result.value = { ok: false };
+    } finally { busy.value = false; }
+  });
+  return (
+    <div class="gift-balance">
+      <div class="home-catalog__filter-title">{fr ? "Solde de la carte-cadeau" : "Gift Card Balance"}</div>
+      <form class="gift-balance__row" preventdefault:submit onSubmit$={check}>
+        <input
+          type="text"
+          class="gift-balance__input"
+          value={code.value}
+          placeholder={fr ? "Code de la carte" : "Card code"}
+          aria-label={fr ? "Code de la carte-cadeau" : "Gift card code"}
+          onInput$={(_, el) => { code.value = el.value; result.value = null; }}
+        />
+        <button type="submit" class="gift-balance__btn" disabled={busy.value}>
+          {busy.value ? "…" : (fr ? "Vérifier" : "Check")}
+        </button>
+      </form>
+      {result.value && (result.value.ok ? (
+        <div class="gift-balance__result">
+          <span class="gift-balance__amount">${(result.value.balance ?? 0).toFixed(2)}</span>
+          <span class="gift-balance__label">{fr ? "disponible" : "available"}{result.value.name ? ` · ${result.value.name}` : ""}</span>
+        </div>
+      ) : (
+        <div class="gift-balance__error">{fr ? "Carte introuvable ou inactive." : "Card not found or inactive."}</div>
+      ))}
+    </div>
+  );
+});
 
 const ProductCard = component$<{ item: Product; sku: string; index: number }>(({ item, sku, index }) => {
   const locale = useContext(LocaleContext);
@@ -1218,6 +1267,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
               {t("filter.clear", locale.value)}
             </button>
           )}
+          {loginType.value === "gift" && <GiftBalanceCheck />}
         </aside>
         {isPdp.value ? (
           <div
