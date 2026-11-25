@@ -1214,14 +1214,14 @@ export const allProducts = [
     "sizes": "One Size",
     "badge": "",
     "colors": [
-      "#1a191e",
-      "#2c3e50"
+      "#2c3e50",
+      "#1a191e"
     ],
     "price": 150,
-    "img": "/gift/CA2009-73/black-tonal-front.webp",
+    "img": "/gift/CA2009-73/navy-front.webp",
     "imgs": [
-      "/gift/CA2009-73/black-tonal-front.webp",
-      "/gift/CA2009-73/navy-front.webp"
+      "/gift/CA2009-73/navy-front.webp",
+      "/gift/CA2009-73/black-tonal-front.webp"
     ],
     "material": "100% recycled 600D polyester, excluding trims",
     "details": "Tonal stripe liner made from 100% recycled polyester, Padded and fleece-lined floating sleeve fits a 15\"/16\" laptop, Laptop sleeve dimensions: 12.5\" (H) x 11\" (W), Easy U-pull drawcord closure, Adjustable EVA-padded shoulder straps, Side entry zipper for easy access, Dual water bottle pockets expand to fit different sizes, Front storage sleeve, #CA2009-73",
