@@ -1145,9 +1145,6 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
                     <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
                   </svg>
                 )}
-                {loginType.value === "gift" && (
-                  <p class="gift-side__text">{locale.value === "fr" ? "Choisissez votre récompense et payez avec votre carte-cadeau." : "Choose your award and pay with your gift card."}</p>
-                )}
               </div>
               {visibleCategories.value.map((cat) => (
                 <button
