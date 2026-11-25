@@ -26,7 +26,8 @@ async function main() {
   for (const c of COPIES) {
     const src = (await db.execute({ sql: "SELECT * FROM products WHERE vendor = ? AND sku = ?", args: [VENDOR, c.from] })).rows[0];
     if (!src) throw new Error(`missing ${c.from}`);
-    const imgs = PALETTE.map(([, s]) => `/gift/${c.code}/${s}.webp`);
+    // SS navy keeps the original navy photo (/gildan/navy.webp), not the 2000T tall shot.
+    const imgs = PALETTE.map(([, s]) => (c.code === "2000" && s === "navy" ? "/gildan/navy.webp" : `/gift/${c.code}/${s}.webp`));
     const ex = await db.execute({ sql: "SELECT sku FROM products WHERE vendor = ? AND sku = ?", args: [VENDOR, c.sku] });
     if (ex.rows.length) {
       await db.execute({ sql: "UPDATE products SET colors = ?, img = ?, imgs = ? WHERE vendor = ? AND sku = ?",

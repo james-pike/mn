@@ -38,9 +38,9 @@ export const allProducts = [
       "#c0392b"
     ],
     "price": 13.5,
-    "img": "/gift/2000/navy.webp",
+    "img": "/gildan/navy.webp",
     "imgs": [
-      "/gift/2000/navy.webp",
+      "/gildan/navy.webp",
       "/gift/2000/black.webp",
       "/gift/2000/charcoal.webp",
       "/gift/2000/sportgrey.webp",
