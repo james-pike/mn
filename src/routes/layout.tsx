@@ -166,8 +166,8 @@ export const checkGiftCardBalance = server$(async function (code: string) {
   if (!tursoUrl || !tursoToken) return { valid: false, balance: 0, error: "not_configured" as const };
   const db = createClient({ url: tursoUrl, authToken: tursoToken });
   const card = await getGiftCard(db, (code || "").slice(0, 64));
-  if (!card || !card.active) return { valid: false, balance: 0 };
-  return { valid: true, balance: card.balance };
+  if (!card || !card.active) return { valid: false, balance: 0, firstName: "", lastName: "" };
+  return { valid: true, balance: card.balance, firstName: card.firstName, lastName: card.lastName };
 });
 
 export const useSubmitOrder = routeAction$(
@@ -247,6 +247,20 @@ export const useSubmitOrder = routeAction$(
       return fail(500, { message: "Order database not configured (missing env vars)" });
     }
     const db = createClient({ url: tursoUrl, authToken: tursoToken });
+
+    // Gift portal: the gift card # identifies the employee — every order needs a
+    // valid card (even a credit-card-only one), and the name on the card is the
+    // order's name (the checkout has no name fields when the card carries one).
+    if (lt === "gift") {
+      // Gift portal pays by gift card (topped up by credit card only when short).
+      if (!wantsGift) return fail(400, { message: "Pay with your gift card." });
+      if (!data.giftCardCode) return fail(400, { message: "Enter your gift card number." });
+      const holder = await getGiftCard(db, data.giftCardCode);
+      if (!holder || !holder.active) return fail(400, { message: "Gift card not found or inactive." });
+      const holderName = `${holder.firstName} ${holder.lastName}`.trim();
+      if (holderName) employee.name = holderName;
+      else if (!employee.name?.trim()) return fail(400, { message: "Enter your first and last name." });
+    }
 
     // ---- Resolve the gift-card contribution (if any) ----
     let giftAmount = 0;
@@ -1530,7 +1544,7 @@ export default component$(() => {
       </div>
 
       {(auth.value.loggedIn || (loginAction.value && !loginAction.value.failed) || isPaymentReturn.value) && <>
-      <header class={`site-header site-header--white ${loginType.value === "electrical" ? "site-header--electrical" : ""} ${tabsStuck.value ? "site-header--tabs-stuck" : ""} ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value || isCheckout.value ? "site-header--cart-open" : ""}`}>
+      <header class={`site-header site-header--white ${loginType.value === "electrical" ? "site-header--electrical" : ""} ${loginType.value === "gift" ? "site-header--gift" : ""} ${tabsStuck.value ? "site-header--tabs-stuck" : ""} ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value || isCheckout.value ? "site-header--cart-open" : ""}`}>
         {/* Electrical desktop: the sidebar's dot texture continued over the header corner. */}
         {loginType.value === "electrical" && <span class="site-header__panel-dots" aria-hidden="true" />}
         <div class="site-header__inner">

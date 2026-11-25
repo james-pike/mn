@@ -156,8 +156,8 @@ function sizesOf(p: Product): string[] {
 // up as a filter (the facet list is BRAND_LIST ∩ brands-present).
 const BRAND_LIST = [
   // Clothing brands first...
-  "Puma", "Adidas", "Atlas", "Carhartt", "Coal Harbour", "Flexfit", "FootJoy", "Gildan",
-  "Travis Mathew", "Under Armour",
+  "Puma", "Adidas", "Atlas", "Carhartt", "Coal Harbour", "Core365", "Flexfit", "FootJoy", "Gildan",
+  "Travis Mathew", "Trimark", "Under Armour",
   // ...then non-clothing brands (bags, golf, towels, tech, headwear).
   "Nexgen", "Nomad", "Srixon", "Titleist", "Tranzip", "Cap America",
   // Yeti (drinkware/coolers) and 2 Buds (earbuds) pinned last per request.
@@ -647,12 +647,28 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     }
     if (loginType.value === "gift") {
       // Milestone Awards: only the DB products flagged portals ∋ "gift".
-      // Order: the gift-only lineup (Puma/Adidas) first, then the shared Service
-      // apparel (Gildan/Carhartt tees), then shared Headwear + Accessories last.
+      // Order: the workwear shirts first (Gildan, Carhartt, Core365, Trimark, in
+      // that brand order), then the Puma/Adidas golf lineup, then Headwear +
+      // Accessories last.
       const gift = allProducts.filter((p) => (p as { portals?: string[] }).portals?.includes("gift"));
-      const rank = (p: (typeof gift)[number]) =>
-        p.category === "Hats" || p.category === "SWAG" ? 2 : isGiftOnly(p as { portals?: string[] }) ? 0 : 1;
-      return [0, 1, 2].flatMap((r) => gift.filter((p) => rank(p) === r));
+      const WORKWEAR = ["gildan", "carhartt", "core365", "trimark"];
+      const rank = (p: (typeof gift)[number]) => {
+        if (p.category === "Hats" || p.category === "SWAG") return WORKWEAR.length + 1;
+        const n = p.name.toLowerCase();
+        const w = WORKWEAR.findIndex((b) => n.includes(b));
+        return w !== -1 ? w : isGiftOnly(p as { portals?: string[] }) ? WORKWEAR.length : WORKWEAR.length + 0.5;
+      };
+      // Stable sort keeps the DB sort_order within each group.
+      const ordered = gift.slice().sort((a, b) => rank(a) - rank(b));
+      // Swap the Trimark Stirling SS shirt (MN-94) with the Puma Golf Icon
+      // Heather Polo 2.0 (MN-44) in the gift lineup, per request.
+      const i = ordered.findIndex((p) => p.sku === "MN-94");
+      const j = ordered.findIndex((p) => p.sku === "MN-44");
+      if (i !== -1 && j !== -1) [ordered[i], ordered[j]] = [ordered[j], ordered[i]];
+      // Carhartt LS shirt (MN-2): out of the first view, at display position 15.
+      const k = ordered.findIndex((p) => p.sku === "MN-2");
+      if (k !== -1) ordered.splice(Math.min(14, ordered.length - 1), 0, ...ordered.splice(k, 1));
+      return ordered;
     }
     if (isTech.value) return allProducts.filter((p) => p.category === "Work Wear");
     if (isSafety.value) {
@@ -904,9 +920,13 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     // Fit facet is suppressed for those categories.
     const NO_FIT_CATS = new Set(["Hats", "New Hire Kit"]);
     return {
-      genders: NO_FIT_CATS.has(activeCat.value) ? [] : GENDER_ORDER.filter((g) => genders.has(g)),
+      // Gift portal: no "Unisex" option under Fit (Men / Women only).
+      genders: NO_FIT_CATS.has(activeCat.value) ? [] : GENDER_ORDER.filter((g) => genders.has(g) && !(g === "Unisex" && loginType.value === "gift")),
       sizes: [...SIZE_ORDER.filter((s) => sizes.has(s)), ...shoeSizes],
-      brands: BRAND_LIST.filter((b) => brands.has(b)),
+      // Gift portal: brands listed alphabetically (others keep BRAND_LIST order).
+      brands: loginType.value === "gift"
+        ? BRAND_LIST.filter((b) => brands.has(b)).sort((a, b) => a.localeCompare(b))
+        : BRAND_LIST.filter((b) => brands.has(b)),
     };
   });
 

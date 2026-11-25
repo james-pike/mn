@@ -14820,6 +14820,8 @@
     :root { --site-max: 1760px; }
     /* Bring the sticky header bar in to the same width as the content column. */
     .site-header { max-width: var(--site-max); margin-inline: auto; }
+    /* Gift portal (Milestone Awards): a touch narrower than the shared 1760px cap. */
+    html:has(.site-header--gift) { --site-max: min(100vw, 1640px); }
   }
 
   @media (min-width: 1025px) {
@@ -33439,4 +33441,111 @@
   .product-card .product-card__name { font-size: 0.94rem; }
   .product-card .product-card__sizes,
   .product-card .product-card__gender { font-size: 0.88rem; }
+}
+
+/* Gift portal (Milestone Awards), desktop: larger sidebar text. The category
+   labels and the Fit/Brand options left the right half of the sidebar empty,
+   so they grow ~15% to fill it a little more. */
+@media (min-width: 1025px) {
+  html:has(.site-header--gift) .home-catalog__catnav-title,
+  html:has(.site-header--gift) .home-catalog__filter-title { font-size: 0.85rem; }
+  html:has(.site-header--gift) .home-catalog__catnav-item { font-size: 1.18rem; }
+  html:has(.site-header--gift) .home-catalog__catnav-icon svg { width: 21px; height: 21px; }
+  html:has(.site-header--gift) .home-catalog__catnav-count { font-size: 0.84rem; }
+  html:has(.site-header--gift) .home-catalog__filter-opt { font-size: 1.02rem; }
+}
+
+/* Gift portal, desktop: header logo mark + wordmark scaled down slightly
+   (visual only; the header's layout box is unchanged). */
+@media (min-width: 1025px) {
+  html:has(.site-header--gift) .site-header .site-header__logo.brand-cluster {
+    transform: translateX(-12px) scale(0.9); /* nudged left a touch */
+    transform-origin: left center;
+  }
+}
+
+/* Gift portal checkout: the gift card # sits first in Order details; once
+   applied, the holder's name on the card shows under it (no name fields). */
+/* Its own full-width row in the 2-column form grid (Street Address etc. start
+   below it), contents kept one column wide, closed off by a divider. */
+.checkout-modal__gift--top {
+  grid-column: 1 / -1;
+  margin: 0 0 0.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+.checkout-modal__gift--top > * { max-width: calc(50% - 13.5px); }
+@media (max-width: 600px) {
+  .checkout-modal__gift--top > * { max-width: none; }
+}
+.checkout-modal__gift-holder {
+  display: flex; align-items: baseline; gap: 0.6rem;
+  margin-top: 0.5rem; padding: 0.55rem 0.75rem;
+  background: rgba(0, 0, 0, 0.035); border-radius: 3px; font-size: 0.9rem;
+}
+.checkout-modal__gift-holder span { color: var(--ce-gray-500, #6b7280); }
+
+/* Gift portal, desktop: the filter sidebar sticks under the sticky header while
+   the products scroll, instead of scrolling away and leaving an empty column.
+   Capped to the viewport (scrolls internally on short screens). */
+@media (min-width: 1025px) {
+  html:has(.site-header--gift) .home-catalog__filters {
+    position: sticky;
+    /* 72px, not the header's 73px: the sidebar naturally sits 1px under the
+       header, which hides its 1px white top inset — 73 exposed it as a strip. */
+    top: 72px;
+    max-height: calc(100vh - 72px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+}
+
+/* Gift portal, desktop: tighter letter spacing on the header wordmark's
+   MODERN NIAGARA + BUILDING SERVICES lines (APPAREL unchanged). */
+@media (min-width: 1025px) {
+  html:has(.site-header--gift) .site-header .brand-cluster__word:not(.brand-cluster__word--sub):not(.brand-cluster__word--muted) { letter-spacing: -0.6px; }
+  html:has(.site-header--gift) .site-header .brand-cluster__word--sub { letter-spacing: 0.35px; }
+}
+
+/* Gift portal, desktop: "MILESTONE AWARDS" (top of the sidebar, right under the
+   header logo) reads as the site's subtitle — set in the wordmark's weight and
+   ink, larger and tighter, so it pairs with MODERN NIAGARA / BUILDING SERVICES.
+   Same box height as before (~30.8px): a tighter line-height absorbs the
+   larger text, so nothing around it moves. */
+@media (min-width: 1025px) {
+  html:has(.site-header--gift) .home-catalog__catnav-title {
+    font-size: 0.98rem;
+    font-weight: 500;
+    color: rgb(43, 47, 52);
+    letter-spacing: 0.1px;
+    line-height: 24px;
+    padding-top: 0.12rem;
+    padding-bottom: 0.25rem;
+  }
+}
+
+/* Gift portal, desktop: the MILESTONE AWARDS band gets its own slightly darker
+   shade than the sidebar below. The sidebar's + catnav's top padding is pulled
+   into the band (negative margin + matching padding) so it runs flush to the
+   top under the header — nothing below moves. The sidebar's 1px white top
+   inset (box-shadow) is dropped so no thin white strip shows between the
+   header and the band. */
+@media (min-width: 1025px) {
+  html:has(.site-header--gift) .home-catalog__filters { box-shadow: none; border-top-left-radius: 0; border-top-right-radius: 0; }
+  html:has(.site-header--gift) .home-catalog__filters .home-catalog__catnav-head {
+    background: #e6e7e9;
+    /* sidebar 0.35rem + catnav 0.15rem top padding = 0.5rem (9px) */
+    margin-top: -0.5rem;
+    padding-top: calc(0.5rem + 0.2px);
+    /* Cover the catnav's 2px flex gap below the band (else a light strip shows
+       between it and "All"); the negative margin keeps "All" where it was. */
+    padding-bottom: 2px;
+    margin-bottom: -2px;
+  }
+  /* Vertically centre the text in the visible band (header covers its top
+     1px): top padding moved to the bottom, same total height (~39.7px). */
+  html:has(.site-header--gift) .home-catalog__filters .home-catalog__catnav-head .home-catalog__catnav-title {
+    padding-top: 0;
+    padding-bottom: calc(0.37rem - 0.2px);
+  }
 }

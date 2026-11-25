@@ -9,7 +9,7 @@
  * now navigates here. Payment is purchase-order only (no Stripe / gift card),
  * matching the rest of mn2.
  */
-import { component$, useSignal, useStore, useComputed$, useContext, useVisibleTask$, $ } from "@builder.io/qwik";
+import { component$, useSignal, useStore, useComputed$, useContext, useVisibleTask$, useTask$, $ } from "@builder.io/qwik";
 import { Link, useNavigate } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { Modal, Collapsible } from "@qwik-ui/headless";
@@ -91,6 +91,8 @@ export default component$(() => {
   const giftBalance = useSignal<number | null>(null); // null = not yet checked
   const giftChecking = useSignal(false);
   const giftError = useSignal("");
+  // Gift portal: the applied card has a holder name on file (name fields hidden).
+  const giftHolder = useSignal(false);
   const usesGift = useComputed$(() => payMethod.value === "giftcard" || payMethod.value === "giftcard_card");
   const checkGiftCard = $(async () => {
     giftError.value = "";
@@ -98,7 +100,13 @@ export default component$(() => {
     giftChecking.value = true;
     try {
       const v = await checkGiftCardBalance(giftCode.value.trim());
-      if (v?.valid) giftBalance.value = Number(v.balance) || 0;
+      if (v?.valid) {
+        giftBalance.value = Number(v.balance) || 0;
+        // The card carries its holder's name — fill it in (no name fields then).
+        giftHolder.value = !!(v.firstName || v.lastName);
+        empFirstName.value = v.firstName || "";
+        empLastName.value = v.lastName || "";
+      }
       else { giftBalance.value = null; giftError.value = t("pay.gift.invalid", locale.value); }
     } catch {
       giftBalance.value = null; giftError.value = t("pay.gift.invalid", locale.value);
@@ -115,6 +123,16 @@ export default component$(() => {
   const giftCovers = useComputed$(() => (giftBalance.value == null ? 0 : Math.min(giftBalance.value, orderTotal.value)));
   const giftRemaining = useComputed$(() => Math.max(0, +(orderTotal.value - giftCovers.value).toFixed(2)));
   const giftLeftover = useComputed$(() => Math.max(0, +((giftBalance.value ?? 0) - giftCovers.value).toFixed(2)));
+  // Gift portal payment: gift card only, plus "gift card + credit card" ONLY once
+  // an applied card falls short of the total (no credit-card-only option). Keep
+  // the selection valid as the balance / total (province tax) changes: short →
+  // gift + card, covered → gift card.
+  const giftShort = useComputed$(() => giftBalance.value != null && giftRemaining.value > 0);
+  useTask$(({ track }) => {
+    const short = track(() => giftShort.value);
+    if (!isGift) return;
+    payMethod.value = short ? "giftcard_card" : "giftcard";
+  });
   const goesToCard = useComputed$(() => payMethod.value === "card" || (payMethod.value === "giftcard_card" && giftRemaining.value > 0));
   const taxLabel = useComputed$(() => {
     if (taxRate.value === undefined) return t("cart.invoice.tax", locale.value);
@@ -128,7 +146,7 @@ export default component$(() => {
         || !empPhone.value.trim() || !empProvince.value) return false;
     if (!empAddress1.value.trim() || !empCity.value.trim() || (!empPostal.value.trim() && !fixedShip)) return false;
     if (payMethod.value === "po" && !empPO.value.trim() && !poOptional(loginType.value)) return false;
-    if (usesGift.value && giftBalance.value == null) return false;             // card not applied yet
+    if ((usesGift.value || isGift) && giftBalance.value == null) return false; // card not applied yet (gift: it's the employee's ID)
     if (payMethod.value === "giftcard" && giftRemaining.value > 0) return false; // gift doesn't cover it
     if (kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).length) return false; // Electrical: full kit only
     return true;
@@ -206,7 +224,7 @@ export default component$(() => {
     const device: "mobile" | "tablet" | "desktop" = window.innerWidth <= 600 ? "mobile" : window.innerWidth <= 1024 ? "tablet" : "desktop";
     const orderData = {
       paymentMethod: payMethod.value,
-      ...(usesGift.value ? { giftCardCode: giftCode.value.trim() } : {}),
+      ...(usesGift.value || isGift ? { giftCardCode: giftCode.value.trim() } : {}),
       device,
       employee: {
         name: `${empFirstName.value} ${empLastName.value}`,
@@ -440,6 +458,34 @@ export default component$(() => {
               </Collapsible.Root>
               <div class="checkout-modal__form">
                 <h3 class="checkout-modal__form-title">{t("cart.orderdetails", locale.value)}</h3>
+                {isGift && (
+                  /* Gift portal: the gift card # comes first — applying it fills in
+                     the employee's name from the card. */
+                  <div class="checkout-modal__gift checkout-modal__gift--top">
+                    <div class="checkout-modal__gift-row">
+                      <div class={`checkout-modal__field ${giftError.value ? "checkout-modal__field--error" : ""}`}>
+                        <label>{t("pay.gift.label", locale.value)}</label>
+                        <input
+                          type="text"
+                          value={giftCode.value}
+                          placeholder={t("pay.gift.placeholder", locale.value)}
+                          onInput$={(_, el) => { giftCode.value = el.value; giftBalance.value = null; giftError.value = ""; }}
+                        />
+                      </div>
+                      <button type="button" class="btn checkout-modal__gift-apply" onClick$={checkGiftCard} disabled={giftChecking.value}>
+                        {giftChecking.value ? t("pay.gift.checking", locale.value) : t("pay.gift.apply", locale.value)}
+                      </button>
+                    </div>
+                    {giftError.value && <div class="checkout-modal__gift-msg checkout-modal__gift-msg--err">{giftError.value}</div>}
+                    {giftHolder.value && giftBalance.value != null && (
+                      <div class="checkout-modal__gift-holder">
+                        <span>{locale.value === "fr" ? "Nom" : "Name"}</span>
+                        <strong>{empFirstName.value} {empLastName.value}</strong>
+                      </div>
+                    )}
+                  </div>
+                )}
+                {(!isGift || (giftBalance.value != null && !giftHolder.value)) && (
                 <div class="checkout-modal__row">
                   <div class={`checkout-modal__field ${formTouched.value && !empFirstName.value ? "checkout-modal__field--error" : ""}`}>
                     <label>{t("cart.firstname", locale.value)}</label>
@@ -450,6 +496,7 @@ export default component$(() => {
                     <input type="text" value={empLastName.value} onInput$={(_, el) => { empLastName.value = el.value; formError.value = ""; }} />
                   </div>
                 </div>
+                )}
                 {fixedShip ? (
                   /* Electrical: email + phone first, then the one fixed ship-to
                      address (not editable). */
@@ -537,12 +584,13 @@ export default component$(() => {
                 <h3 class="checkout-modal__form-title">{t("pay.title", locale.value)}</h3>
                 <div class="checkout-modal__pay-options">
                   {([
-                    // Gift (Milestone Awards): no PO — gift card, gift card + credit
-                    // card when the balance falls short, or credit card alone.
-                    { key: "giftcard", label: t("pay.giftcard", locale.value) },
-                    { key: "giftcard_card", label: t("pay.giftcard_card", locale.value) },
-                    { key: "card", label: t("pay.card", locale.value) },
-                  ] as const).map((opt) => (
+                    // Gift (Milestone Awards): no PO, no credit-card-only. Gift card
+                    // when it covers the order; gift card + credit card only when the
+                    // applied balance falls short (gift card alone can't pay then).
+                    giftShort.value
+                      ? { key: "giftcard_card" as const, label: t("pay.giftcard_card", locale.value) }
+                      : { key: "giftcard" as const, label: t("pay.giftcard", locale.value) },
+                  ]).map((opt) => (
                     <button
                       key={opt.key}
                       type="button"
@@ -556,25 +604,11 @@ export default component$(() => {
                 </div>
 
 
-                {/* Gift card code + balance — for the gift methods. */}
-                {usesGift.value && (
+                {/* Gift card balance — for the gift methods (the code itself is
+                    entered at the top of Order details). */}
+                {usesGift.value && giftBalance.value != null && (
                   <div class="checkout-modal__gift">
-                    <div class="checkout-modal__gift-row">
-                      <div class={`checkout-modal__field ${giftError.value ? "checkout-modal__field--error" : ""}`}>
-                        <label>{t("pay.gift.label", locale.value)}</label>
-                        <input
-                          type="text"
-                          value={giftCode.value}
-                          placeholder={t("pay.gift.placeholder", locale.value)}
-                          onInput$={(_, el) => { giftCode.value = el.value; giftBalance.value = null; giftError.value = ""; }}
-                        />
-                      </div>
-                      <button type="button" class="btn checkout-modal__gift-apply" onClick$={checkGiftCard} disabled={giftChecking.value}>
-                        {giftChecking.value ? t("pay.gift.checking", locale.value) : t("pay.gift.apply", locale.value)}
-                      </button>
-                    </div>
-                    {giftError.value && <div class="checkout-modal__gift-msg checkout-modal__gift-msg--err">{giftError.value}</div>}
-                    {giftBalance.value != null && !giftError.value && (
+                    {!giftError.value && (
                       <div class="checkout-modal__gift-summary">
                         <div><span>{t("pay.gift.balance", locale.value)}</span><span>${giftBalance.value.toFixed(2)}</span></div>
                         <div><span>{t("pay.gift.applied", locale.value)}</span><span>-${giftCovers.value.toFixed(2)}</span></div>

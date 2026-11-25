@@ -256,6 +256,18 @@ const colorNames: Record<string, Record<string, string>> = {
   "#0d59af": { en: "Team Royal / Grey Two", fr: "Bleu royal équipe / Gris deux" }, // Adidas (gift)
   "#efeef1": { en: "White", fr: "Blanc" }, // Adidas (gift)
   "#f1f2f6": { en: "White / Black", fr: "Blanc / Noir" }, // Adidas (gift)
+  "#1f2a48": { en: "Navy", fr: "Marine" }, // Trimark work shirts (gift)
+  "#5e5c60": { en: "Grey Storm", fr: "Gris orage" }, // Trimark work shirts (gift)
+  "#446093": { en: "Blue", fr: "Bleu" }, // Trimark work shirts (gift)
+  "#b5d5f0": { en: "Frost Blue", fr: "Bleu givré" }, // Trimark work shirts (gift)
+  "#baa48c": { en: "Desert Khaki", fr: "Kaki désert" }, // Trimark work shirts (gift)
+  "#672e45": { en: "Maroon", fr: "Bordeaux" }, // Trimark work shirts (gift)
+  "#382246": { en: "Dark Plum", fr: "Prune foncé" }, // Trimark work shirts (gift)
+  "#bc2c3a": { en: "Team Red", fr: "Rouge équipe" }, // Trimark work shirts (gift)
+  "#22304a": { en: "Classic Navy", fr: "Marine classique" }, // Core365 work shirts (gift)
+  "#53565a": { en: "Carbon", fr: "Carbone" }, // Core365 work shirts (gift)
+  "#9fa1a4": { en: "Sport Grey", fr: "Gris sport" }, // Gildan tees (gift)
+  "#1c57a5": { en: "Royal", fr: "Bleu royal" }, // Gildan tees (gift)
 };
 export function colorName(hex: string, locale: Locale): string {
   return colorNames[hex]?.[locale] || hex;

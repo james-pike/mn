@@ -20,7 +20,36 @@ export const allProducts = [
     "material": "100% US cotton, 18 singles, 6 oz/yd² ",
     "details": "Classic fit, rib collar, taped neck and shoulders, tear-away label, no optical brighteners for consistent dye adherence, #2000 / #2000T",
     "portals": [
-      "service",
+      "service"
+    ]
+  },
+  {
+    "sku": "MN-98",
+    "name": "Gildan Short Sleeve T-Shirt",
+    "category": "Shirts",
+    "sizes": "S - 4XL / LT - 4XLT",
+    "badge": "",
+    "colors": [
+      "#1f2a48",
+      "#1a1a18",
+      "#4a4a4a",
+      "#9fa1a4",
+      "#1c57a5",
+      "#c0392b"
+    ],
+    "price": 13.5,
+    "img": "/gift/2000/navy.webp",
+    "imgs": [
+      "/gift/2000/navy.webp",
+      "/gift/2000/black.webp",
+      "/gift/2000/charcoal.webp",
+      "/gift/2000/sportgrey.webp",
+      "/gift/2000/royal.webp",
+      "/gift/2000/red.webp"
+    ],
+    "material": "100% US cotton, 18 singles, 6 oz/yd² ",
+    "details": "Classic fit, rib collar, taped neck and shoulders, tear-away label, no optical brighteners for consistent dye adherence, #2000 / #2000T",
+    "portals": [
       "gift"
     ]
   },
@@ -41,7 +70,36 @@ export const allProducts = [
     "material": "100% U.S. cotton, 18 singles, 10.1 oz/L yd (CA)",
     "details": "Classic fit, Classic width rib collar, Taped neck and shoulders, Rib cuffs, Tear away label, #2400",
     "portals": [
-      "service",
+      "service"
+    ]
+  },
+  {
+    "sku": "MN-99",
+    "name": "Gildan Long Sleeve T-Shirt",
+    "category": "Shirts",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1f2a48",
+      "#1a1a18",
+      "#4a4a4a",
+      "#9fa1a4",
+      "#1c57a5",
+      "#c0392b"
+    ],
+    "price": 19.5,
+    "img": "/gift/2400/sportgrey.webp",
+    "imgs": [
+      "/gift/2400/navy.webp",
+      "/gift/2400/black.webp",
+      "/gift/2400/charcoal.webp",
+      "/gift/2400/sportgrey.webp",
+      "/gift/2400/royal.webp",
+      "/gift/2400/red.webp"
+    ],
+    "material": "100% U.S. cotton, 18 singles, 10.1 oz/L yd (CA)",
+    "details": "Classic fit, Classic width rib collar, Taped neck and shoulders, Rib cuffs, Tear away label, #2400",
+    "portals": [
       "gift"
     ]
   },
@@ -834,31 +892,31 @@ export const allProducts = [
       "#a70e27"
     ],
     "price": 54,
-    "img": "/gift/631055/festive-royal-front.webp",
+    "img": "/gift/631055/festive-royal-front.webp?v=3",
     "imgs": [
-      "/gift/631055/white-glow-front.webp",
-      "/gift/631055/white-glow-back.webp",
-      "/gift/631055/puma-black-front.webp",
-      "/gift/631055/puma-black-side.webp",
-      "/gift/631055/puma-black-back.webp",
-      "/gift/631055/dark-crimson-front.webp",
-      "/gift/631055/dark-crimson-side.webp",
-      "/gift/631055/dark-crimson-back.webp",
-      "/gift/631055/dark-myrtle-front.webp",
-      "/gift/631055/dark-myrtle-side.webp",
-      "/gift/631055/dark-myrtle-back.webp",
-      "/gift/631055/deep-navy-front.webp",
-      "/gift/631055/deep-navy-side.webp",
-      "/gift/631055/deep-navy-back.webp",
-      "/gift/631055/festive-royal-front.webp",
-      "/gift/631055/festive-royal-side.webp",
-      "/gift/631055/festive-royal-back.webp",
-      "/gift/631055/slate-sky-front.webp",
-      "/gift/631055/slate-sky-side.webp",
-      "/gift/631055/slate-sky-back.webp",
-      "/gift/631055/strong-red-front.webp",
-      "/gift/631055/strong-red-side.webp",
-      "/gift/631055/strong-red-back.webp"
+      "/gift/631055/white-glow-front.webp?v=3",
+      "/gift/631055/white-glow-back.webp?v=3",
+      "/gift/631055/puma-black-front.webp?v=3",
+      "/gift/631055/puma-black-side.webp?v=3",
+      "/gift/631055/puma-black-back.webp?v=3",
+      "/gift/631055/dark-crimson-front.webp?v=3",
+      "/gift/631055/dark-crimson-side.webp?v=3",
+      "/gift/631055/dark-crimson-back.webp?v=3",
+      "/gift/631055/dark-myrtle-front.webp?v=3",
+      "/gift/631055/dark-myrtle-side.webp?v=3",
+      "/gift/631055/dark-myrtle-back.webp?v=3",
+      "/gift/631055/deep-navy-front.webp?v=3",
+      "/gift/631055/deep-navy-side.webp?v=3",
+      "/gift/631055/deep-navy-back.webp?v=3",
+      "/gift/631055/festive-royal-front.webp?v=3",
+      "/gift/631055/festive-royal-side.webp?v=3",
+      "/gift/631055/festive-royal-back.webp?v=3",
+      "/gift/631055/slate-sky-front.webp?v=3",
+      "/gift/631055/slate-sky-side.webp?v=3",
+      "/gift/631055/slate-sky-back.webp?v=3",
+      "/gift/631055/strong-red-front.webp?v=3",
+      "/gift/631055/strong-red-side.webp?v=3",
+      "/gift/631055/strong-red-back.webp?v=3"
     ],
     "material": "4.42 oz./yd², 76/19/5 recycled polyester/polyester/spandex",
     "details": "Bio-based moisture-management, Solid self-collar twin-needle edge stitching, Forward shoulder seam, Three button placket with contrast top button thread, Side vents with contrast fabric tape and bar tacks, Hem finished with a 1\" turnback and double-needle topstitching, Sleek silicone heat transfer cat branding at center back, #631055",
@@ -877,11 +935,11 @@ export const allProducts = [
       "#222838"
     ],
     "price": 81,
-    "img": "/gift/638595/puma-black-front.webp",
+    "img": "/gift/638595/puma-black-front.webp?v=3",
     "imgs": [
-      "/gift/638595/puma-black-front.webp",
-      "/gift/638595/puma-black-back.webp",
-      "/gift/638595/deep-navy-back.webp"
+      "/gift/638595/puma-black-front.webp?v=3",
+      "/gift/638595/puma-black-back.webp?v=3",
+      "/gift/638595/deep-navy-back.webp?v=3"
     ],
     "material": "7.7 oz./yd², 100% recycled polyester",
     "details": "Diamond shaped quilted fabric with textual interest and soft hand feel, Moisture-management, Self-faced collar and interior center back seam with locker loop, 1/4 zip design with reverse coil zipper, Side vents with tape and bar tacks, 1\" hem turnback with twin needle coverstitch, Premium embroidered cat branding at sleeve hem, #638595",
@@ -901,15 +959,15 @@ export const allProducts = [
       "#2b313f"
     ],
     "price": 54,
-    "img": "/gift/631057/warm-white-heather-front.webp",
+    "img": "/gift/631057/warm-white-heather-front.webp?v=3",
     "imgs": [
-      "/gift/631057/warm-white-heather-front.webp",
-      "/gift/631057/warm-white-heather-side.webp",
-      "/gift/631057/puma-black-heather-side.webp",
-      "/gift/631057/puma-black-heather-back.webp",
-      "/gift/631057/deep-navy-heather-front.webp",
-      "/gift/631057/deep-navy-heather-side.webp",
-      "/gift/631057/deep-navy-heather-back.webp"
+      "/gift/631057/warm-white-heather-front.webp?v=3",
+      "/gift/631057/warm-white-heather-side.webp?v=3",
+      "/gift/631057/puma-black-heather-side.webp?v=3",
+      "/gift/631057/puma-black-heather-back.webp?v=3",
+      "/gift/631057/deep-navy-heather-front.webp?v=3",
+      "/gift/631057/deep-navy-heather-side.webp?v=3",
+      "/gift/631057/deep-navy-heather-back.webp?v=3"
     ],
     "material": "4.42 oz./yd², 76/19/5 recycled polyester/polyester/spandex",
     "details": "Heather fabric, Bio-based moisture-management, Solid self-collar twin-needle edge stitching, Forward shoulder seam, Three button placket with contrast top button thread, Side vents with contrast fabric tape and bar tacks, Hem finished with a 1\" turnback and double-needle topstitching, Sleek silicone heat transfer cat branding at center back, #631057",
@@ -927,11 +985,11 @@ export const allProducts = [
       "#222838"
     ],
     "price": 81,
-    "img": "/gift/638594/deep-navy-front.webp",
+    "img": "/gift/638594/deep-navy-front.webp?v=3",
     "imgs": [
-      "/gift/638594/deep-navy-front.webp",
-      "/gift/638594/deep-navy-side.webp",
-      "/gift/638594/deep-navy-back.webp"
+      "/gift/638594/deep-navy-front.webp?v=3",
+      "/gift/638594/deep-navy-side.webp?v=3",
+      "/gift/638594/deep-navy-back.webp?v=3"
     ],
     "material": "7.7 oz./yd², 100% recycled polyester",
     "details": "Diamond shaped quilted fabric with textual interest and soft hand feel, Moisture-management, Three-piece self-fabric hood with crossover neckline, Raglan sleeve construction with double needle coverstitching, 1\" hem turnback with twin needle coverstitch, Premium embroidered cat branding at sleeve hem, #638594",
@@ -952,20 +1010,20 @@ export const allProducts = [
       "#68686a"
     ],
     "price": 72,
-    "img": "/gift/631059/white-glow-front.webp",
+    "img": "/gift/631059/white-glow-front.webp?v=3",
     "imgs": [
-      "/gift/631059/white-glow-front.webp",
-      "/gift/631059/white-glow-side.webp",
-      "/gift/631059/white-glow-back.webp",
-      "/gift/631059/puma-black-front.webp",
-      "/gift/631059/puma-black-side.webp",
-      "/gift/631059/puma-black-back.webp",
-      "/gift/631059/deep-navy-front.webp",
-      "/gift/631059/deep-navy-side.webp",
-      "/gift/631059/deep-navy-back.webp",
-      "/gift/631059/slate-sky-front.webp",
-      "/gift/631059/slate-sky-side.webp",
-      "/gift/631059/slate-sky-back.webp"
+      "/gift/631059/white-glow-front.webp?v=3",
+      "/gift/631059/white-glow-side.webp?v=3",
+      "/gift/631059/white-glow-back.webp?v=3",
+      "/gift/631059/puma-black-front.webp?v=3",
+      "/gift/631059/puma-black-side.webp?v=3",
+      "/gift/631059/puma-black-back.webp?v=3",
+      "/gift/631059/deep-navy-front.webp?v=3",
+      "/gift/631059/deep-navy-side.webp?v=3",
+      "/gift/631059/deep-navy-back.webp?v=3",
+      "/gift/631059/slate-sky-front.webp?v=3",
+      "/gift/631059/slate-sky-side.webp?v=3",
+      "/gift/631059/slate-sky-back.webp?v=3"
     ],
     "material": "4.42 oz./yd², 76/19/5 recycled polyester/polyester/spandex",
     "details": "Bio-based moisture-management, Mechanical peaching for a soft hand feel, 2\" collar with self-interior facing, Zipper garage at both top and bottom for smooth operation and irritation-free wear, Forward shoulder seam, 1\" hem turnback with double needle coverstitch, Sleek silicone heat transfer cat branding at center back, #631059",
@@ -987,23 +1045,23 @@ export const allProducts = [
       "#666668"
     ],
     "price": 85,
-    "img": "/gift/628858/dark-myrtle-slate-sky-front.webp",
+    "img": "/gift/628858/dark-myrtle-slate-sky-front.webp?v=3",
     "imgs": [
-      "/gift/628858/puma-black-slate-sky-front.webp",
-      "/gift/628858/puma-black-slate-sky-side.webp",
-      "/gift/628858/puma-black-slate-sky-back.webp",
-      "/gift/628858/dark-crimson-slate-sky-front.webp",
-      "/gift/628858/dark-crimson-slate-sky-side.webp",
-      "/gift/628858/dark-crimson-slate-sky-back.webp",
-      "/gift/628858/dark-myrtle-slate-sky-front.webp",
-      "/gift/628858/dark-myrtle-slate-sky-side.webp",
-      "/gift/628858/dark-myrtle-slate-sky-back.webp",
-      "/gift/628858/deep-navy-white-glow-front.webp",
-      "/gift/628858/deep-navy-white-glow-side.webp",
-      "/gift/628858/deep-navy-white-glow-back.webp",
-      "/gift/628858/slate-sky-ash-grey-front.webp",
-      "/gift/628858/slate-sky-ash-grey-side.webp",
-      "/gift/628858/slate-sky-ash-grey-back.webp"
+      "/gift/628858/puma-black-slate-sky-front.webp?v=3",
+      "/gift/628858/puma-black-slate-sky-side.webp?v=3",
+      "/gift/628858/puma-black-slate-sky-back.webp?v=3",
+      "/gift/628858/dark-crimson-slate-sky-front.webp?v=3",
+      "/gift/628858/dark-crimson-slate-sky-side.webp?v=3",
+      "/gift/628858/dark-crimson-slate-sky-back.webp?v=3",
+      "/gift/628858/dark-myrtle-slate-sky-front.webp?v=3",
+      "/gift/628858/dark-myrtle-slate-sky-side.webp?v=3",
+      "/gift/628858/dark-myrtle-slate-sky-back.webp?v=3",
+      "/gift/628858/deep-navy-white-glow-front.webp?v=3",
+      "/gift/628858/deep-navy-white-glow-side.webp?v=3",
+      "/gift/628858/deep-navy-white-glow-back.webp?v=3",
+      "/gift/628858/slate-sky-ash-grey-front.webp?v=3",
+      "/gift/628858/slate-sky-ash-grey-side.webp?v=3",
+      "/gift/628858/slate-sky-ash-grey-back.webp?v=3"
     ],
     "material": "5.9 oz./yd², 94/6 recycled polyester/spandex",
     "details": "Four-way stretch, Bio-based moisture-management, Mechanical peaching for a soft hand feel, 2' collar with contrast interior facing, Zipper garage at both top and bottom for smooth operation and irritation-free wear, Seamless side panel, Forward shoulder seam, 1' hem turnback with double needle coverstitch, Sleek silicone heat transfer cat branding at center back, #628858",
@@ -1028,32 +1086,32 @@ export const allProducts = [
       "#68686a"
     ],
     "price": 54,
-    "img": "/gift/631050/strong-red-front.webp",
+    "img": "/gift/631050/strong-red-front.webp?v=3",
     "imgs": [
-      "/gift/631050/white-glow-front.webp",
-      "/gift/631050/white-glow-side.webp",
-      "/gift/631050/white-glow-back.webp",
-      "/gift/631050/puma-black-front.webp",
-      "/gift/631050/puma-black-side.webp",
-      "/gift/631050/puma-black-back.webp",
-      "/gift/631050/dark-crimson-front.webp",
-      "/gift/631050/dark-crimson-side.webp",
-      "/gift/631050/dark-crimson-back.webp",
-      "/gift/631050/dark-myrtle-front.webp",
-      "/gift/631050/dark-myrtle-side.webp",
-      "/gift/631050/dark-myrtle-back.webp",
-      "/gift/631050/deep-navy-front.webp",
-      "/gift/631050/deep-navy-side.webp",
-      "/gift/631050/deep-navy-back.webp",
-      "/gift/631050/festive-royal-front.webp",
-      "/gift/631050/festive-royal-side.webp",
-      "/gift/631050/festive-royal-back.webp",
-      "/gift/631050/slate-sky-front.webp",
-      "/gift/631050/slate-sky-side.webp",
-      "/gift/631050/slate-sky-back.webp",
-      "/gift/631050/strong-red-front.webp",
-      "/gift/631050/strong-red-side.webp",
-      "/gift/631050/strong-red-back.webp"
+      "/gift/631050/white-glow-front.webp?v=3",
+      "/gift/631050/white-glow-side.webp?v=3",
+      "/gift/631050/white-glow-back.webp?v=3",
+      "/gift/631050/puma-black-front.webp?v=3",
+      "/gift/631050/puma-black-side.webp?v=3",
+      "/gift/631050/puma-black-back.webp?v=3",
+      "/gift/631050/dark-crimson-front.webp?v=3",
+      "/gift/631050/dark-crimson-side.webp?v=3",
+      "/gift/631050/dark-crimson-back.webp?v=3",
+      "/gift/631050/dark-myrtle-front.webp?v=3",
+      "/gift/631050/dark-myrtle-side.webp?v=3",
+      "/gift/631050/dark-myrtle-back.webp?v=3",
+      "/gift/631050/deep-navy-front.webp?v=3",
+      "/gift/631050/deep-navy-side.webp?v=3",
+      "/gift/631050/deep-navy-back.webp?v=3",
+      "/gift/631050/festive-royal-front.webp?v=3",
+      "/gift/631050/festive-royal-side.webp?v=3",
+      "/gift/631050/festive-royal-back.webp?v=3",
+      "/gift/631050/slate-sky-front.webp?v=3",
+      "/gift/631050/slate-sky-side.webp?v=3",
+      "/gift/631050/slate-sky-back.webp?v=3",
+      "/gift/631050/strong-red-front.webp?v=3",
+      "/gift/631050/strong-red-side.webp?v=3",
+      "/gift/631050/strong-red-back.webp?v=3"
     ],
     "material": "4.42 oz./yd², 76/19/5 recycled polyester/polyester/spandex",
     "details": "Bio-based moisture-management, Mechanical peaching for a soft hand feel, Self-fabric crossed V-neck sleek, feminine neckline, Forward shoulder seam, Side seam vent with bartack reinforcement, Sleek silicone heat transfer cat branding at front hem, #631050",
@@ -1079,35 +1137,35 @@ export const allProducts = [
       "#a70e27"
     ],
     "price": 63,
-    "img": "/gift/629948/festive-royal-front.webp",
+    "img": "/gift/629948/festive-royal-front.webp?v=3",
     "imgs": [
-      "/gift/629948/white-glow-front.webp",
-      "/gift/629948/white-glow-side.webp",
-      "/gift/629948/white-glow-back.webp",
-      "/gift/629948/puma-black-front.webp",
-      "/gift/629948/puma-black-side.webp",
-      "/gift/629948/puma-black-back.webp",
-      "/gift/629948/dark-crimson-front.webp",
-      "/gift/629948/dark-crimson-side.webp",
-      "/gift/629948/dark-crimson-back.webp",
-      "/gift/629948/dark-myrtle-front.webp",
-      "/gift/629948/dark-myrtle-side.webp",
-      "/gift/629948/dark-myrtle-back.webp",
-      "/gift/629948/deep-navy-front.webp",
-      "/gift/629948/deep-navy-side.webp",
-      "/gift/629948/deep-navy-back.webp",
-      "/gift/629948/festive-royal-front.webp",
-      "/gift/629948/festive-royal-side.webp",
-      "/gift/629948/festive-royal-back.webp",
-      "/gift/629948/rickie-orange-front.webp",
-      "/gift/629948/rickie-orange-side.webp",
-      "/gift/629948/rickie-orange-back.webp",
-      "/gift/629948/slate-sky-front.webp",
-      "/gift/629948/slate-sky-side.webp",
-      "/gift/629948/slate-sky-back.webp",
-      "/gift/629948/strong-red-front.webp",
-      "/gift/629948/strong-red-side.webp",
-      "/gift/629948/strong-red-back.webp"
+      "/gift/629948/white-glow-front.webp?v=3",
+      "/gift/629948/white-glow-side.webp?v=3",
+      "/gift/629948/white-glow-back.webp?v=3",
+      "/gift/629948/puma-black-front.webp?v=3",
+      "/gift/629948/puma-black-side.webp?v=3",
+      "/gift/629948/puma-black-back.webp?v=3",
+      "/gift/629948/dark-crimson-front.webp?v=3",
+      "/gift/629948/dark-crimson-side.webp?v=3",
+      "/gift/629948/dark-crimson-back.webp?v=3",
+      "/gift/629948/dark-myrtle-front.webp?v=3",
+      "/gift/629948/dark-myrtle-side.webp?v=3",
+      "/gift/629948/dark-myrtle-back.webp?v=3",
+      "/gift/629948/deep-navy-front.webp?v=3",
+      "/gift/629948/deep-navy-side.webp?v=3",
+      "/gift/629948/deep-navy-back.webp?v=3",
+      "/gift/629948/festive-royal-front.webp?v=3",
+      "/gift/629948/festive-royal-side.webp?v=3",
+      "/gift/629948/festive-royal-back.webp?v=3",
+      "/gift/629948/rickie-orange-front.webp?v=3",
+      "/gift/629948/rickie-orange-side.webp?v=3",
+      "/gift/629948/rickie-orange-back.webp?v=3",
+      "/gift/629948/slate-sky-front.webp?v=3",
+      "/gift/629948/slate-sky-side.webp?v=3",
+      "/gift/629948/slate-sky-back.webp?v=3",
+      "/gift/629948/strong-red-front.webp?v=3",
+      "/gift/629948/strong-red-side.webp?v=3",
+      "/gift/629948/strong-red-back.webp?v=3"
     ],
     "material": "4.13 oz./yd², 100% recycled polyester",
     "details": "Interlock fabric structure with superior softness, shape retention, and coverage, Moisture-management, Solid self-collar with plastic collar stays sewn into the underside, Forward shoulder seam, Three-button placket with contrast top button thread, Hem finished with a 1' turnback and double-needle topstitching, 40+ UPF protection, Sleek silicone heat transfer cat branding at center back, #629948",
@@ -1132,32 +1190,32 @@ export const allProducts = [
       "#68686a"
     ],
     "price": 63,
-    "img": "/gift/629944/white-glow-front.webp",
+    "img": "/gift/629944/white-glow-front.webp?v=3",
     "imgs": [
-      "/gift/629944/white-glow-front.webp",
-      "/gift/629944/white-glow-side.webp",
-      "/gift/629944/white-glow-back.webp",
-      "/gift/629944/puma-black-front.webp",
-      "/gift/629944/puma-black-side.webp",
-      "/gift/629944/puma-black-back.webp",
-      "/gift/629944/dark-crimson-front.webp",
-      "/gift/629944/dark-crimson-side.webp",
-      "/gift/629944/dark-crimson-back.webp",
-      "/gift/629944/dark-myrtle-front.webp",
-      "/gift/629944/dark-myrtle-side.webp",
-      "/gift/629944/dark-myrtle-back.webp",
-      "/gift/629944/deep-navy-front.webp",
-      "/gift/629944/deep-navy-side.webp",
-      "/gift/629944/deep-navy-back.webp",
-      "/gift/629944/festive-royal-front.webp",
-      "/gift/629944/festive-royal-side.webp",
-      "/gift/629944/festive-royal-back.webp",
-      "/gift/629944/rickie-orange-front.webp",
-      "/gift/629944/rickie-orange-side.webp",
-      "/gift/629944/rickie-orange-back.webp",
-      "/gift/629944/slate-sky-front.webp",
-      "/gift/629944/slate-sky-side.webp",
-      "/gift/629944/slate-sky-back.webp"
+      "/gift/629944/white-glow-front.webp?v=3",
+      "/gift/629944/white-glow-side.webp?v=3",
+      "/gift/629944/white-glow-back.webp?v=3",
+      "/gift/629944/puma-black-front.webp?v=3",
+      "/gift/629944/puma-black-side.webp?v=3",
+      "/gift/629944/puma-black-back.webp?v=3",
+      "/gift/629944/dark-crimson-front.webp?v=3",
+      "/gift/629944/dark-crimson-side.webp?v=3",
+      "/gift/629944/dark-crimson-back.webp?v=3",
+      "/gift/629944/dark-myrtle-front.webp?v=3",
+      "/gift/629944/dark-myrtle-side.webp?v=3",
+      "/gift/629944/dark-myrtle-back.webp?v=3",
+      "/gift/629944/deep-navy-front.webp?v=3",
+      "/gift/629944/deep-navy-side.webp?v=3",
+      "/gift/629944/deep-navy-back.webp?v=3",
+      "/gift/629944/festive-royal-front.webp?v=3",
+      "/gift/629944/festive-royal-side.webp?v=3",
+      "/gift/629944/festive-royal-back.webp?v=3",
+      "/gift/629944/rickie-orange-front.webp?v=3",
+      "/gift/629944/rickie-orange-side.webp?v=3",
+      "/gift/629944/rickie-orange-back.webp?v=3",
+      "/gift/629944/slate-sky-front.webp?v=3",
+      "/gift/629944/slate-sky-side.webp?v=3",
+      "/gift/629944/slate-sky-back.webp?v=3"
     ],
     "material": "4.13 oz./yd², 100% recycled polyester",
     "details": "Interlock fabric structure with superior softness, shape retention, and coverage, Moisture-management, Five-button placket with premium button detailing, No true side seam for ergonomic fit, Ergonomic shoulder panel, Curved hem with 1/2\" hem turnback offers a flattering fit and stays tucked or untucked with ease, 40+ UPF protection, Sleek silicone heat transfer cat branding at front hem, #629944",
@@ -1180,26 +1238,26 @@ export const allProducts = [
       "#68686a"
     ],
     "price": 81,
-    "img": "/gift/629449/white-glow-front.webp",
+    "img": "/gift/629449/white-glow-front.webp?v=3",
     "imgs": [
-      "/gift/629449/white-glow-front.webp",
-      "/gift/629449/white-glow-side.webp",
-      "/gift/629449/white-glow-back.webp",
-      "/gift/629449/puma-black-front.webp",
-      "/gift/629449/puma-black-side.webp",
-      "/gift/629449/puma-black-back.webp",
-      "/gift/629449/dark-crimson-front.webp",
-      "/gift/629449/dark-crimson-side.webp",
-      "/gift/629449/dark-crimson-back.webp",
-      "/gift/629449/dark-myrtle-front.webp",
-      "/gift/629449/dark-myrtle-side.webp",
-      "/gift/629449/dark-myrtle-back.webp",
-      "/gift/629449/deep-navy-front.webp",
-      "/gift/629449/deep-navy-side.webp",
-      "/gift/629449/deep-navy-back.webp",
-      "/gift/629449/slate-sky-front.webp",
-      "/gift/629449/slate-sky-side.webp",
-      "/gift/629449/slate-sky-back.webp"
+      "/gift/629449/white-glow-front.webp?v=3",
+      "/gift/629449/white-glow-side.webp?v=3",
+      "/gift/629449/white-glow-back.webp?v=3",
+      "/gift/629449/puma-black-front.webp?v=3",
+      "/gift/629449/puma-black-side.webp?v=3",
+      "/gift/629449/puma-black-back.webp?v=3",
+      "/gift/629449/dark-crimson-front.webp?v=3",
+      "/gift/629449/dark-crimson-side.webp?v=3",
+      "/gift/629449/dark-crimson-back.webp?v=3",
+      "/gift/629449/dark-myrtle-front.webp?v=3",
+      "/gift/629449/dark-myrtle-side.webp?v=3",
+      "/gift/629449/dark-myrtle-back.webp?v=3",
+      "/gift/629449/deep-navy-front.webp?v=3",
+      "/gift/629449/deep-navy-side.webp?v=3",
+      "/gift/629449/deep-navy-back.webp?v=3",
+      "/gift/629449/slate-sky-front.webp?v=3",
+      "/gift/629449/slate-sky-side.webp?v=3",
+      "/gift/629449/slate-sky-back.webp?v=3"
     ],
     "material": "5.9 oz./yd², 94/6 recycled polyester/spandex",
     "details": "Four-way stretch, Bio-based moisture-management, Mechanical peaching for a soft hand feel, No true side seam for ergonomic fit, Raglan sleeve construction, Curved hem with 1\" hem turnback with double needle coverstitch, Premium embroidered cat branding at front hem, #629449",
@@ -2360,40 +2418,6 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-85",
-    "name": "Men's Adidas Heathered Polo",
-    "category": "Polos",
-    "sizes": "S - 4XL",
-    "badge": "",
-    "colors": [
-      "#515153",
-      "#797e91",
-      "#738ec5",
-      "#c9c8cd"
-    ],
-    "price": 63,
-    "img": "/gift/A582/black-melange-front.webp",
-    "imgs": [
-      "/gift/A582/black-melange-front.webp",
-      "/gift/A582/black-melange-side.webp",
-      "/gift/A582/black-melange-back.webp",
-      "/gift/A582/collegiate-navy-melange-front.webp",
-      "/gift/A582/collegiate-navy-melange-side.webp",
-      "/gift/A582/collegiate-navy-melange-back.webp",
-      "/gift/A582/collegiate-royal-melange-front.webp",
-      "/gift/A582/collegiate-royal-melange-side.webp",
-      "/gift/A582/collegiate-royal-melange-back.webp",
-      "/gift/A582/grey-two-melange-front.webp",
-      "/gift/A582/grey-two-melange-side.webp",
-      "/gift/A582/grey-two-melange-back.webp"
-    ],
-    "material": "5.1 oz./yd² (US), 8.3 oz/L yd (CA), 100% recycled polyester",
-    "details": "Self-collar, Three-button placket, Contrast silicone logo on right sleeve, #A582",
-    "portals": [
-      "gift"
-    ]
-  },
-  {
     "sku": "MN-86",
     "name": "Women's Adidas Heathered Polo",
     "category": "Polos",
@@ -2608,6 +2632,142 @@ export const allProducts = [
     "portals": [
       "gift"
     ]
+  },
+  {
+    "sku": "MN-94",
+    "name": "Men's Trimark Stirling Short Sleeve Shirt",
+    "category": "Polos",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1f2a48",
+      "#1a1a18",
+      "#5e5c60",
+      "#a1a8b0",
+      "#446093",
+      "#b5d5f0",
+      "#1e4d2b",
+      "#baa48c",
+      "#672e45",
+      "#382246",
+      "#bc2c3a",
+      "#ffffff"
+    ],
+    "price": 45,
+    "img": "/gift/17745/navy.webp",
+    "imgs": [
+      "/gift/17745/navy.webp",
+      "/gift/17745/black.webp",
+      "/gift/17745/greystorm.webp",
+      "/gift/17745/grey.webp",
+      "/gift/17745/blue.webp",
+      "/gift/17745/frostblue.webp",
+      "/gift/17745/forestgreen.webp",
+      "/gift/17745/desertkhaki.webp",
+      "/gift/17745/maroon.webp",
+      "/gift/17745/darkplum.webp",
+      "/gift/17745/teamred.webp",
+      "/gift/17745/white.webp"
+    ],
+    "material": "65% polyester / 35% combed cotton woven twill (4.3 oz / 145 gsm)",
+    "details": "Button-down collar, Upper patch pocket (left chest), Center-back box pleat, Back yoke, Flat-felled seams, Contrast inner yoke, EZ-Care fabric, #17745",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-95",
+    "name": "Men's Trimark Wilshire Long Sleeve Shirt",
+    "category": "Polos",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1f2a48",
+      "#1a1a18",
+      "#5e5c60",
+      "#a1a8b0",
+      "#446093",
+      "#b5d5f0",
+      "#1e4d2b",
+      "#baa48c",
+      "#672e45",
+      "#382246",
+      "#bc2c3a",
+      "#ffffff"
+    ],
+    "price": 52,
+    "img": "/gift/17744/navy.webp",
+    "imgs": [
+      "/gift/17744/navy.webp",
+      "/gift/17744/black.webp",
+      "/gift/17744/greystorm.webp",
+      "/gift/17744/grey.webp",
+      "/gift/17744/blue.webp",
+      "/gift/17744/frostblue.webp",
+      "/gift/17744/forestgreen.webp",
+      "/gift/17744/desertkhaki.webp",
+      "/gift/17744/maroon.webp",
+      "/gift/17744/darkplum.webp",
+      "/gift/17744/teamred.webp",
+      "/gift/17744/white.webp"
+    ],
+    "material": "65% polyester / 35% combed cotton woven twill (4.3 oz / 145 gsm)",
+    "details": "Button-down collar, Left chest pocket, Adjustable one-button cuffs with single pleats, Center-back box pleat, Back yoke, Flat-felled seams, Contrast inner yoke, EZ-Care fabric, #17744",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-96",
+    "name": "Women's Core365 Optimum Short Sleeve Twill Shirt",
+    "category": "Polos",
+    "sizes": "XS - 3XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#22304a",
+      "#53565a",
+      "#ffffff"
+    ],
+    "price": 45,
+    "img": "/gift/78194/black.webp",
+    "imgs": [
+      "/gift/78194/black.webp",
+      "/gift/78194/classicnavy.webp",
+      "/gift/78194/carbon.webp",
+      "/gift/78194/white.webp"
+    ],
+    "material": "55/45 cotton/polyester twill (4.4 oz / 150 gsm)",
+    "details": "UV protection, button-down collar, flat-felled seams, left chest pocket, back yoke with box pleat, #78194",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-97",
+    "name": "Women's Core365 Operate Long Sleeve Twill Shirt",
+    "category": "Polos",
+    "sizes": "XS - 3XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#22304a",
+      "#53565a",
+      "#ffffff"
+    ],
+    "price": 52.5,
+    "img": "/gift/78193/black.webp",
+    "imgs": [
+      "/gift/78193/black.webp",
+      "/gift/78193/classicnavy.webp",
+      "/gift/78193/carbon.webp",
+      "/gift/78193/white.webp"
+    ],
+    "material": "55/45 cotton/polyester twill (4.4 oz / 150 gsm)",
+    "details": "UV protection, button-down collar, flat-felled seams, adjustable cuffs, left chest pocket, back yoke with box pleat, #78193",
+    "portals": [
+      "gift"
+    ]
   }
 ];
 
@@ -2785,6 +2945,18 @@ const colorNames: Record<string, Record<string, string>> = {
   "#0d59af": { en: "Team Royal / Grey Two", fr: "Bleu royal équipe / Gris deux" }, // Adidas (gift)
   "#efeef1": { en: "White", fr: "Blanc" }, // Adidas (gift)
   "#f1f2f6": { en: "White / Black", fr: "Blanc / Noir" }, // Adidas (gift)
+  "#1f2a48": { en: "Navy", fr: "Marine" }, // Trimark work shirts (gift)
+  "#5e5c60": { en: "Grey Storm", fr: "Gris orage" }, // Trimark work shirts (gift)
+  "#446093": { en: "Blue", fr: "Bleu" }, // Trimark work shirts (gift)
+  "#b5d5f0": { en: "Frost Blue", fr: "Bleu givré" }, // Trimark work shirts (gift)
+  "#baa48c": { en: "Desert Khaki", fr: "Kaki désert" }, // Trimark work shirts (gift)
+  "#672e45": { en: "Maroon", fr: "Bordeaux" }, // Trimark work shirts (gift)
+  "#382246": { en: "Dark Plum", fr: "Prune foncé" }, // Trimark work shirts (gift)
+  "#bc2c3a": { en: "Team Red", fr: "Rouge équipe" }, // Trimark work shirts (gift)
+  "#22304a": { en: "Classic Navy", fr: "Marine classique" }, // Core365 work shirts (gift)
+  "#53565a": { en: "Carbon", fr: "Carbone" }, // Core365 work shirts (gift)
+  "#9fa1a4": { en: "Sport Grey", fr: "Gris sport" }, // Gildan tees (gift)
+  "#1c57a5": { en: "Royal", fr: "Bleu royal" }, // Gildan tees (gift)
 };
 export function colorName(hex: string, locale: Locale): string {
   return colorNames[hex]?.[locale] || hex;

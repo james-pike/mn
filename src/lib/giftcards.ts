@@ -18,6 +18,9 @@ export interface GiftCard {
   balance: number;
   initialBalance: number;
   active: boolean;
+  /** Card holder (gift portal: entering the code fills in the employee's name). */
+  firstName: string;
+  lastName: string;
 }
 
 export function normalizeCode(code: string): string {
@@ -32,7 +35,7 @@ export async function getGiftCard(db: Client, code: string): Promise<GiftCard | 
   const c = normalizeCode(code);
   if (!c) return null;
   const r = await db.execute({
-    sql: "SELECT code, balance, initial_balance, active FROM gift_cards WHERE code = ? AND vendor = ?",
+    sql: "SELECT code, balance, initial_balance, active, first_name, last_name FROM gift_cards WHERE code = ? AND vendor = ?",
     args: [c, GIFT_CARD_VENDOR],
   });
   const row = r.rows[0] as any;
@@ -42,6 +45,8 @@ export async function getGiftCard(db: Client, code: string): Promise<GiftCard | 
     balance: Number(row.balance) || 0,
     initialBalance: Number(row.initial_balance) || 0,
     active: Number(row.active) === 1,
+    firstName: String(row.first_name ?? "").trim(),
+    lastName: String(row.last_name ?? "").trim(),
   };
 }
 
