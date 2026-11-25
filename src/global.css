@@ -33682,20 +33682,3 @@ html:has(.site-header--gift) .cart-drawer .cart-drawer__footer { padding-bottom:
 
 /* Gift portal: product-page colour swatches a little less rounded (6 -> 3px). */
 html:has(.site-header--gift) .product-modal__color { border-radius: 3px; }
-
-/* Gift portal, desktop: the sidebar's MILESTONE AWARDS band as a small brand
-   header — "Milestone / Awards" on two larger lines. */
-@media (min-width: 1025px) {
-  html:has(.site-header--gift) .home-catalog__filters .home-catalog__catnav-head--gift {
-    display: flex; align-items: center;
-    padding-left: 12px; padding-right: 12px;
-    padding-bottom: 8px; padding-top: calc(0.5rem + 7px);
-  }
-  html:has(.site-header--gift) .home-catalog__filters .home-catalog__catnav-head--gift .home-catalog__catnav-title {
-    padding: 0; font-size: 1.42rem; line-height: 1.08; font-weight: 600;
-    letter-spacing: -0.4px; text-transform: none; color: rgb(43, 47, 52); white-space: normal; text-align: left; flex: 1 1 auto;
-  }
-  html:has(.site-header--gift) .home-catalog__filters .home-catalog__catnav-head--gift { flex-wrap: wrap; }
-  .gift-side__trophy { width: 36px; height: 36px; flex: none; color: #2e698e; margin-left: 8px; }
-}
-@media (max-width: 1024px) { .gift-side__trophy { display: none; } }
