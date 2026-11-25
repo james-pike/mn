@@ -314,6 +314,11 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
       el.style.fontSize = "";
       el.style.whiteSpace = "nowrap";
       el.style.overflow = "hidden";
+      // Gift portal: a title that doesn't fit at the normal width gets a slightly
+      // wider row (into the card's side padding, evenly) before shrinking.
+      const row = el.parentElement;
+      row?.classList.remove("product-card__name-row--wide");
+      if (loginType.value === "gift" && el.scrollWidth > el.clientWidth + 0.5) row?.classList.add("product-card__name-row--wide");
       const base = parseFloat(getComputedStyle(el).fontSize);
       let px = base;
       const min = base * 0.62;
