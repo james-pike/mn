@@ -524,7 +524,7 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
                     />
                   ))}
                   {(extra > 0 || (svc && all.length > 3)) && (
-                    <span class={`product-card__color-more${extra > 0 ? "" : " product-card__color-more--phone"}`} aria-label="More colours">+</span>
+                    <span class={`product-card__color-more${extra > 0 ? "" : " product-card__color-more--phone"}`} aria-label="More colours">{loginType.value === "gift" && extra > 0 ? `+${extra}` : "+"}</span>
                   )}
                   {(hoverColorName.value || singleColorName || pickedColorName.value) && (
                     <span ref={colorNameRef} class={`product-card__color-name${singleColorName ? "" : " product-card__color-name--overlay"}`}>{hoverColorName.value || singleColorName || pickedColorName.value}</span>
