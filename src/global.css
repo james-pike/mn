@@ -33610,24 +33610,23 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
 
 /* Product cards: the bottom-row price is only used by the gift portal on desktop. */
 .product-card__price-bottom { display: none; }
-/* Gift portal, desktop: price moves to the card's bottom-right corner; the
-   Men's/Women's + size range sit centred in the bottom row; the title gets the
-   full card width. Swatches | gender+sizes | price as three flex zones. */
+/* Gift portal, desktop: three lines — title (full width) / swatches + sizes /
+   price in the bottom-left corner. */
 @media (min-width: 1025px) {
   html:has(.site-header--gift) .product-card .product-card__name-row .product-card__price-group { display: none; }
   html:has(.site-header--gift) .product-card .product-card__price-bottom { display: flex; align-items: baseline; }
   html:has(.site-header--gift) .product-card .product-card__color-size-row {
     display: grid;
-    /* side columns never narrower than their content (no overlap), and share any
-       spare room equally so the middle (gender + sizes) sits centred */
-    grid-template-columns: minmax(max-content, 1fr) auto auto minmax(max-content, 1fr);
-    column-gap: 8px; align-items: center;
+    /* line 2: swatches (left) | Men's/Women's + sizes (right); line 3: price */
+    grid-template-columns: minmax(max-content, 1fr) auto auto;
+    column-gap: 8px; row-gap: 3px; align-items: center;
   }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > :first-child { grid-column: 1; justify-self: start; }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__gender { grid-column: 2; margin: 0; justify-self: end; }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__sizes { grid-column: 3; justify-self: start; text-align: left; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > :first-child { grid-column: 1; grid-row: 1; justify-self: start; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__gender { grid-column: 2; grid-row: 1; margin: 0; justify-self: end; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__sizes { grid-column: 3; grid-row: 1; justify-self: end; text-align: right; }
   html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__colors-text { display: none; }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__price-bottom { grid-column: 4; justify-self: end; flex: none; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__price-bottom { grid-column: 1 / -1; grid-row: 2; justify-self: start; flex: none; }
+  html:has(.site-header--gift) .product-card .product-card__price-bottom .product-card__price { font-size: 0.98rem; }
 }
 
 /* Gift portal, desktop: card size text (and the Men's/Women's beside it) a touch
