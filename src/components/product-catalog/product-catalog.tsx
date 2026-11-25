@@ -1133,8 +1133,8 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
               with a SKU count pill. The tab strip stays for mobile/tablet. */}
           {!isSingleCat.value && (
             <nav class="home-catalog__catnav" aria-label="Collections">
-              <div class="home-catalog__catnav-head">
-                <div class="home-catalog__catnav-title">{isElectrical.value ? t("login.portal.electrical", locale.value) : loginType.value === "gift" ? (locale.value === "fr" ? "Récompenses d’étape" : "Milestone Awards") : isSafety.value ? `${t("filter.collections", locale.value)} - HVAC` : t("filter.collections", locale.value)}</div>
+              <div class={`home-catalog__catnav-head${loginType.value === "gift" ? " home-catalog__catnav-head--gift" : ""}`}>
+                <div class="home-catalog__catnav-title">{isElectrical.value ? t("login.portal.electrical", locale.value) : loginType.value === "gift" ? (locale.value === "fr" ? <>Récompenses<br />d’étape</> : <>Milestone<br />Awards</>) : isSafety.value ? `${t("filter.collections", locale.value)} - HVAC` : t("filter.collections", locale.value)}</div>
               </div>
               {visibleCategories.value.map((cat) => (
                 <button
