@@ -1272,7 +1272,7 @@ export const allProducts = [
   {
     "sku": "MN-155",
     "name": "Men's The North Face AIM Full Zip Fleece Jacket",
-    "category": "Fleece",
+    "category": "Jackets",
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
@@ -1300,7 +1300,7 @@ export const allProducts = [
   {
     "sku": "MN-156",
     "name": "Women's The North Face AIM Full Zip Fleece Jacket",
-    "category": "Fleece",
+    "category": "Jackets",
     "sizes": "S - 2XL",
     "badge": "",
     "colors": [
