@@ -467,6 +467,7 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
       onKeyDown$={(e) => { if (e.key === "Enter") goToPdp(); }}
     >
       <div class="product-card__image">
+        {cardBrand && <span class="product-card__brand">{cardBrand}</span>}
         {cardLogoColor.value ? (() => {
           // Logo product: show the STATIC pre-baked card image (front with the
           // default chest logo already composited — scripts/bake-card-logos.ts),
@@ -507,7 +508,6 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
         )}
       </div>
       <div class="product-card__info">
-        {cardBrand && <div class="product-card__brand">{cardBrand}</div>}
         <div class="product-card__name-row">
           <div class="product-card__name" ref={nameRef}>
             {(() => {

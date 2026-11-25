@@ -33738,13 +33738,18 @@ html:has(.site-header--gift) .product-modal__color { border-radius: 3px; }
   html:has(.site-header--gift) .home-catalog__filters { top: 64px; max-height: calc(100vh - 64px); }
 }
 
-/* Gift portal cards: brand on its own small line above the (brand-less) title. */
+/* Gift portal cards: brand as a small outlined chip in the photo's bottom-left
+   corner (the brand is left out of the card title). */
+html:has(.site-header--gift) .product-card .product-card__image { position: relative; }
 html:has(.site-header--gift) .product-card__brand {
-  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
-  color: #6b7076; line-height: 1.2; margin: 0 0 1px;
+  position: absolute; left: 8px; bottom: 8px; z-index: 2; pointer-events: none;
+  padding: 2px 7px; border: 1px solid rgba(43, 47, 52, 0.28); border-radius: 3px;
+  background: rgba(255, 255, 255, 0.88);
+  font-size: 0.66rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  color: #4b5057; line-height: 1.35;
 }
 @media (min-width: 1000px) {
-  html:has(.site-header--gift) .product-card__brand { font-size: 0.74rem; }
+  html:has(.site-header--gift) .product-card__brand { font-size: 0.7rem; }
 }
 
 /* Gift portal, desktop + wide tablets: the sticky sidebar is exactly one screen
