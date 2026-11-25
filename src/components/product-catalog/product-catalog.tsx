@@ -776,7 +776,13 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
         const i = GIFT_CATEGORIES.indexOf(c);
         return i === -1 ? GIFT_CATEGORIES.length : i;
       };
-      return gift.slice().sort((a, b) => rank(a.category) - rank(b.category));
+      const ordered = gift.slice().sort((a, b) => rank(a.category) - rank(b.category));
+      // For now: swap the green Club Fleece pullover hoodie (MN-153) with the
+      // women's North Face AIM jacket (MN-156) in the "All" grid.
+      const i = ordered.findIndex((p) => p.sku === "MN-153");
+      const j = ordered.findIndex((p) => p.sku === "MN-156");
+      if (i !== -1 && j !== -1) [ordered[i], ordered[j]] = [ordered[j], ordered[i]];
+      return ordered;
     }
     if (isTech.value) return allProducts.filter((p) => p.category === "Work Wear");
     if (isSafety.value) {
