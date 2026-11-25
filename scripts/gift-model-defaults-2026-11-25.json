@@ -1,0 +1,198 @@
+{
+ "MN-144": {
+  "colors": [
+   "#7ba4db",
+   "#333f48",
+   "#1a1a18",
+   "#707372",
+   "#003594",
+   "#2c3e50",
+   "#ba0c2f",
+   "#ffffff"
+  ],
+  "img": "/gift/NKDC1991/valor-blue-model.webp",
+  "imgs": [
+   "/gift/NKDC1991/valor-blue-model.webp",
+   "/gift/NKDC1991/valor-blue-front.webp",
+   "/gift/NKDC1991/valor-blue-back.webp",
+   "/gift/NKDC1991/anthracite-front.webp",
+   "/gift/NKDC1991/anthracite-back.webp",
+   "/gift/NKDC1991/black-front.webp",
+   "/gift/NKDC1991/black-back.webp",
+   "/gift/NKDC1991/cool-grey-front.webp",
+   "/gift/NKDC1991/cool-grey-back.webp",
+   "/gift/NKDC1991/game-royal-front.webp",
+   "/gift/NKDC1991/game-royal-back.webp",
+   "/gift/NKDC1991/navy-front.webp",
+   "/gift/NKDC1991/navy-back.webp",
+   "/gift/NKDC1991/university-red-front.webp",
+   "/gift/NKDC1991/university-red-back.webp",
+   "/gift/NKDC1991/white-front.webp",
+   "/gift/NKDC1991/white-back.webp"
+  ]
+ },
+ "MN-145": {
+  "colors": [
+   "#7ba4db",
+   "#333f48",
+   "#1a1a18",
+   "#707372",
+   "#003594",
+   "#2c3e50",
+   "#bc2c3a",
+   "#ba0c2f",
+   "#ffffff"
+  ],
+  "img": "/gift/NKDC1963/valor-blue-model.webp",
+  "imgs": [
+   "/gift/NKDC1963/valor-blue-model.webp",
+   "/gift/NKDC1963/valor-blue-front.webp",
+   "/gift/NKDC1963/valor-blue-back.webp",
+   "/gift/NKDC1963/anthracite-front.webp",
+   "/gift/NKDC1963/anthracite-back.webp",
+   "/gift/NKDC1963/black-front.webp",
+   "/gift/NKDC1963/black-back.webp",
+   "/gift/NKDC1963/cool-grey-front.webp",
+   "/gift/NKDC1963/cool-grey-back.webp",
+   "/gift/NKDC1963/game-royal-front.webp",
+   "/gift/NKDC1963/game-royal-back.webp",
+   "/gift/NKDC1963/navy-front.webp",
+   "/gift/NKDC1963/navy-back.webp",
+   "/gift/NKDC1963/team-red-front.webp",
+   "/gift/NKDC1963/team-red-back.webp",
+   "/gift/NKDC1963/university-red-front.webp",
+   "/gift/NKDC1963/university-red-back.webp",
+   "/gift/NKDC1963/white-front.webp",
+   "/gift/NKDC1963/white-back.webp"
+  ]
+ },
+ "MN-147": {
+  "colors": [
+   "#051c2c",
+   "#1a1a18",
+   "#9ea2a2"
+  ],
+  "img": "/gift/NKDX6720/midnight-navy-model.webp",
+  "imgs": [
+   "/gift/NKDX6720/midnight-navy-model.webp",
+   "/gift/NKDX6720/midnight-navy-front.webp",
+   "/gift/NKDX6720/midnight-navy-back.webp",
+   "/gift/NKDX6720/black-front.webp",
+   "/gift/NKDX6720/black-back.webp",
+   "/gift/NKDX6720/dark-grey-heather-front.webp",
+   "/gift/NKDX6720/dark-grey-heather-back.webp"
+  ]
+ },
+ "MN-148": {
+  "colors": [
+   "#333f48",
+   "#1a1a18",
+   "#9ea2a2",
+   "#051c2c",
+   "#ffffff"
+  ],
+  "img": "/gift/NKDX6718/anthracite-model.webp",
+  "imgs": [
+   "/gift/NKDX6718/anthracite-model.webp",
+   "/gift/NKDX6718/anthracite-front.webp",
+   "/gift/NKDX6718/anthracite-back.webp",
+   "/gift/NKDX6718/black-front.webp",
+   "/gift/NKDX6718/black-back.webp",
+   "/gift/NKDX6718/dark-grey-heather-front.webp",
+   "/gift/NKDX6718/dark-grey-heather-back.webp",
+   "/gift/NKDX6718/midnight-navy-front.webp",
+   "/gift/NKDX6718/midnight-navy-back.webp",
+   "/gift/NKDX6718/white-front.webp",
+   "/gift/NKDX6718/white-back.webp"
+  ]
+ },
+ "MN-152": {
+  "colors": [
+   "#545859",
+   "#1a1a18",
+   "#9ea2a2",
+   "#051c2c",
+   "#ffffff"
+  ],
+  "img": "/gift/DR1513/charcoal-heather-model.webp",
+  "imgs": [
+   "/gift/DR1513/charcoal-heather-model.webp",
+   "/gift/DR1513/charcoal-heather-front.webp",
+   "/gift/DR1513/charcoal-heather-back.webp",
+   "/gift/DR1513/black-front.webp",
+   "/gift/DR1513/black-back.webp",
+   "/gift/DR1513/dark-grey-heather-front.webp",
+   "/gift/DR1513/dark-grey-heather-back.webp",
+   "/gift/DR1513/midnight-navy-front.webp",
+   "/gift/DR1513/midnight-navy-back.webp",
+   "/gift/DR1513/white-front.webp",
+   "/gift/DR1513/white-back.webp"
+  ]
+ },
+ "MN-153": {
+  "colors": [
+   "#2b5135",
+   "#333f48",
+   "#1a1a18",
+   "#9ea2a2",
+   "#003594",
+   "#051c2c",
+   "#ba0c2f",
+   "#ffffff"
+  ],
+  "img": "/gift/DR1499/gorge-green-model.webp",
+  "imgs": [
+   "/gift/DR1499/gorge-green-model.webp",
+   "/gift/DR1499/gorge-green-front.webp",
+   "/gift/DR1499/gorge-green-back.webp",
+   "/gift/DR1499/anthracite-front.webp",
+   "/gift/DR1499/anthracite-back.webp",
+   "/gift/DR1499/black-front.webp",
+   "/gift/DR1499/black-back.webp",
+   "/gift/DR1499/dark-grey-heather-front.webp",
+   "/gift/DR1499/dark-grey-heather-back.webp",
+   "/gift/DR1499/game-royal-front.webp",
+   "/gift/DR1499/game-royal-back.webp",
+   "/gift/DR1499/midnight-navy-front.webp",
+   "/gift/DR1499/midnight-navy-back.webp",
+   "/gift/DR1499/university-red-front.webp",
+   "/gift/DR1499/university-red-back.webp",
+   "/gift/DR1499/white-front.webp",
+   "/gift/DR1499/white-back.webp"
+  ]
+ },
+ "MN-155": {
+  "colors": [
+   "#63666a",
+   "#004976",
+   "#1a1a18"
+  ],
+  "img": "/gift/NF0A8ENK/smoked-pearl-grey-model.webp",
+  "imgs": [
+   "/gift/NF0A8ENK/smoked-pearl-grey-model.webp",
+   "/gift/NF0A8ENK/smoked-pearl-grey-front.webp",
+   "/gift/NF0A8ENK/smoked-pearl-grey-back.webp",
+   "/gift/NF0A8ENK/shady-blue-front.webp",
+   "/gift/NF0A8ENK/shady-blue-back.webp",
+   "/gift/NF0A8ENK/black-front.webp",
+   "/gift/NF0A8ENK/black-back.webp"
+  ]
+ },
+ "MN-156": {
+  "colors": [
+   "#004976",
+   "#63666a",
+   "#1a1a18"
+  ],
+  "img": "/gift/NF0A8FQJ/shady-blue-model.webp",
+  "imgs": [
+   "/gift/NF0A8FQJ/shady-blue-model.webp",
+   "/gift/NF0A8FQJ/shady-blue-front.webp",
+   "/gift/NF0A8FQJ/shady-blue-back.webp",
+   "/gift/NF0A8FQJ/smoked-pearl-grey-front.webp",
+   "/gift/NF0A8FQJ/smoked-pearl-grey-back.webp",
+   "/gift/NF0A8FQJ/black-front.webp",
+   "/gift/NF0A8FQJ/black-back.webp"
+  ]
+ }
+}
