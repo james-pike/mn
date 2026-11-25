@@ -267,7 +267,7 @@ const GiftBalanceCheck = component$(() => {
   });
   return (
     <div class="gift-balance">
-      <div class="home-catalog__filter-title">{fr ? "Solde de la carte-cadeau" : "Gift Card Balance"}</div>
+      <div class="home-catalog__filter-title">{fr ? "Vérifier le solde" : "Check Balance"}</div>
       <form class="gift-balance__row" preventdefault:submit onSubmit$={check}>
         <input
           type="text"
