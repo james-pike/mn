@@ -4,7 +4,7 @@ import type { DocumentHead } from "@builder.io/qwik-city";
 import { allProducts } from "../../apparel/products";
 import { ProductDetailPanel } from "../../../components/product-detail/product-detail";
 import { isSkuInLineup } from "../../../components/product-catalog/product-catalog";
-import { getLoginType } from "../../layout";
+import { getLoginType, useAuthCheck } from "../../layout";
 
 // Guards the /<sku>/ route. Unknown slugs (including the retired "/apparel"
 // path) redirect to the catalog. Every login is scoped to its own lineup: a
@@ -41,10 +41,9 @@ export default component$(() => {
 export const head: DocumentHead = ({ params, resolveValue }) => {
   const guard = resolveValue(useProductGuard);
   const product = allProducts.find((p) => p.sku === params.sku);
+  // Gift portal: short "<product> - Milestone Awards" tab titles.
+  const suffix = resolveValue(useAuthCheck).loginType === "gift" ? "Milestone Awards" : "Modern Niagara Building Services Apparel";
   return {
-    title:
-      guard.allowed && product
-        ? `${product.name} - Modern Niagara Building Services Apparel`
-        : "Product - Modern Niagara Building Services Apparel",
+    title: guard.allowed && product ? `${product.name} - ${suffix}` : `Product - ${suffix}`,
   };
 };

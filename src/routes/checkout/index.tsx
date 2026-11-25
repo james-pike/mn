@@ -15,7 +15,7 @@ import type { DocumentHead } from "@builder.io/qwik-city";
 import { Modal, Collapsible } from "@qwik-ui/headless";
 import { LocaleContext, t } from "../../i18n";
 import { colorName } from "../apparel/products";
-import { LoginTypeContext, useSubmitOrder, checkGiftCardBalance } from "../layout";
+import { LoginTypeContext, useSubmitOrder, checkGiftCardBalance, useAuthCheck } from "../layout";
 import { hidesPrices, poOptional, kitMissing, fixedQtyFor, ELECTRICAL_SHIP_TO, ELECTRICAL_SUMMARY_ORDER } from "../../lib/lineup";
 import { ElectricalBrandPanel } from "../../components/kit-panel/kit-panel";
 
@@ -749,7 +749,7 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
-  title: "Checkout — Modern Niagara Building Services Apparel",
+export const head: DocumentHead = ({ resolveValue }) => ({
+  title: resolveValue(useAuthCheck).loginType === "gift" ? "Checkout - Milestone Awards" : "Checkout — Modern Niagara Building Services Apparel",
   meta: [{ name: "robots", content: "noindex" }],
-};
+});
