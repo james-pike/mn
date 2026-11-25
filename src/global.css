@@ -33610,22 +33610,23 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
 
 /* Product cards: the bottom-row price is only used by the gift portal on desktop. */
 .product-card__price-bottom { display: none; }
-/* Gift portal, desktop: three lines — title (full width) / price + sizes /
-   swatches. */
+/* Gift portal, desktop: three lines — title (full width) / swatches /
+   price (left) + sizes (right). */
 @media (min-width: 1025px) {
   html:has(.site-header--gift) .product-card .product-card__name-row .product-card__price-group { display: none; }
   html:has(.site-header--gift) .product-card .product-card__price-bottom { display: flex; align-items: baseline; }
   html:has(.site-header--gift) .product-card .product-card__color-size-row {
     display: grid;
-    /* line 2: price (left) | Men's/Women's + sizes (right); line 3: swatches */
+    /* line 2: swatches; line 3: price (left) | Men's/Women's + sizes (right) */
     grid-template-columns: minmax(max-content, 1fr) auto auto;
+    grid-template-rows: 24px auto; /* fixed swatch line so prices stay level across a row */
     column-gap: 8px; row-gap: 3px; align-items: center;
   }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > :first-child { grid-column: 1 / -1; grid-row: 2; justify-self: start; }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__gender { grid-column: 2; grid-row: 1; margin: 0; justify-self: end; }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__sizes { grid-column: 3; grid-row: 1; justify-self: end; text-align: right; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > :first-child { grid-column: 1 / -1; grid-row: 1; justify-self: start; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__gender { grid-column: 2; grid-row: 2; margin: 0; justify-self: end; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__sizes { grid-column: 3; grid-row: 2; justify-self: end; text-align: right; }
   html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__colors-text { display: none; }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__price-bottom { grid-column: 1; grid-row: 1; justify-self: start; flex: none; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__price-bottom { grid-column: 1; grid-row: 2; justify-self: start; flex: none; }
   html:has(.site-header--gift) .product-card .product-card__price-bottom .product-card__price { font-size: 1.04rem; }
 }
 
