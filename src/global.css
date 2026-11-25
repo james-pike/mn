@@ -33688,5 +33688,7 @@ html:has(.site-header--gift) .product-modal__color { border-radius: 3px; }
   html:has(.site-header--gift) .home-catalog__filters .home-catalog__catnav-head { align-items: center; }
   .gift-side__trophy { width: 21.5px; height: 21.5px; flex: none; color: #2e698e; margin: 0 4.75px 0 3px; position: relative; top: -3.5px; } /* centred over the count badges, level with the caps */
   html:has(.site-header--gift) .home-catalog__filters .home-catalog__catnav-head .home-catalog__catnav-title { white-space: nowrap; padding-right: 0; flex: 1 1 auto; min-width: 0; font-size: 0.97rem; letter-spacing: -0.2px; }
+  /* a touch more room above and below the heading (3px each) */
+  html:has(.site-header--gift) .home-catalog__filters .home-catalog__catnav-head { padding-top: calc(0.5rem + 3.2px); padding-bottom: 5px; }
 }
 @media (max-width: 1024px) { .gift-side__trophy { display: none; } }
