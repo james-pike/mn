@@ -33766,3 +33766,5 @@ html:has(.site-header--gift) .product-card__brand {
 @media (min-width: 1000px) and (max-width: 1100px) {
   html:has(.site-header--gift) .home-catalog__filters { height: calc(100vh - 64px); }
 }
+/* Gift portal cards: less space above the title (closer to the brand tab). */
+html:has(.site-header--gift) .product-card .product-card__info { padding-top: 5.5px; }
