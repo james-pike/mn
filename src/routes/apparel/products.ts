@@ -904,7 +904,7 @@ export const allProducts = [
     "sku": "MN-146",
     "name": "Herschel Recycled Classic Crossbody Tote",
     "category": "Bags",
-    "sizes": "One Size",
+    "sizes": "2L",
     "badge": "",
     "colors": [
       "#1a1a18"
@@ -1005,9 +1005,9 @@ export const allProducts = [
   },
   {
     "sku": "MN-150",
-    "name": "Nike Utility Speed Backpack 2.0 (27L)",
+    "name": "Nike Utility Speed Backpack 2.0",
     "category": "Bags",
-    "sizes": "One Size",
+    "sizes": "27L",
     "badge": "",
     "colors": [
       "#1a1a18"
@@ -1028,7 +1028,7 @@ export const allProducts = [
     "sku": "MN-151",
     "name": "Herschel Recycled Classic Gym Bag",
     "category": "Bags",
-    "sizes": "One Size",
+    "sizes": "27L",
     "badge": "",
     "colors": [
       "#b5b9c4",
@@ -1211,7 +1211,7 @@ export const allProducts = [
     "sku": "MN-154",
     "name": "Herschel Retreat Backpack",
     "category": "Bags",
-    "sizes": "One Size",
+    "sizes": "23L",
     "badge": "",
     "colors": [
       "#2c3e50",
