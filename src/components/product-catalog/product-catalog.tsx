@@ -1135,6 +1135,9 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
             <nav class="home-catalog__catnav" aria-label="Collections">
               <div class={`home-catalog__catnav-head${loginType.value === "gift" ? " home-catalog__catnav-head--gift" : ""}`}>
                 <div class="home-catalog__catnav-title">{isElectrical.value ? t("login.portal.electrical", locale.value) : loginType.value === "gift" ? (locale.value === "fr" ? <>Récompenses<br />d’étape</> : <>Milestone<br />Awards</>) : isSafety.value ? `${t("filter.collections", locale.value)} - HVAC` : t("filter.collections", locale.value)}</div>
+                {loginType.value === "gift" && (
+                  <p class="gift-side__text">{locale.value === "fr" ? "Choisissez votre récompense et payez avec votre carte-cadeau." : "Choose your award and pay with your gift card."}</p>
+                )}
               </div>
               {visibleCategories.value.map((cat) => (
                 <button
