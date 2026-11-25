@@ -306,25 +306,13 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
       el.style.fontSize = "";
       el.style.whiteSpace = "nowrap";
       el.style.overflow = "hidden";
-      el.classList.remove("product-card__name--marquee");
-      // Gift portal on hover-capable desktops: shrink only a little, then let a
-      // still-too-long title scroll its last bit into view on card hover
-      // (instead of shrinking it to a tiny size).
-      const marquee = loginType.value === "gift" && window.matchMedia("(hover: hover) and (min-width: 1025px)").matches;
       const base = parseFloat(getComputedStyle(el).fontSize);
       let px = base;
-      const min = base * (marquee ? 0.9 : 0.62);
+      const min = base * 0.62;
       let guard = 0;
       while (el.scrollWidth > el.clientWidth + 0.5 && px > min && guard++ < 40) {
         px -= 0.5;
         el.style.fontSize = `${px}px`;
-      }
-      if (marquee && el.scrollWidth > el.clientWidth + 0.5) {
-        const over = el.scrollWidth - el.clientWidth + 2;
-        el.style.setProperty("--marquee-shift", `${-over}px`);
-        el.style.setProperty("--marquee-dur", `${Math.max(0.6, over / 45).toFixed(2)}s`);
-        el.classList.add("product-card__name--marquee");
-        return;
       }
       if (el.scrollWidth > el.clientWidth + 0.5) {
         // Can't fit even at the floor: wrap instead. Explicit "normal" because the
