@@ -273,7 +273,7 @@ const GiftBalanceCheck = component$(() => {
           type="text"
           class="gift-balance__input"
           value={code.value}
-          placeholder={fr ? "Code cadeau" : "Gift code"}
+          placeholder={fr ? "N° de carte-cadeau" : "Gift Card #"}
           aria-label={fr ? "Code de la carte-cadeau" : "Gift card code"}
           onInput$={(_, el) => { code.value = el.value; result.value = null; }}
         />
