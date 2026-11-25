@@ -33658,3 +33658,15 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
    code field — hide the name/address/contact fields and the payment section. */
 .cart-drawer__details-step--gift-locked .checkout-modal__form > :not(.checkout-modal__form-title):not(.checkout-modal__gift--top),
 .cart-drawer__details-step--gift-locked .checkout-modal__pay { display: none !important; }
+
+/* Gift portal checkout (desktop): order summary sits right beside the gift card
+   / details column (not pushed to the far right), with bigger text and more
+   padding so it reads at the same scale as the form. */
+@media (min-width: 1025px) {
+  html:has(.site-header--gift) .cart-drawer__details-step {
+    grid-template-columns: minmax(0, 700px) minmax(0, 1fr);
+  }
+  html:has(.site-header--gift) .cart-drawer__summary { padding: 30px 32px 28px; }
+  html:has(.site-header--gift) .cart-drawer__checkout-title { font-size: 0.95rem; }
+  html:has(.site-header--gift) .cart-drawer__summary-item { font-size: 1rem; padding: 6px 0; }
+}
