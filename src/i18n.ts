@@ -288,6 +288,8 @@ const translations = {
   "cat.Flame Resistant": { en: "Flame Resistant", fr: "Vêtements ignifuges" },
   "cat.Shirts": { en: "T-Shirts", fr: "T-shirts" },
   "cat.Sweaters": { en: "Sweaters", fr: "Chandails" },
+  "cat.Fleece": { en: "Fleece", fr: "Molleton" },
+  "cat.Bags": { en: "Bags", fr: "Sacs" },
   "cat.Footwear": { en: "Safety Footwear", fr: "Chaussures de sécurité" },
   "cat.Headwear": { en: "Headwear", fr: "Couvre-chefs" },
   "cat.Pants": { en: "Pants", fr: "Pantalons" },

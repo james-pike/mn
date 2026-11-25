@@ -810,6 +810,506 @@ export const allProducts = [
     "portals": [
       "electrical"
     ]
+  },
+  {
+    "sku": "MN-144",
+    "name": "Women's Nike Dri-FIT Micro Pique 2.0 Polo",
+    "category": "Polos",
+    "sizes": "S - 2XL",
+    "badge": "",
+    "colors": [
+      "#333f48",
+      "#1a1a18",
+      "#707372",
+      "#003594",
+      "#2c3e50",
+      "#ba0c2f",
+      "#7ba4db",
+      "#ffffff"
+    ],
+    "price": 50,
+    "img": "/gift/NKDC1991/anthracite-front.webp",
+    "imgs": [
+      "/gift/NKDC1991/anthracite-front.webp",
+      "/gift/NKDC1991/anthracite-back.webp",
+      "/gift/NKDC1991/black-front.webp",
+      "/gift/NKDC1991/black-back.webp",
+      "/gift/NKDC1991/cool-grey-front.webp",
+      "/gift/NKDC1991/cool-grey-back.webp",
+      "/gift/NKDC1991/game-royal-front.webp",
+      "/gift/NKDC1991/game-royal-back.webp",
+      "/gift/NKDC1991/navy-front.webp",
+      "/gift/NKDC1991/navy-back.webp",
+      "/gift/NKDC1991/university-red-front.webp",
+      "/gift/NKDC1991/university-red-back.webp",
+      "/gift/NKDC1991/valor-blue-front.webp",
+      "/gift/NKDC1991/valor-blue-back.webp",
+      "/gift/NKDC1991/valor-blue-model.webp",
+      "/gift/NKDC1991/white-front.webp",
+      "/gift/NKDC1991/white-back.webp"
+    ],
+    "material": "7.2 oz/ly (CA), 4.3 oz/sq yd (US), 146 gsm (EU)",
+    "details": "100% Dri-FIT polyester with moisture management technology, Self-fabric collar, Open neckline, Double needle hemmed bottom, Contrast embroidered Swoosh logo at left sleeve, Breathable, Tagless, Classic fit, #NKDC1991",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-145",
+    "name": "Men's Nike Dri-FIT Micro Pique 2.0 Polo",
+    "category": "Polos",
+    "sizes": "XS - 4XL",
+    "badge": "",
+    "colors": [
+      "#333f48",
+      "#1a1a18",
+      "#707372",
+      "#003594",
+      "#2c3e50",
+      "#bc2c3a",
+      "#ba0c2f",
+      "#7ba4db",
+      "#ffffff"
+    ],
+    "price": 50,
+    "img": "/gift/NKDC1963/anthracite-front.webp",
+    "imgs": [
+      "/gift/NKDC1963/anthracite-front.webp",
+      "/gift/NKDC1963/anthracite-back.webp",
+      "/gift/NKDC1963/black-front.webp",
+      "/gift/NKDC1963/black-back.webp",
+      "/gift/NKDC1963/cool-grey-front.webp",
+      "/gift/NKDC1963/cool-grey-back.webp",
+      "/gift/NKDC1963/game-royal-front.webp",
+      "/gift/NKDC1963/game-royal-back.webp",
+      "/gift/NKDC1963/navy-front.webp",
+      "/gift/NKDC1963/navy-back.webp",
+      "/gift/NKDC1963/team-red-front.webp",
+      "/gift/NKDC1963/team-red-back.webp",
+      "/gift/NKDC1963/university-red-front.webp",
+      "/gift/NKDC1963/university-red-back.webp",
+      "/gift/NKDC1963/valor-blue-front.webp",
+      "/gift/NKDC1963/valor-blue-back.webp",
+      "/gift/NKDC1963/valor-blue-model.webp",
+      "/gift/NKDC1963/white-front.webp",
+      "/gift/NKDC1963/white-back.webp"
+    ],
+    "material": "7.2 oz/ly (CA), 4.3 oz/sq yd (US), 146 gsm (EU)",
+    "details": "100% Dri-FIT polyester with moisture management technology, Rib knit collar, 3-button placket, Rolled forward shoulder seams, Nike embossed pearlized buttons, Double needle hemmed bottom, Contrast embroidered Swoosh logo at left sleeve, Breathable, Tagless, Classic fit, #NKDC1963",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-146",
+    "name": "Herschel Recycled Classic Crossbody Tote",
+    "category": "Bags",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 50,
+    "img": "/gift/CA2009-48/black-front.webp",
+    "imgs": [
+      "/gift/CA2009-48/black-front.webp"
+    ],
+    "material": "Simple, versatile and made with recycled EcoSystem™ fabrics",
+    "details": "Crossbody tote for daily journeys, keeps the essentials within reach, #CA2009-48",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-147",
+    "name": "Women's Nike Club Fleece Sleeve Swoosh 1/2 Zip",
+    "category": "Fleece",
+    "sizes": "S - 2XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#9ea2a2",
+      "#051c2c"
+    ],
+    "price": 100,
+    "img": "/gift/NKDX6720/black-front.webp",
+    "imgs": [
+      "/gift/NKDX6720/black-front.webp",
+      "/gift/NKDX6720/black-back.webp",
+      "/gift/NKDX6720/dark-grey-heather-front.webp",
+      "/gift/NKDX6720/dark-grey-heather-back.webp",
+      "/gift/NKDX6720/midnight-navy-front.webp",
+      "/gift/NKDX6720/midnight-navy-back.webp",
+      "/gift/NKDX6720/midnight-navy-model.webp"
+    ],
+    "material": "13.8 oz/ly (CA), 8.3 oz/sq yd (US), 281 gsm (EU)",
+    "details": "80/20 cotton/polyester, Zip-through collar, Dyed-to-match zipper, Taped neck for comfort and durability, Set-in sleeves, Front pouch pocket, Rib knit cuffs and waistband, Contrast embroidered Swoosh logo on left sleeve, Classic fit, #NKDX6720",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-148",
+    "name": "Men's Nike Club Fleece Sleeve Swoosh 1/2 Zip",
+    "category": "Fleece",
+    "sizes": "XS - 4XL",
+    "badge": "",
+    "colors": [
+      "#333f48",
+      "#1a1a18",
+      "#9ea2a2",
+      "#051c2c",
+      "#ffffff"
+    ],
+    "price": 100,
+    "img": "/gift/NKDX6718/anthracite-front.webp",
+    "imgs": [
+      "/gift/NKDX6718/anthracite-front.webp",
+      "/gift/NKDX6718/anthracite-back.webp",
+      "/gift/NKDX6718/anthracite-model.webp",
+      "/gift/NKDX6718/black-front.webp",
+      "/gift/NKDX6718/black-back.webp",
+      "/gift/NKDX6718/dark-grey-heather-front.webp",
+      "/gift/NKDX6718/dark-grey-heather-back.webp",
+      "/gift/NKDX6718/midnight-navy-front.webp",
+      "/gift/NKDX6718/midnight-navy-back.webp",
+      "/gift/NKDX6718/white-front.webp",
+      "/gift/NKDX6718/white-back.webp"
+    ],
+    "material": "13.8 oz/ly (CA), 8.3 oz/sq yd (US), 281 gsm (EU)",
+    "details": "80/20 cotton/polyester, Zip-through collar, Dyed-to-match zipper, Taped neck for comfort and durability, Set-in sleeves, Side pockets, Rib knit cuffs and waistband, Contrast embroidered Swoosh logo on left sleeve, Classic fit, #NKDX6718",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-149",
+    "name": "Nike Therma-FIT 1/4 Zip Fleece Hoodie",
+    "category": "Fleece",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#9ea2a2"
+    ],
+    "price": 100,
+    "img": "/gift/NKFD9742/dark-grey-heather-front.webp",
+    "imgs": [
+      "/gift/NKFD9742/dark-grey-heather-front.webp",
+      "/gift/NKFD9742/dark-grey-heather-back.webp"
+    ],
+    "material": "12.3 oz/ly (CA), 7.4 oz/sq yd (US), 250 gsm (EU)",
+    "details": "100% Therma-FIT polyester with moisture management technology, 3-panel hood with flat contrast drawstrings, Front pouch pocket, Self-fabric cuffs and bottom hem, Contrast embroidered Swoosh logo on left sleeve zipper pocket, Contains at least 50% recycled content, Breathable, Scuba hood, Classic fit, #NKFD9742",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-150",
+    "name": "Nike Utility Speed Backpack 2.0 (27L)",
+    "category": "Bags",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 100,
+    "img": "/gift/NKFN4106/black-front.webp",
+    "imgs": [
+      "/gift/NKFN4106/black-front.webp",
+      "/gift/NKFN4106/black-back.webp"
+    ],
+    "material": "100% polyester with PU coating for durability, with at least 65% recycled content",
+    "details": "Spacious two-way zippered main compartment with interior slip sleeve pockets, Secure laptop sleeve with right-side zipper access; fits laptops up to 16\", Gusseted side slip pocket with utility hoop, Side mesh slip pocket, Multiple front exterior zippered pockets, Top back zippered utility pocket, Padded back panel for added comfort, Padded, adjustable shoulder straps for comfortable carrying, Adjustable sternum strap, Luggage pass-through back strap, Bottom front grommets for ventilation, Padded top haul handle, Contrast welded rubber Nike branding on front bottom left pocket, #NKFN4106",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-151",
+    "name": "Herschel Recycled Classic Gym Bag",
+    "category": "Bags",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#b5b9c4"
+    ],
+    "price": 100,
+    "img": "/gift/CA2009-46/black-front.webp",
+    "imgs": [
+      "/gift/CA2009-46/black-front.webp",
+      "/gift/CA2009-46/raven-crosshatch-front.webp"
+    ],
+    "material": "EcoSystem™ 600D Fabric made from 100% recycled post-consumer water bottles",
+    "details": "Tonal stripe EcoSystem™ Liner made from 100% recycled post-consumer water bottles, Zippered closure with Prusik cord pulls, Smooth webbing top-carrying handles, Removable smooth webbing shoulder strap, Front storage sleeve, #CA2009-46",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-54",
+    "name": "Men's Adidas Spacer Quarter-Zip Pullover",
+    "category": "Fleece",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#272629",
+      "#222942",
+      "#ececec",
+      "#69686d",
+      "#d2d9e1",
+      "#a0998d"
+    ],
+    "price": 100,
+    "img": "/gift/A588/black-front.webp",
+    "imgs": [
+      "/gift/A588/black-front.webp",
+      "/gift/A588/black-side.webp",
+      "/gift/A588/black-back.webp",
+      "/gift/A588/collegiate-navy-front.webp",
+      "/gift/A588/collegiate-navy-side.webp",
+      "/gift/A588/collegiate-navy-back.webp",
+      "/gift/A588/core-white-front.webp",
+      "/gift/A588/core-white-side.webp",
+      "/gift/A588/core-white-back.webp",
+      "/gift/A588/grey-five-front.webp",
+      "/gift/A588/grey-five-side.webp",
+      "/gift/A588/grey-five-back.webp",
+      "/gift/A588/halo-blue-front.webp",
+      "/gift/A588/halo-blue-side.webp",
+      "/gift/A588/halo-blue-back.webp",
+      "/gift/A588/silver-pebble-front.webp",
+      "/gift/A588/silver-pebble-side.webp",
+      "/gift/A588/silver-pebble-back.webp"
+    ],
+    "material": "5.8 oz./yd² (US), 10 oz/L yd (CA) 100% recycled polyester",
+    "details": "Spacer knit construction, Contrast silicone logo on right sleeve, #A588",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-56",
+    "name": "Women's Adidas Spacer Quarter-Zip Pullover",
+    "category": "Fleece",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#272629",
+      "#222942",
+      "#ececec",
+      "#69686d",
+      "#d2d9e1",
+      "#a0998d"
+    ],
+    "price": 100,
+    "img": "/gift/A589/black-front.webp",
+    "imgs": [
+      "/gift/A589/black-front.webp",
+      "/gift/A589/black-side.webp",
+      "/gift/A589/black-back.webp",
+      "/gift/A589/collegiate-navy-front.webp",
+      "/gift/A589/collegiate-navy-side.webp",
+      "/gift/A589/collegiate-navy-back.webp",
+      "/gift/A589/core-white-front.webp",
+      "/gift/A589/core-white-side.webp",
+      "/gift/A589/core-white-back.webp",
+      "/gift/A589/grey-five-front.webp",
+      "/gift/A589/grey-five-side.webp",
+      "/gift/A589/grey-five-back.webp",
+      "/gift/A589/halo-blue-front.webp",
+      "/gift/A589/halo-blue-side.webp",
+      "/gift/A589/halo-blue-back.webp",
+      "/gift/A589/silver-pebble-front.webp",
+      "/gift/A589/silver-pebble-side.webp",
+      "/gift/A589/silver-pebble-back.webp"
+    ],
+    "material": "5.8 oz./yd² (US), 10 oz/L yd (CA), 100% recycled polyester",
+    "details": "Spacer knit construction, Contrast silicone logo on right sleeve, #A589",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-152",
+    "name": "Nike Club Fleece Sleeve Swoosh Full Zip Hoodie",
+    "category": "Fleece",
+    "sizes": "XS - 4XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#545859",
+      "#9ea2a2",
+      "#051c2c",
+      "#ffffff"
+    ],
+    "price": 150,
+    "img": "/gift/DR1513/black-front.webp",
+    "imgs": [
+      "/gift/DR1513/black-front.webp",
+      "/gift/DR1513/black-back.webp",
+      "/gift/DR1513/charcoal-heather-front.webp",
+      "/gift/DR1513/charcoal-heather-back.webp",
+      "/gift/DR1513/charcoal-heather-model.webp",
+      "/gift/DR1513/dark-grey-heather-front.webp",
+      "/gift/DR1513/dark-grey-heather-back.webp",
+      "/gift/DR1513/midnight-navy-front.webp",
+      "/gift/DR1513/midnight-navy-back.webp",
+      "/gift/DR1513/white-front.webp",
+      "/gift/DR1513/white-back.webp"
+    ],
+    "material": "13.8 oz/ly (CA), 8.3 oz/sq yd (US), 281 gsm (EU)",
+    "details": "80/20 cotton/polyester, 100% cotton jersey lined 3-panel hood with flat drawstrings, Taped neck, Set-in sleeves, Front pouch pocket, Rib knit cuffs and waistband, Contrast embroidered Swoosh logo on left sleeve, Scuba hood, YKK® zipper, Classic fit, #DR1513",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-153",
+    "name": "Nike Club Fleece Sleeve Swoosh Pullover Hoodie",
+    "category": "Fleece",
+    "sizes": "XS - 4XL",
+    "badge": "",
+    "colors": [
+      "#333f48",
+      "#1a1a18",
+      "#9ea2a2",
+      "#003594",
+      "#2b5135",
+      "#051c2c",
+      "#ba0c2f",
+      "#ffffff"
+    ],
+    "price": 150,
+    "img": "/gift/DR1499/anthracite-front.webp",
+    "imgs": [
+      "/gift/DR1499/anthracite-front.webp",
+      "/gift/DR1499/anthracite-back.webp",
+      "/gift/DR1499/black-front.webp",
+      "/gift/DR1499/black-back.webp",
+      "/gift/DR1499/dark-grey-heather-front.webp",
+      "/gift/DR1499/dark-grey-heather-back.webp",
+      "/gift/DR1499/game-royal-front.webp",
+      "/gift/DR1499/game-royal-back.webp",
+      "/gift/DR1499/gorge-green-front.webp",
+      "/gift/DR1499/gorge-green-back.webp",
+      "/gift/DR1499/gorge-green-model.webp",
+      "/gift/DR1499/midnight-navy-front.webp",
+      "/gift/DR1499/midnight-navy-back.webp",
+      "/gift/DR1499/university-red-front.webp",
+      "/gift/DR1499/university-red-back.webp",
+      "/gift/DR1499/white-front.webp",
+      "/gift/DR1499/white-back.webp"
+    ],
+    "material": "13.8 oz/ly (CA), 8.3 oz/sq yd (US), 281 gsm (EU)",
+    "details": "80/20 cotton/polyester, 100% cotton jersey lined 3-panel hood with flat tonal drawstrings, Crossover neck line, Taped neck, Set-in sleeves, Front pouch pocket, Rib knit cuffs and waistband, Contrast embroidered Swoosh logo on left sleeve, Classic fit, #DR1499",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-154",
+    "name": "Herschel Retreat Backpack",
+    "category": "Bags",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#1a191e",
+      "#2c3e50"
+    ],
+    "price": 150,
+    "img": "/gift/CA2009-73/black-tonal-front.webp",
+    "imgs": [
+      "/gift/CA2009-73/black-tonal-front.webp",
+      "/gift/CA2009-73/navy-front.webp"
+    ],
+    "material": "100% recycled 600D polyester, excluding trims",
+    "details": "Tonal stripe liner made from 100% recycled polyester, Padded and fleece-lined floating sleeve fits a 15\"/16\" laptop, Laptop sleeve dimensions: 12.5\" (H) x 11\" (W), Easy U-pull drawcord closure, Adjustable EVA-padded shoulder straps, Side entry zipper for easy access, Dual water bottle pockets expand to fit different sizes, Front storage sleeve, #CA2009-73",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-155",
+    "name": "Men's The North Face AIM Full Zip Fleece Jacket",
+    "category": "Fleece",
+    "sizes": "S - 3XL",
+    "badge": "",
+    "colors": [
+      "#004976",
+      "#63666a",
+      "#1a1a18"
+    ],
+    "price": 200,
+    "img": "/gift/NF0A8ENK/shady-blue-front.webp",
+    "imgs": [
+      "/gift/NF0A8ENK/shady-blue-front.webp",
+      "/gift/NF0A8ENK/shady-blue-back.webp",
+      "/gift/NF0A8ENK/smoked-pearl-grey-front.webp",
+      "/gift/NF0A8ENK/smoked-pearl-grey-back.webp",
+      "/gift/NF0A8ENK/smoked-pearl-grey-model.webp",
+      "/gift/NF0A8ENK/black-front.webp",
+      "/gift/NF0A8ENK/black-back.webp"
+    ],
+    "material": "10.62 oz/ly (CA), 6.37 oz/sq yd (US), 216 gsm (EU)",
+    "details": "95/5 recycled polyester/elastane grid-texture fleece, Stand collar, Set-in sleeves, Exposed reverse coil centre front zipper with extended dyed-to-match zipper pull, Reinforced binding on collar and cuffs, Secure-zip hand pockets, Contrast heat transfer The North Face® logo on left sleeve and right back shoulder, Modern fit, #NF0A8ENK",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-156",
+    "name": "Women's The North Face AIM Full Zip Fleece Jacket",
+    "category": "Fleece",
+    "sizes": "S - 2XL",
+    "badge": "",
+    "colors": [
+      "#004976",
+      "#63666a",
+      "#1a1a18"
+    ],
+    "price": 200,
+    "img": "/gift/NF0A8FQJ/shady-blue-front.webp",
+    "imgs": [
+      "/gift/NF0A8FQJ/shady-blue-front.webp",
+      "/gift/NF0A8FQJ/shady-blue-back.webp",
+      "/gift/NF0A8FQJ/shady-blue-model.webp",
+      "/gift/NF0A8FQJ/smoked-pearl-grey-front.webp",
+      "/gift/NF0A8FQJ/smoked-pearl-grey-back.webp",
+      "/gift/NF0A8FQJ/black-front.webp",
+      "/gift/NF0A8FQJ/black-back.webp"
+    ],
+    "material": "10.62 oz/ly (CA), 6.37 oz/sq yd (US), 216 gsm (EU)",
+    "details": "95/5 recycled polyester/elastane grid-texture fleece, Stand collar, Set-in sleeves with forward-set shoulder seams, Exposed reverse coil centre front zipper with extended dyed-to-match zipper pull, Reinforced binding on collar and cuffs, Secure-zip hand pockets, Contrast heat transfer The North Face® logo on left sleeve and right back shoulder, Modern fit, #NF0A8FQJ",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-157",
+    "name": "Men's Columbia Loma Vista III Jacket",
+    "category": "Jackets",
+    "sizes": "S - 2XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#9d7951"
+    ],
+    "price": 200,
+    "img": "/gift/208855/black-front.webp",
+    "imgs": [
+      "/gift/208855/black-front.webp",
+      "/gift/208855/black-side.webp",
+      "/gift/208855/black-back.webp",
+      "/gift/208855/delta-front.webp",
+      "/gift/208855/delta-side.webp",
+      "/gift/208855/delta-back.webp"
+    ],
+    "material": "60/40 cotton/polyester",
+    "details": "Lining is 100% polyester MTR filament fleece 250g, Insulation is 100g Microtemp XF II 85/15 recycled polyester/polyester, Omni-Shields™ water and stain repellent, Regular fit, Chest pocket, interior security pocket, and zippered hand pockets, Adjustable cuffs, Columbia logo above chest pocket, Woven label, #208855",
+    "portals": [
+      "gift"
+    ]
   }
 ];
 
@@ -999,6 +1499,20 @@ const colorNames: Record<string, Record<string, string>> = {
   "#53565a": { en: "Carbon", fr: "Carbone" }, // Core365 work shirts (gift)
   "#9fa1a4": { en: "Sport Grey", fr: "Gris sport" }, // Gildan tees (gift)
   "#1c57a5": { en: "Royal", fr: "Bleu royal" }, // Gildan tees (gift)
+  "#333f48": { en: "Anthracite", fr: "Anthracite" }, // gift lineup 2026-11-25
+  "#707372": { en: "Cool Grey", fr: "Gris froid" }, // gift lineup 2026-11-25
+  "#003594": { en: "Game Royal", fr: "Bleu royal match" }, // gift lineup 2026-11-25
+  "#ba0c2f": { en: "University Red", fr: "Rouge universitaire" }, // gift lineup 2026-11-25
+  "#7ba4db": { en: "Valor Blue", fr: "Bleu valeur" }, // gift lineup 2026-11-25
+  "#9ea2a2": { en: "Dark Grey Heather", fr: "Gris foncé chiné" }, // gift lineup 2026-11-25
+  "#051c2c": { en: "Midnight Navy", fr: "Marine minuit" }, // gift lineup 2026-11-25
+  "#b5b9c4": { en: "Raven Crosshatch", fr: "Corbeau hachuré" }, // gift lineup 2026-11-25
+  "#545859": { en: "Charcoal Heather", fr: "Charbon chiné" }, // gift lineup 2026-11-25
+  "#2b5135": { en: "Gorge Green", fr: "Vert gorge" }, // gift lineup 2026-11-25
+  "#1a191e": { en: "Black Tonal", fr: "Noir ton sur ton" }, // gift lineup 2026-11-25
+  "#004976": { en: "Shady Blue", fr: "Bleu ombragé" }, // gift lineup 2026-11-25
+  "#63666a": { en: "Smoked Pearl Grey", fr: "Gris perle fumé" }, // gift lineup 2026-11-25
+  "#9d7951": { en: "Delta", fr: "Delta" }, // gift lineup 2026-11-25
 };
 export function colorName(hex: string, locale: Locale): string {
   return colorNames[hex]?.[locale] || hex;

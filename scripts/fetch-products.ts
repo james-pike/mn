@@ -271,6 +271,20 @@ const colorNames: Record<string, Record<string, string>> = {
   "#53565a": { en: "Carbon", fr: "Carbone" }, // Core365 work shirts (gift)
   "#9fa1a4": { en: "Sport Grey", fr: "Gris sport" }, // Gildan tees (gift)
   "#1c57a5": { en: "Royal", fr: "Bleu royal" }, // Gildan tees (gift)
+  "#333f48": { en: "Anthracite", fr: "Anthracite" }, // gift lineup 2026-11-25
+  "#707372": { en: "Cool Grey", fr: "Gris froid" }, // gift lineup 2026-11-25
+  "#003594": { en: "Game Royal", fr: "Bleu royal match" }, // gift lineup 2026-11-25
+  "#ba0c2f": { en: "University Red", fr: "Rouge universitaire" }, // gift lineup 2026-11-25
+  "#7ba4db": { en: "Valor Blue", fr: "Bleu valeur" }, // gift lineup 2026-11-25
+  "#9ea2a2": { en: "Dark Grey Heather", fr: "Gris foncé chiné" }, // gift lineup 2026-11-25
+  "#051c2c": { en: "Midnight Navy", fr: "Marine minuit" }, // gift lineup 2026-11-25
+  "#b5b9c4": { en: "Raven Crosshatch", fr: "Corbeau hachuré" }, // gift lineup 2026-11-25
+  "#545859": { en: "Charcoal Heather", fr: "Charbon chiné" }, // gift lineup 2026-11-25
+  "#2b5135": { en: "Gorge Green", fr: "Vert gorge" }, // gift lineup 2026-11-25
+  "#1a191e": { en: "Black Tonal", fr: "Noir ton sur ton" }, // gift lineup 2026-11-25
+  "#004976": { en: "Shady Blue", fr: "Bleu ombragé" }, // gift lineup 2026-11-25
+  "#63666a": { en: "Smoked Pearl Grey", fr: "Gris perle fumé" }, // gift lineup 2026-11-25
+  "#9d7951": { en: "Delta", fr: "Delta" }, // gift lineup 2026-11-25
 };
 export function colorName(hex: string, locale: Locale): string {
   return colorNames[hex]?.[locale] || hex;

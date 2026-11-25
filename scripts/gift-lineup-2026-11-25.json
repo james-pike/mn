@@ -1,0 +1,843 @@
+{
+ "rows": [
+  {
+   "sku": "MN-144",
+   "code": "NKDC1991MNG",
+   "name": "Women's Nike Dri-FIT Micro Pique 2.0 Polo",
+   "category": "Polos",
+   "sizes": "S - 2XL",
+   "price": 50,
+   "colors": [
+    "#333f48",
+    "#1a1a18",
+    "#707372",
+    "#003594",
+    "#2c3e50",
+    "#ba0c2f",
+    "#7ba4db",
+    "#ffffff"
+   ],
+   "img": "/gift/NKDC1991/anthracite-front.webp",
+   "imgs": [
+    "/gift/NKDC1991/anthracite-front.webp",
+    "/gift/NKDC1991/anthracite-back.webp",
+    "/gift/NKDC1991/black-front.webp",
+    "/gift/NKDC1991/black-back.webp",
+    "/gift/NKDC1991/cool-grey-front.webp",
+    "/gift/NKDC1991/cool-grey-back.webp",
+    "/gift/NKDC1991/game-royal-front.webp",
+    "/gift/NKDC1991/game-royal-back.webp",
+    "/gift/NKDC1991/navy-front.webp",
+    "/gift/NKDC1991/navy-back.webp",
+    "/gift/NKDC1991/university-red-front.webp",
+    "/gift/NKDC1991/university-red-back.webp",
+    "/gift/NKDC1991/valor-blue-front.webp",
+    "/gift/NKDC1991/valor-blue-back.webp",
+    "/gift/NKDC1991/valor-blue-model.webp",
+    "/gift/NKDC1991/white-front.webp",
+    "/gift/NKDC1991/white-back.webp"
+   ],
+   "material": "7.2 oz/ly (CA), 4.3 oz/sq yd (US), 146 gsm (EU)",
+   "details": "100% Dri-FIT polyester with moisture management technology, Self-fabric collar, Open neckline, Double needle hemmed bottom, Contrast embroidered Swoosh logo at left sleeve, Breathable, Tagless, Classic fit, #NKDC1991",
+   "sort_order": 300,
+   "portals": [
+    "gift"
+   ]
+  },
+  {
+   "sku": "MN-145",
+   "code": "NKDC1963MNG",
+   "name": "Men's Nike Dri-FIT Micro Pique 2.0 Polo",
+   "category": "Polos",
+   "sizes": "XS - 4XL",
+   "price": 50,
+   "colors": [
+    "#333f48",
+    "#1a1a18",
+    "#707372",
+    "#003594",
+    "#2c3e50",
+    "#bc2c3a",
+    "#ba0c2f",
+    "#7ba4db",
+    "#ffffff"
+   ],
+   "img": "/gift/NKDC1963/anthracite-front.webp",
+   "imgs": [
+    "/gift/NKDC1963/anthracite-front.webp",
+    "/gift/NKDC1963/anthracite-back.webp",
+    "/gift/NKDC1963/black-front.webp",
+    "/gift/NKDC1963/black-back.webp",
+    "/gift/NKDC1963/cool-grey-front.webp",
+    "/gift/NKDC1963/cool-grey-back.webp",
+    "/gift/NKDC1963/game-royal-front.webp",
+    "/gift/NKDC1963/game-royal-back.webp",
+    "/gift/NKDC1963/navy-front.webp",
+    "/gift/NKDC1963/navy-back.webp",
+    "/gift/NKDC1963/team-red-front.webp",
+    "/gift/NKDC1963/team-red-back.webp",
+    "/gift/NKDC1963/university-red-front.webp",
+    "/gift/NKDC1963/university-red-back.webp",
+    "/gift/NKDC1963/valor-blue-front.webp",
+    "/gift/NKDC1963/valor-blue-back.webp",
+    "/gift/NKDC1963/valor-blue-model.webp",
+    "/gift/NKDC1963/white-front.webp",
+    "/gift/NKDC1963/white-back.webp"
+   ],
+   "material": "7.2 oz/ly (CA), 4.3 oz/sq yd (US), 146 gsm (EU)",
+   "details": "100% Dri-FIT polyester with moisture management technology, Rib knit collar, 3-button placket, Rolled forward shoulder seams, Nike embossed pearlized buttons, Double needle hemmed bottom, Contrast embroidered Swoosh logo at left sleeve, Breathable, Tagless, Classic fit, #NKDC1963",
+   "sort_order": 301,
+   "portals": [
+    "gift"
+   ]
+  },
+  {
+   "sku": "MN-146",
+   "code": "CA200948MNG",
+   "name": "Herschel Recycled Classic Crossbody Tote",
+   "category": "Bags",
+   "sizes": "One Size",
+   "price": 50,
+   "colors": [
+    "#1a1a18"
+   ],
+   "img": "/gift/CA2009-48/black-front.webp",
+   "imgs": [
+    "/gift/CA2009-48/black-front.webp"
+   ],
+   "material": "Simple, versatile and made with recycled EcoSystem™ fabrics",
+   "details": "Crossbody tote for daily journeys, keeps the essentials within reach, #CA2009-48",
+   "sort_order": 302,
+   "portals": [
+    "gift"
+   ]
+  },
+  {
+   "sku": "MN-147",
+   "code": "NKDX6720MNG",
+   "name": "Women's Nike Club Fleece Sleeve Swoosh 1/2 Zip",
+   "category": "Fleece",
+   "sizes": "S - 2XL",
+   "price": 100,
+   "colors": [
+    "#1a1a18",
+    "#9ea2a2",
+    "#051c2c"
+   ],
+   "img": "/gift/NKDX6720/black-front.webp",
+   "imgs": [
+    "/gift/NKDX6720/black-front.webp",
+    "/gift/NKDX6720/black-back.webp",
+    "/gift/NKDX6720/dark-grey-heather-front.webp",
+    "/gift/NKDX6720/dark-grey-heather-back.webp",
+    "/gift/NKDX6720/midnight-navy-front.webp",
+    "/gift/NKDX6720/midnight-navy-back.webp",
+    "/gift/NKDX6720/midnight-navy-model.webp"
+   ],
+   "material": "13.8 oz/ly (CA), 8.3 oz/sq yd (US), 281 gsm (EU)",
+   "details": "80/20 cotton/polyester, Zip-through collar, Dyed-to-match zipper, Taped neck for comfort and durability, Set-in sleeves, Front pouch pocket, Rib knit cuffs and waistband, Contrast embroidered Swoosh logo on left sleeve, Classic fit, #NKDX6720",
+   "sort_order": 303,
+   "portals": [
+    "gift"
+   ]
+  },
+  {
+   "sku": "MN-148",
+   "code": "NKDX6718MNG",
+   "name": "Men's Nike Club Fleece Sleeve Swoosh 1/2 Zip",
+   "category": "Fleece",
+   "sizes": "XS - 4XL",
+   "price": 100,
+   "colors": [
+    "#333f48",
+    "#1a1a18",
+    "#9ea2a2",
+    "#051c2c",
+    "#ffffff"
+   ],
+   "img": "/gift/NKDX6718/anthracite-front.webp",
+   "imgs": [
+    "/gift/NKDX6718/anthracite-front.webp",
+    "/gift/NKDX6718/anthracite-back.webp",
+    "/gift/NKDX6718/anthracite-model.webp",
+    "/gift/NKDX6718/black-front.webp",
+    "/gift/NKDX6718/black-back.webp",
+    "/gift/NKDX6718/dark-grey-heather-front.webp",
+    "/gift/NKDX6718/dark-grey-heather-back.webp",
+    "/gift/NKDX6718/midnight-navy-front.webp",
+    "/gift/NKDX6718/midnight-navy-back.webp",
+    "/gift/NKDX6718/white-front.webp",
+    "/gift/NKDX6718/white-back.webp"
+   ],
+   "material": "13.8 oz/ly (CA), 8.3 oz/sq yd (US), 281 gsm (EU)",
+   "details": "80/20 cotton/polyester, Zip-through collar, Dyed-to-match zipper, Taped neck for comfort and durability, Set-in sleeves, Side pockets, Rib knit cuffs and waistband, Contrast embroidered Swoosh logo on left sleeve, Classic fit, #NKDX6718",
+   "sort_order": 304,
+   "portals": [
+    "gift"
+   ]
+  },
+  {
+   "sku": "MN-149",
+   "code": "NKFD9742MNG",
+   "name": "Nike Therma-FIT 1/4 Zip Fleece Hoodie",
+   "category": "Fleece",
+   "sizes": "S - 4XL",
+   "price": 100,
+   "colors": [
+    "#9ea2a2"
+   ],
+   "img": "/gift/NKFD9742/dark-grey-heather-front.webp",
+   "imgs": [
+    "/gift/NKFD9742/dark-grey-heather-front.webp",
+    "/gift/NKFD9742/dark-grey-heather-back.webp"
+   ],
+   "material": "12.3 oz/ly (CA), 7.4 oz/sq yd (US), 250 gsm (EU)",
+   "details": "100% Therma-FIT polyester with moisture management technology, 3-panel hood with flat contrast drawstrings, Front pouch pocket, Self-fabric cuffs and bottom hem, Contrast embroidered Swoosh logo on left sleeve zipper pocket, Contains at least 50% recycled content, Breathable, Scuba hood, Classic fit, #NKFD9742",
+   "sort_order": 305,
+   "portals": [
+    "gift"
+   ]
+  },
+  {
+   "sku": "MN-150",
+   "code": "NKFN4106MNG",
+   "name": "Nike Utility Speed Backpack 2.0 (27L)",
+   "category": "Bags",
+   "sizes": "One Size",
+   "price": 100,
+   "colors": [
+    "#1a1a18"
+   ],
+   "img": "/gift/NKFN4106/black-front.webp",
+   "imgs": [
+    "/gift/NKFN4106/black-front.webp",
+    "/gift/NKFN4106/black-back.webp"
+   ],
+   "material": "100% polyester with PU coating for durability, with at least 65% recycled content",
+   "details": "Spacious two-way zippered main compartment with interior slip sleeve pockets, Secure laptop sleeve with right-side zipper access; fits laptops up to 16\", Gusseted side slip pocket with utility hoop, Side mesh slip pocket, Multiple front exterior zippered pockets, Top back zippered utility pocket, Padded back panel for added comfort, Padded, adjustable shoulder straps for comfortable carrying, Adjustable sternum strap, Luggage pass-through back strap, Bottom front grommets for ventilation, Padded top haul handle, Contrast welded rubber Nike branding on front bottom left pocket, #NKFN4106",
+   "sort_order": 306,
+   "portals": [
+    "gift"
+   ]
+  },
+  {
+   "sku": "MN-151",
+   "code": "CA200946MNG",
+   "name": "Herschel Recycled Classic Gym Bag",
+   "category": "Bags",
+   "sizes": "One Size",
+   "price": 100,
+   "colors": [
+    "#1a1a18",
+    "#b5b9c4"
+   ],
+   "img": "/gift/CA2009-46/black-front.webp",
+   "imgs": [
+    "/gift/CA2009-46/black-front.webp",
+    "/gift/CA2009-46/raven-crosshatch-front.webp"
+   ],
+   "material": "EcoSystem™ 600D Fabric made from 100% recycled post-consumer water bottles",
+   "details": "Tonal stripe EcoSystem™ Liner made from 100% recycled post-consumer water bottles, Zippered closure with Prusik cord pulls, Smooth webbing top-carrying handles, Removable smooth webbing shoulder strap, Front storage sleeve, #CA2009-46",
+   "sort_order": 307,
+   "portals": [
+    "gift"
+   ]
+  },
+  {
+   "sku": "MN-152",
+   "code": "DR1513MNG",
+   "name": "Nike Club Fleece Sleeve Swoosh Full Zip Hoodie",
+   "category": "Fleece",
+   "sizes": "XS - 4XL",
+   "price": 150,
+   "colors": [
+    "#1a1a18",
+    "#545859",
+    "#9ea2a2",
+    "#051c2c",
+    "#ffffff"
+   ],
+   "img": "/gift/DR1513/black-front.webp",
+   "imgs": [
+    "/gift/DR1513/black-front.webp",
+    "/gift/DR1513/black-back.webp",
+    "/gift/DR1513/charcoal-heather-front.webp",
+    "/gift/DR1513/charcoal-heather-back.webp",
+    "/gift/DR1513/charcoal-heather-model.webp",
+    "/gift/DR1513/dark-grey-heather-front.webp",
+    "/gift/DR1513/dark-grey-heather-back.webp",
+    "/gift/DR1513/midnight-navy-front.webp",
+    "/gift/DR1513/midnight-navy-back.webp",
+    "/gift/DR1513/white-front.webp",
+    "/gift/DR1513/white-back.webp"
+   ],
+   "material": "13.8 oz/ly (CA), 8.3 oz/sq yd (US), 281 gsm (EU)",
+   "details": "80/20 cotton/polyester, 100% cotton jersey lined 3-panel hood with flat drawstrings, Taped neck, Set-in sleeves, Front pouch pocket, Rib knit cuffs and waistband, Contrast embroidered Swoosh logo on left sleeve, Scuba hood, YKK® zipper, Classic fit, #DR1513",
+   "sort_order": 310,
+   "portals": [
+    "gift"
+   ]
+  },
+  {
+   "sku": "MN-153",
+   "code": "DR1499MNG",
+   "name": "Nike Club Fleece Sleeve Swoosh Pullover Hoodie",
+   "category": "Fleece",
+   "sizes": "XS - 4XL",
+   "price": 150,
+   "colors": [
+    "#333f48",
+    "#1a1a18",
+    "#9ea2a2",
+    "#003594",
+    "#2b5135",
+    "#051c2c",
+    "#ba0c2f",
+    "#ffffff"
+   ],
+   "img": "/gift/DR1499/anthracite-front.webp",
+   "imgs": [
+    "/gift/DR1499/anthracite-front.webp",
+    "/gift/DR1499/anthracite-back.webp",
+    "/gift/DR1499/black-front.webp",
+    "/gift/DR1499/black-back.webp",
+    "/gift/DR1499/dark-grey-heather-front.webp",
+    "/gift/DR1499/dark-grey-heather-back.webp",
+    "/gift/DR1499/game-royal-front.webp",
+    "/gift/DR1499/game-royal-back.webp",
+    "/gift/DR1499/gorge-green-front.webp",
+    "/gift/DR1499/gorge-green-back.webp",
+    "/gift/DR1499/gorge-green-model.webp",
+    "/gift/DR1499/midnight-navy-front.webp",
+    "/gift/DR1499/midnight-navy-back.webp",
+    "/gift/DR1499/university-red-front.webp",
+    "/gift/DR1499/university-red-back.webp",
+    "/gift/DR1499/white-front.webp",
+    "/gift/DR1499/white-back.webp"
+   ],
+   "material": "13.8 oz/ly (CA), 8.3 oz/sq yd (US), 281 gsm (EU)",
+   "details": "80/20 cotton/polyester, 100% cotton jersey lined 3-panel hood with flat tonal drawstrings, Crossover neck line, Taped neck, Set-in sleeves, Front pouch pocket, Rib knit cuffs and waistband, Contrast embroidered Swoosh logo on left sleeve, Classic fit, #DR1499",
+   "sort_order": 311,
+   "portals": [
+    "gift"
+   ]
+  },
+  {
+   "sku": "MN-154",
+   "code": "CA200973MNG",
+   "name": "Herschel Retreat Backpack",
+   "category": "Bags",
+   "sizes": "One Size",
+   "price": 150,
+   "colors": [
+    "#1a191e",
+    "#2c3e50"
+   ],
+   "img": "/gift/CA2009-73/black-tonal-front.webp",
+   "imgs": [
+    "/gift/CA2009-73/black-tonal-front.webp",
+    "/gift/CA2009-73/navy-front.webp"
+   ],
+   "material": "100% recycled 600D polyester, excluding trims",
+   "details": "Tonal stripe liner made from 100% recycled polyester, Padded and fleece-lined floating sleeve fits a 15\"/16\" laptop, Laptop sleeve dimensions: 12.5\" (H) x 11\" (W), Easy U-pull drawcord closure, Adjustable EVA-padded shoulder straps, Side entry zipper for easy access, Dual water bottle pockets expand to fit different sizes, Front storage sleeve, #CA2009-73",
+   "sort_order": 312,
+   "portals": [
+    "gift"
+   ]
+  },
+  {
+   "sku": "MN-155",
+   "code": "NF0A8ENKMNG",
+   "name": "Men's The North Face AIM Full Zip Fleece Jacket",
+   "category": "Fleece",
+   "sizes": "S - 3XL",
+   "price": 200,
+   "colors": [
+    "#004976",
+    "#63666a",
+    "#1a1a18"
+   ],
+   "img": "/gift/NF0A8ENK/shady-blue-front.webp",
+   "imgs": [
+    "/gift/NF0A8ENK/shady-blue-front.webp",
+    "/gift/NF0A8ENK/shady-blue-back.webp",
+    "/gift/NF0A8ENK/smoked-pearl-grey-front.webp",
+    "/gift/NF0A8ENK/smoked-pearl-grey-back.webp",
+    "/gift/NF0A8ENK/smoked-pearl-grey-model.webp",
+    "/gift/NF0A8ENK/black-front.webp",
+    "/gift/NF0A8ENK/black-back.webp"
+   ],
+   "material": "10.62 oz/ly (CA), 6.37 oz/sq yd (US), 216 gsm (EU)",
+   "details": "95/5 recycled polyester/elastane grid-texture fleece, Stand collar, Set-in sleeves, Exposed reverse coil centre front zipper with extended dyed-to-match zipper pull, Reinforced binding on collar and cuffs, Secure-zip hand pockets, Contrast heat transfer The North Face® logo on left sleeve and right back shoulder, Modern fit, #NF0A8ENK",
+   "sort_order": 313,
+   "portals": [
+    "gift"
+   ]
+  },
+  {
+   "sku": "MN-156",
+   "code": "NF0A8FQJMNG",
+   "name": "Women's The North Face AIM Full Zip Fleece Jacket",
+   "category": "Fleece",
+   "sizes": "S - 2XL",
+   "price": 200,
+   "colors": [
+    "#004976",
+    "#63666a",
+    "#1a1a18"
+   ],
+   "img": "/gift/NF0A8FQJ/shady-blue-front.webp",
+   "imgs": [
+    "/gift/NF0A8FQJ/shady-blue-front.webp",
+    "/gift/NF0A8FQJ/shady-blue-back.webp",
+    "/gift/NF0A8FQJ/shady-blue-model.webp",
+    "/gift/NF0A8FQJ/smoked-pearl-grey-front.webp",
+    "/gift/NF0A8FQJ/smoked-pearl-grey-back.webp",
+    "/gift/NF0A8FQJ/black-front.webp",
+    "/gift/NF0A8FQJ/black-back.webp"
+   ],
+   "material": "10.62 oz/ly (CA), 6.37 oz/sq yd (US), 216 gsm (EU)",
+   "details": "95/5 recycled polyester/elastane grid-texture fleece, Stand collar, Set-in sleeves with forward-set shoulder seams, Exposed reverse coil centre front zipper with extended dyed-to-match zipper pull, Reinforced binding on collar and cuffs, Secure-zip hand pockets, Contrast heat transfer The North Face® logo on left sleeve and right back shoulder, Modern fit, #NF0A8FQJ",
+   "sort_order": 314,
+   "portals": [
+    "gift"
+   ]
+  },
+  {
+   "sku": "MN-157",
+   "code": "208855MNG",
+   "name": "Men's Columbia Loma Vista III Jacket",
+   "category": "Jackets",
+   "sizes": "S - 2XL",
+   "price": 200,
+   "colors": [
+    "#1a1a18",
+    "#9d7951"
+   ],
+   "img": "/gift/208855/black-front.webp",
+   "imgs": [
+    "/gift/208855/black-front.webp",
+    "/gift/208855/black-side.webp",
+    "/gift/208855/black-back.webp",
+    "/gift/208855/delta-front.webp",
+    "/gift/208855/delta-side.webp",
+    "/gift/208855/delta-back.webp"
+   ],
+   "material": "60/40 cotton/polyester",
+   "details": "Lining is 100% polyester MTR filament fleece 250g, Insulation is 100g Microtemp XF II 85/15 recycled polyester/polyester, Omni-Shields™ water and stain repellent, Regular fit, Chest pocket, interior security pocket, and zippered hand pockets, Adjustable cuffs, Columbia logo above chest pocket, Woven label, #208855",
+   "sort_order": 315,
+   "portals": [
+    "gift"
+   ]
+  }
+ ],
+ "update": [
+  {
+   "code": "A588",
+   "category": "Fleece",
+   "price": 100,
+   "sort_order": 308
+  },
+  {
+   "code": "A589",
+   "category": "Fleece",
+   "price": 100,
+   "sort_order": 309
+  }
+ ],
+ "blanks": {
+  "nkdc1991mng": {
+   "#333f48": "/skus/NKDC1991MNG-anthracite.jpg",
+   "#1a1a18": "/skus/NKDC1991MNG-black.jpg",
+   "#707372": "/skus/NKDC1991MNG-coolgrey.jpg",
+   "#003594": "/skus/NKDC1991MNG-gameroyal.jpg",
+   "#2c3e50": "/skus/NKDC1991MNG-navy.jpg",
+   "#ba0c2f": "/skus/NKDC1991MNG-universityred.jpg",
+   "#7ba4db": "/skus/NKDC1991MNG-valorblue.jpg",
+   "#ffffff": "/skus/NKDC1991MNG-white.jpg"
+  },
+  "nkdc1963mng": {
+   "#333f48": "/skus/NKDC1963MNG-anthracite.jpg",
+   "#1a1a18": "/skus/NKDC1963MNG-black.jpg",
+   "#707372": "/skus/NKDC1963MNG-coolgrey.jpg",
+   "#003594": "/skus/NKDC1963MNG-gameroyal.jpg",
+   "#2c3e50": "/skus/NKDC1963MNG-navy.jpg",
+   "#bc2c3a": "/skus/NKDC1963MNG-teamred.jpg",
+   "#ba0c2f": "/skus/NKDC1963MNG-universityred.jpg",
+   "#7ba4db": "/skus/NKDC1963MNG-valorblue.jpg",
+   "#ffffff": "/skus/NKDC1963MNG-white.jpg"
+  },
+  "ca200948mng": {
+   "#1a1a18": "/skus/CA200948MNG-black.jpg"
+  },
+  "nkdx6720mng": {
+   "#1a1a18": "/skus/NKDX6720MNG-black.jpg",
+   "#9ea2a2": "/skus/NKDX6720MNG-darkgreyheather.jpg",
+   "#051c2c": "/skus/NKDX6720MNG-midnightnavy.jpg"
+  },
+  "nkdx6718mng": {
+   "#333f48": "/skus/NKDX6718MNG-anthracite.jpg",
+   "#1a1a18": "/skus/NKDX6718MNG-black.jpg",
+   "#9ea2a2": "/skus/NKDX6718MNG-darkgreyheather.jpg",
+   "#051c2c": "/skus/NKDX6718MNG-midnightnavy.jpg",
+   "#ffffff": "/skus/NKDX6718MNG-white.jpg"
+  },
+  "nkfd9742mng": {
+   "#9ea2a2": "/skus/NKFD9742MNG-darkgreyheather.jpg"
+  },
+  "nkfn4106mng": {
+   "#1a1a18": "/skus/NKFN4106MNG-black.jpg"
+  },
+  "ca200946mng": {
+   "#1a1a18": "/skus/CA200946MNG-black.jpg",
+   "#b5b9c4": "/skus/CA200946MNG-ravencrosshatch.jpg"
+  },
+  "dr1513mng": {
+   "#1a1a18": "/skus/DR1513MNG-black.jpg",
+   "#545859": "/skus/DR1513MNG-charcoalheather.jpg",
+   "#9ea2a2": "/skus/DR1513MNG-darkgreyheather.jpg",
+   "#051c2c": "/skus/DR1513MNG-midnightnavy.jpg",
+   "#ffffff": "/skus/DR1513MNG-white.jpg"
+  },
+  "dr1499mng": {
+   "#333f48": "/skus/DR1499MNG-anthracite.jpg",
+   "#1a1a18": "/skus/DR1499MNG-black.jpg",
+   "#9ea2a2": "/skus/DR1499MNG-darkgreyheather.jpg",
+   "#003594": "/skus/DR1499MNG-gameroyal.jpg",
+   "#2b5135": "/skus/DR1499MNG-gorgegreen.jpg",
+   "#051c2c": "/skus/DR1499MNG-midnightnavy.jpg",
+   "#ba0c2f": "/skus/DR1499MNG-universityred.jpg",
+   "#ffffff": "/skus/DR1499MNG-white.jpg"
+  },
+  "ca200973mng": {
+   "#1a191e": "/skus/CA200973MNG-blacktonal.jpg",
+   "#2c3e50": "/skus/CA200973MNG-navy.jpg"
+  },
+  "nf0a8enkmng": {
+   "#004976": "/skus/NF0A8ENKMNG-shadyblue.jpg",
+   "#63666a": "/skus/NF0A8ENKMNG-smokedpearlgrey.jpg",
+   "#1a1a18": "/skus/NF0A8ENKMNG-black.jpg"
+  },
+  "nf0a8fqjmng": {
+   "#004976": "/skus/NF0A8FQJMNG-shadyblue.jpg",
+   "#63666a": "/skus/NF0A8FQJMNG-smokedpearlgrey.jpg",
+   "#1a1a18": "/skus/NF0A8FQJMNG-black.jpg"
+  },
+  "208855mng": {
+   "#1a1a18": "/skus/208855MNG-black.jpg",
+   "#9d7951": "/skus/208855MNG-delta.jpg"
+  }
+ },
+ "views": {
+  "NKDC1991MNG": {
+   "anthracite": [
+    "/sku-views/NKDC1991MNG-anthracite-back.webp"
+   ],
+   "black": [
+    "/sku-views/NKDC1991MNG-black-back.webp"
+   ],
+   "coolgrey": [
+    "/sku-views/NKDC1991MNG-coolgrey-back.webp"
+   ],
+   "gameroyal": [
+    "/sku-views/NKDC1991MNG-gameroyal-back.webp"
+   ],
+   "navy": [
+    "/sku-views/NKDC1991MNG-navy-back.webp"
+   ],
+   "universityred": [
+    "/sku-views/NKDC1991MNG-universityred-back.webp"
+   ],
+   "valorblue": [
+    "/sku-views/NKDC1991MNG-valorblue-back.webp",
+    "/sku-views/NKDC1991MNG-valorblue-model.webp"
+   ],
+   "white": [
+    "/sku-views/NKDC1991MNG-white-back.webp"
+   ]
+  },
+  "NKDC1963MNG": {
+   "anthracite": [
+    "/sku-views/NKDC1963MNG-anthracite-back.webp"
+   ],
+   "black": [
+    "/sku-views/NKDC1963MNG-black-back.webp"
+   ],
+   "coolgrey": [
+    "/sku-views/NKDC1963MNG-coolgrey-back.webp"
+   ],
+   "gameroyal": [
+    "/sku-views/NKDC1963MNG-gameroyal-back.webp"
+   ],
+   "navy": [
+    "/sku-views/NKDC1963MNG-navy-back.webp"
+   ],
+   "teamred": [
+    "/sku-views/NKDC1963MNG-teamred-back.webp"
+   ],
+   "universityred": [
+    "/sku-views/NKDC1963MNG-universityred-back.webp"
+   ],
+   "valorblue": [
+    "/sku-views/NKDC1963MNG-valorblue-back.webp",
+    "/sku-views/NKDC1963MNG-valorblue-model.webp"
+   ],
+   "white": [
+    "/sku-views/NKDC1963MNG-white-back.webp"
+   ]
+  },
+  "CA200948MNG": {
+   "black": []
+  },
+  "NKDX6720MNG": {
+   "black": [
+    "/sku-views/NKDX6720MNG-black-back.webp"
+   ],
+   "darkgreyheather": [
+    "/sku-views/NKDX6720MNG-darkgreyheather-back.webp"
+   ],
+   "midnightnavy": [
+    "/sku-views/NKDX6720MNG-midnightnavy-back.webp",
+    "/sku-views/NKDX6720MNG-midnightnavy-model.webp"
+   ]
+  },
+  "NKDX6718MNG": {
+   "anthracite": [
+    "/sku-views/NKDX6718MNG-anthracite-back.webp",
+    "/sku-views/NKDX6718MNG-anthracite-model.webp"
+   ],
+   "black": [
+    "/sku-views/NKDX6718MNG-black-back.webp"
+   ],
+   "darkgreyheather": [
+    "/sku-views/NKDX6718MNG-darkgreyheather-back.webp"
+   ],
+   "midnightnavy": [
+    "/sku-views/NKDX6718MNG-midnightnavy-back.webp"
+   ],
+   "white": [
+    "/sku-views/NKDX6718MNG-white-back.webp"
+   ]
+  },
+  "NKFD9742MNG": {
+   "darkgreyheather": [
+    "/sku-views/NKFD9742MNG-darkgreyheather-back.webp"
+   ]
+  },
+  "NKFN4106MNG": {
+   "black": [
+    "/sku-views/NKFN4106MNG-black-back.webp"
+   ]
+  },
+  "CA200946MNG": {
+   "black": [],
+   "ravencrosshatch": []
+  },
+  "DR1513MNG": {
+   "black": [
+    "/sku-views/DR1513MNG-black-back.webp"
+   ],
+   "charcoalheather": [
+    "/sku-views/DR1513MNG-charcoalheather-back.webp",
+    "/sku-views/DR1513MNG-charcoalheather-model.webp"
+   ],
+   "darkgreyheather": [
+    "/sku-views/DR1513MNG-darkgreyheather-back.webp"
+   ],
+   "midnightnavy": [
+    "/sku-views/DR1513MNG-midnightnavy-back.webp"
+   ],
+   "white": [
+    "/sku-views/DR1513MNG-white-back.webp"
+   ]
+  },
+  "DR1499MNG": {
+   "anthracite": [
+    "/sku-views/DR1499MNG-anthracite-back.webp"
+   ],
+   "black": [
+    "/sku-views/DR1499MNG-black-back.webp"
+   ],
+   "darkgreyheather": [
+    "/sku-views/DR1499MNG-darkgreyheather-back.webp"
+   ],
+   "gameroyal": [
+    "/sku-views/DR1499MNG-gameroyal-back.webp"
+   ],
+   "gorgegreen": [
+    "/sku-views/DR1499MNG-gorgegreen-back.webp",
+    "/sku-views/DR1499MNG-gorgegreen-model.webp"
+   ],
+   "midnightnavy": [
+    "/sku-views/DR1499MNG-midnightnavy-back.webp"
+   ],
+   "universityred": [
+    "/sku-views/DR1499MNG-universityred-back.webp"
+   ],
+   "white": [
+    "/sku-views/DR1499MNG-white-back.webp"
+   ]
+  },
+  "CA200973MNG": {
+   "blacktonal": [],
+   "navy": []
+  },
+  "NF0A8ENKMNG": {
+   "shadyblue": [
+    "/sku-views/NF0A8ENKMNG-shadyblue-back.webp"
+   ],
+   "smokedpearlgrey": [
+    "/sku-views/NF0A8ENKMNG-smokedpearlgrey-back.webp",
+    "/sku-views/NF0A8ENKMNG-smokedpearlgrey-model.webp"
+   ],
+   "black": [
+    "/sku-views/NF0A8ENKMNG-black-back.webp"
+   ]
+  },
+  "NF0A8FQJMNG": {
+   "shadyblue": [
+    "/sku-views/NF0A8FQJMNG-shadyblue-back.webp",
+    "/sku-views/NF0A8FQJMNG-shadyblue-model.webp"
+   ],
+   "smokedpearlgrey": [
+    "/sku-views/NF0A8FQJMNG-smokedpearlgrey-back.webp"
+   ],
+   "black": [
+    "/sku-views/NF0A8FQJMNG-black-back.webp"
+   ]
+  },
+  "208855MNG": {
+   "black": [
+    "/sku-views/208855MNG-black-side.webp",
+    "/sku-views/208855MNG-black-back.webp"
+   ],
+   "delta": [
+    "/sku-views/208855MNG-delta-side.webp",
+    "/sku-views/208855MNG-delta-back.webp"
+   ]
+  }
+ },
+ "meta": {
+  "anthracite": {
+   "label": "Anthracite",
+   "swatch": "#333f48"
+  },
+  "black": {
+   "label": "Black",
+   "swatch": "#1a1a18"
+  },
+  "coolgrey": {
+   "label": "Cool Grey",
+   "swatch": "#707372"
+  },
+  "gameroyal": {
+   "label": "Game Royal",
+   "swatch": "#003594"
+  },
+  "navy": {
+   "label": "Navy",
+   "swatch": "#2c3e50"
+  },
+  "universityred": {
+   "label": "University Red",
+   "swatch": "#ba0c2f"
+  },
+  "valorblue": {
+   "label": "Valor Blue",
+   "swatch": "#7ba4db"
+  },
+  "white": {
+   "label": "White",
+   "swatch": "#ffffff"
+  },
+  "teamred": {
+   "label": "Team Red",
+   "swatch": "#bc2c3a"
+  },
+  "darkgreyheather": {
+   "label": "Dark Grey Heather",
+   "swatch": "#9ea2a2"
+  },
+  "midnightnavy": {
+   "label": "Midnight Navy",
+   "swatch": "#051c2c"
+  },
+  "ravencrosshatch": {
+   "label": "Raven Crosshatch",
+   "swatch": "#b5b9c4"
+  },
+  "charcoalheather": {
+   "label": "Charcoal Heather",
+   "swatch": "#545859"
+  },
+  "gorgegreen": {
+   "label": "Gorge Green",
+   "swatch": "#2b5135"
+  },
+  "blacktonal": {
+   "label": "Black Tonal",
+   "swatch": "#1a191e"
+  },
+  "shadyblue": {
+   "label": "Shady Blue",
+   "swatch": "#004976"
+  },
+  "smokedpearlgrey": {
+   "label": "Smoked Pearl Grey",
+   "swatch": "#63666a"
+  },
+  "delta": {
+   "label": "Delta",
+   "swatch": "#9d7951"
+  }
+ },
+ "dark": {
+  "nkdc1991mng::coolgrey": true,
+  "nkdc1991mng::white": true,
+  "nkdc1963mng::coolgrey": true,
+  "nkdc1963mng::white": true,
+  "nkdx6720mng::darkgreyheather": true,
+  "nkdx6718mng::darkgreyheather": true,
+  "nkdx6718mng::white": true,
+  "nkfd9742mng::darkgreyheather": true,
+  "ca200946mng::ravencrosshatch": true,
+  "dr1513mng::darkgreyheather": true,
+  "dr1513mng::white": true,
+  "dr1499mng::darkgreyheather": true,
+  "dr1499mng::white": true,
+  "nf0a8enkmng::smokedpearlgrey": true,
+  "nf0a8fqjmng::smokedpearlgrey": true
+ },
+ "codes": [
+  "NKDC1991MNG",
+  "NKDC1963MNG",
+  "CA200948MNG",
+  "NKDX6720MNG",
+  "NKDX6718MNG",
+  "NKFD9742MNG",
+  "NKFN4106MNG",
+  "CA200946MNG",
+  "DR1513MNG",
+  "DR1499MNG",
+  "CA200973MNG",
+  "NF0A8ENKMNG",
+  "NF0A8FQJMNG",
+  "208855MNG"
+ ],
+ "newnames": {
+  "Anthracite": "#333f48",
+  "Cool Grey": "#707372",
+  "Game Royal": "#003594",
+  "University Red": "#ba0c2f",
+  "Valor Blue": "#7ba4db",
+  "Dark Grey Heather": "#9ea2a2",
+  "Midnight Navy": "#051c2c",
+  "Raven Crosshatch": "#b5b9c4",
+  "Charcoal Heather": "#545859",
+  "Gorge Green": "#2b5135",
+  "Black Tonal": "#1a191e",
+  "Shady Blue": "#004976",
+  "Smoked Pearl Grey": "#63666a",
+  "Delta": "#9d7951"
+ }
+}

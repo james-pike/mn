@@ -152,12 +152,15 @@ function sizesOf(p: Product): string[] {
   if (s.length) return s;
   return p.sizes === "One Size" ? ["One Size"] : [];
 }
+// Milestone Awards (gift login) category tabs, in sidebar order.
+const GIFT_CATEGORIES = ["All", "Polos", "Fleece", "Jackets", "Bags"];
+
 // Brands carried, in sidebar display order. A brand must be listed here to show
 // up as a filter (the facet list is BRAND_LIST ∩ brands-present).
 const BRAND_LIST = [
   // Clothing brands first...
-  "Puma", "Adidas", "Atlas", "Carhartt", "Coal Harbour", "Core365", "Flexfit", "FootJoy", "Gildan",
-  "Travis Mathew", "Trimark", "Under Armour",
+  "Puma", "Adidas", "Atlas", "Carhartt", "Coal Harbour", "Columbia", "Core365", "Flexfit", "FootJoy", "Gildan",
+  "Herschel", "Nike", "The North Face", "Travis Mathew", "Trimark", "Under Armour",
   // ...then non-clothing brands (bags, golf, towels, tech, headwear).
   "Nexgen", "Nomad", "Srixon", "Titleist", "Tranzip", "Cap America",
   // Yeti (drinkware/coolers) and 2 Buds (earbuds) pinned last per request.
@@ -621,7 +624,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       // the breadcrumb crumb (#polos) found no match and fell back to All. Keyed
       // exactly the way the crumb builds its hash: lower-case, spaces → hyphens.
       : Object.fromEntries(
-          CLOTHING_CATEGORIES
+          [...CLOTHING_CATEGORIES, ...GIFT_CATEGORIES.filter((c) => !CLOTHING_CATEGORIES.includes(c))]
             .filter((c) => c !== "All")
             .map((c) => [c.toLowerCase().replace(/\s+/g, "-"), c])
         );
@@ -646,29 +649,15 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
         .sort((a, b) => rank(a.sku) - rank(b.sku));
     }
     if (loginType.value === "gift") {
-      // Milestone Awards: only the DB products flagged portals ∋ "gift".
-      // Order: the workwear shirts first (Gildan, Carhartt, Core365, Trimark, in
-      // that brand order), then the Puma/Adidas golf lineup, then Headwear +
-      // Accessories last.
+      // Milestone Awards: only the DB products flagged portals ∋ "gift", grouped
+      // by the gift tab order (Polos, Fleece, Jackets, Bags); within a category
+      // the DB sort_order (the order the lineup was supplied in) is kept.
       const gift = allProducts.filter((p) => (p as { portals?: string[] }).portals?.includes("gift"));
-      const WORKWEAR = ["gildan", "carhartt", "core365", "trimark"];
-      const rank = (p: (typeof gift)[number]) => {
-        if (p.category === "Hats" || p.category === "SWAG") return WORKWEAR.length + 1;
-        const n = p.name.toLowerCase();
-        const w = WORKWEAR.findIndex((b) => n.includes(b));
-        return w !== -1 ? w : isGiftOnly(p as { portals?: string[] }) ? WORKWEAR.length : WORKWEAR.length + 0.5;
+      const rank = (c: string) => {
+        const i = GIFT_CATEGORIES.indexOf(c);
+        return i === -1 ? GIFT_CATEGORIES.length : i;
       };
-      // Stable sort keeps the DB sort_order within each group.
-      const ordered = gift.slice().sort((a, b) => rank(a) - rank(b));
-      // Swap the Trimark Stirling SS shirt (MN-94) with the Puma Golf Icon
-      // Heather Polo 2.0 (MN-44) in the gift lineup, per request.
-      const i = ordered.findIndex((p) => p.sku === "MN-94");
-      const j = ordered.findIndex((p) => p.sku === "MN-44");
-      if (i !== -1 && j !== -1) [ordered[i], ordered[j]] = [ordered[j], ordered[i]];
-      // Carhartt LS shirt (MN-2): out of the first view, at display position 15.
-      const k = ordered.findIndex((p) => p.sku === "MN-2");
-      if (k !== -1) ordered.splice(Math.min(14, ordered.length - 1), 0, ...ordered.splice(k, 1));
-      return ordered;
+      return gift.slice().sort((a, b) => rank(a.category) - rank(b.category));
     }
     if (isTech.value) return allProducts.filter((p) => p.category === "Work Wear");
     if (isSafety.value) {
@@ -852,8 +841,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     // Milestone Awards: no Office Welcome Kit tab.
     // Milestone Awards: no Office Welcome Kit tab; Sweaters (quarter-zips/hoodies)
     // gets its own tab right after Jackets.
-    if (loginType.value === "gift")
-      return CLOTHING_CATEGORIES.filter((c) => c !== "New Hire Kit").flatMap((c) => (c === "Jackets" ? ["Jackets", "Sweaters"] : [c]));
+    if (loginType.value === "gift") return GIFT_CATEGORIES;
     return CLOTHING_CATEGORIES;
   });
 
