@@ -33653,3 +33653,8 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
 @media (min-width: 1101px) {
   html:has(.site-header--gift) .product-card .product-card__name-row { min-height: calc(1.02rem * 1.45); align-items: center; }
 }
+
+/* Gift portal checkout: before the gift card code is applied, show only the
+   code field — hide the name/address/contact fields and the payment section. */
+.cart-drawer__details-step--gift-locked .checkout-modal__form > :not(.checkout-modal__form-title):not(.checkout-modal__gift--top),
+.cart-drawer__details-step--gift-locked .checkout-modal__pay { display: none !important; }

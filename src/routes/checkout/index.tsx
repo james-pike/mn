@@ -394,7 +394,9 @@ export default component$(() => {
           </div>
         ) : (
           <>
-            <div class="cart-drawer__details-step">
+            {/* Gift portal: until a gift card is applied, only the code field shows —
+                the address/contact fields and payment section stay hidden (CSS). */}
+            <div class={`cart-drawer__details-step${isGift && giftBalance.value == null ? " cart-drawer__details-step--gift-locked" : ""}`}>
               {/* Electrical: "Back to FR Kit" above the order summary (no cart, so
                   no "Back to Cart"). */}
               {loginType.value === "electrical" && (
