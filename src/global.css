@@ -33637,12 +33637,3 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
   html:has(.site-header--gift) .product-card .product-card__gender { font-size: 0.92rem; letter-spacing: -0.25px; }
   html:has(.site-header--gift) .product-card .product-card__color-name { font-size: 0.92rem; letter-spacing: -0.25px; }
 }
-/* Gift portal: no colour name beside a single swatch (one-colour products) —
-   the non-overlay .product-card__color-name is only used for that case. */
-html:has(.site-header--gift) .product-card .product-card__color-name:not(.product-card__color-name--overlay) { display: none; }
-
-/* Gift portal: while a swatch's colour name is showing (hover, or the clicked
-   colour), it fully replaces the Men's/Women's + size text in that row — the
-   sizes never stay beside it, even when there'd be room. */
-html:has(.site-header--gift) .product-card__color-size-row:has(.product-card__color-name--overlay) > .product-card__gender,
-html:has(.site-header--gift) .product-card__color-size-row:has(.product-card__color-name--overlay) > .product-card__sizes { visibility: hidden; }
