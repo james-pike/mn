@@ -59,6 +59,9 @@ async function fetchAndWrite() {
       // Products flagged hidden in the admin are delisted from the storefront —
       // never emitted into the catalog bundle.
       .filter((row: any) => !row.hidden)
+      // Staged rows (portals ∋ "staging", e.g. the Core365 gift lineup being
+      // logo-placed in the sm SKU manager) are not live on any portal yet.
+      .filter((row: any) => !String(row.portals || "").includes('"staging"'))
       .map((row: any) => ({
         sku: row.sku,
         name: row.name,
