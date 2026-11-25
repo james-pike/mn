@@ -33746,3 +33746,17 @@ html:has(.site-header--gift) .product-card__brand {
 @media (min-width: 1000px) {
   html:has(.site-header--gift) .product-card__brand { font-size: 0.74rem; }
 }
+
+/* Gift portal, desktop + wide tablets: the sticky sidebar is exactly one screen
+   tall (below the header), and the Check Balance box is pinned to its bottom —
+   it stays put however many categories/brands are listed above it. */
+@media (min-width: 1000px) {
+  html:has(.site-header--gift) .home-catalog__filters {
+    display: flex; flex-direction: column;
+    height: calc(100vh - 72px);
+  }
+  html:has(.site-header--gift) .home-catalog__filters > .gift-balance { margin-top: auto; flex: none; }
+}
+@media (min-width: 1000px) and (max-width: 1100px) {
+  html:has(.site-header--gift) .home-catalog__filters { height: calc(100vh - 64px); }
+}
