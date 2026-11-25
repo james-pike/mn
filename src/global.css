@@ -33616,17 +33616,16 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
   html:has(.site-header--gift) .product-card .product-card__name-row .product-card__price-group { display: none; }
   html:has(.site-header--gift) .product-card .product-card__price-bottom { display: flex; align-items: baseline; }
   html:has(.site-header--gift) .product-card .product-card__color-size-row {
-    display: grid;
-    /* line 2: swatches; line 3: price (left) | Men's/Women's + sizes (right) */
-    grid-template-columns: minmax(max-content, 1fr) auto auto;
-    grid-template-rows: 24px auto; /* fixed swatch line so prices stay level across a row */
-    column-gap: 8px; row-gap: 3px; align-items: center;
+    /* line 2: swatches (left) | price (right, under the title);
+       line 3: Men's/Women's + sizes together */
+    display: flex; flex-wrap: wrap; align-items: center; column-gap: 8px; row-gap: 2px;
   }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > :first-child { grid-column: 1 / -1; grid-row: 1; justify-self: start; }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__gender { grid-column: 2; grid-row: 2; margin: 0; justify-self: end; }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__sizes { grid-column: 3; grid-row: 2; justify-self: end; text-align: right; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > :first-child { order: 1; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__price-bottom { order: 2; margin-left: auto; flex: none; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row::after { content: ""; order: 3; flex-basis: 100%; height: 0; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__gender { order: 4; margin: 0; }
+  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__sizes { order: 5; margin: 0; text-align: left; }
   html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__colors-text { display: none; }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__price-bottom { grid-column: 1; grid-row: 2; justify-self: start; flex: none; }
   html:has(.site-header--gift) .product-card .product-card__price-bottom .product-card__price { font-size: 1.04rem; }
 }
 
