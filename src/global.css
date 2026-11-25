@@ -33598,3 +33598,12 @@
 @media (min-width: 1101px) {
   html:has(.site-header--gift) .home-catalog__inner { grid-template-columns: 248px minmax(0, 1fr); }
 }
+
+/* Gift portal: "More Milestone Awards" carousel — every slide keeps its 1/4
+   width (a long one-line title was forcing its slide, and so its image, wider);
+   an overlong title ends in an ellipsis instead. */
+html:has(.site-header--gift) .related-carousel__slide { min-width: 0; }
+html:has(.site-header--gift) .related-carousel__slide .product-card { min-width: 0; max-width: 100%; }
+html:has(.site-header--gift) .related-carousel__slide .product-card__name {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis;
+}
