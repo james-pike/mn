@@ -33573,3 +33573,16 @@
     background: #e6e7e9 !important;
   }
 }
+
+/* Gift portal, desktop: bigger swatches and size text on product cards (they
+   left the card's swatch/size row looking sparse) — dots 17 -> 21px, sizes and
+   the Men's/Women's prefix 15.8 -> ~18.7px, colour name + "+" to match. */
+@media (min-width: 1025px) {
+  html:has(.site-header--gift) .product-card .product-card__colors { gap: 7px; }
+  html:has(.site-header--gift) .product-card .product-card__color-dot { width: 21px; height: 21px; }
+  html:has(.site-header--gift) .product-card .product-card__sizes,
+  html:has(.site-header--gift) .product-card .product-card__sizes-line,
+  html:has(.site-header--gift) .product-card .product-card__gender { font-size: 1.04rem; }
+  html:has(.site-header--gift) .product-card .product-card__color-name { font-size: 1rem; }
+  html:has(.site-header--gift) .product-card .product-card__color-more { font-size: 0.95rem; }
+}
