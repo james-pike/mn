@@ -18,7 +18,7 @@ import { LocaleContext, t } from "../i18n";
 import { SecondaryBarContext } from "../context/secondary-bar";
 import type { Locale, TranslationKey } from "../i18n";
 import { allProducts, colorName, categoryLabel } from "./apparel/products";
-import { getGiftCard, giftContribution, deductGiftCard } from "../lib/giftcards";
+import { getGiftCard, giftContribution, deductGiftCard, isDemoGiftCode } from "../lib/giftcards";
 import { sortColorsWhiteLast } from "./apparel/utils";
 import { CATEGORY_ICONS } from "../lib/categories";
 import { isSkuInLineup, portalCatKey, hidesPrices, poOptional, fixedQtyFor, kitMissing, ELECTRICAL_SHIP_TO, ELECTRICAL_SKUS, ELECTRICAL_SUMMARY_ORDER } from "../lib/lineup";
@@ -237,6 +237,12 @@ export const useSubmitOrder = routeAction$(
     if (testModeVal === "fail") {
       console.warn("[ORDER_TEST_MODE=fail] Simulating a failed order (no DB, no email).");
       return fail(500, { message: "Order could not be saved. Please try again." });
+    }
+    // Dev demo gift card (see lib/giftcards.ts): simulate the order — no DB write,
+    // no email, no charge. Never matches in a production build.
+    if (data.giftCardCode && isDemoGiftCode(data.giftCardCode)) {
+      console.warn("[demo gift card] Simulated order — nothing saved or sent.", { total });
+      return { success: true, orderNumber: "MN-DEMO" };
     }
     if (/^(1|true|yes)$/.test(testModeVal)) {
       console.warn("[ORDER_TEST_MODE] Skipping DB insert + email. Simulated order.", { vendor, total });

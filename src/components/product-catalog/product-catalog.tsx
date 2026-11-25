@@ -266,6 +266,8 @@ const GiftBalanceCheck = component$(() => {
       result.value = v?.valid
         ? { ok: true, balance: Number(v.balance) || 0, name: `${v.firstName || ""} ${v.lastName || ""}`.trim() }
         : { ok: false };
+      // Remember a valid code for this browser tab so the checkout can fill it in.
+      try { if (v?.valid) sessionStorage.setItem("mn_gift_code", c); } catch { /* ignore */ }
     } catch {
       result.value = { ok: false };
     } finally { busy.value = false; }

@@ -31,9 +31,17 @@ export function normalizeCode(code: string): string {
 // Modern Niagara's, so another brand's code (e.g. a Wills card) can't be used here.
 export const GIFT_CARD_VENDOR = "modernniagara";
 
+// LOCAL DEV ONLY: a demo card for trying the gift portal without touching the
+// database. import.meta.env.DEV is compile-time false in production builds, so
+// this code never matches there.
+export const DEMO_GIFT_CODE = "DEMO-2026";
+const demoCard = (): GiftCard => ({ code: DEMO_GIFT_CODE, balance: 250, initialBalance: 250, active: true, firstName: "Jordan", lastName: "Sample" });
+export const isDemoGiftCode = (code: string) => !!import.meta.env.DEV && normalizeCode(code) === DEMO_GIFT_CODE;
+
 export async function getGiftCard(db: Client, code: string): Promise<GiftCard | null> {
   const c = normalizeCode(code);
   if (!c) return null;
+  if (isDemoGiftCode(c)) return demoCard();
   const r = await db.execute({
     sql: "SELECT code, balance, initial_balance, active, first_name, last_name FROM gift_cards WHERE code = ? AND vendor = ?",
     args: [c, GIFT_CARD_VENDOR],
@@ -67,6 +75,7 @@ export function giftContribution(card: GiftCard | null, total: number): number {
  */
 export async function deductGiftCard(db: Client, code: string, amount: number): Promise<boolean> {
   const c = normalizeCode(code);
+  if (isDemoGiftCode(c)) return true; // dev demo card: nothing to deduct
   const cents = Math.round(amount * 100);
   if (!c || cents <= 0) return false;
   const r = await db.execute({

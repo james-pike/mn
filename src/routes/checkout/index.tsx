@@ -102,6 +102,7 @@ export default component$(() => {
       const v = await checkGiftCardBalance(giftCode.value.trim());
       if (v?.valid) {
         giftBalance.value = Number(v.balance) || 0;
+        try { sessionStorage.setItem("mn_gift_code", giftCode.value.trim()); } catch { /* ignore */ }
         // The card carries its holder's name — fill it in (no name fields then).
         giftHolder.value = !!(v.firstName || v.lastName);
         empFirstName.value = v.firstName || "";
@@ -111,6 +112,17 @@ export default component$(() => {
     } catch {
       giftBalance.value = null; giftError.value = t("pay.gift.invalid", locale.value);
     } finally { giftChecking.value = false; }
+  });
+  // Gift portal: a code already checked in the sidebar (this tab) is filled in and
+  // applied, so the holder's name and balance are ready without retyping.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    if (!isGift || giftCode.value) return;
+    let saved = "";
+    try { saved = sessionStorage.getItem("mn_gift_code") || ""; } catch { /* ignore */ }
+    if (!saved) return;
+    giftCode.value = saved;
+    checkGiftCard();
   });
 
   const cartCount = useComputed$(() => cart.items.reduce((sum, i) => sum + i.quantity, 0));
