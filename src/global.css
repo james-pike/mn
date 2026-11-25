@@ -33636,6 +33636,7 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
   html:has(.site-header--gift) .product-card .product-card__sizes,
   html:has(.site-header--gift) .product-card .product-card__sizes-line,
   html:has(.site-header--gift) .product-card .product-card__gender { font-size: 0.92rem; letter-spacing: -0.25px; }
+  html:has(.site-header--gift) .product-card .product-card__color-name { font-size: 0.92rem; letter-spacing: -0.25px; }
 }
 /* Gift portal: no colour name beside a single swatch (one-colour products) —
    the non-overlay .product-card__color-name is only used for that case. */
