@@ -6,10 +6,10 @@ config({ path: new URL("../.env", import.meta.url).pathname });
 // Gift portal bags: show the capacity in the size slot instead of "One Size"
 // (and not in the title). Nike 27L from its SanMar listing; Herschel Retreat 23L
 // (herschel.ca); Herschel Classic Gym Bag 27L (retailer listings — Herschel has
-// delisted it); Herschel Classic Crossbody 2L (herschel.com).
+// delisted it). The $50 crossbody tote stays "One Size" (no published capacity).
 // Usage: tsx scripts/set-gift-bag-capacities.ts
 const BAGS: [string, string, string | null][] = [
-  ["MN-146", "2L", null],
+  ["MN-146", "One Size", null], // crossbody tote: no capacity listed anywhere for it — keep "One Size"
   ["MN-150", "27L", "Nike Utility Speed Backpack 2.0"],
   ["MN-151", "27L", null],
   ["MN-154", "23L", null],
