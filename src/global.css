@@ -33449,7 +33449,7 @@
 @media (min-width: 1025px) {
   html:has(.site-header--gift) .home-catalog__catnav-title,
   html:has(.site-header--gift) .home-catalog__filter-title { font-size: 0.85rem; }
-  html:has(.site-header--gift) .home-catalog__catnav-item { font-size: 1.18rem; }
+  html:has(.site-header--gift) .home-catalog__catnav-item { font-size: 1.1rem; }
   html:has(.site-header--gift) .home-catalog__catnav-icon svg { width: 21px; height: 21px; }
   html:has(.site-header--gift) .home-catalog__catnav-count { font-size: 0.84rem; }
   html:has(.site-header--gift) .home-catalog__filter-opt { font-size: 1.02rem; }
