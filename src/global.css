@@ -33561,3 +33561,15 @@
     background-image: none !important;
   }
 }
+
+/* Gift portal, desktop: the secondary bars right under the (now #f2f2f2) header
+   — the cart's PRODUCT / QTY / TOTAL row and checkout's "Back to Cart" bar —
+   take the MILESTONE AWARDS band shade (#e6e7e9) so they don't merge with it. */
+@media (min-width: 1025px) {
+  html:has(.site-header--gift) body:not(#cm) .cart-table thead,
+  html:has(.site-header--gift) body:not(#cm) .cart-table thead tr,
+  html:has(.site-header--gift) body:not(#cm) .cart-table thead th,
+  html:has(.site-header--gift) body:not(#cm) .cart-drawer__back-btn {
+    background: #e6e7e9 !important;
+  }
+}
