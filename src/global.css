@@ -33742,9 +33742,10 @@ html:has(.site-header--gift) .product-modal__color { border-radius: 3px; }
    corner (the brand is left out of the card title). */
 html:has(.site-header--gift) .product-card .product-card__image { position: relative; }
 html:has(.site-header--gift) .product-card__brand {
-  position: absolute; left: 8px; bottom: 3px; z-index: 2; pointer-events: none;
-  padding: 2px 7px; border: 1px solid rgba(43, 47, 52, 0.34); border-radius: 3px;
-  background: #eceef0;
+  /* a tab rising out of the grey info area: same grey, no border, square bottom */
+  position: absolute; left: 0; bottom: 0; z-index: 2; pointer-events: none;
+  padding: 4px 9px 3px 7.5px; border: 0; border-radius: 0 4px 0 0;
+  background: #f2f2f2;
   font-size: 0.66rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
   color: #4b5057; line-height: 1.35;
 }
