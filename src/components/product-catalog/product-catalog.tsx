@@ -176,6 +176,8 @@ const BRAND_BY_SKU: Record<string, string> = {
   "MN-12": "FootJoy", // Women's Speckle Print Polo
   "MN-29": "Nexgen",  // Microfiber Waffle Towel
   "MN-24": "2 Buds", // 2 Buds Pro Wireless ANC Earbuds (ANC = feature, not brand)
+  "MN-155": "The North Face", // gift: titled "North Face AIM …" (no "The")
+  "MN-156": "The North Face",
 };
 function brandOf(p: Product): string | null {
   if (BRAND_BY_SKU[p.sku]) return BRAND_BY_SKU[p.sku];
