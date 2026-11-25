@@ -155,8 +155,6 @@ function sizesOf(p: Product): string[] {
 // Shorter titles shown on the catalog card only (product page = full DB name).
 export const CARD_TITLE: Record<string, string> = {
   "MN-153": "Nike Club Fleece Sleeve Swoosh Hoodie", // Nike Club Fleece … Pullover Hoodie
-  "MN-146": "Herschel Recycled Crossbody Tote", // Herschel Recycled Classic Crossbody Tote
-  "MN-151": "Herschel Recycled Gym Bag", // Herschel Recycled Classic Gym Bag
 };
 
 // Gift portal cards: the brand is shown on its own small line above the title,
