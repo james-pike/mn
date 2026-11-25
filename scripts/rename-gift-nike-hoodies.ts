@@ -3,12 +3,13 @@ import { config } from "dotenv";
 
 config({ path: new URL("../.env", import.meta.url).pathname });
 
-// Gift portal: drop "Fleece" from the two Nike Club hoodie titles (they sit
-// under the Fleeces category already; "Hoodie" says what they are).
+// Gift portal: the two Nike Club hoodies keep their FULL names in the DB (the
+// product page shows them). The shorter card titles (no "Fleece") live in
+// product-catalog.tsx CARD_TITLE, so only the catalog card is shortened.
 // Usage: tsx scripts/rename-gift-nike-hoodies.ts
 const NAMES: [string, string][] = [
-  ["MN-152", "Nike Club Sleeve Swoosh Full Zip Hoodie"],
-  ["MN-153", "Nike Club Sleeve Swoosh Pullover Hoodie"],
+  ["MN-152", "Nike Club Fleece Sleeve Swoosh Full Zip Hoodie"],
+  ["MN-153", "Nike Club Fleece Sleeve Swoosh Pullover Hoodie"],
 ];
 async function main() {
   const url = process.env.TURSO_URL || process.env.VITE_TURSO_URL;

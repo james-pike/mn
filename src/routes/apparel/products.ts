@@ -1171,7 +1171,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-152",
-    "name": "Nike Club Sleeve Swoosh Full Zip Hoodie",
+    "name": "Nike Club Fleece Sleeve Swoosh Full Zip Hoodie",
     "category": "Fleece",
     "sizes": "XS - 4XL",
     "badge": "",
@@ -1205,7 +1205,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-153",
-    "name": "Nike Club Sleeve Swoosh Pullover Hoodie",
+    "name": "Nike Club Fleece Sleeve Swoosh Pullover Hoodie",
     "category": "Fleece",
     "sizes": "XS - 4XL",
     "badge": "",

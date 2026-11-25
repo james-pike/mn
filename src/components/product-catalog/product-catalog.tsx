@@ -152,6 +152,12 @@ function sizesOf(p: Product): string[] {
   if (s.length) return s;
   return p.sizes === "One Size" ? ["One Size"] : [];
 }
+// Shorter titles shown on the catalog card only (product page = full DB name).
+const CARD_TITLE: Record<string, string> = {
+  "MN-152": "Nike Club Sleeve Swoosh Full Zip Hoodie", // Nike Club Fleece … Full Zip Hoodie
+  "MN-153": "Nike Club Sleeve Swoosh Pullover Hoodie", // Nike Club Fleece … Pullover Hoodie
+};
+
 // Milestone Awards (gift login) category tabs, in sidebar order.
 const GIFT_CATEGORIES = ["All", "Fleece", "Jackets", "Polos", "Bags"];
 
@@ -358,6 +364,9 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
     displayName = displayName.replace(new RegExp(`\\s*[-–]\\s*${singleColorEn.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "i"), "");
   }
   displayName = displayName.trim();
+  // Gift portal: shorter catalog-card titles for a few long names (the product
+  // page keeps the full name).
+  if (CARD_TITLE[item.sku]) displayName = CARD_TITLE[item.sku];
 
   return (
     <div
