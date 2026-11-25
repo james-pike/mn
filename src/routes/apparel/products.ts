@@ -1031,14 +1031,14 @@ export const allProducts = [
     "sizes": "One Size",
     "badge": "",
     "colors": [
-      "#1a1a18",
-      "#b5b9c4"
+      "#b5b9c4",
+      "#1a1a18"
     ],
     "price": 100,
-    "img": "/gift/CA2009-46/black-front.webp",
+    "img": "/gift/CA2009-46/raven-crosshatch-front.webp",
     "imgs": [
-      "/gift/CA2009-46/black-front.webp",
-      "/gift/CA2009-46/raven-crosshatch-front.webp"
+      "/gift/CA2009-46/raven-crosshatch-front.webp",
+      "/gift/CA2009-46/black-front.webp"
     ],
     "material": "EcoSystem™ 600D Fabric made from 100% recycled post-consumer water bottles",
     "details": "Tonal stripe EcoSystem™ Liner made from 100% recycled post-consumer water bottles, Zippered closure with Prusik cord pulls, Smooth webbing top-carrying handles, Removable smooth webbing shoulder strap, Front storage sleeve, #CA2009-46",

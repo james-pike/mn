@@ -278,6 +278,8 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
   // Colour name shown while hovering a swatch (multi-colour cards) — mirrors the
   // single-colour name that shows permanently on one-swatch cards.
   const hoverColorName = useSignal("");
+  // Gift portal: the clicked swatch's colour name stays shown (not only on hover).
+  const pickedColorName = useSignal("");
   // When the hover colour name (an absolute overlay) is long enough to overflow
   // onto the gender prefix ("Men's"/"Women's") to its right, hide that prefix so
   // it doesn't show as a half-covered fragment. Measured after the overlay paints.
@@ -288,7 +290,7 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
   // hover handler — otherwise it measures the previous, shorter name's width.
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
-    const name = track(() => hoverColorName.value);
+    const name = track(() => hoverColorName.value || pickedColorName.value);
     if (!name) { genderHidden.value = false; return; }
     requestAnimationFrame(() => requestAnimationFrame(() => {
       const ov = colorNameRef.value;
@@ -496,6 +498,7 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
                         // (logo products) or the plain colour photo.
                         const src = cc ? cc.views.front.src.replace(/\.webp$/i, "-logo.webp") : imageForColor(item, c);
                         activeColor.value = c; // immediate: swatch highlight
+                        if (loginType.value === "gift") pickedColorName.value = c.startsWith("#") ? colorName(c, locale.value) : c;
                         // Decode before swapping so the (logo-baked) image paints at
                         // once. Capped so a slow/uncached decode can't block the swap.
                         await Promise.race([preload(src), new Promise((r) => setTimeout(r, 400))]);
@@ -507,8 +510,8 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
                   {(extra > 0 || (svc && all.length > 3)) && (
                     <span class={`product-card__color-more${extra > 0 ? "" : " product-card__color-more--phone"}`} aria-label="More colours">+</span>
                   )}
-                  {(hoverColorName.value || singleColorName) && (
-                    <span ref={colorNameRef} class={`product-card__color-name${singleColorName ? "" : " product-card__color-name--overlay"}`}>{hoverColorName.value || singleColorName}</span>
+                  {(hoverColorName.value || singleColorName || pickedColorName.value) && (
+                    <span ref={colorNameRef} class={`product-card__color-name${singleColorName ? "" : " product-card__color-name--overlay"}`}>{hoverColorName.value || singleColorName || pickedColorName.value}</span>
                   )}
                 </div>
               ) : <span />;

@@ -204,6 +204,9 @@ const RelatedCard = component$<{
   // ProductCard for the full rationale. activeColor flips immediately (highlight).
   const shownColor = useSignal("");
   const hoverColorName = useSignal("");
+  // Gift portal: the clicked swatch's colour name stays shown (not only on hover).
+  const loginTypeCard = useContext(LoginTypeContext);
+  const pickedColorName = useSignal("");
   // Hide the gender prefix when the hover colour-name overlay overflows onto it.
   const colorNameRef = useSignal<HTMLElement>();
   const genderRef = useSignal<HTMLElement>();
@@ -212,7 +215,7 @@ const RelatedCard = component$<{
   // gender prefix hides only when the (final-width) colour name overflows onto it.
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
-    const name = track(() => hoverColorName.value);
+    const name = track(() => hoverColorName.value || pickedColorName.value);
     if (!name) { genderHidden.value = false; return; }
     requestAnimationFrame(() => requestAnimationFrame(() => {
       const ov = colorNameRef.value;
@@ -334,6 +337,7 @@ const RelatedCard = component$<{
                       const cc = rcLogoCfg?.colors[c.toLowerCase()];
                       const src = cc ? cc.views.front.src.replace(/\.webp$/i, "-logo.webp") : imageForColor(item, c);
                       activeColor.value = c; // immediate: swatch highlight
+                      if (loginTypeCard.value === "gift") pickedColorName.value = c.startsWith("#") ? colorName(c, locale.value) : c;
                       // Decode before swapping so the (logo-baked) image paints at once.
                       await Promise.race([preload(src), new Promise((r) => setTimeout(r, 400))]);
                       shownColor.value = c;
@@ -344,8 +348,8 @@ const RelatedCard = component$<{
                 {extra > 0 && (
                   <span class="product-card__color-more" aria-label={`+${extra} more colours`}>+{extra}</span>
                 )}
-                {(hoverColorName.value || singleName) && (
-                  <span ref={colorNameRef} class={`product-card__color-name${singleName ? "" : " product-card__color-name--overlay"}`}>{hoverColorName.value || singleName}</span>
+                {(hoverColorName.value || singleName || pickedColorName.value) && (
+                  <span ref={colorNameRef} class={`product-card__color-name${singleName ? "" : " product-card__color-name--overlay"}`}>{hoverColorName.value || singleName || pickedColorName.value}</span>
                 )}
               </div>
             )}
