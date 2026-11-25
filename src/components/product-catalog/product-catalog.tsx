@@ -165,6 +165,14 @@ export const CARD_TITLE: Record<string, string> = {
   "MN-151": "Herschel Recycled Gym Bag", // Herschel Recycled Classic Gym Bag
 };
 
+// Gift hero: one representative (model) photo per category tile.
+const GIFT_HERO_IMG: Record<string, string> = {
+  Fleece: "/gift/DR1499/gorge-green-model.webp",
+  Jackets: "/gift/NF0A8FQJ/shady-blue-model.webp",
+  Polos: "/gift/NKDC1963/valor-blue-model.webp",
+  Bags: "/gift/CA2009-73/navy-front.webp",
+};
+
 // Milestone Awards (gift login) category tabs, in sidebar order.
 const GIFT_CATEGORIES = ["All", "Fleece", "Jackets", "Polos", "Bags"];
 
@@ -1003,6 +1011,51 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
 
   return (
     <section class={`home-catalog ${isElectrical.value ? "home-catalog--electrical" : ""} ${cls || ""}`}>
+      {/* Milestone Awards (gift portal) catalog page: a hero band between the
+          header and the product area — brand panel (left, like the Electrical
+          portal's) + one big tile per category (right). A tile filters the grid. */}
+      {loginType.value === "gift" && !isPdp.value && (
+        <div class="gift-hero">
+          <div class="gift-hero__panel">
+            <svg class="gift-hero__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
+              <polygon points="50,50 100,0 100,50" fill="#ae1f2a" />
+              <polygon points="50,50 100,50 100,100" fill="#d43950" />
+              <polygon points="50,50 100,100 50,100" fill="#9ec069" />
+              <polygon points="50,50 50,100 0,100" fill="#7fa244" />
+              <polygon points="50,50 0,100 0,50" fill="#4689b3" />
+              <polygon points="50,50 0,50 0,0" fill="#31759c" />
+              <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
+            </svg>
+            <h1 class="gift-hero__title">{locale.value === "fr" ? "Récompenses d’étape" : "Milestone Awards"}</h1>
+            <p class="gift-hero__text">
+              {locale.value === "fr"
+                ? "Choisissez votre récompense et payez avec votre carte-cadeau."
+                : "Choose your award and pay with your gift card."}
+            </p>
+            <a class="gift-hero__contact" href="mailto:info@mnbsapparel.ca">info@mnbsapparel.ca</a>
+          </div>
+          <div class="gift-hero__tiles">
+            {GIFT_CATEGORIES.filter((c) => c !== "All").map((cat) => {
+              const items = baseProducts.value.filter((p) => p.category === cat);
+              if (!items.length) return null;
+              const prices = items.map((p) => Number(p.price) || 0);
+              const lo = Math.min(...prices), hi = Math.max(...prices);
+              return (
+                <button key={cat} type="button" class={`gift-hero__tile${activeCat.value === cat ? " active" : ""}`} onClick$={() => selectCat(cat)}>
+                  <img class="gift-hero__img" src={GIFT_HERO_IMG[cat]} alt="" width={440} height={440} loading="eager" decoding="async" />
+                  <span class="gift-hero__label">
+                    <span class="gift-hero__cat">{categoryLabel(cat, locale.value)}</span>
+                    <span class="gift-hero__meta">
+                      {items.length} {locale.value === "fr" ? (items.length === 1 ? "article" : "articles") : (items.length === 1 ? "item" : "items")} · ${lo}{hi !== lo ? `–$${hi}` : ""}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
       <div
         class="home-catalog__inner"
         onClick$={(e) => {
