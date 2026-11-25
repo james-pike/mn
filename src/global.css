@@ -33575,11 +33575,11 @@
 }
 
 /* Gift portal, desktop: bigger swatches and size text on product cards (they
-   left the card's swatch/size row looking sparse) — dots 17 -> 21px, sizes and
+   left the card's swatch/size row looking sparse) — dots 17 -> 19px (5px apart), sizes and
    the Men's/Women's prefix 15.8 -> ~18.7px, colour name + "+" to match. */
 @media (min-width: 1025px) {
-  html:has(.site-header--gift) .product-card .product-card__colors { gap: 7px; }
-  html:has(.site-header--gift) .product-card .product-card__color-dot { width: 21px; height: 21px; }
+  html:has(.site-header--gift) .product-card .product-card__colors { gap: 5px; }
+  html:has(.site-header--gift) .product-card .product-card__color-dot { width: 19px; height: 19px; }
   html:has(.site-header--gift) .product-card .product-card__sizes,
   html:has(.site-header--gift) .product-card .product-card__sizes-line,
   html:has(.site-header--gift) .product-card .product-card__gender { font-size: 1.04rem; }
