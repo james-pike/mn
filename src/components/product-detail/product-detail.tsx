@@ -266,6 +266,7 @@ const RelatedCard = component$<{
   const body = (
     <>
       <div class="product-card__image">
+        {cardBrand && <span class="product-card__brand">{cardBrand}</span>}
         {rcLogoColor ? (() => {
           // Static pre-baked card image (front + default chest logo already
           // composited — scripts/bake-card-logos.ts), same as the gallery card:
@@ -286,7 +287,6 @@ const RelatedCard = component$<{
         )}
       </div>
       <div class="product-card__info">
-        {cardBrand && <div class="product-card__brand">{cardBrand}</div>}
         <div class="product-card__name-row">
           <div class="product-card__name">
             <span class="product-card__name-text">{displayName}</span>
