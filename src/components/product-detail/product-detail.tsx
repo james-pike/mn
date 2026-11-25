@@ -7,7 +7,7 @@ import { expandSizes, sizeGroups, sortColorsWhiteLast } from "../../routes/appar
 import { LoginTypeContext } from "../../routes/layout";
 import { hidesPrices, fixedQtyFor, isGiftOnly } from "../../lib/lineup";
 import { readKitSel, writeKitSel } from "../../lib/kit-selection";
-import { ELECTRICAL_SKUS, imageForColor, imgMatchesColor, genderOf, swatchOrder, isSafetyProduct } from "../product-catalog/product-catalog";
+import { ELECTRICAL_SKUS, imageForColor, imgMatchesColor, genderOf, swatchOrder, isSafetyProduct, CARD_TITLE } from "../product-catalog/product-catalog";
 import { ProductImage } from "../product-image/product-image";
 import { LogoSlide } from "../logo-overlay/logo-slide";
 import { getLogoConfig, logoAsset, type LogoPosition, type LogoStyle, type LogoBox } from "../../data/logo-placements";
@@ -246,6 +246,7 @@ const RelatedCard = component$<{
     displayName = displayName.replace(new RegExp(`\\s*[-–]\\s*${singleEn.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "i"), "");
   }
   displayName = displayName.trim();
+  if (CARD_TITLE[item.sku]) displayName = CARD_TITLE[item.sku]; // shorter card-only title
   const g = genderOf(item);
   const MAX_DOTS = 5;
   let dots = visible.slice(0, MAX_DOTS);
@@ -1234,6 +1235,8 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
           clothing: ["Jackets", "Sweaters", "Shirts", "Polos", "Hats", "SWAG", "New Hire Kit"],
           tech: ["Work Wear"],
           hvac: ["Flame Resistant", "Shirts", "Hats"],
+          // Milestone Awards: its own tabs (see GIFT_CATEGORIES in product-catalog).
+          gift: ["Fleece", "Jackets", "Polos", "Bags"],
         };
         const isElectrical = loginType.value === "electrical";
         const isHvac = loginType.value === "hvac";
@@ -1256,7 +1259,9 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
         // Use the SKU's own category only when it has enough siblings to fill a
         // carousel; otherwise (e.g. Sweaters, with a single item) fall back to the
         // whole "Apparel" lineup so the row isn't empty/near-empty.
-        const useCat = inVisible && sameCat.length >= 2;
+        // Gift portal: always the product's own category ("More Fleeces", "More
+        // Polos", …), even when it only has one sibling.
+        const useCat = inVisible && sameCat.length >= (loginType.value === "gift" ? 1 : 2);
         const related = isElectrical
           ? allProducts.filter((r) => r.sku !== p.sku && inLineup(r)).slice(0, 8)
           : (useCat ? sameCat : allApparel).slice(0, 8);

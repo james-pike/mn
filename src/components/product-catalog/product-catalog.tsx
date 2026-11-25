@@ -153,7 +153,7 @@ function sizesOf(p: Product): string[] {
   return p.sizes === "One Size" ? ["One Size"] : [];
 }
 // Shorter titles shown on the catalog card only (product page = full DB name).
-const CARD_TITLE: Record<string, string> = {
+export const CARD_TITLE: Record<string, string> = {
   "MN-152": "Nike Club Sleeve Swoosh Full Zip Hoodie", // Nike Club Fleece … Full Zip Hoodie
   "MN-153": "Nike Club Sleeve Swoosh Pullover Hoodie", // Nike Club Fleece … Pullover Hoodie
 };
