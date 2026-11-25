@@ -33673,3 +33673,9 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
 /* Gift portal checkout: more room below the Place Order button. */
 html:has(.site-header--gift) .checkout-page .cart-drawer__footer,
 html:has(.site-header--gift) .cart-drawer .cart-drawer__footer { padding-bottom: 28px !important; }
+
+/* Gift portal: form controls inherit the site font (browsers give <button> etc.
+   their own default font — the sidebar categories and Fit/Brand filters were
+   rendering in Arial). :where() keeps this lower than any button rule that sets
+   its own font. */
+:where(html:has(.site-header--gift)) :where(button, input, select, textarea) { font-family: inherit; }
