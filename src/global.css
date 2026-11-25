@@ -33768,3 +33768,5 @@ html:has(.site-header--gift) .product-card__brand {
 }
 /* Gift portal cards: less space above the title (closer to the brand tab). */
 html:has(.site-header--gift) .product-card .product-card__info { padding-top: 5.5px; }
+/* Gift portal: footer language button less rounded (4 -> 2px). */
+html:has(.site-header--gift) .site-footer .locale-btn--footer { border-radius: 2px !important; }
