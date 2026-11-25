@@ -33744,7 +33744,7 @@ html:has(.site-header--gift) .product-card .product-card__image { position: rela
 html:has(.site-header--gift) .product-card__brand {
   /* a tab rising out of the grey info area: same grey, no border, square bottom */
   position: absolute; left: 0; bottom: 0; z-index: 2; pointer-events: none;
-  padding: 4px 9px 3px 7.5px; border: 0; border-radius: 0 4px 0 0;
+  padding: 4px 9px 3px 7.5px; border: 0; border-radius: 0 2px 0 0;
   background: #f2f2f2;
   font-size: 0.66rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
   color: #4b5057; line-height: 1.35;
