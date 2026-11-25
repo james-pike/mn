@@ -33610,23 +33610,12 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
 
 /* Product cards: the bottom-row price is only used by the gift portal on desktop. */
 .product-card__price-bottom { display: none; }
-/* Gift portal, desktop: three lines — title (full width) / swatches /
-   price (left) + sizes (right). */
+/* Gift portal, desktop: price back on the title line (right); swatches (left)
+   and Men's/Women's + sizes (right) on the line below. The bottom-row price copy
+   (.product-card__price-bottom) stays hidden. */
 @media (min-width: 1025px) {
-  html:has(.site-header--gift) .product-card .product-card__name-row .product-card__price-group { display: none; }
-  html:has(.site-header--gift) .product-card .product-card__price-bottom { display: flex; align-items: baseline; }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row {
-    /* line 2: Men's/Women's + sizes (left) | price (right, under the title);
-       line 3: swatches */
-    display: flex; flex-wrap: wrap; align-items: center; column-gap: 8px; row-gap: 2px;
-  }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > :first-child { order: 5; }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__price-bottom { order: 3; margin-left: auto; flex: none; }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row::after { content: ""; order: 4; flex-basis: 100%; height: 0; }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__gender { order: 1; margin: 0; }
-  html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__sizes { order: 2; margin: 0; text-align: left; }
+  html:has(.site-header--gift) .product-card .product-card__name-row { column-gap: 6px; }
   html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__colors-text { display: none; }
-  html:has(.site-header--gift) .product-card .product-card__price-bottom .product-card__price { font-size: 1.04rem; }
 }
 
 /* Gift portal, desktop: card size text (and the Men's/Women's beside it) a touch
@@ -33641,7 +33630,7 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
    price, which moved below). Short titles keep the normal left edge; a long one
    widens its row a little on BOTH sides so it shrinks less. */
 @media (min-width: 1025px) {
-  html:has(.site-header--gift) .product-card .product-card__name-row { column-gap: 0; }
+  html:has(.site-header--gift) .product-card .product-card__name-row { }
   /* only a title that doesn't fit at the normal width (set by the card's fit
      script) reaches into the side padding — evenly, ~5px each side */
   html:has(.site-header--gift) .product-card .product-card__name-row.product-card__name-row--wide { margin-left: -2.5px; margin-right: -2.5px; }
