@@ -33658,11 +33658,9 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
   html:has(.site-header--gift) .product-card .product-card__info { padding-bottom: 5.5px; }
 }
 
-/* Gift portal, desktop: 5 products per row (was 4). */
+/* Gift portal, desktop: titles shrink to fit their cards by different amounts;
+   reserve the full-size title line (1.08rem x 1.45) so the swatch + price lines
+   stay level across a row. */
 @media (min-width: 1101px) {
-  html:has(.site-header--gift) .home-catalog .apparel-grid,
-  html:has(.site-header--gift) .home-catalog .apparel-grid.apparel-grid--dense { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
-  /* titles shrink to fit the narrower cards; reserve the full-size title line
-     (1.08rem x 1.45) so the swatch + price lines stay level across a row */
   html:has(.site-header--gift) .product-card .product-card__name-row { min-height: calc(1.08rem * 1.45); align-items: center; }
 }
