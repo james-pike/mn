@@ -327,11 +327,11 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
       const row = el.parentElement;
       row?.classList.remove("product-card__name-row--wide");
       if (loginType.value === "gift" && el.scrollWidth > el.clientWidth + 0.5) row?.classList.add("product-card__name-row--wide");
-      // Gift portal: tighten the letter spacing first (up to ~0.05em more), and
+      // Gift portal: tighten the letter spacing a little first (up to ~0.025em), and
       // only shrink the text if the title still doesn't fit.
       if (loginType.value === "gift" && el.scrollWidth > el.clientWidth + 0.5) {
         const ls0 = parseFloat(getComputedStyle(el).letterSpacing) || 0;
-        const floor = ls0 - parseFloat(getComputedStyle(el).fontSize) * 0.05;
+        const floor = ls0 - parseFloat(getComputedStyle(el).fontSize) * 0.025;
         let ls = ls0;
         while (el.scrollWidth > el.clientWidth + 0.5 && ls > floor) {
           ls -= 0.1;
@@ -342,8 +342,9 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
       let px = base;
       const min = base * 0.62;
       let guard = 0;
-      while (el.scrollWidth > el.clientWidth + 0.5 && px > min && guard++ < 40) {
-        px -= 0.5;
+      const step = loginType.value === "gift" ? 0.1 : 0.5; // gift: fine steps, so the title ends right at the price
+      while (el.scrollWidth > el.clientWidth + 0.5 && px > min && guard++ < 200) {
+        px -= step;
         el.style.fontSize = `${px}px`;
       }
       if (el.scrollWidth > el.clientWidth + 0.5) {

@@ -33614,7 +33614,7 @@ html:has(.site-header--gift) .related-carousel__slide .product-card__name {
    and Men's/Women's + sizes (right) on the line below. The bottom-row price copy
    (.product-card__price-bottom) stays hidden. */
 @media (min-width: 1025px) {
-  html:has(.site-header--gift) .product-card .product-card__name-row { column-gap: 6px; }
+  html:has(.site-header--gift) .product-card .product-card__name-row { column-gap: 3px; }
   html:has(.site-header--gift) .product-card .product-card__color-size-row > .product-card__colors-text { display: none; }
 }
 
