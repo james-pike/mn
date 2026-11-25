@@ -350,7 +350,7 @@ const RelatedCard = component$<{
                   />
                 ))}
                 {extra > 0 && (
-                  <span class="product-card__color-more" aria-label={`+${extra} more colours`}>+{extra}</span>
+                  <span class="product-card__color-more" aria-label={`+${extra} more colours`}>{loginTypeCard.value === "gift" ? "+" : `+${extra}`}</span>
                 )}
                 {(hoverColorName.value || singleName || pickedColorName.value) && (
                   <span ref={colorNameRef} class={`product-card__color-name${singleName ? "" : " product-card__color-name--overlay"}`}>{hoverColorName.value || singleName || pickedColorName.value}</span>

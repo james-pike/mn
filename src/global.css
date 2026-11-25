@@ -33586,7 +33586,7 @@
   /* A touch less space between the title and the swatch/size line (6.3 -> 4.5px). */
   html:has(.site-header--gift) .product-card .product-card__name-row { margin-bottom: 4.5px; }
   html:has(.site-header--gift) .product-card .product-card__color-name { font-size: 1rem; }
-  html:has(.site-header--gift) .product-card .product-card__color-more { font-size: 0.95rem; }
+  html:has(.site-header--gift) .product-card .product-card__color-more { font-size: 0.88rem; }
   /* Titles start larger (0.94 -> 1.08rem); the card's fit-to-one-line script
      still shrinks a long title until it fits, so only short ones grow. */
   html:has(.site-header--gift) .product-card .product-card__name { font-size: 1.02rem; }
