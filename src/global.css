@@ -33726,4 +33726,6 @@ html:has(.site-header--gift) .product-modal__color { border-radius: 3px; }
   html:has(.site-header--gift) .home-catalog__filters .home-catalog__catnav { padding-bottom: 14px; }
   html:has(.site-header--gift) .home-catalog__filters .home-catalog__filter-group { padding-top: 10px; padding-bottom: 12px; }
   html:has(.site-header--gift) .home-catalog__filters .gift-balance { margin-top: 0; padding-top: 18px; }
+  /* category rows a little tighter (7 -> 5.5px top/bottom) */
+  html:has(.site-header--gift) .home-catalog__filters .home-catalog__catnav-item { padding-top: 5.5px; padding-bottom: 5.5px; }
 }
