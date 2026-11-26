@@ -352,7 +352,8 @@ export const allProducts = [
     "material": "Poly/spandex blend with performance mesh back",
     "details": "Mid-profile structured trucker cap, shapeable pre-curved visor, UV protection, moisture wicking, 110 Technology® sweatband, adjustable plastic snapback, grey under visor, #i8502",
     "portals": [
-      "service"
+      "service",
+      "gift"
     ]
   },
   {
@@ -372,7 +373,8 @@ export const allProducts = [
     "material": "100% acrylic rib knit",
     "details": "Stretchy thick knit, fold-up cuff with Carhartt patch, one-size-fits-most, #A18",
     "portals": [
-      "service"
+      "service",
+      "gift"
     ]
   },
   {
@@ -812,7 +814,7 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-144",
+    "sku": "MN-57",
     "name": "Women's Nike Dri-FIT Micro Pique 2.0 Polo",
     "category": "Polos",
     "sizes": "S - 2XL",
@@ -855,7 +857,7 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-145",
+    "sku": "MN-58",
     "name": "Men's Nike Dri-FIT Micro Pique 2.0 Polo",
     "category": "Polos",
     "sizes": "XS - 4XL",
@@ -901,7 +903,7 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-146",
+    "sku": "MN-59",
     "name": "Herschel Recycled Classic Crossbody Tote",
     "category": "Bags",
     "sizes": "One Size",
@@ -921,7 +923,31 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-147",
+    "sku": "MN-42",
+    "name": "Carhartt Marquette Pullover Hoodie",
+    "category": "Fleece",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#5f6062",
+      "#2c3e50"
+    ],
+    "price": 75,
+    "img": "/gift/K121/black-front.webp",
+    "imgs": [
+      "/gift/K121/black-front.webp",
+      "/gift/K121/carbon-heather-front.webp",
+      "/gift/K121/navy-front.webp"
+    ],
+    "material": "10.5 oz, 50% cotton / 50% polyester",
+    "details": "Three-piece hood with drawcord, Rib-knit cuffs and waist, Front handwarmer pocket, Triple-stitched seams, Carhartt patch, Loose fit, #K121",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-43",
     "name": "Women's Nike Club Fleece Sleeve Swoosh 1/2 Zip",
     "category": "Fleece",
     "sizes": "S - 2XL",
@@ -949,7 +975,7 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-148",
+    "sku": "MN-44",
     "name": "Men's Nike Club Fleece Sleeve Swoosh 1/2 Zip",
     "category": "Fleece",
     "sizes": "XS - 4XL",
@@ -983,7 +1009,7 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-149",
+    "sku": "MN-45",
     "name": "Nike Therma-FIT 1/4 Zip Fleece Hoodie",
     "category": "Fleece",
     "sizes": "S - 4XL",
@@ -1004,7 +1030,7 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-150",
+    "sku": "MN-60",
     "name": "Nike Utility Speed Backpack 2.0",
     "category": "Bags",
     "sizes": "27L",
@@ -1028,7 +1054,7 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-151",
+    "sku": "MN-61",
     "name": "Herschel Recycled Classic Gym Bag",
     "category": "Bags",
     "sizes": "27L",
@@ -1050,7 +1076,7 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-54",
+    "sku": "MN-46",
     "name": "Men's Adidas Spacer Quarter-Zip Pullover",
     "category": "Fleece",
     "sizes": "S - 4XL",
@@ -1110,7 +1136,7 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-56",
+    "sku": "MN-47",
     "name": "Women's Adidas Spacer Quarter-Zip Pullover",
     "category": "Fleece",
     "sizes": "S - 3XL",
@@ -1170,7 +1196,7 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-152",
+    "sku": "MN-48",
     "name": "Nike Club Fleece Sleeve Swoosh Full Zip Hoodie",
     "category": "Fleece",
     "sizes": "XS - 4XL",
@@ -1204,7 +1230,7 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-153",
+    "sku": "MN-49",
     "name": "Nike Club Fleece Sleeve Swoosh Pullover Hoodie",
     "category": "Fleece",
     "sizes": "XS - 4XL",
@@ -1247,7 +1273,7 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-154",
+    "sku": "MN-62",
     "name": "Herschel Retreat Backpack",
     "category": "Bags",
     "sizes": "23L",
@@ -1270,7 +1296,93 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-155",
+    "sku": "MN-50",
+    "name": "Carhartt Washed Duck Mock Neck Vest",
+    "category": "Jackets",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#6e6e6e"
+    ],
+    "price": 100,
+    "img": "/gift/104277/black-front.webp",
+    "imgs": [
+      "/gift/104277/black-front.webp",
+      "/gift/104277/grey-front.webp"
+    ],
+    "material": "12 oz, 100% cotton washed duck, sherpa lining",
+    "details": "Sherpa lining for warmth, Map pocket on left chest with zipper closure, Two large sherpa-lined front pockets, Two inside pockets, Droptail hem for added coverage, #104277",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-51",
+    "name": "Carhartt Gilliam Jacket",
+    "category": "Jackets",
+    "sizes": "S - 3XL / LT - 2XLT",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#2c3e50"
+    ],
+    "price": 110,
+    "img": "/gift/102208/black-front.webp",
+    "imgs": [
+      "/gift/102208/black-front.webp",
+      "/gift/102208/navy-front.webp"
+    ],
+    "material": "100% nylon Cordura shell with quilted polyester insulation",
+    "details": "Rain Defender durable water repellent, Wind Fighter windproof technology, Mock-neck collar, Left-chest map pocket, Two lower-front pockets with hidden snap closure, Two inside pockets, Hook-and-loop adjustable cuffs, Drawcord adjustable hem, Relaxed fit, #102208",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-52",
+    "name": "Carhartt Storm Defender Packable Jacket",
+    "category": "Jackets",
+    "sizes": "S - 4XL / LT - 2XLT",
+    "badge": "",
+    "colors": [
+      "#1a1a18",
+      "#5b5444"
+    ],
+    "price": 150,
+    "img": "/gift/105751/black-front.webp",
+    "imgs": [
+      "/gift/105751/black-front.webp",
+      "/gift/105751/tarmac-front.webp"
+    ],
+    "material": "100% nylon, lightweight",
+    "details": "Storm Defender waterproof breathable technology (10K/5K), Wind Fighter technology, Adjustable hood, Water-repellent front zip, Drawcord-adjustable droptail hem, Zippered chest and two lower pockets, Packs into its left lower pocket, Relaxed fit, #105751",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-53",
+    "name": "Carhartt Iconic Duck Active Jac",
+    "category": "Jackets",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 150,
+    "img": "/gift/106673/black-front.webp",
+    "imgs": [
+      "/gift/106673/black-front.webp"
+    ],
+    "material": "12 oz, 100% cotton firm duck",
+    "details": "Quilted-flannel lining in body, Quilted-nylon lining in sleeves, Attached quilted-flannel-lined hood with drawcord, Two inside pockets, Rib-knit cuffs, #106673",
+    "portals": [
+      "gift"
+    ]
+  },
+  {
+    "sku": "MN-54",
     "name": "Men's North Face AIM Full Zip Fleece Jacket",
     "category": "Jackets",
     "sizes": "S - 3XL",
@@ -1298,7 +1410,7 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-156",
+    "sku": "MN-55",
     "name": "Women's North Face AIM Full Zip Fleece Jacket",
     "category": "Jackets",
     "sizes": "S - 2XL",
@@ -1326,7 +1438,7 @@ export const allProducts = [
     ]
   },
   {
-    "sku": "MN-157",
+    "sku": "MN-56",
     "name": "Men's Columbia Loma Vista III Jacket",
     "category": "Jackets",
     "sizes": "S - 2XL",
@@ -1557,6 +1669,8 @@ const colorNames: Record<string, Record<string, string>> = {
   "#2b5135": { en: "Gorge Green", fr: "Vert gorge" }, // gift lineup 2026-11-25
   "#1a191e": { en: "Black Tonal", fr: "Noir ton sur ton" }, // gift lineup 2026-11-25
   "#004976": { en: "Shady Blue", fr: "Bleu ombragé" }, // gift lineup 2026-11-25
+  "#5f6062": { en: "Carbon Heather", fr: "Carbone chiné" }, // Carhartt (gift)
+  "#5b5444": { en: "Tarmac", fr: "Asphalte" }, // Carhartt (gift)
   "#63666a": { en: "Smoked Pearl Grey", fr: "Gris perle fumé" }, // gift lineup 2026-11-25
   "#9d7951": { en: "Delta", fr: "Delta" }, // gift lineup 2026-11-25
 };

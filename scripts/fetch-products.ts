@@ -283,6 +283,8 @@ const colorNames: Record<string, Record<string, string>> = {
   "#2b5135": { en: "Gorge Green", fr: "Vert gorge" }, // gift lineup 2026-11-25
   "#1a191e": { en: "Black Tonal", fr: "Noir ton sur ton" }, // gift lineup 2026-11-25
   "#004976": { en: "Shady Blue", fr: "Bleu ombragé" }, // gift lineup 2026-11-25
+  "#5f6062": { en: "Carbon Heather", fr: "Carbone chiné" }, // Carhartt (gift)
+  "#5b5444": { en: "Tarmac", fr: "Asphalte" }, // Carhartt (gift)
   "#63666a": { en: "Smoked Pearl Grey", fr: "Gris perle fumé" }, // gift lineup 2026-11-25
   "#9d7951": { en: "Delta", fr: "Delta" }, // gift lineup 2026-11-25
 };

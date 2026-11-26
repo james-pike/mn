@@ -1021,6 +1021,8 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup }) => {
     const handler = () => {
+      // Gift portal: cart + checkout are one page.
+      if (loginType.value === "gift") { nav("/checkout/"); return; }
       cartOpen.value = true;
       checkoutStep.value = "details";
       checkoutOpen.value = true;
@@ -1354,6 +1356,9 @@ export default component$(() => {
   useVisibleTask$(({ track, cleanup }) => {
     track(() => loginAction.value);
     if (loginAction.value && !loginAction.value.failed) {
+      // Milestone Awards: a one-time silver flash around the sidebar banner
+      // after each fresh login (played by the catalog once the overlay is gone).
+      try { sessionStorage.setItem("gift-sheen-pending", "1"); } catch { /* ignore */ }
       overlayFading.value = true;
       document.documentElement.style.overflow = "";
       document.body.style.cssText = "";
@@ -1361,6 +1366,7 @@ export default component$(() => {
       const tid = setTimeout(() => {
         showLogin.value = false;
         overlayFading.value = false;
+        window.dispatchEvent(new CustomEvent("gift-sheen"));
       }, 800);
       cleanup(() => clearTimeout(tid));
     }
@@ -1705,7 +1711,7 @@ export default component$(() => {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
               </button>
             )}
-            <button class={`cart-btn ${cart.items.length > 0 ? "cart-btn--active" : ""}`} onClick$={() => { if (isCheckout.value) { try { sessionStorage.setItem("reopen-cart", "1"); } catch { /* ignore */ } nav("/"); return; } cartOpen.value = !cartOpen.value; if (cartOpen.value) menuOpen.value = false; if (!cartOpen.value) checkoutStep.value = "cart"; }}>
+            <button class={`cart-btn ${cart.items.length > 0 ? "cart-btn--active" : ""}`} onClick$={() => { if (loginType.value === "gift") { nav(isCheckout.value ? "/" : "/checkout/"); return; } if (isCheckout.value) { try { sessionStorage.setItem("reopen-cart", "1"); } catch { /* ignore */ } nav("/"); return; } cartOpen.value = !cartOpen.value; if (cartOpen.value) menuOpen.value = false; if (!cartOpen.value) checkoutStep.value = "cart"; }}>
               <span class="cart-btn__label cart-btn__label-full">{loginType.value === "electrical" ? (locale.value === "fr" ? "Panier" : "Cart") : t("cart.mycart", locale.value)}</span>
               <span class="cart-btn__label-short">{t("cart.short", locale.value)}</span>
               {cartOpen.value && !isCheckout.value ? (
@@ -1937,7 +1943,7 @@ export default component$(() => {
 
       <footer class="site-footer">
         <div class="site-footer__inner">
-          <div class="site-footer__brand brand-cluster">
+          <div class={`site-footer__brand brand-cluster${loginType.value === "gift" ? " site-footer__brand--gift" : ""}`}>
             <svg class="brand-cluster__mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <polygon points="50,50 50,0 100,0" fill="#ffe2a6" />
               <polygon points="50,50 100,0 100,50" fill="#ae1f2a" />
@@ -1948,11 +1954,32 @@ export default component$(() => {
               <polygon points="50,50 0,50 0,0" fill="#31759c" />
               <polygon points="50,50 0,0 50,0" fill="#ffd25b" />
             </svg>
+            {/* Milestone Awards: the mark stays; the wordmark text becomes the program name. */}
+            {loginType.value === "gift" ? (
+              <>
+                <span class="site-footer__gift-name">
+                  <span>{locale.value === "fr" ? "Récompenses" : "Milestone"}</span>
+                  <span class="site-footer__gift-line2">
+                    {locale.value === "fr" ? "d’étape" : "Awards"}
+                    {/* Small trophy on the AWARDS line only, sized to that line's text. */}
+                    <svg class="site-footer__gift-trophy-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                      <path d="M4 22h16" />
+                      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+                      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+                      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+                    </svg>
+                  </span>
+                </span>
+              </>
+            ) : (
             <div class="brand-cluster__words">
               <span class="brand-cluster__word">MODERN NIAGARA</span>
               <span class="brand-cluster__word brand-cluster__word--sub">BUILDING SERVICES</span>
               <span class="brand-cluster__word brand-cluster__word--muted">{t("logo.apparel", locale.value).toUpperCase()}</span>
             </div>
+            )}
           </div>
           <div class="site-footer__col">
           {loginType.value === "hvac" && (

@@ -6,7 +6,7 @@ config({ path: new URL("../.env", import.meta.url).pathname });
 // Test gift cards for trying the Milestone Awards (gift portal) checkout.
 //   MN-TEST-500  — $500 balance  → covers most orders: payment shows "Gift card"
 //   MN-TEST-0    — $0 balance    → never covers: payment shows "Gift card + credit card"
-// Holder name "Test Holder" (fills in on Apply). NOTE: the gift_cards table is the
+// Holder name "Genevieve Tremblay" (fills in on Apply). NOTE: the gift_cards table is the
 // live database, so these codes also work on the deployed site — delete them
 // before real use:  tsx scripts/test-gift-cards.ts --delete
 // Re-running without --delete resets both balances.
@@ -23,7 +23,7 @@ async function main() {
     if (process.argv.includes("--delete")) { console.log("deleted", code); continue; }
     await db.execute({
       sql: `INSERT INTO gift_cards (code, balance, initial_balance, active, note, vendor, first_name, last_name)
-            VALUES (?, ?, ?, 1, 'test card (scripts/test-gift-cards.ts)', 'modernniagara', 'Test', 'Holder')`,
+            VALUES (?, ?, ?, 1, 'test card (scripts/test-gift-cards.ts)', 'modernniagara', 'Genevieve', 'Tremblay')`,
       args: [code, bal, bal],
     });
     console.log("ready", code, `$${bal}`);

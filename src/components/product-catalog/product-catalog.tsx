@@ -154,7 +154,7 @@ function sizesOf(p: Product): string[] {
 }
 // Shorter titles shown on the catalog card only (product page = full DB name).
 export const CARD_TITLE: Record<string, string> = {
-  "MN-153": "Nike Club Fleece Sleeve Swoosh Hoodie", // Nike Club Fleece … Pullover Hoodie
+  "MN-49": "Nike Club Fleece Sleeve Swoosh Hoodie", // Nike Club Fleece … Pullover Hoodie
 };
 
 // Gift portal cards: the brand is shown on its own small line above the title,
@@ -171,7 +171,7 @@ export function stripBrand(title: string, brand: string | null): string {
 }
 
 // Milestone Awards (gift login) category tabs, in sidebar order.
-const GIFT_CATEGORIES = ["All", "Fleece", "Jackets", "Polos", "Bags"];
+const GIFT_CATEGORIES = ["All", "Fleece", "Jackets", "Polos", "Bags", "Hats"]; // Hats = "Headwear" (the MN toque, shared with Service)
 
 // Brands carried, in sidebar display order. A brand must be listed here to show
 // up as a filter (the facet list is BRAND_LIST ∩ brands-present).
@@ -194,8 +194,8 @@ const BRAND_BY_SKU: Record<string, string> = {
   "MN-12": "FootJoy", // Women's Speckle Print Polo
   "MN-29": "Nexgen",  // Microfiber Waffle Towel
   "MN-24": "2 Buds", // 2 Buds Pro Wireless ANC Earbuds (ANC = feature, not brand)
-  "MN-155": "The North Face", // gift: titled "North Face AIM …" (no "The")
-  "MN-156": "The North Face",
+  "MN-54": "The North Face", // gift: titled "North Face AIM …" (no "The")
+  "MN-55": "The North Face",
 };
 export function brandOf(p: Product): string | null {
   if (BRAND_BY_SKU[p.sku]) return BRAND_BY_SKU[p.sku];
@@ -777,10 +777,10 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
         return i === -1 ? GIFT_CATEGORIES.length : i;
       };
       const ordered = gift.slice().sort((a, b) => rank(a.category) - rank(b.category));
-      // For now: swap the green Club Fleece pullover hoodie (MN-153) with the
-      // women's North Face AIM jacket (MN-156) in the "All" grid.
-      const i = ordered.findIndex((p) => p.sku === "MN-153");
-      const j = ordered.findIndex((p) => p.sku === "MN-156");
+      // For now: swap the green Club Fleece pullover hoodie (MN-49) with the
+      // women's North Face AIM jacket (MN-55) in the "All" grid.
+      const i = ordered.findIndex((p) => p.sku === "MN-49");
+      const j = ordered.findIndex((p) => p.sku === "MN-55");
       if (i !== -1 && j !== -1) [ordered[i], ordered[j]] = [ordered[j], ordered[i]];
       return ordered;
     }
@@ -1064,6 +1064,99 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     }
 
     return applyFacets(products);
+  });
+
+  // Gift portal: right after a fresh login, a silver light travels once around
+  // the MILESTONE AWARDS banner's frame (same sheen as the Add to Cart button).
+  // Login sets the pending flag; it plays when the login overlay has gone (the
+  // "gift-sheen" event), or on mount if the page loaded fresh after login.
+  useVisibleTask$(({ cleanup }) => {
+    if (loginType.value !== "gift") return;
+    let tid: ReturnType<typeof setTimeout> | undefined;
+    const play = () => {
+      try {
+        if (sessionStorage.getItem("gift-sheen-pending") !== "1") return;
+        sessionStorage.removeItem("gift-sheen-pending");
+      } catch { return; }
+      const head = document.querySelector<HTMLElement>(".home-catalog__filters .home-catalog__catnav-head");
+      if (!head) return;
+      head.classList.remove("gift-sheen");
+      void head.offsetWidth; // restart the animation
+      head.classList.add("gift-sheen");
+      tid = setTimeout(() => head.classList.remove("gift-sheen"), 2600);
+    };
+    if (!document.querySelector(".login-modal__form")) tid = setTimeout(play, 350);
+    window.addEventListener("gift-sheen", play);
+    cleanup(() => { window.removeEventListener("gift-sheen", play); if (tid) clearTimeout(tid); });
+  });
+
+  // Gift portal, desktop: the sidebar sticks under the header at one screen
+  // tall, but a sticky box can't run past the bottom of its grid row — so as the
+  // footer came up (or on a short category) the whole sidebar, heading and all,
+  // scrolled away. Instead, shrink it to end where the catalog ends: the
+  // MILESTONE AWARDS heading stays pinned and only Check Balance rides up.
+  useVisibleTask$(({ cleanup }) => {
+    if (loginType.value !== "gift") return;
+    // The sidebar's vertical spacing scales by --gk (1 = normal, down to K_MIN)
+    // so its contents always fit the height available — on a short monitor, or
+    // as the sidebar shortens when the footer comes in — with no scrollbar.
+    // Content height is linear in --gk, so it's measured at k=0 and k=1 (only
+    // when the contents or width change) and each fit is then just arithmetic.
+    // Past the tightest spacing (short laptop screens), the sidebar's text and
+    // icons scale down too, by --gf (1 down to F_MIN).
+    const K_MIN = 0.25, F_MIN = 0.82;
+    let h0 = 0, h1 = 0, hK = 0, hF = 0, measured = false;
+    const measure = (aside: HTMLElement) => {
+      aside.classList.add("gift-side--measure"); // natural height: no fixed height, no auto gap
+      aside.style.setProperty("--gf", "1");
+      aside.style.setProperty("--gk", "0"); h0 = aside.offsetHeight;
+      aside.style.setProperty("--gk", "1"); h1 = aside.offsetHeight;
+      aside.style.setProperty("--gk", String(K_MIN)); hK = aside.offsetHeight;
+      aside.style.setProperty("--gf", String(F_MIN)); hF = aside.offsetHeight;
+      aside.classList.remove("gift-side--measure");
+      measured = true;
+    };
+    const fit = () => {
+      const aside = document.querySelector<HTMLElement>(".home-catalog__filters");
+      const inner = aside?.parentElement;
+      if (!aside || !inner) return;
+      if (window.innerWidth < 1000) {
+        aside.style.removeProperty("--gift-side-h"); aside.style.removeProperty("--gk"); aside.style.removeProperty("--gf");
+        aside.classList.remove("gift-side--overflow"); return;
+      }
+      if (!measured) measure(aside);
+      const top = parseFloat(getComputedStyle(aside).top) || 72;
+      const full = window.innerHeight - top;
+      const room = inner.getBoundingClientRect().bottom - top;
+      const h = Math.max(240, Math.min(full, room));
+      aside.style.setProperty("--gift-side-h", `${h}px`);
+      const k = h1 > h0 ? Math.min(1, (h - h0) / (h1 - h0)) : 1;
+      aside.style.setProperty("--gk", `${Math.max(K_MIN, k).toFixed(3)}`);
+      let f = 1;
+      // (-4px: text height isn't perfectly linear in font size, so keep a small margin)
+      if (k < K_MIN && hK > hF) f = Math.max(F_MIN, 1 - ((hK - (h - 4)) / (hK - hF)) * (1 - F_MIN));
+      aside.style.setProperty("--gf", f.toFixed(3));
+      // Only if even the smallest spacing and text can't fit, allow scrolling.
+      aside.classList.toggle("gift-side--overflow", k < K_MIN && h < hF - 0.5);
+    };
+    const remeasure = () => { measured = false; fit(); };
+    fit();
+    window.addEventListener("scroll", fit, { passive: true });
+    window.addEventListener("resize", remeasure);
+    // Switching category/filters changes the grid's height without a scroll.
+    const ro = new ResizeObserver(fit);
+    const grid = document.querySelector(".home-catalog__inner");
+    if (grid) ro.observe(grid);
+    // ...and the sidebar's own contents (brand list, balance result, Clear).
+    const aside0 = document.querySelector(".home-catalog__filters");
+    const mo = new MutationObserver(remeasure);
+    if (aside0) mo.observe(aside0, { childList: true, subtree: true });
+    if (document.fonts) document.fonts.ready.then(remeasure).catch(() => {});
+    cleanup(() => {
+      ro.disconnect(); mo.disconnect();
+      window.removeEventListener("scroll", fit);
+      window.removeEventListener("resize", remeasure);
+    });
   });
 
   return (

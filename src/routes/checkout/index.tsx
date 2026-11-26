@@ -58,6 +58,10 @@ export default component$(() => {
 
   const summaryOpen = useSignal(true);
   const formError = useSignal("");
+  // Per-field validation messages, shown on each field's label line (not one
+  // message at the bottom). Keys: firstName lastName email phone address city
+  // province postal po. Cleared as the field is edited.
+  const fe = useStore<Record<string, string>>({});
   const formTouched = useSignal(false);
   const submitting = useSignal(false);
   const orderSubmitted = useSignal(false);
@@ -163,6 +167,15 @@ export default component$(() => {
     if (kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).length) return false; // Electrical: full kit only
     return true;
   });
+  // The order button is clickable whenever the only things missing are form
+  // fields — clicking then flags each blank/invalid field right on the field
+  // (submitOrder's checks). Non-field blockers still disable it.
+  const canTryOrder = useComputed$(() => {
+    if ((usesGift.value || isGift) && giftBalance.value == null) return false;
+    if (payMethod.value === "giftcard" && giftRemaining.value > 0) return false;
+    if (kitMissing(loginType.value, cart.items.map((i: any) => i.sku)).length) return false;
+    return true;
+  });
 
   // Load the cart from localStorage (the drawer writes it there) and stay in
   // sync with add/remove events fired elsewhere in the app.
@@ -190,6 +203,23 @@ export default component$(() => {
     cleanup(() => window.removeEventListener("cart-updated", loadCart));
   });
 
+  // Gift portal: the cart and checkout are one page — the order summary is the
+  // cart (change quantity / remove), so there's no separate cart drawer step.
+  // Writes the same localStorage cart the layout reads, then tells it to reload.
+  const updateQty = $((index: number, delta: number) => {
+    const items = cart.items.slice();
+    const it = items[index];
+    if (!it) return;
+    const q = it.quantity + delta;
+    const next = q < 1 ? items.filter((_, i) => i !== index) : items.map((x, i) => (i === index ? { ...x, quantity: q } : x));
+    cart.items = next;
+    try {
+      localStorage.setItem(`ce_cart_mn_${loginType.value || "clothing"}`, JSON.stringify(next));
+      document.cookie = `ce_cart_count=${next.reduce((n, x) => n + x.quantity, 0)};path=/;max-age=31536000`;
+    } catch { /* ignore */ }
+    window.dispatchEvent(new CustomEvent("cart-updated"));
+  });
+
   // Mint one idempotency key for this checkout visit (client-side only, so SSR
   // and client agree). Retries reuse it; a fresh visit gets a fresh key.
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -203,23 +233,47 @@ export default component$(() => {
   });
 
   const submitOrder = $(async () => {
-    if (!canPlaceOrder.value || submitting.value) return;
+    if (!(isGift ? canTryOrder.value : canPlaceOrder.value) || submitting.value) return;
     formTouched.value = true;
-    if (!empFirstName.value || !empLastName.value || !empAddress1.value || !empCity.value
-        || (!empPostal.value && !fixedShip) || !empEmail.value || !empPhone.value || !empProvince.value || (payMethod.value === "po" && !empPO.value && !poOptional(loginType.value))) {
-      formError.value = t("cart.error.required", locale.value);
-      return;
+    if (!isGift) {
+      // Other portals: unchanged — one message under the form.
+      if (!empFirstName.value || !empLastName.value || !empAddress1.value || !empCity.value
+          || (!empPostal.value && !fixedShip) || !empEmail.value || !empPhone.value || !empProvince.value || (payMethod.value === "po" && !empPO.value && !poOptional(loginType.value))) {
+        formError.value = t("cart.error.required", locale.value);
+        return;
+      }
+      const fmtErrors: string[] = [];
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(empEmail.value.trim())) fmtErrors.push(t("cart.error.email", locale.value));
+      const pd = empPhone.value.replace(/[^\d]/g, "");
+      if (pd.length < 10 || pd.length > 15 || !/^[\d\s+()\-.]+$/.test(empPhone.value.trim())) fmtErrors.push(t("cart.error.phone", locale.value));
+      if (!fixedShip && !/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(empPostal.value.trim())) fmtErrors.push(t("cart.error.postal", locale.value));
+      if (fmtErrors.length) { formError.value = fmtErrors.join("\n"); return; }
     }
-    // Field-format checks — collect ALL failures so every invalid field is
-    // reported together in one submit, not one at a time.
-    const fmtErrors: string[] = [];
-    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRe.test(empEmail.value.trim())) fmtErrors.push(t("cart.error.email", locale.value));
+    // Gift portal: check every field and report each problem ON that field.
+    const fr = locale.value === "fr";
+    const req = fr ? "Obligatoire" : "Required";
+    const errs: Record<string, string> = {};
+    if (!empFirstName.value.trim()) errs.firstName = req;
+    if (!empLastName.value.trim()) errs.lastName = req;
+    if (!fixedShip) {
+      if (!empAddress1.value.trim()) errs.address = req;
+      if (!empCity.value.trim()) errs.city = req;
+      if (!empProvince.value) errs.province = req;
+      if (!empPostal.value.trim()) errs.postal = req;
+      else if (!/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(empPostal.value.trim())) errs.postal = fr ? "Format : A1A 1A1" : "Use format A1A 1A1";
+    }
+    if (!empEmail.value.trim()) errs.email = req;
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(empEmail.value.trim())) errs.email = fr ? "Courriel invalide" : "Enter a valid email";
     const phoneDigits = empPhone.value.replace(/[^\d]/g, "");
-    if (phoneDigits.length < 10 || phoneDigits.length > 15 || !/^[\d\s+()\-.]+$/.test(empPhone.value.trim())) fmtErrors.push(t("cart.error.phone", locale.value));
-    if (!fixedShip && !/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(empPostal.value.trim())) fmtErrors.push(t("cart.error.postal", locale.value));
-    if (fmtErrors.length) {
-      formError.value = fmtErrors.join("\n");
+    if (!empPhone.value.trim()) errs.phone = req;
+    else if (phoneDigits.length < 10 || phoneDigits.length > 15 || !/^[\d\s+()\-.]+$/.test(empPhone.value.trim())) errs.phone = fr ? "Numéro invalide" : "Enter a valid phone number";
+    if (payMethod.value === "po" && !empPO.value && !poOptional(loginType.value)) errs.po = req;
+    for (const k of Object.keys(fe)) delete fe[k];
+    if (isGift) Object.assign(fe, errs);
+    if (isGift && Object.keys(errs).length) {
+      formError.value = "";
+      // Bring the first problem into view.
+      requestAnimationFrame(() => document.querySelector(".checkout-modal__field--error")?.scrollIntoView({ behavior: "smooth", block: "center" }));
       return;
     }
     formError.value = "";
@@ -389,7 +443,7 @@ export default component$(() => {
             <img src="/logo.png" alt="Modern Niagara" class="site-header__logo-img" width="200" height="200" loading="eager" decoding="sync" />
           </Link>
           <nav class="site-header__nav">
-            <button class="cart-btn" onClick$={() => { try { sessionStorage.setItem("reopen-cart", "1"); } catch { /* ignore */ } nav("/"); }}>
+            <button class="cart-btn" onClick$={() => { if (!isGift) { try { sessionStorage.setItem("reopen-cart", "1"); } catch { /* ignore */ } } nav("/"); }}>
               <span class="cart-btn__label">{t("cart.mycart", locale.value)}</span>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
             </button>
@@ -418,7 +472,13 @@ export default component$(() => {
                 </Link>
               )}
               {/* Electrical has no cart (no cart buttons anywhere), so no "Back to Cart". */}
-              {loginType.value !== "electrical" && (
+              {isGift && (
+                <Link href="/" class="cart-drawer__back-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+                  {locale.value === "fr" ? "Retour aux récompenses" : "Back to Awards"}
+                </Link>
+              )}
+              {loginType.value !== "electrical" && !isGift && (
               <button class="cart-drawer__back-btn" onClick$={() => { try { sessionStorage.setItem("reopen-cart", "1"); } catch { /* ignore */ } nav("/"); }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
                 {t("cart.backtocart", locale.value)}
@@ -432,7 +492,25 @@ export default component$(() => {
                   <div class="cart-drawer__summary-list">
                     {(loginType.value === "electrical"
                       ? [...cart.items].sort((a: any, b: any) => ELECTRICAL_SUMMARY_ORDER.indexOf(a.sku) - ELECTRICAL_SUMMARY_ORDER.indexOf(b.sku))
-                      : cart.items).map((item) => (
+                      : cart.items).map((item, i) => isGift ? (
+                      <div key={`${item.name}-${item.size}-${item.color}`} class="cart-drawer__summary-item gift-line">
+                        <Link href={item.sku ? `/${item.sku}/` : "/"} class="gift-line__img"><img src={item.img} alt="" width="56" height="56" /></Link>
+                        <div class="gift-line__main">
+                          <Link href={item.sku ? `/${item.sku}/` : "/"} class="gift-line__name">{stripColorSuffix(item.name)}</Link>
+                          <div class="gift-line__meta">
+                            {item.color && item.color.startsWith("#") && <span class="cart-drawer__summary-swatch" style={{ background: item.color }} aria-hidden="true" />}
+                            {[item.color ? (item.color.startsWith("#") ? colorName(item.color, locale.value) : item.color) : "", item.size || ""].filter(Boolean).join(" / ")}
+                          </div>
+                        </div>
+                        <div class="cart-table__qty-controls gift-line__qty">
+                          <button type="button" class="cart-table__qty-btn" aria-label={`Decrease quantity of ${item.name}`} onClick$={() => updateQty(i, -1)}>-</button>
+                          <span>{`${item.quantity}`}</span>
+                          <button type="button" class="cart-table__qty-btn" aria-label={`Increase quantity of ${item.name}`} onClick$={() => updateQty(i, 1)}>+</button>
+                        </div>
+                        <span class="gift-line__price">${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</span>
+                        <button type="button" class="gift-line__remove" aria-label={`Remove ${item.name}`} title={locale.value === "fr" ? "Retirer" : "Remove"} onClick$={() => updateQty(i, -item.quantity)}>×</button>
+                      </div>
+                    ) : (
                       <div key={`${item.name}-${item.size}`} class="cart-drawer__summary-item">
                         <span>
                           {item.color && item.color.startsWith("#") && <span class="cart-drawer__summary-swatch" style={{ background: item.color }} aria-hidden="true" />}
@@ -490,24 +568,30 @@ export default component$(() => {
                         {giftChecking.value ? t("pay.gift.checking", locale.value) : t("pay.gift.apply", locale.value)}
                       </button>
                     </div>
-                    {giftError.value && <div class="checkout-modal__gift-msg checkout-modal__gift-msg--err">{giftError.value}</div>}
-                    {giftHolder.value && giftBalance.value != null && (
-                      <div class="checkout-modal__gift-holder">
-                        <span>{locale.value === "fr" ? "Nom" : "Name"}</span>
-                        <strong>{empFirstName.value} {empLastName.value}</strong>
+                    {/* Balance up top, in the right half beside the code row, once applied. */}
+                    {giftBalance.value != null && (
+                      <div class="checkout-modal__gift-bal">
+                        <span class="checkout-modal__gift-bal-amt">${giftBalance.value.toFixed(2)}</span>
+                        <span class="checkout-modal__gift-bal-label">{locale.value === "fr" ? "solde de la carte" : "card balance"}</span>
                       </div>
                     )}
+                    {giftError.value && <div class="checkout-modal__gift-msg checkout-modal__gift-msg--err">{giftError.value}</div>}
                   </div>
                 )}
-                {(!isGift || (giftBalance.value != null && !giftHolder.value)) && (
+                {/* Gift portal: once the card is applied, First/Last Name come filled in
+                    from the card — read-only when the card carries a name, since the
+                    order always uses the card holder's name (server side). */}
+                {(!isGift || giftBalance.value != null) && (
                 <div class="checkout-modal__row">
-                  <div class={`checkout-modal__field ${formTouched.value && !empFirstName.value ? "checkout-modal__field--error" : ""}`}>
+                  <div class={`checkout-modal__field ${(isGift ? fe.firstName : formTouched.value && !empFirstName.value) ? "checkout-modal__field--error" : ""}`}>
                     <label>{t("cart.firstname", locale.value)}</label>
-                    <input type="text" value={empFirstName.value} onInput$={(_, el) => { empFirstName.value = el.value; formError.value = ""; }} />
+                    {fe.firstName && <span class="checkout-modal__field-msg" role="alert">{fe.firstName}</span>}
+                    <input type="text" value={empFirstName.value} readOnly={isGift && giftHolder.value} class={isGift && giftHolder.value ? "checkout-modal__input--locked" : ""} onInput$={(_, el) => { empFirstName.value = el.value; formError.value = ""; delete fe.firstName; }} />
                   </div>
-                  <div class={`checkout-modal__field ${formTouched.value && !empLastName.value ? "checkout-modal__field--error" : ""}`}>
+                  <div class={`checkout-modal__field ${(isGift ? fe.lastName : formTouched.value && !empLastName.value) ? "checkout-modal__field--error" : ""}`}>
                     <label>{t("cart.lastname", locale.value)}</label>
-                    <input type="text" value={empLastName.value} onInput$={(_, el) => { empLastName.value = el.value; formError.value = ""; }} />
+                    {fe.lastName && <span class="checkout-modal__field-msg" role="alert">{fe.lastName}</span>}
+                    <input type="text" value={empLastName.value} readOnly={isGift && giftHolder.value} class={isGift && giftHolder.value ? "checkout-modal__input--locked" : ""} onInput$={(_, el) => { empLastName.value = el.value; formError.value = ""; delete fe.lastName; }} />
                   </div>
                 </div>
                 )}
@@ -517,13 +601,15 @@ export default component$(() => {
                   <>
                 {/* Email + Phone share a row. */}
                 <div class="checkout-modal__row">
-                <div class={`checkout-modal__field ${formTouched.value && !empEmail.value ? "checkout-modal__field--error" : ""}`}>
+                <div class={`checkout-modal__field ${(isGift ? fe.email : formTouched.value && !empEmail.value) ? "checkout-modal__field--error" : ""}`}>
                   <label>{t("cart.email", locale.value)}</label>
-                  <input type="email" value={empEmail.value} onInput$={(_, el) => { empEmail.value = el.value; formError.value = ""; }} />
+                    {fe.email && <span class="checkout-modal__field-msg" role="alert">{fe.email}</span>}
+                  <input type="email" value={empEmail.value} onInput$={(_, el) => { empEmail.value = el.value; formError.value = ""; delete fe.email; }} />
                 </div>
-                <div class={`checkout-modal__field ${formTouched.value && !empPhone.value ? "checkout-modal__field--error" : ""}`}>
+                <div class={`checkout-modal__field ${(isGift ? fe.phone : formTouched.value && !empPhone.value) ? "checkout-modal__field--error" : ""}`}>
                   <label>{t("cart.phone", locale.value)}</label>
-                  <input type="tel" value={empPhone.value} onInput$={(_, el) => { empPhone.value = el.value; formError.value = ""; }} />
+                    {fe.phone && <span class="checkout-modal__field-msg" role="alert">{fe.phone}</span>}
+                  <input type="tel" value={empPhone.value} onInput$={(_, el) => { empPhone.value = el.value; formError.value = ""; delete fe.phone; }} />
                 </div>
                 </div>
                   <div class="checkout-modal__field checkout-modal__field--shipto">
@@ -539,22 +625,27 @@ export default component$(() => {
                 ) : (
                 <>
                 {/* Full shipping address — all required. */}
-                <div class={`checkout-modal__field ${formTouched.value && !empAddress1.value ? "checkout-modal__field--error" : ""}`}>
+                <div class={`checkout-modal__field ${(isGift ? fe.address : formTouched.value && !empAddress1.value) ? "checkout-modal__field--error" : ""}`}>
                   <label>{t("cart.address", locale.value)}</label>
-                  <input type="text" autoComplete="street-address" value={empAddress1.value} onInput$={(_, el) => { empAddress1.value = el.value; formError.value = ""; }} />
+                    {fe.address && <span class="checkout-modal__field-msg" role="alert">{fe.address}</span>}
+                  <input type="text" autoComplete="street-address" value={empAddress1.value} onInput$={(_, el) => { empAddress1.value = el.value; formError.value = ""; delete fe.address; }} />
                 </div>
-                <div class={`checkout-modal__field ${formTouched.value && !empCity.value ? "checkout-modal__field--error" : ""}`}>
+                <div class={`checkout-modal__field ${(isGift ? fe.city : formTouched.value && !empCity.value) ? "checkout-modal__field--error" : ""}`}>
                   <label>{t("cart.city", locale.value)}</label>
-                  <input type="text" autoComplete="address-level2" value={empCity.value} onInput$={(_, el) => { empCity.value = el.value; formError.value = ""; }} />
+                    {fe.city && <span class="checkout-modal__field-msg" role="alert">{fe.city}</span>}
+                  <input type="text" autoComplete="address-level2" value={empCity.value} onInput$={(_, el) => { empCity.value = el.value; formError.value = ""; delete fe.city; }} />
                 </div>
                 {/* Province + Postal share a row (neither needs full width).
                     Province sits high so the tax line in the summary updates as
                     soon as possible. */}
                 <div class="checkout-modal__row">
-                <div class={`checkout-modal__field ${formTouched.value && !empProvince.value ? "checkout-modal__field--error" : ""}`}>
+                <div class={`checkout-modal__field ${(isGift ? fe.province : formTouched.value && !empProvince.value) ? "checkout-modal__field--error" : ""}`}>
                   <label>{t("cart.province", locale.value)}</label>
-                  <select required value={empProvince.value} onChange$={(_, el) => { empProvince.value = el.value; formError.value = ""; }}>
-                    <option value="" disabled hidden>{locale.value === "fr" ? "Sélectionner…" : "Select…"}</option>
+                    {fe.province && <span class="checkout-modal__field-msg" role="alert">{fe.province}</span>}
+                  <select required value={empProvince.value} onChange$={(_, el) => { empProvince.value = el.value; formError.value = ""; delete fe.province; }}>
+                    {/* Shown (selected) while no province is picked — a hidden placeholder
+                        made the browser display Alberta though nothing was chosen. */}
+                    <option value="" disabled hidden={!isGift} selected={isGift && !empProvince.value}>{locale.value === "fr" ? "Sélectionner…" : "Select…"}</option>
                     <option value="AB">{t("prov.AB", locale.value)}</option>
                     <option value="BC">{t("prov.BC", locale.value)}</option>
                     <option value="MB">{t("prov.MB", locale.value)}</option>
@@ -567,9 +658,10 @@ export default component$(() => {
                     <option value="SK">{t("prov.SK", locale.value)}</option>
                   </select>
                 </div>
-                <div class={`checkout-modal__field ${formTouched.value && !empPostal.value ? "checkout-modal__field--error" : ""}`}>
+                <div class={`checkout-modal__field ${(isGift ? fe.postal : formTouched.value && !empPostal.value) ? "checkout-modal__field--error" : ""}`}>
                   <label>{t("cart.postal", locale.value)}</label>
-                  <input type="text" autoComplete="postal-code" value={empPostal.value} onInput$={(_, el) => { empPostal.value = el.value; formError.value = ""; }} />
+                    {fe.postal && <span class="checkout-modal__field-msg" role="alert">{fe.postal}</span>}
+                  <input type="text" autoComplete="postal-code" value={empPostal.value} onInput$={(_, el) => { empPostal.value = el.value; formError.value = ""; delete fe.postal; }} />
                 </div>
                 </div>
                 </>
@@ -578,13 +670,15 @@ export default component$(() => {
                 <>
                 {/* Email + Phone share a row. */}
                 <div class="checkout-modal__row">
-                <div class={`checkout-modal__field ${formTouched.value && !empEmail.value ? "checkout-modal__field--error" : ""}`}>
+                <div class={`checkout-modal__field ${(isGift ? fe.email : formTouched.value && !empEmail.value) ? "checkout-modal__field--error" : ""}`}>
                   <label>{t("cart.email", locale.value)}</label>
-                  <input type="email" value={empEmail.value} onInput$={(_, el) => { empEmail.value = el.value; formError.value = ""; }} />
+                    {fe.email && <span class="checkout-modal__field-msg" role="alert">{fe.email}</span>}
+                  <input type="email" value={empEmail.value} onInput$={(_, el) => { empEmail.value = el.value; formError.value = ""; delete fe.email; }} />
                 </div>
-                <div class={`checkout-modal__field ${formTouched.value && !empPhone.value ? "checkout-modal__field--error" : ""}`}>
+                <div class={`checkout-modal__field ${(isGift ? fe.phone : formTouched.value && !empPhone.value) ? "checkout-modal__field--error" : ""}`}>
                   <label>{t("cart.phone", locale.value)}</label>
-                  <input type="tel" value={empPhone.value} onInput$={(_, el) => { empPhone.value = el.value; formError.value = ""; }} />
+                    {fe.phone && <span class="checkout-modal__field-msg" role="alert">{fe.phone}</span>}
+                  <input type="tel" value={empPhone.value} onInput$={(_, el) => { empPhone.value = el.value; formError.value = ""; delete fe.phone; }} />
                 </div>
                 </div>
                 </>
@@ -654,9 +748,10 @@ export default component$(() => {
                 <h3 class="checkout-modal__form-title">{t("pay.title", locale.value)}</h3>
                 {/* MN accepts purchase-order checkout only — no gift card or
                     credit-card options. */}
-                <div class={`checkout-modal__field ${formTouched.value && !empPO.value ? "checkout-modal__field--error" : ""}`}>
+                <div class={`checkout-modal__field ${(isGift ? fe.po : formTouched.value && !empPO.value) ? "checkout-modal__field--error" : ""}`}>
                   <label>{t("cart.po", locale.value)}</label>
-                  <input type="text" value={empPO.value} onInput$={(_, el) => (empPO.value = el.value)} />
+                    {fe.po && <span class="checkout-modal__field-msg" role="alert">{fe.po}</span>}
+                  <input type="text" value={empPO.value} onInput$={(_, el) => { empPO.value = el.value; delete fe.po; }} />
                 </div>
               </div>
               )
@@ -679,7 +774,7 @@ export default component$(() => {
               )}
               <button
                 class={`btn btn--primary cart-drawer__order-btn ${!canPlaceOrder.value ? "cart-drawer__order-btn--disabled" : ""}`}
-                disabled={!canPlaceOrder.value || submitting.value}
+                disabled={!(isGift ? canTryOrder.value : canPlaceOrder.value) || submitting.value}
                 onClick$={submitOrder}
               >
                 {submitting.value ? (
