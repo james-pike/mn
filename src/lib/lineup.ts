@@ -20,6 +20,7 @@ export const ELECTRICAL_SKU_SET = new Set(ELECTRICAL_SKUS);
 // (cards, product page, tab title, related items, and so the cart/checkout).
 export const GIFT_OVERRIDES: Record<string, { name?: string; price?: number }> = {
   "MN-6": { name: "Carhartt A18 Knit Cuffed Beanie", price: 19 }, // Service: "Carhartt Flip Toque - Navy", $18.50
+  "MN-5": { price: 24 }, // Flexfit Trucker Ball Cap — Service: $23.50
 };
 export const giftNamed = <T extends { sku: string; name: string; price: number }>(p: T, loginType: string | null | undefined): T =>
   loginType === "gift" && GIFT_OVERRIDES[p.sku] ? { ...p, ...GIFT_OVERRIDES[p.sku] } : p;
