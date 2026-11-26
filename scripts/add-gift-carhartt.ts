@@ -27,7 +27,7 @@ const ROWS = [
     sizes: "S - 5XL", colors: [BLACK, GREY], slugs: ["black", "grey"],
     material: "12 oz, 100% cotton washed duck, sherpa lining",
     details: "Sherpa lining for warmth, Map pocket on left chest with zipper closure, Two large sherpa-lined front pockets, Two inside pockets, Droptail hem for added coverage, #104277" },
-  { sku: "MN-53", code: "106673", name: "Carhartt Iconic Duck Active Jac", category: "Jackets", price: 150, sort: 312.9,
+  { sku: "MN-53", code: "106673", name: "Carhartt Iconic Firm Duck Active Jac", category: "Jackets", price: 150, sort: 312.9,
     sizes: "S - 5XL", colors: [BLACK], slugs: ["black"],
     material: "12 oz, 100% cotton firm duck",
     details: "Quilted-flannel lining in body, Quilted-nylon lining in sleeves, Attached quilted-flannel-lined hood with drawcord, Two inside pockets, Rib-knit cuffs, #106673" },

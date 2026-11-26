@@ -1363,7 +1363,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-53",
-    "name": "Carhartt Iconic Duck Active Jac",
+    "name": "Carhartt Iconic Firm Duck Active Jac",
     "category": "Jackets",
     "sizes": "S - 5XL",
     "badge": "",
