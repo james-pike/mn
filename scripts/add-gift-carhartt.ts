@@ -15,7 +15,7 @@ const ROWS = [
     sizes: "S - 4XL", colors: [BLACK, CARBON, NAVY], slugs: ["black", "carbon-heather", "navy"],
     material: "10.5 oz, 50% cotton / 50% polyester",
     details: "Three-piece hood with drawcord, Rib-knit cuffs and waist, Front handwarmer pocket, Triple-stitched seams, Carhartt patch, Loose fit, #K121" },
-  { sku: "MN-51", code: "102208", name: "Carhartt Gilliam Jacket", category: "Jackets", price: 110, sort: 312.6,
+  { sku: "MN-51", code: "102208", name: "Carhartt Gilliam Water Resistant Jacket", category: "Jackets", price: 110, sort: 312.6,
     sizes: "S - 3XL / LT - 2XLT", colors: [BLACK, NAVY], slugs: ["black", "navy"],
     material: "100% nylon Cordura shell with quilted polyester insulation",
     details: "Rain Defender durable water repellent, Wind Fighter windproof technology, Mock-neck collar, Left-chest map pocket, Two lower-front pockets with hidden snap closure, Two inside pockets, Hook-and-loop adjustable cuffs, Drawcord adjustable hem, Relaxed fit, #102208" },

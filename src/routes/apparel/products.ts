@@ -1319,7 +1319,7 @@ export const allProducts = [
   },
   {
     "sku": "MN-51",
-    "name": "Carhartt Gilliam Jacket",
+    "name": "Carhartt Gilliam Water Resistant Jacket",
     "category": "Jackets",
     "sizes": "S - 3XL / LT - 2XLT",
     "badge": "",
