@@ -373,8 +373,7 @@ export const allProducts = [
     "material": "100% acrylic rib knit",
     "details": "Stretchy thick knit, fold-up cuff with Carhartt patch, one-size-fits-most, #A18",
     "portals": [
-      "service",
-      "gift"
+      "service"
     ]
   },
   {
