@@ -5,7 +5,7 @@ import { LocaleContext, t } from "../../i18n";
 import { allProducts, colorName, categoryLabel } from "../../routes/apparel/products";
 import { expandSizes, sizeGroups, sortColorsWhiteLast } from "../../routes/apparel/utils";
 import { LoginTypeContext } from "../../routes/layout";
-import { hidesPrices, fixedQtyFor, isGiftOnly } from "../../lib/lineup";
+import { hidesPrices, fixedQtyFor, isGiftOnly, giftNamed } from "../../lib/lineup";
 import { readKitSel, writeKitSel } from "../../lib/kit-selection";
 import { ELECTRICAL_SKUS, imageForColor, imgMatchesColor, genderOf, swatchOrder, isSafetyProduct, CARD_TITLE, brandOf, stripBrand } from "../product-catalog/product-catalog";
 import { ProductImage } from "../product-image/product-image";
@@ -420,7 +420,7 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
   // Reference props.sku directly inside computed/tasks so they re-track when the
   // panel is pointed at a different product (route [sku]→[sku] nav, or the
   // in-frame overlay switching products via a related item).
-  const product = useComputed$(() => allProducts.find((p) => p.sku === props.sku) || null);
+  const product = useComputed$(() => { const f = allProducts.find((p) => p.sku === props.sku); return f ? giftNamed(f, loginType.value) : null; });
   // The catalog card can hand off a pre-selected colour via ?c=<hex> so the PDP
   // opens on the colour the shopper previewed in the gallery.
   const loc = useLocation();
@@ -1272,8 +1272,8 @@ export const ProductDetailPanel = component$<ProductDetailPanelProps>((props) =>
           : isHvac ? isSafetyProduct(r.sku) : isElectrical
             ? ELECTRICAL_SKUS.includes(r.sku)
             : !ELECTRICAL_SKUS.includes(r.sku) && r.category !== "Flame Resistant" && !isGiftOnly(r as { portals?: string[] });
-        const sameCat = allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && inLineup(r) && r.category === p.category);
-        const allApparel = allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && inLineup(r) && visible.includes(r.category));
+        const sameCat = allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && inLineup(r) && r.category === p.category).map((r) => giftNamed(r, loginType.value));
+        const allApparel = allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && inLineup(r) && visible.includes(r.category)).map((r) => giftNamed(r, loginType.value));
         // Use the SKU's own category only when it has enough siblings to fill a
         // carousel; otherwise (e.g. Sweaters, with a single item) fall back to the
         // whole "Apparel" lineup so the row isn't empty/near-empty.

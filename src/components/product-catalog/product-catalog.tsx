@@ -82,7 +82,7 @@ export function swatchOrder(colors: readonly string[]): string[] {
 // Login lineups (Electrical SKUs, isSkuInLineup) live in lib/lineup.ts and the
 // HVAC rule in lib/hvac.ts, shared with the layout's menu drawer.
 export { ELECTRICAL_SKUS, isSkuInLineup } from "../../lib/lineup";
-import { ELECTRICAL_SKUS, ELECTRICAL_SKU_SET, hidesPrices, isGiftOnly, portalCatKey } from "../../lib/lineup";
+import { ELECTRICAL_SKUS, ELECTRICAL_SKU_SET, hidesPrices, isGiftOnly, portalCatKey, giftNamed } from "../../lib/lineup";
 import { KitBuilder, ElectricalBrandPanel } from "../kit-panel/kit-panel";
 export { SAFETY_CATEGORIES, SAFETY_SKU_ORDER, isSafetyProduct } from "../../lib/hvac";
 import { isSafetyProduct, SAFETY_CATEGORIES, SAFETY_SKU_ORDER } from "../../lib/hvac";
@@ -771,7 +771,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       // Milestone Awards: only the DB products flagged portals ∋ "gift", grouped
       // by the gift tab order (Fleece, Jackets, Polos, Bags); within a category
       // the DB sort_order (the order the lineup was supplied in) is kept.
-      const gift = allProducts.filter((p) => (p as { portals?: string[] }).portals?.includes("gift"));
+      const gift = allProducts.filter((p) => (p as { portals?: string[] }).portals?.includes("gift")).map((p) => giftNamed(p, "gift"));
       const rank = (c: string) => {
         const i = GIFT_CATEGORIES.indexOf(c);
         return i === -1 ? GIFT_CATEGORIES.length : i;

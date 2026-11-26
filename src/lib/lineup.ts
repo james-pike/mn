@@ -15,6 +15,15 @@ export const ELECTRICAL_SKU_SET = new Set(ELECTRICAL_SKUS);
 
 // Gift-ONLY products (portals ∋ "gift" but not "service") stay out of the Service
 // catalog; a product tagged ["service","gift"] (e.g. the MN hats) shows in both.
+// Milestone Awards (gift) name/price for products SHARED with another portal —
+// the DB row stays as the other portal shows it; the gift portal shows these
+// (cards, product page, tab title, related items, and so the cart/checkout).
+export const GIFT_OVERRIDES: Record<string, { name?: string; price?: number }> = {
+  "MN-6": { name: "Carhartt A18 Knit Cuffed Beanie", price: 19 }, // Service: "Carhartt Flip Toque - Navy", $18.50
+};
+export const giftNamed = <T extends { sku: string; name: string; price: number }>(p: T, loginType: string | null | undefined): T =>
+  loginType === "gift" && GIFT_OVERRIDES[p.sku] ? { ...p, ...GIFT_OVERRIDES[p.sku] } : p;
+
 export const isGiftOnly = (p: { portals?: string[] }): boolean =>
   !!p.portals?.includes("gift") && !p.portals.includes("service");
 
