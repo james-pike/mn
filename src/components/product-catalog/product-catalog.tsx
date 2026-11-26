@@ -171,7 +171,7 @@ export function stripBrand(title: string, brand: string | null): string {
 }
 
 // Milestone Awards (gift login) category tabs, in sidebar order.
-const GIFT_CATEGORIES = ["All", "Fleece", "Jackets", "Polos", "Bags", "Hats"]; // Hats = "Headwear" (the MN toque, shared with Service)
+const GIFT_CATEGORIES = ["All", "Fleece", "Jackets", "Polos", "Bags"];
 
 // Brands carried, in sidebar display order. A brand must be listed here to show
 // up as a filter (the facet list is BRAND_LIST ∩ brands-present).
